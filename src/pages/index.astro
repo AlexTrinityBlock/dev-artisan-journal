@@ -53,43 +53,60 @@ const certifications = [
 >
   <div class="container about-container">
     
-    <!-- ════════ TOP HERO PROFILE CARD ════════ -->
-    <section class="chamfer-card-wrapper profile-hero-wrapper">
-      <div class="chamfer-card-content profile-hero-inner">
-        <div class="profile-hero-layout">
-          
-          <div class="profile-avatar-block">
+    <!-- ════════ TOP HERO PROFILE (BORDERLESS EDITORIAL DESIGN) ════════ -->
+    <section class="profile-hero-borderless">
+      <div class="profile-hero-layout">
+        
+        <div class="profile-avatar-block">
+          <div class="avatar-frame">
             <img
               class="avatar-large"
               src="/images/avatar/avatar.jpg"
               alt="Alex.Hsiao (Wei-Chun Hsiao) — FullStack & GenAI Systems Architect"
               loading="lazy"
             />
-            <span class="status-indicator-badge">ACTIVE // TAIPEI NODE</span>
           </div>
-
-          <div class="profile-hero-content">
-            <div class="profile-meta-top">
-              <span class="card-tag">SYSTEM // 01 · CANDIDATE PROFILE</span>
-              <span class="role-pill">FULLSTACK &amp; GENAI ARCHITECT</span>
-            </div>
-
-            <h1 class="profile-name">Wei-Chun Hsiao <span class="profile-alias">(Alex)</span></h1>
-            
-            <p class="profile-intro-lead">
-              Currently serving as a <strong>GenAI Engineer</strong> with hands-on expertise spanning full-stack application development, bare-metal GPU virtualization (NVIDIA GPU Operator &amp; HAMi), stateful Multi-Agent LLMs with LangGraph, distributed microservices, and ISO/IEC 27001 security compliance.
-            </p>
-
-            <div class="profile-quick-ledger">
-              <div class="ledger-pill"><strong>Target Roles:</strong> FullStack Engineer / GenAI Systems Architect</div>
-              <div class="ledger-pill"><strong>Experience:</strong> ~3 Years FullStack</div>
-              <div class="ledger-pill"><strong>Education:</strong> M.S. in CSIE, National Chiayi University</div>
-              <div class="ledger-pill"><strong>Language:</strong> English (~3 Yrs Professional Proficiency)</div>
-            </div>
+          <div class="status-indicator-badge">
+            <span class="status-dot"></span>
+            <span>ACTIVE // TAIPEI NODE</span>
           </div>
-
         </div>
+
+        <div class="profile-hero-content">
+          <div class="profile-meta-top">
+            <span class="card-tag">SYSTEM // 01 · CANDIDATE PROFILE</span>
+            <span class="role-pill">FULLSTACK &amp; GENAI ARCHITECT</span>
+          </div>
+
+          <h1 class="profile-name">Wei-Chun Hsiao <span class="profile-alias">(Alex)</span></h1>
+          
+          <p class="profile-intro-lead">
+            Currently serving as a <strong>GenAI Engineer</strong> with hands-on expertise spanning full-stack application development, bare-metal GPU virtualization (NVIDIA GPU Operator &amp; HAMi), stateful Multi-Agent LLMs with LangGraph, distributed microservices, and ISO/IEC 27001 security compliance.
+          </p>
+
+          <div class="profile-quick-ledger">
+            <div class="ledger-item">
+              <span class="ledger-k">TARGET ROLES</span>
+              <span class="ledger-v">FullStack Engineer / GenAI Systems Architect</span>
+            </div>
+            <div class="ledger-item">
+              <span class="ledger-k">EXPERIENCE</span>
+              <span class="ledger-v">~3 Years Enterprise FullStack &amp; ML</span>
+            </div>
+            <div class="ledger-item">
+              <span class="ledger-k">EDUCATION</span>
+              <span class="ledger-v">M.S. in CSIE, National Chiayi University</span>
+            </div>
+            <div class="ledger-item">
+              <span class="ledger-k">LANGUAGE</span>
+              <span class="ledger-v">English (~3 Yrs Professional Proficiency)</span>
+            </div>
+          </div>
+        </div>
+
       </div>
+      
+      <div class="hero-divider"></div>
     </section>
 
     <!-- ════════ TECHNICAL SKILLS MATRIX ════════ -->
@@ -373,8 +390,6 @@ const certifications = [
   }
 
   /* ── Dual-Chamfer Shared Geometry ──────────────────────────── */
-  .profile-hero-wrapper,
-  .profile-hero-inner,
   .cert-card-wrapper,
   .cert-card-inner,
   .skill-group-wrapper,
@@ -393,7 +408,6 @@ const certifications = [
     );
   }
 
-  .profile-hero-wrapper,
   .cert-card-wrapper,
   .skill-group-wrapper,
   .timeline-wrapper,
@@ -404,7 +418,6 @@ const certifications = [
     transition: background-color 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .profile-hero-inner,
   .cert-card-inner,
   .skill-group-inner,
   .timeline-inner,
@@ -413,18 +426,15 @@ const certifications = [
     color: var(--mono-ink);
   }
 
-  /* ── Hero Profile Card ─────────────────────────────────────── */
-  .profile-hero-wrapper {
-    margin-bottom: 48px;
-  }
-
-  .profile-hero-inner {
-    padding: 36px 32px;
+  /* ── Borderless Hero Profile ───────────────────────────────── */
+  .profile-hero-borderless {
+    margin-bottom: 56px;
+    padding-top: 8px;
   }
 
   .profile-hero-layout {
     display: flex;
-    gap: 32px;
+    gap: 40px;
     align-items: flex-start;
   }
 
@@ -433,28 +443,50 @@ const certifications = [
     flex-direction: column;
     align-items: center;
     gap: 12px;
+    width: 216px;
     flex-shrink: 0;
   }
 
+  .avatar-frame {
+    position: relative;
+    width: 216px;
+    height: 216px;
+  }
+
   .avatar-large {
-    width: 92px;
-    height: 92px;
-    border-radius: 4px;
+    width: 216px;
+    height: 216px;
+    border-radius: 8px;
     object-fit: cover;
     display: block;
-    border: 0.7px solid var(--mono-l2);
+    border: 0.7px solid var(--mono-grid);
+    background: var(--mono-bg-subtle);
   }
 
   .status-indicator-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
     font-family: var(--mono-font-mono);
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 700;
     color: var(--mono-l2);
     background: var(--mono-bg-subtle);
     border: 0.7px solid var(--mono-grid);
-    padding: 3px 8px;
-    border-radius: var(--mono-tag-radius);
+    padding: 5px 12px;
+    border-radius: var(--mono-pill-radius);
     white-space: nowrap;
+    letter-spacing: 0.04em;
+    width: 100%;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #2e7d32;
+    display: inline-block;
   }
 
   .profile-hero-content {
@@ -467,7 +499,7 @@ const certifications = [
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     flex-wrap: wrap;
   }
 
@@ -477,50 +509,68 @@ const certifications = [
     font-weight: 700;
     color: var(--mono-paper);
     background: var(--mono-ink);
-    padding: 2px 8px;
+    padding: 3px 9px;
     border-radius: var(--mono-tag-radius);
     letter-spacing: 0.06em;
   }
 
   .profile-name {
-    font-size: 2.15rem;
+    font-size: 2.35rem;
     font-weight: 800;
     color: var(--mono-ink);
-    letter-spacing: -0.025em;
+    letter-spacing: -0.03em;
     margin: 0 0 14px 0;
-    line-height: 1.2;
+    line-height: 1.15;
   }
 
   .profile-alias {
-    font-size: 1.5rem;
+    font-size: 1.65rem;
     color: var(--mono-muted);
     font-weight: 500;
   }
 
   .profile-intro-lead {
-    font-size: 14.5px;
-    line-height: 1.7;
+    font-size: 15px;
+    line-height: 1.75;
     color: var(--mono-l2);
-    margin: 0 0 24px 0;
+    margin: 0 0 26px 0;
+    max-width: 820px;
   }
 
+  /* Borderless Quick Ledger Grid */
   .profile-quick-ledger {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 28px;
   }
 
-  .ledger-pill {
-    background: var(--mono-bg-subtle);
-    border: 0.7px solid var(--mono-grid);
-    padding: 10px 14px;
-    border-radius: var(--mono-tag-radius);
-    font-size: 12px;
-    color: var(--mono-l2);
+  .ledger-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    border-top: 0.7px solid var(--mono-grid);
+    padding-top: 10px;
   }
 
-  .ledger-pill strong {
+  .ledger-k {
+    font-family: var(--mono-font-mono);
+    font-size: 9.5px;
+    font-weight: 700;
+    color: var(--mono-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .ledger-v {
+    font-size: 13.5px;
+    font-weight: 600;
     color: var(--mono-ink);
+    line-height: 1.4;
+  }
+
+  .hero-divider {
+    margin-top: 48px;
+    border-bottom: 0.7px solid var(--mono-grid);
   }
 
   /* ── Section Blocks ────────────────────────────────────────── */
@@ -831,7 +881,18 @@ const certifications = [
   @media (max-width: 860px) {
     .profile-hero-layout {
       flex-direction: column;
-      gap: 20px;
+      gap: 28px;
+    }
+    .profile-avatar-block {
+      width: 180px;
+    }
+    .avatar-frame {
+      width: 180px;
+      height: 180px;
+    }
+    .avatar-large {
+      width: 180px;
+      height: 180px;
     }
     .profile-quick-ledger {
       grid-template-columns: 1fr;
@@ -852,6 +913,17 @@ const certifications = [
   }
 
   @media (max-width: 540px) {
+    .profile-avatar-block {
+      width: 160px;
+    }
+    .avatar-frame {
+      width: 160px;
+      height: 160px;
+    }
+    .avatar-large {
+      width: 160px;
+      height: 160px;
+    }
     .certs-grid {
       grid-template-columns: 1fr;
     }
