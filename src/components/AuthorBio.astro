@@ -4,6 +4,8 @@ interface Props {
 }
 
 const { compact = false } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const homeHref = baseUrl ? `${baseUrl}/` : '/';
 ---
 
 <div class={`chamfer-card-wrapper author-box-wrapper ${compact ? 'compact' : ''}`}>
@@ -14,7 +16,7 @@ const { compact = false } = Astro.props;
       <div class="author-avatar-wrap">
         <img
           class="author-avatar-img"
-          src="/images/avatar/avatar.jpg"
+          src={`${baseUrl}/images/avatar/avatar.jpg`}
           alt="Alex.Hsiao (Wei-Chun Hsiao) — personal avatar"
           loading="lazy"
         />
@@ -28,7 +30,7 @@ const { compact = false } = Astro.props;
             <h3 class="author-name">Alex.Hsiao <span class="author-full">(Wei-Chun Hsiao)</span></h3>
             <p class="author-role">FullStack Engineer &amp; GenAI Systems Architect</p>
           </div>
-          <a href="/" class="mono-btn-chamfer view-profile-btn">
+          <a href={homeHref} class="mono-btn-chamfer view-profile-btn">
             <span class="chamfer-inner">
               <span class="btn-tag">CV //</span>
               <span class="btn-label">Full Profile &amp; CV &rarr;</span>

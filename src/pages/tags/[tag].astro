@@ -26,6 +26,8 @@ export async function getStaticPaths() {
 }
 
 const { tag, posts } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const homeHref = baseUrl ? `${baseUrl}/` : '/';
 ---
 
 <BaseLayout
@@ -38,7 +40,7 @@ const { tag, posts } = Astro.props;
     <header class="chamfer-card-wrapper tag-header-wrapper">
       <div class="chamfer-card-content tag-header-inner">
         <div class="tag-meta-top">
-          <a href="/tags" class="back-topics-link">&larr; All Topics &amp; Taxonomy</a>
+          <a href={`${baseUrl}/tags`} class="back-topics-link">&larr; All Topics &amp; Taxonomy</a>
           <span class="meta-dot"></span>
           <span class="count-badge">{posts.length} {posts.length === 1 ? 'Dispatch' : 'Dispatches'}</span>
         </div>
@@ -65,7 +67,7 @@ const { tag, posts } = Astro.props;
     </section>
 
     <div class="back-home-wrap">
-      <a href="/" class="mono-btn-chamfer">
+      <a href={homeHref} class="mono-btn-chamfer">
         <span class="chamfer-inner">
           <span class="btn-tag">NAV //</span>
           <span class="btn-label">&larr; Return to Home Feed</span>

@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+
 const skillGroups = [
   {
     tag: 'SYSTEM // ML & INFERENCE',
@@ -63,7 +65,7 @@ const certifications = [
     issuer: 'NVIDIA // CREDLY VERIFIED',
     id: 'f2df353f-b36d-41d5-b652-fbcea74abc6c',
     url: 'https://www.credly.com/badges/f2df353f-b36d-41d5-b652-fbcea74abc6c/public_url',
-    image: '/images/certifications/nvidia-genai-llms-full.png',
+    image: `${baseUrl}/images/certifications/nvidia-genai-llms-full.png`,
     description: 'Validates enterprise mastery in building, deploying, and accelerating large language model architectures. Encompasses parameter-efficient fine-tuning (PEFT/LoRA), vLLM & Triton inference serving, retrieval-augmented generation (RAG), and production LLM evaluation.',
     meta: 'NVIDIA Deep Learning Institute · Verified'
   },
@@ -73,7 +75,7 @@ const certifications = [
     issuer: 'LINUX FOUNDATION / CNCF',
     id: 'fcbae132-9ad2-4995-ae14-6feeaa914d28',
     url: 'https://www.credly.com/badges/fcbae132-9ad2-4995-ae14-6feeaa914d28/public_url',
-    image: '/images/certifications/cka-full.png',
+    image: `${baseUrl}/images/certifications/cka-full.png`,
     description: 'Demonstrates production competence in Kubernetes cluster architecture, core component troubleshooting, networking (CNI/Ingress), storage volumes (CSI), cluster security, RBAC policies, and container workload maintenance.',
     meta: 'Cloud Native Computing Foundation · Verified'
   },
@@ -83,7 +85,7 @@ const certifications = [
     issuer: 'AMAZON WEB SERVICES',
     id: '13a54046-b8d0-40df-9094-8222ec7b0d2e',
     url: 'https://www.credly.com/badges/13a54046-b8d0-40df-9094-8222ec7b0d2e',
-    image: '/images/certifications/aws-sap-full.png',
+    image: `${baseUrl}/images/certifications/aws-sap-full.png`,
     description: 'Pinnacle AWS professional credential validating advanced expertise in complex multi-tier enterprise architecture, multi-account governance (AWS Control Tower), high availability, disaster recovery, cost optimization, and hybrid cloud migrations.',
     meta: 'Amazon Web Services · SAP-C02 Professional'
   },
@@ -93,7 +95,7 @@ const certifications = [
     issuer: 'GOOGLE CLOUD',
     id: 'd0031cb8-c858-4a63-8f54-521020f54a44',
     url: 'https://www.credly.com/badges/d0031cb8-c858-4a63-8f54-521020f54a44',
-    image: '/images/certifications/gcp-pca-full.png',
+    image: `${baseUrl}/images/certifications/gcp-pca-full.png`,
     description: 'Certifies comprehensive architecture competence on Google Cloud Platform, encompassing scalable microservice topologies on GKE, VPC network security, IAM least-privilege governance, data migration pipelines, and enterprise reliability engineering.',
     meta: 'Google Cloud Certified · Professional Tier'
   },
@@ -103,7 +105,7 @@ const certifications = [
     issuer: 'TKSG // ISMS GOVERNANCE',
     id: '5615205852WH',
     url: 'https://tksg.org/admin/tool/certificate/index.php?code=5615205852WH',
-    image: '/images/certifications/iso27001-full.png',
+    image: `${baseUrl}/images/certifications/iso27001-full.png`,
     description: 'Professional Lead Auditor certification validating deep knowledge in Information Security Management Systems (ISMS), risk assessment methodologies, Annex A security control implementation, compliance audits, and security baseline governance.',
     meta: 'TKSG ISMS Lead Auditor · Certified'
   },
@@ -113,7 +115,7 @@ const certifications = [
     issuer: 'IEEE XPLORE // PEER REVIEWED',
     id: '10210155',
     url: 'https://ieeexplore.ieee.org/abstract/document/10210155',
-    image: '/images/paper/paper.png',
+    image: `${baseUrl}/images/paper/paper.png`,
     description: 'Peer-reviewed research publication in IEEE Xplore introducing a novel hybrid deep learning architecture combining Multi-Model CNN, Bidirectional GRU, and Multi-Head Self-Attention mechanisms for robust real-time detection of SQLi and XSS attacks.',
     meta: 'IEEE Xplore Doc: 10210155 · Master Thesis'
   },
@@ -143,7 +145,7 @@ const certifications = [
           <div class="avatar-frame">
             <img
               class="avatar-large"
-              src="/images/avatar/avatar.jpg"
+              src={`${baseUrl}/images/avatar/avatar.jpg`}
               alt="Alex.Hsiao (Wei-Chun Hsiao) — FullStack &amp; GenAI Systems Architect"
               loading="lazy"
             />
@@ -444,7 +446,7 @@ const certifications = [
 
           <!-- World Map Telemetry Canvas -->
           <div class="dispatch-map-frame">
-            <div id="dispatch-world-map" class="dispatch-world-map"></div>
+            <div id="dispatch-world-map" class="dispatch-world-map" data-world-url={`${baseUrl}/geojson/world.json`}></div>
           </div>
 
           <!-- Minimal English Location Note -->
@@ -1427,7 +1429,7 @@ const certifications = [
 </style>
 
 <!-- ECharts Local Script & Telemetry Map Renderer -->
-<script is:inline src="/js/echarts.min.js"></script>
+<script is:inline src={`${baseUrl}/js/echarts.min.js`}></script>
 <script is:inline>
   (function() {
     var INK = '#1C1C1A', PAPER = '#F0EFEB', MUTED = '#8F8E88', GRID = '#DEDDD6';
@@ -1455,7 +1457,10 @@ const certifications = [
       setTimeout(go, 400);
     };
 
-    fetch('/geojson/world.json')
+    var mapEl = document.getElementById('dispatch-world-map');
+    var worldUrl = (mapEl && mapEl.dataset.worldUrl) || '/geojson/world.json';
+
+    fetch(worldUrl)
       .then(function(r) {
         if (!r.ok) throw new Error('HTTP error ' + r.status);
         return r.json();

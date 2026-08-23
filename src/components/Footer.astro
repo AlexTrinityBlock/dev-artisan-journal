@@ -1,5 +1,7 @@
 ---
 const currentYear = new Date().getFullYear();
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const homeHref = baseUrl ? `${baseUrl}/` : '/';
 ---
 
 <footer class="site-footer">
@@ -25,9 +27,9 @@ const currentYear = new Date().getFullYear();
       <div class="footer-col">
         <span class="col-title">NAVIGATION</span>
         <ul class="footer-links">
-          <li><a href="/">Home &amp; Profile</a></li>
-          <li><a href="/articles">Articles</a></li>
-          <li><a href="/tags">Topics &amp; Taxonomy</a></li>
+          <li><a href={homeHref}>Home &amp; Profile</a></li>
+          <li><a href={`${baseUrl}/articles`}>Articles</a></li>
+          <li><a href={`${baseUrl}/tags`}>Topics &amp; Taxonomy</a></li>
         </ul>
       </div>
 

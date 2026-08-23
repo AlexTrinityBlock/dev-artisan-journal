@@ -18,6 +18,9 @@ const tagCounts = allTags.reduce((acc, tag) => {
 const topTags = Object.entries(tagCounts)
   .sort((a, b) => b[1] - a[1])
   .slice(0, 10);
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const homeHref = baseUrl ? `${baseUrl}/` : '/';
 ---
 
 <BaseLayout
@@ -98,7 +101,7 @@ const topTags = Object.entries(tagCounts)
               <span class="card-tag">SYSTEM // AUTHOR</span>
             </div>
             <div class="author-mini-head">
-              <img class="author-avatar-sq" src="/images/avatar/avatar.jpg" alt="Alex.Hsiao avatar" loading="lazy" />
+              <img class="author-avatar-sq" src={`${baseUrl}/images/avatar/avatar.jpg`} alt="Alex.Hsiao avatar" loading="lazy" />
               <div>
                 <h3 class="author-title-text">Alex.Hsiao</h3>
                 <p class="author-sub-text">GenAI Engineer</p>
@@ -108,7 +111,7 @@ const topTags = Object.entries(tagCounts)
               Specializing in full-stack Python &amp; Node systems, distributed message brokers (RabbitMQ), Kubernetes vGPU virtualization, and cloud infrastructure.
             </p>
             <div class="widget-links">
-              <a href="/" class="mono-btn-chamfer btn-block">
+              <a href={homeHref} class="mono-btn-chamfer btn-block">
                 <span class="chamfer-inner">
                   <span class="btn-tag">CV //</span>
                   <span class="btn-label">View Profile &amp; Credentials &rarr;</span>
@@ -178,7 +181,7 @@ const topTags = Object.entries(tagCounts)
               </div>
               <div class="topic-cloud">
                 {topTags.map(([tag, count]) => (
-                  <a href={`/tags/${tag}`} class="tag">
+                  <a href={`${baseUrl}/tags/${tag}`} class="tag">
                     <span>#{tag}</span>
                     <span class="topic-count">{count}</span>
                   </a>
