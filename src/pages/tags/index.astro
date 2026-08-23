@@ -113,10 +113,10 @@ const sortedCategories = Object.entries(categoryMap).sort((a, b) => b[1] - a[1])
   .topics-header-wrapper,
   .category-card-wrapper,
   .tags-wall-wrapper {
-    background-color: var(--mono-l2);
+    background-color: var(--mono-grid);
     padding: var(--mono-border-w, 0.7px);
     width: 100%;
-    transition: background-color 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .topics-header-inner,
@@ -197,7 +197,6 @@ const sortedCategories = Object.entries(categoryMap).sort((a, b) => b[1] - a[1])
   }
 
   .category-card-wrapper:hover {
-    background-color: var(--mono-ink);
     transform: translateY(-2px);
   }
 

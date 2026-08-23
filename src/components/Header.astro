@@ -49,8 +49,11 @@ const navItems = [
 
       <!-- Quick Actions -->
       <div class="nav-actions">
-        <a href="mailto:q123717111@gmail.com" class="action-btn contact-btn" title="Send Email">
-          <span class="action-label">Contact</span>
+        <a href="mailto:q123717111@gmail.com" class="mono-btn-chamfer header-contact-btn" title="Send Email">
+          <span class="chamfer-inner">
+            <span class="btn-tag">SYS //</span>
+            <span class="btn-label">Contact</span>
+          </span>
         </a>
       </div>
     </nav>
@@ -61,7 +64,7 @@ const navItems = [
 <style>
   .site-header {
     background: var(--mono-card-bg);
-    border-bottom: 1px solid var(--mono-grid);
+    border-bottom: 0.7px solid var(--mono-grid);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -104,7 +107,7 @@ const navItems = [
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    border: 1px dashed var(--mono-muted);
+    border: 0.7px dashed var(--mono-muted);
     animation: pulse 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   }
 
@@ -141,7 +144,7 @@ const navItems = [
   .site-nav {
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 20px;
   }
 
   .nav-list {
@@ -156,7 +159,7 @@ const navItems = [
     font-size: 12px;
     font-weight: 600;
     padding: 6px 12px;
-    border-radius: 6px;
+    border-radius: var(--mono-tag-radius);
     color: var(--mono-l3);
     transition: all 0.15s ease;
   }
@@ -175,40 +178,13 @@ const navItems = [
     display: flex;
     align-items: center;
     gap: 8px;
-    border-left: 1px solid var(--mono-grid);
+    border-left: 0.7px solid var(--mono-grid);
     padding-left: 16px;
   }
 
-  .action-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 10px;
-    border-radius: 6px;
-    border: 1px solid var(--mono-grid);
-    background: var(--mono-bg-subtle);
-    font-family: var(--mono-font-mono);
+  .header-contact-btn .chamfer-inner {
+    padding: 6px 12px;
     font-size: 11px;
-    font-weight: 600;
-    color: var(--mono-l2);
-    transition: all 0.15s ease;
-  }
-
-  .action-btn:hover {
-    background: var(--mono-ink);
-    color: var(--mono-paper);
-    border-color: var(--mono-ink);
-  }
-
-  .contact-btn {
-    background: var(--mono-ink);
-    color: var(--mono-paper);
-    border-color: var(--mono-ink);
-  }
-
-  .contact-btn:hover {
-    background: #363530;
-    border-color: #363530;
   }
 
   @media (max-width: 768px) {

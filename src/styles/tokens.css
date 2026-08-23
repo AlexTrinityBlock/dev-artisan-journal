@@ -44,6 +44,7 @@
   /* Typography */
   --mono-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --mono-font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Monaco, Menlo, Consolas, 'Liberation Mono', monospace;
+  --mono-mono-font: 'JetBrains Mono', ui-monospace, 'SF Mono', Monaco, Menlo, Consolas, 'Liberation Mono', monospace;
 
   --mono-title-size: 1.15rem;
   --mono-title-weight: 700;
@@ -64,7 +65,7 @@
   --mono-border-w: 0.7px;             /* Hairline stroke tier */
   --mono-chamfer-cut: 16px;           /* 45-degree dual chamfer cut */
   --mono-card-radius: 0px;            /* Replaced by dual chamfer */
-  --mono-card-pad: 24px 20px;
+  --mono-card-pad: 24px 22px 20px;
   --mono-pill-radius: 9999px;
   --mono-tag-radius: 4px;
   --mono-btn-radius: 4px;
@@ -118,14 +119,13 @@ img {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   DUAL-CHAMFER CARD (Deep Charcoal 0.7px Hairline)
-   Standard technical / telemetry card in Alex Trinity Block style.
-   Features 45° dual chamfer on top-right and bottom-left.
+   DUAL-CHAMFER CARD (0.7px --mono-grid Hairline Standard)
+   Canonical technical & editorial card architecture.
+   Features 45° dual chamfer on top-right & bottom-left (16px).
    ═══════════════════════════════════════════════════════════════ */
 .chamfer-card-wrapper,
 .chamfer-card-content,
-.chamfer-card,
-.chamfer-inner {
+.chamfer-card {
   clip-path: polygon(
     0 0,
     calc(100% - var(--mono-chamfer-cut, 16px)) 0,
@@ -136,32 +136,43 @@ img {
   );
 }
 
-/* Outer wrapper: 0.7px Deep Charcoal hairline border */
+/* Outer wrapper: 0.7px --mono-grid (#DEDDD6) hairline border */
 .chamfer-card-wrapper,
 .chamfer-card {
-  background-color: var(--mono-l2);
+  background-color: var(--mono-grid);
   padding: var(--mono-border-w, 0.7px);
   width: 100%;
   position: relative;
-  transition: background-color 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+  display: flex;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
 }
 
-/* Inner content ground */
-.chamfer-card-content,
-.chamfer-inner {
+/* Inner content ground: native paper ground (#F0EFEB) */
+.chamfer-card-content {
   background-color: var(--mono-card-bg);
-  padding: var(--mono-card-pad, 26px 22px);
+  padding: var(--mono-card-pad, 24px 22px 20px);
   color: var(--mono-ink);
   font-family: var(--mono-font);
   width: 100%;
   height: 100%;
 }
 
+/* Dark Mode Chamfer Variant */
+.chamfer-card-wrapper.dark,
+.chamfer-card.dark {
+  background-color: var(--mono-dark-grid);
+}
+.chamfer-card-wrapper.dark .chamfer-card-content,
+.chamfer-card.dark .chamfer-card-content {
+  background-color: var(--mono-dark-bg);
+  color: var(--mono-dark-ink);
+}
+
 /* Base card compatibility wrapper */
 .card {
   background: var(--mono-card-bg);
-  border: 0.7px solid var(--mono-l2);
-  padding: 26px 22px;
+  border: 0.7px solid var(--mono-grid);
+  padding: 24px 22px 20px;
   color: var(--mono-ink);
 }
 
@@ -170,18 +181,17 @@ img {
 .chamfer-card.interactive:hover,
 a.chamfer-card-wrapper:hover,
 a.chamfer-card:hover {
-  background-color: var(--mono-ink);
   transform: translateY(-2px);
 }
 
 /* Card Micro-Tag */
 .card-tag {
   font-family: var(--mono-font-mono);
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 600;
   color: var(--mono-muted);
   letter-spacing: 0.12em;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   text-transform: uppercase;
 }
 
@@ -196,7 +206,7 @@ a.chamfer-card:hover {
   padding: 3px 8px;
   border-radius: var(--mono-tag-radius);
   background: var(--mono-bg-subtle);
-  border: 1px solid var(--mono-grid);
+  border: 0.7px solid var(--mono-grid);
   color: var(--mono-l2);
 }
 
@@ -216,39 +226,121 @@ a.chamfer-card:hover {
   text-transform: uppercase;
 }
 
-/* Buttons */
+/* ═══════════════════════════════════════════════════════════════
+   DUAL-CHAMFER BUTTON (SWEEP 2: Label-Only Underline Rail)
+   45° dual chamfer (8px) with 0.7px --mono-grid hairline wrapper.
+   Background & border remain 100% constant on hover.
+   0.8px --mono-ink hairline sweeps smoothly under the label text.
+   ═══════════════════════════════════════════════════════════════ */
+.mono-btn-chamfer,
+.btn-chamfer {
+  display: inline-flex;
+  padding: 0.7px;
+  background-color: var(--mono-grid);
+  clip-path: polygon(
+    0 0,
+    calc(100% - 8px) 0,
+    100% 8px,
+    100% 100%,
+    8px 100%,
+    0 calc(100% - 8px)
+  );
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.mono-btn-chamfer .chamfer-inner,
+.btn-chamfer .chamfer-inner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: var(--mono-paper);
+  padding: 8px 16px;
+  clip-path: polygon(
+    0 0,
+    calc(100% - 8px) 0,
+    100% 8px,
+    100% 100%,
+    8px 100%,
+    0 calc(100% - 8px)
+  );
+  color: var(--mono-ink);
+  font-family: var(--mono-font);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  position: relative;
+  width: 100%;
+}
+
+.mono-btn-chamfer .btn-tag,
+.btn-chamfer .btn-tag {
+  font-family: var(--mono-font-mono);
+  font-size: 10px;
+  color: var(--mono-muted);
+  letter-spacing: 0.1em;
+}
+
+.mono-btn-chamfer .btn-label,
+.btn-chamfer .btn-label {
+  position: relative;
+  display: inline-block;
+}
+
+.mono-btn-chamfer .btn-label::after,
+.btn-chamfer .btn-label::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2.5px;
+  width: 100%;
+  height: 0.8px;
+  background-color: var(--mono-ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.mono-btn-chamfer:hover .btn-label::after,
+.btn-chamfer:hover .btn-label::after {
+  transform: scaleX(1);
+}
+
+.mono-btn-chamfer:active,
+.btn-chamfer:active {
+  transform: translateY(1px);
+}
+
+.mono-btn-chamfer.btn-block,
+.btn-chamfer.btn-block {
+  display: flex;
+  width: 100%;
+}
+
+/* Legacy button fallbacks gracefully adopting clean mono aesthetics */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-family: var(--mono-font-mono);
-  font-size: 12px;
+  font-family: var(--mono-font);
+  font-size: 11.5px;
   font-weight: 600;
+  letter-spacing: 0.04em;
   padding: 8px 16px;
-  border-radius: var(--mono-btn-radius);
-  border: 1px solid var(--mono-grid);
-  background: var(--mono-card-bg);
+  border: 0.7px solid var(--mono-grid);
+  background: var(--mono-paper);
   color: var(--mono-ink);
   cursor: pointer;
-  transition: all 0.15s ease;
+  text-decoration: none;
+  position: relative;
+  transition: transform 0.15s ease;
 }
 
-.btn:hover {
-  background: var(--mono-ink);
-  color: var(--mono-paper);
-  border-color: var(--mono-ink);
-}
-
-.btn-primary {
-  background: var(--mono-ink);
-  color: var(--mono-paper);
-  border-color: var(--mono-ink);
-}
-
-.btn-primary:hover {
-  background: #363530;
-  border-color: #363530;
+.btn:active {
+  transform: translateY(1px);
 }
 
 /* Monospace micro-telemetry / metadata */

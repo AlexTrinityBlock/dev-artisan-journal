@@ -27,5 +27,8 @@ pnpm-debug.log*
 opencode.json
 .opencode/
 
+# antigravity / agent config
+.agents/
+
 # reference
 reference/

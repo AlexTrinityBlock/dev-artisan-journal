@@ -65,7 +65,12 @@ const { tag, posts } = Astro.props;
     </section>
 
     <div class="back-home-wrap">
-      <a href="/" class="btn btn-primary">&larr; Return to Home Feed</a>
+      <a href="/" class="mono-btn-chamfer">
+        <span class="chamfer-inner">
+          <span class="btn-tag">NAV //</span>
+          <span class="btn-label">&larr; Return to Home Feed</span>
+        </span>
+      </a>
     </div>
 
   </div>
@@ -86,7 +91,7 @@ const { tag, posts } = Astro.props;
   }
 
   .tag-header-wrapper {
-    background-color: var(--mono-l2);
+    background-color: var(--mono-grid);
     padding: var(--mono-border-w, 0.7px);
     width: 100%;
     margin-bottom: 44px;

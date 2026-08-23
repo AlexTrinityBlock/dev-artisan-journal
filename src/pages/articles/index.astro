@@ -108,7 +108,12 @@ const topTags = Object.entries(tagCounts)
               Specializing in full-stack Python &amp; Node systems, distributed message brokers (RabbitMQ), Kubernetes vGPU virtualization, and cloud infrastructure.
             </p>
             <div class="widget-links">
-              <a href="/" class="btn btn-primary btn-block">View Full CV &amp; Credentials &rarr;</a>
+              <a href="/" class="mono-btn-chamfer btn-block">
+                <span class="chamfer-inner">
+                  <span class="btn-tag">CV //</span>
+                  <span class="btn-label">View Profile &amp; Credentials &rarr;</span>
+                </span>
+              </a>
             </div>
           </div>
         </div>
@@ -192,11 +197,17 @@ const topTags = Object.entries(tagCounts)
               Open for Senior FullStack, GenAI Systems, and GPU Cluster Architecture opportunities in Taipei &amp; Remote.
             </p>
             <div class="dispatch-btns">
-              <a href="mailto:q123717111@gmail.com" class="btn btn-primary btn-block">
-                q123717111@gmail.com
+              <a href="mailto:q123717111@gmail.com" class="mono-btn-chamfer btn-block">
+                <span class="chamfer-inner">
+                  <span class="btn-tag">MAIL //</span>
+                  <span class="btn-label">q123717111@gmail.com</span>
+                </span>
               </a>
-              <button class="btn btn-block" onclick="navigator.clipboard.writeText('q123717111@gmail.com'); showToast('Email copied to clipboard!');">
-                [Copy Email]
+              <button class="mono-btn-chamfer btn-block" onclick="navigator.clipboard.writeText('q123717111@gmail.com'); showToast('Email copied to clipboard!');">
+                <span class="chamfer-inner">
+                  <span class="btn-tag">COPY //</span>
+                  <span class="btn-label">Copy Email Address</span>
+                </span>
               </button>
             </div>
           </div>
@@ -232,10 +243,10 @@ const topTags = Object.entries(tagCounts)
   .filter-bar-wrapper,
   .empty-state-wrapper,
   .widget-wrapper {
-    background-color: var(--mono-l2);
+    background-color: var(--mono-grid);
     padding: var(--mono-border-w, 0.7px);
     width: 100%;
-    transition: background-color 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .feed-header-inner,
@@ -427,7 +438,7 @@ const topTags = Object.entries(tagCounts)
     border-radius: 4px;
     object-fit: cover;
     display: block;
-    border: 0.7px solid var(--mono-l2);
+    border: 0.7px solid var(--mono-grid);
   }
 
   .author-title-text {

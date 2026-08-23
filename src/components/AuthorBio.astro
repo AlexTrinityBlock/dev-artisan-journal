@@ -28,7 +28,12 @@ const { compact = false } = Astro.props;
             <h3 class="author-name">Alex.Hsiao <span class="author-full">(Wei-Chun Hsiao)</span></h3>
             <p class="author-role">FullStack Engineer &amp; GenAI Systems Architect</p>
           </div>
-          <a href="/" class="view-profile-btn">Full Profile &amp; CV &rarr;</a>
+          <a href="/" class="mono-btn-chamfer view-profile-btn">
+            <span class="chamfer-inner">
+              <span class="btn-tag">CV //</span>
+              <span class="btn-label">Full Profile &amp; CV &rarr;</span>
+            </span>
+          </a>
         </div>
 
         <p class="author-bio-text">
@@ -64,7 +69,7 @@ const { compact = false } = Astro.props;
 
 <style>
   .author-box-wrapper {
-    background-color: var(--mono-l2);
+    background-color: var(--mono-grid);
     padding: var(--mono-border-w, 0.7px);
     width: 100%;
     clip-path: polygon(
@@ -96,7 +101,7 @@ const { compact = false } = Astro.props;
 
   .card-tag {
     font-family: var(--mono-font-mono);
-    font-size: 10.5px;
+    font-size: 10px;
     font-weight: 600;
     color: var(--mono-muted);
     letter-spacing: 0.12em;
@@ -119,7 +124,7 @@ const { compact = false } = Astro.props;
     border-radius: 4px;
     object-fit: cover;
     display: block;
-    border: 0.7px solid var(--mono-l2);
+    border: 0.7px solid var(--mono-grid);
   }
 
   .author-details {
@@ -158,23 +163,9 @@ const { compact = false } = Astro.props;
     margin: 2px 0 0 0;
   }
 
-  .view-profile-btn {
-    font-family: var(--mono-font-mono);
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--mono-ink);
-    text-decoration: none;
-    padding: 4px 8px;
-    border-radius: var(--mono-btn-radius);
-    background: var(--mono-bg-subtle);
-    border: 0.7px solid var(--mono-grid);
-    transition: all 0.15s ease;
-  }
-
-  .view-profile-btn:hover {
-    background: var(--mono-ink);
-    color: var(--mono-paper);
-    border-color: var(--mono-ink);
+  .view-profile-btn .chamfer-inner {
+    padding: 5px 10px;
+    font-size: 10.5px;
   }
 
   .author-bio-text {

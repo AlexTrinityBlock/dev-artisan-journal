@@ -1,48 +1,121 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
+const skillGroups = [
+  {
+    tag: 'SYSTEM // ML & INFERENCE',
+    title: 'GenAI & Machine Learning',
+    skills: [
+      { name: 'vLLM Inference Engine', level: 'Enterprise' },
+      { name: 'LangGraph Multi-Agents', level: 'Production' },
+      { name: 'HAMi vGPU Slicing', level: 'Enterprise' },
+      { name: 'NVIDIA GPU Operator', level: 'Production' },
+      { name: 'PyTorch & TensorFlow', level: '~3 Years' },
+    ],
+    synopsis: 'Architecting containerized GPU clusters on bare-metal Kubernetes with NVIDIA GPU Operator and HAMi vGPU dynamic slicing to maximize compute density and hardware utilization. Designing stateful, autonomous multi-agent orchestration pipelines with LangGraph and low-latency LLM streaming inference endpoints via vLLM.',
+    stack: 'K8s GPU Operator · HAMi · LangGraph · vLLM · PyTorch · HuggingFace'
+  },
+  {
+    tag: 'SYSTEM // BACKEND & AMQP',
+    title: 'FullStack & Distributed Systems',
+    skills: [
+      { name: 'FastAPI / Python', level: '~3 Years' },
+      { name: 'Node.js (Async Runtimes)', level: '~3 Years' },
+      { name: 'RabbitMQ (AMQP Broker)', level: 'Production' },
+      { name: 'Django / Flask', level: '~2 Years' },
+      { name: 'PHP / Laravel', level: '~1 Year' },
+    ],
+    synopsis: 'Engineering high-throughput, non-blocking asynchronous microservices and reactive interfaces using FastAPI, modern Node.js, and React. Implementing enterprise AMQP message broker topologies with RabbitMQ to decouple critical distributed workloads and ensure reliable, fault-tolerant asynchronous task execution.',
+    stack: 'FastAPI · Python · React.js · Node.js · RabbitMQ · RESTful / WebSockets'
+  },
+  {
+    tag: 'SYSTEM // K8S & CLOUD',
+    title: 'Cloud Fabric & Orchestration',
+    skills: [
+      { name: 'Kubernetes (CKA Certified)', level: '~2 Years' },
+      { name: 'AWS Cloud (SAP Certified)', level: '~3 Years' },
+      { name: 'Google Cloud (PCA Certified)', level: '~3 Years' },
+      { name: 'Terraform (IaC Automation)', level: 'Production' },
+      { name: 'Docker & Podman', level: '~3 Years' },
+    ],
+    synopsis: 'Certified across Kubernetes (CKA), AWS Solutions Architect Professional (SAP), and GCP Professional Cloud Architect (PCA). Designing declarative Infrastructure as Code (IaC) with Terraform, orchestrating production container fabrics, executing complex cross-cloud migrations, and establishing zero-trust security baselines.',
+    stack: 'Kubernetes · Terraform · AWS · Google Cloud · Ansible · RBAC & WAF'
+  },
+  {
+    tag: 'SYSTEM // STORAGE & HA',
+    title: 'Databases & Resilient Storage',
+    skills: [
+      { name: 'PostgreSQL', level: '~3 Years' },
+      { name: 'Microsoft SQL Server', level: 'Enterprise' },
+      { name: 'MongoDB & MySQL', level: '~3 Years' },
+      { name: 'Longhorn HA Block Storage', level: 'Enterprise' },
+      { name: 'MinIO / S3 Parquet', level: 'Production' },
+    ],
+    synopsis: 'Structuring highly resilient, low-latency relational and document database layers across PostgreSQL, Microsoft SQL Server, and MongoDB. Deploying cloud-native distributed persistent block storage with Longhorn replication in Kubernetes alongside MinIO S3 object storage for analytical Parquet storage.',
+    stack: 'PostgreSQL · SQL Server · MongoDB · Longhorn · MinIO / S3 · Redis'
+  },
+];
+
 const certifications = [
   {
+    tag: 'CREDENTIAL // 01 · GENAI',
     title: 'NVIDIA Certified Professional: Generative AI LLMs',
     issuer: 'NVIDIA // CREDLY VERIFIED',
     id: 'f2df353f-b36d-41d5-b652-fbcea74abc6c',
     url: 'https://www.credly.com/badges/f2df353f-b36d-41d5-b652-fbcea74abc6c/public_url',
     image: '/images/certifications/nvidia-genai-llms-full.png',
+    description: 'Validates enterprise mastery in building, deploying, and accelerating large language model architectures. Encompasses parameter-efficient fine-tuning (PEFT/LoRA), vLLM & Triton inference serving, retrieval-augmented generation (RAG), and production LLM evaluation.',
+    meta: 'NVIDIA Deep Learning Institute · Verified'
   },
   {
+    tag: 'CREDENTIAL // 02 · CLOUD NATIVE',
     title: 'Certified Kubernetes Administrator (CKA)',
     issuer: 'LINUX FOUNDATION / CNCF',
     id: 'fcbae132-9ad2-4995-ae14-6feeaa914d28',
     url: 'https://www.credly.com/badges/fcbae132-9ad2-4995-ae14-6feeaa914d28/public_url',
     image: '/images/certifications/cka-full.png',
+    description: 'Demonstrates production competence in Kubernetes cluster architecture, core component troubleshooting, networking (CNI/Ingress), storage volumes (CSI), cluster security, RBAC policies, and container workload maintenance.',
+    meta: 'Cloud Native Computing Foundation · Verified'
   },
   {
+    tag: 'CREDENTIAL // 03 · CLOUD ARCHITECTURE',
     title: 'AWS Certified Solutions Architect – Professional (SAP)',
     issuer: 'AMAZON WEB SERVICES',
     id: '13a54046-b8d0-40df-9094-8222ec7b0d2e',
     url: 'https://www.credly.com/badges/13a54046-b8d0-40df-9094-8222ec7b0d2e',
     image: '/images/certifications/aws-sap-full.png',
+    description: 'Pinnacle AWS professional credential validating advanced expertise in complex multi-tier enterprise architecture, multi-account governance (AWS Control Tower), high availability, disaster recovery, cost optimization, and hybrid cloud migrations.',
+    meta: 'Amazon Web Services · SAP-C02 Professional'
   },
   {
+    tag: 'CREDENTIAL // 04 · CLOUD ARCHITECTURE',
     title: 'Google Cloud Professional Cloud Architect (PCA)',
     issuer: 'GOOGLE CLOUD',
     id: 'd0031cb8-c858-4a63-8f54-521020f54a44',
     url: 'https://www.credly.com/badges/d0031cb8-c858-4a63-8f54-521020f54a44',
     image: '/images/certifications/gcp-pca-full.png',
+    description: 'Certifies comprehensive architecture competence on Google Cloud Platform, encompassing scalable microservice topologies on GKE, VPC network security, IAM least-privilege governance, data migration pipelines, and enterprise reliability engineering.',
+    meta: 'Google Cloud Certified · Professional Tier'
   },
   {
+    tag: 'CREDENTIAL // 05 · SECURITY GOVERNANCE',
     title: 'ISO/IEC 27001 Lead Auditor (Information Security)',
     issuer: 'TKSG // ISMS GOVERNANCE',
     id: '5615205852WH',
     url: 'https://tksg.org/admin/tool/certificate/index.php?code=5615205852WH',
     image: '/images/certifications/iso27001-full.png',
+    description: 'Professional Lead Auditor certification validating deep knowledge in Information Security Management Systems (ISMS), risk assessment methodologies, Annex A security control implementation, compliance audits, and security baseline governance.',
+    meta: 'TKSG ISMS Lead Auditor · Certified'
   },
   {
+    tag: 'PUBLICATION // 06 · IEEE PEER-REVIEWED',
     title: 'IEEE Xplore: Deep Learning SQLi & XSS Detection',
     issuer: 'IEEE XPLORE // PEER REVIEWED',
     id: '10210155',
     url: 'https://ieeexplore.ieee.org/abstract/document/10210155',
     image: '/images/paper/paper.png',
+    description: 'Peer-reviewed research publication in IEEE Xplore introducing a novel hybrid deep learning architecture combining Multi-Model CNN, Bidirectional GRU, and Multi-Head Self-Attention mechanisms for robust real-time detection of SQLi and XSS attacks.',
+    meta: 'IEEE Xplore Doc: 10210155 · Master Thesis'
   },
 ];
 ---
@@ -78,7 +151,7 @@ const certifications = [
             <span class="role-pill">FULLSTACK &amp; GENAI ARCHITECT</span>
           </div>
 
-          <h1 class="profile-name">Wei-Chun Hsiao <span class="profile-alias">(Alex)</span></h1>
+          <h1 class="profile-name">Alex Hsiao <span class="profile-alias">(Wei-Chun Hsiao)</span></h1>
           
           <p class="profile-intro-lead">
             Currently serving as a <strong>GenAI Engineer</strong> with hands-on expertise spanning full-stack application development, bare-metal GPU virtualization (NVIDIA GPU Operator &amp; HAMi), stateful Multi-Agent LLMs with LangGraph, distributed microservices, and ISO/IEC 27001 security compliance.
@@ -116,76 +189,41 @@ const certifications = [
         <h2 class="head-title">End-to-End Technology Stack &amp; Infrastructure Tools</h2>
       </div>
 
-      <div class="skills-category-grid">
-        
-        <!-- GenAI & ML -->
-        <div class="chamfer-card-wrapper skill-group-wrapper">
-          <div class="chamfer-card-content skill-group-inner">
-            <div class="group-header">
-              <div class="card-tag">SYSTEM // ML &amp; INFERENCE</div>
-              <h3 class="group-title">GenAI &amp; Machine Learning</h3>
-            </div>
-            <div class="group-items">
-              <div class="skill-row"><span class="skill-name">vLLM Inference Engine</span><span class="skill-level">Enterprise</span></div>
-              <div class="skill-row"><span class="skill-name">LangGraph Multi-Agents</span><span class="skill-level">Production</span></div>
-              <div class="skill-row"><span class="skill-name">HAMi vGPU Slicing</span><span class="skill-level">Enterprise</span></div>
-              <div class="skill-row"><span class="skill-name">NVIDIA GPU Operator</span><span class="skill-level">Production</span></div>
-              <div class="skill-row"><span class="skill-name">PyTorch &amp; TensorFlow</span><span class="skill-level">~3 Years</span></div>
+      <div class="skills-category-list">
+        {skillGroups.map((group) => (
+          <div class="chamfer-card-wrapper skill-group-wrapper">
+            <div class="chamfer-card-content skill-group-inner">
+              
+              <!-- Left Column: 240px Left Rail (Skills & Proficiency) -->
+              <div class="group-left-rail">
+                <div class="group-header">
+                  <span class="card-tag">{group.tag}</span>
+                  <h3 class="group-title">{group.title}</h3>
+                </div>
+                <div class="group-skills-stack">
+                  {group.skills.map((skill) => (
+                    <div class="skill-row">
+                      <span class="skill-name">{skill.name}</span>
+                      <span class="skill-level">{skill.level}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <!-- Right Column: 1fr (Integrated Production Architecture Narrative) -->
+              <div class="group-right-content">
+                <div class="group-synopsis-head">
+                  <span class="synopsis-label">PRODUCTION ARCHITECTURE &amp; DEPLOYMENT CONTEXT</span>
+                </div>
+                <p class="group-synopsis-text">{group.synopsis}</p>
+                <div class="group-stack-footer">
+                  <span class="stack-footer-label">KEY STACK:</span> {group.stack}
+                </div>
+              </div>
+
             </div>
           </div>
-        </div>
-
-        <!-- FullStack & Systems -->
-        <div class="chamfer-card-wrapper skill-group-wrapper">
-          <div class="chamfer-card-content skill-group-inner">
-            <div class="group-header">
-              <div class="card-tag">SYSTEM // BACKEND &amp; AMQP</div>
-              <h3 class="group-title">FullStack &amp; Distributed Systems</h3>
-            </div>
-            <div class="group-items">
-              <div class="skill-row"><span class="skill-name">FastAPI / Python</span><span class="skill-level">~3 Years</span></div>
-              <div class="skill-row"><span class="skill-name">Node.js (Async Runtimes)</span><span class="skill-level">~3 Years</span></div>
-              <div class="skill-row"><span class="skill-name">RabbitMQ (AMQP Broker)</span><span class="skill-level">Production</span></div>
-              <div class="skill-row"><span class="skill-name">Django / Flask</span><span class="skill-level">~2 Years</span></div>
-              <div class="skill-row"><span class="skill-name">PHP / Laravel</span><span class="skill-level">~1 Year</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Cloud & Kubernetes -->
-        <div class="chamfer-card-wrapper skill-group-wrapper">
-          <div class="chamfer-card-content skill-group-inner">
-            <div class="group-header">
-              <div class="card-tag">SYSTEM // K8S &amp; CLOUD</div>
-              <h3 class="group-title">Cloud Fabric &amp; Orchestration</h3>
-            </div>
-            <div class="group-items">
-              <div class="skill-row"><span class="skill-name">Kubernetes (CKA Certified)</span><span class="skill-level">~2 Years</span></div>
-              <div class="skill-row"><span class="skill-name">AWS Cloud (SAP Certified)</span><span class="skill-level">~3 Years</span></div>
-              <div class="skill-row"><span class="skill-name">Google Cloud (PCA Certified)</span><span class="skill-level">~3 Years</span></div>
-              <div class="skill-row"><span class="skill-name">Terraform (IaC Automation)</span><span class="skill-level">Production</span></div>
-              <div class="skill-row"><span class="skill-name">Docker &amp; Podman</span><span class="skill-level">~3 Years</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Databases & Storage -->
-        <div class="chamfer-card-wrapper skill-group-wrapper">
-          <div class="chamfer-card-content skill-group-inner">
-            <div class="group-header">
-              <div class="card-tag">SYSTEM // STORAGE &amp; HA</div>
-              <h3 class="group-title">Databases &amp; Resilient Storage</h3>
-            </div>
-            <div class="group-items">
-              <div class="skill-row"><span class="skill-name">PostgreSQL</span><span class="skill-level">~3 Years</span></div>
-              <div class="skill-row"><span class="skill-name">Microsoft SQL Server</span><span class="skill-level">Enterprise</span></div>
-              <div class="skill-row"><span class="skill-name">MongoDB &amp; MySQL</span><span class="skill-level">~3 Years</span></div>
-              <div class="skill-row"><span class="skill-name">Longhorn HA Block Storage</span><span class="skill-level">Enterprise</span></div>
-              <div class="skill-row"><span class="skill-name">MinIO / S3 Parquet</span><span class="skill-level">Production</span></div>
-            </div>
-          </div>
-        </div>
-
+        ))}
       </div>
     </section>
 
@@ -197,23 +235,50 @@ const certifications = [
         <p class="head-desc">100% authentic credentials with direct public verification badges.</p>
       </div>
 
-      <div class="certs-grid">
+      <div class="certs-list">
         {certifications.map((cert) => (
-          <a href={cert.url} target="_blank" rel="noopener noreferrer" class="chamfer-card-wrapper cert-card-wrapper interactive">
+          <div class="chamfer-card-wrapper cert-card-wrapper">
             <div class="chamfer-card-content cert-card-inner">
-              <div class="cert-img-wrap">
-                <img src={cert.image} alt={cert.title} loading="lazy" />
+              
+              <!-- Left Column: 240px Left Rail (Portrait / Framed Certificate Exhibit) -->
+              <div class="cert-portrait-rail">
+                <a href={cert.url} target="_blank" rel="noopener noreferrer" class="cert-portrait-frame" title="Click to verify certificate">
+                  <img src={cert.image} alt={cert.title} loading="lazy" class="cert-portrait-img" />
+                </a>
+                <span class="cert-portrait-caption">{cert.meta}</span>
               </div>
-              <div class="cert-body">
-                <span class="cert-issuer-text">{cert.issuer}</span>
-                <h3 class="cert-name-text">{cert.title}</h3>
+
+              <!-- Right Column: 1fr (Comprehensive Credential Specification & Explanation) -->
+              <div class="cert-right-content">
+                <div class="cert-meta-header">
+                  <span class="card-tag">{cert.tag}</span>
+                  <span class="cert-issuer-badge">{cert.issuer}</span>
+                </div>
+
+                <h3 class="cert-name-text">
+                  <a href={cert.url} target="_blank" rel="noopener noreferrer" class="cert-title-link">
+                    {cert.title}
+                  </a>
+                </h3>
+
+                <p class="cert-desc-text">{cert.description}</p>
+
+                <div class="cert-footer-rail">
+                  <div class="cert-id-badge">
+                    <span class="cert-id-k">VERIFICATION ID:</span>
+                    <span class="cert-id-v">{cert.id}</span>
+                  </div>
+                  <a href={cert.url} target="_blank" rel="noopener noreferrer" class="mono-btn-chamfer cert-verify-btn">
+                    <span class="chamfer-inner">
+                      <span class="btn-tag">VERIFY //</span>
+                      <span class="btn-label">Public Credential [↗]</span>
+                    </span>
+                  </a>
+                </div>
               </div>
-              <div class="cert-foot">
-                <span class="cert-id-tag">ID: {cert.id.slice(0, 8)}...</span>
-                <span class="cert-verify-link">Verify [↗]</span>
-              </div>
+
             </div>
-          </a>
+          </div>
         ))}
       </div>
     </section>
@@ -356,26 +421,63 @@ const certifications = [
 
       <div class="chamfer-card-wrapper dispatch-wrapper">
         <div class="chamfer-card-content dispatch-inner">
+          <div class="dispatch-header-bar">
+            <div class="card-tag">TERMINAL // GLOBAL TELEMETRY &amp; DISPATCH NODE</div>
+            <div class="node-telemetry-tag">LOC: 25.0330° N, 121.5654° E · UTC+8 · [DRAG &amp; ZOOM ENABLED]</div>
+          </div>
+
+          <!-- World Map Telemetry Canvas -->
+          <div class="dispatch-map-frame">
+            <div id="dispatch-world-map" class="dispatch-world-map"></div>
+          </div>
+
+          <!-- Minimal English Location Note -->
+          <div class="dispatch-location-brief">
+            <div class="loc-indicator">
+              <span class="loc-dot"></span>
+              <span class="loc-node-title">PRIMARY NODE // TAIPEI, TAIWAN</span>
+            </div>
+            <p class="loc-summary-text">
+              Stationed in <strong>Taipei, Taiwan (UTC+8)</strong>. Available for on-site &amp; hybrid engineering roles in Taipei, and worldwide remote collaboration across distributed teams.
+            </p>
+          </div>
+
+          <div class="dispatch-divider"></div>
+
           <div class="dispatch-grid">
             <div class="dispatch-info">
-              <div class="card-tag">TERMINAL // DIRECT CHANNEL</div>
               <div class="term-line"><span class="term-k">&gt; CANDIDATE:</span> <span class="term-v">Alex.Hsiao (Wei-Chun Hsiao)</span></div>
+              <div class="term-line"><span class="term-k">&gt; LOCATION:</span> <span class="term-v">Taipei, Taiwan (UTC+8 · CST)</span></div>
+              <div class="term-line"><span class="term-k">&gt; WORK MODE:</span> <span class="term-v">Taipei Hybrid / On-Site &amp; Global Remote</span></div>
+              <div class="term-line"><span class="term-k">&gt; STATUS:</span> <span class="term-v">ONLINE // OPEN FOR SENIOR ROLES</span></div>
               <div class="term-line"><span class="term-k">&gt; EMAIL:</span> <span class="term-v">q123717111@gmail.com</span></div>
               <div class="term-line"><span class="term-k">&gt; PHONE:</span> <span class="term-v">+886 0970-565-709</span></div>
-              <div class="term-line"><span class="term-k">&gt; STATUS:</span> <span class="term-v">ONLINE // OPEN FOR SENIOR ROLES</span></div>
             </div>
 
             <div class="dispatch-actions">
-              <a href="mailto:q123717111@gmail.com" class="btn btn-primary">
-                Send Direct Email &rarr;
+              <a href="mailto:q123717111@gmail.com" class="mono-btn-chamfer btn-block">
+                <span class="chamfer-inner">
+                  <span class="btn-tag">MAIL //</span>
+                  <span class="btn-label">Send Direct Email &rarr;</span>
+                </span>
               </a>
-              <button class="btn" onclick="navigator.clipboard.writeText('q123717111@gmail.com'); showToast('Email copied to clipboard!');">
-                [Copy Email: q123717111@gmail.com]
+              <button class="mono-btn-chamfer btn-block" onclick="navigator.clipboard.writeText('q123717111@gmail.com'); showToast('Email copied to clipboard!');">
+                <span class="chamfer-inner">
+                  <span class="btn-tag">COPY //</span>
+                  <span class="btn-label">q123717111@gmail.com</span>
+                </span>
               </button>
-              <button class="btn" onclick="navigator.clipboard.writeText('0970-565-709'); showToast('Phone copied to clipboard!');">
-                [Copy Phone: 0970-565-709]
+              <button class="mono-btn-chamfer btn-block" onclick="navigator.clipboard.writeText('0970-565-709'); showToast('Phone copied to clipboard!');">
+                <span class="chamfer-inner">
+                  <span class="btn-tag">PHONE //</span>
+                  <span class="btn-label">+886 0970-565-709</span>
+                </span>
               </button>
             </div>
+          </div>
+
+          <div class="dispatch-src-line">
+            GEOJSON 1:110M · ECHARTS MONO TELEMETRY · TAIPEI UTC+8 NODE
           </div>
         </div>
       </div>
@@ -389,7 +491,7 @@ const certifications = [
     max-width: 1040px;
   }
 
-  /* ── Dual-Chamfer Shared Geometry ──────────────────────────── */
+  /* ── Dual-Chamfer Shared Geometry (0.7px --mono-grid Hairline) ── */
   .cert-card-wrapper,
   .cert-card-inner,
   .skill-group-wrapper,
@@ -412,10 +514,10 @@ const certifications = [
   .skill-group-wrapper,
   .timeline-wrapper,
   .dispatch-wrapper {
-    background-color: var(--mono-l2);
+    background-color: var(--mono-grid);
     padding: var(--mono-border-w, 0.7px);
     width: 100%;
-    transition: background-color 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .cert-card-inner,
@@ -426,7 +528,7 @@ const certifications = [
     color: var(--mono-ink);
   }
 
-  /* ── Borderless Hero Profile ───────────────────────────────── */
+  /* ── Borderless Hero Profile (SYSTEM // 01 · CANDIDATE PROFILE) ── */
   .profile-hero-borderless {
     margin-bottom: 56px;
     padding-top: 8px;
@@ -606,108 +708,179 @@ const certifications = [
     margin: 0;
   }
 
-  /* ── Certifications Grid ───────────────────────────────────── */
-  .certs-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+  /* ── Verified Credentials List (2-Column Split: Portrait Left / Specs Right) ── */
+  .certs-list {
+    display: flex;
+    flex-direction: column;
     gap: 24px;
   }
 
   .cert-card-wrapper {
     display: flex;
-    text-decoration: none;
-  }
-
-  .cert-card-wrapper:hover {
-    background-color: var(--mono-ink);
-    transform: translateY(-2px);
+    width: 100%;
   }
 
   .cert-card-inner {
-    display: flex;
-    flex-direction: column;
-    padding: 22px 20px;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 36px;
+    padding: 36px 30px;
     width: 100%;
-    height: 100%;
+    min-height: 310px;
   }
 
-  .cert-img-wrap {
+  .cert-portrait-rail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cert-portrait-frame {
     width: 100%;
-    height: 120px;
-    background: var(--mono-paper);
-    border: 0.7px solid var(--mono-grid);
-    border-radius: var(--mono-tag-radius);
+    height: 240px;
+    background: transparent;
+    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px;
-    margin-bottom: 16px;
+    padding: 6px;
+    text-decoration: none;
   }
 
-  .cert-img-wrap img {
+  .cert-card-wrapper:hover .cert-portrait-frame {
+    opacity: 0.92;
+  }
+
+  .cert-portrait-img {
     max-height: 100%;
     max-width: 100%;
     object-fit: contain;
+    display: block;
   }
 
-  .cert-body {
-    flex-grow: 1;
-    margin-bottom: 14px;
+  .cert-portrait-caption {
+    font-family: var(--mono-font-mono);
+    font-size: 9.5px;
+    color: var(--mono-muted);
+    margin-top: 10px;
+    text-align: center;
+    display: block;
+    line-height: 1.35;
   }
 
-  .cert-issuer-text {
+  .cert-right-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 0;
+  }
+
+  .cert-meta-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  .cert-meta-header .card-tag {
+    margin-bottom: 0;
+    font-size: 10px;
+  }
+
+  .cert-issuer-badge {
     font-family: var(--mono-font-mono);
     font-size: 9.5px;
     font-weight: 700;
     color: var(--mono-muted);
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 6px;
     letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
 
   .cert-name-text {
-    font-size: 13.5px;
-    font-weight: 700;
+    font-size: 16.5px;
+    font-weight: 800;
     color: var(--mono-ink);
-    line-height: 1.4;
-    margin: 0;
+    line-height: 1.3;
+    margin: 0 0 12px 0;
+    letter-spacing: -0.015em;
   }
 
-  .cert-foot {
+  .cert-title-link {
+    color: var(--mono-ink);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .cert-title-link:hover {
+    color: var(--mono-l2);
+  }
+
+  .cert-desc-text {
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--mono-l2);
+    margin: 0 0 20px 0;
+  }
+
+  .cert-footer-rail {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding-top: 12px;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 14px;
     border-top: 0.7px dashed var(--mono-grid);
+    flex-wrap: wrap;
+  }
+
+  .cert-id-badge {
     font-family: var(--mono-font-mono);
     font-size: 10px;
+    display: flex;
+    gap: 6px;
+    align-items: center;
   }
 
-  .cert-id-tag {
+  .cert-id-k {
     color: var(--mono-muted);
+    font-weight: 600;
   }
 
-  .cert-verify-link {
-    font-weight: 700;
+  .cert-id-v {
     color: var(--mono-ink);
+    font-weight: 700;
   }
 
-  /* ── Skills Category Grid ──────────────────────────────────── */
-  .skills-category-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+  /* ── Skills Category List (2-Column Split: Skills Left / Synopsis Right) ── */
+  .skills-category-list {
+    display: flex;
+    flex-direction: column;
     gap: 24px;
   }
 
   .skill-group-inner {
-    padding: 26px 22px;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 36px;
+    padding: 36px 30px;
+    min-height: 270px;
+  }
+
+  .group-left-rail {
+    display: flex;
+    flex-direction: column;
   }
 
   .group-header {
-    margin-bottom: 16px;
-    padding-bottom: 10px;
-    border-bottom: 0.7px solid var(--mono-grid);
+    margin-bottom: 14px;
+  }
+
+  .group-header .card-tag {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 10px;
   }
 
   .group-title {
@@ -715,13 +888,14 @@ const certifications = [
     font-weight: 700;
     color: var(--mono-ink);
     letter-spacing: -0.02em;
+    line-height: 1.25;
     margin: 0;
   }
 
-  .group-items {
+  .group-skills-stack {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
   }
 
   .skill-row {
@@ -729,8 +903,8 @@ const certifications = [
     justify-content: space-between;
     align-items: center;
     font-size: 12.5px;
-    padding-bottom: 8px;
-    border-bottom: 0.7px dashed var(--mono-border-subtle);
+    padding-bottom: 6px;
+    border-bottom: 0.7px dashed var(--mono-grid);
   }
 
   .skill-row:last-child {
@@ -745,9 +919,47 @@ const certifications = [
 
   .skill-level {
     font-family: var(--mono-font-mono);
+    font-size: 9.5px;
+    color: var(--mono-muted);
+    font-weight: 700;
+  }
+
+  .group-right-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .group-synopsis-head {
+    margin-bottom: 10px;
+  }
+
+  .synopsis-label {
+    font-family: var(--mono-font-mono);
+    font-size: 9.5px;
+    font-weight: 700;
+    color: var(--mono-muted);
+    letter-spacing: 0.08em;
+  }
+
+  .group-synopsis-text {
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--mono-l2);
+    margin: 0 0 20px 0;
+  }
+
+  .group-stack-footer {
+    font-family: var(--mono-font-mono);
     font-size: 10.5px;
     color: var(--mono-muted);
-    font-weight: 600;
+    padding-top: 14px;
+    border-top: 0.7px dashed var(--mono-grid);
+  }
+
+  .stack-footer-label {
+    font-weight: 800;
+    color: var(--mono-ink);
   }
 
   /* ── Timeline Chronicle ────────────────────────────────────── */
@@ -759,9 +971,9 @@ const certifications = [
 
   .timeline-inner {
     display: grid;
-    grid-template-columns: 240px 1fr;
-    gap: 32px;
-    padding: 28px 24px;
+    grid-template-columns: 260px 1fr;
+    gap: 36px;
+    padding: 36px 30px;
   }
 
   .entry-meta {
@@ -846,6 +1058,104 @@ const certifications = [
     padding: 32px 28px;
   }
 
+  .dispatch-header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .node-telemetry-tag {
+    font-family: var(--mono-font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--mono-muted);
+    letter-spacing: 0.08em;
+  }
+
+  .dispatch-map-frame {
+    position: relative;
+    width: 100%;
+    background-color: var(--mono-paper);
+    border: 0.7px solid var(--mono-grid);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 18px;
+  }
+
+  .dispatch-world-map {
+    width: 100%;
+    height: 360px;
+    display: block;
+    cursor: grab;
+  }
+
+  .dispatch-world-map:active {
+    cursor: grabbing;
+  }
+
+  .dispatch-location-brief {
+    background-color: var(--mono-bg-subtle);
+    border: 0.7px solid var(--mono-grid);
+    border-radius: 4px;
+    padding: 14px 18px;
+    margin-bottom: 18px;
+  }
+
+  .loc-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .loc-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: var(--mono-ink);
+    display: inline-block;
+    animation: locPulse 2.4s infinite ease-in-out;
+  }
+
+  @keyframes locPulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.4);
+      opacity: 0.5;
+    }
+  }
+
+  .loc-node-title {
+    font-family: var(--mono-font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--mono-ink);
+  }
+
+  .loc-summary-text {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--mono-l2);
+    margin: 0;
+  }
+
+  .loc-summary-text strong {
+    color: var(--mono-ink);
+    font-weight: 700;
+  }
+
+  .dispatch-divider {
+    border-top: 0.7px dashed var(--mono-grid);
+    margin: 18px 0;
+  }
+
   .dispatch-grid {
     display: grid;
     grid-template-columns: 1.2fr 1fr;
@@ -878,6 +1188,18 @@ const certifications = [
     gap: 10px;
   }
 
+  .dispatch-src-line {
+    margin-top: 22px;
+    padding-top: 10px;
+    border-top: 0.7px solid var(--mono-grid);
+    font-family: var(--mono-font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--mono-faint);
+    letter-spacing: 0.08em;
+    text-align: right;
+  }
+
   @media (max-width: 860px) {
     .profile-hero-layout {
       flex-direction: column;
@@ -897,15 +1219,35 @@ const certifications = [
     .profile-quick-ledger {
       grid-template-columns: 1fr;
     }
-    .certs-grid {
-      grid-template-columns: 1fr 1fr;
-    }
-    .skills-category-grid {
+    .skill-group-inner {
       grid-template-columns: 1fr;
+      gap: 20px;
+      padding: 24px 20px;
+    }
+    .cert-card-inner {
+      grid-template-columns: 1fr;
+      gap: 20px;
+      padding: 24px 20px;
+    }
+    .cert-portrait-rail {
+      align-items: flex-start;
+      max-width: 320px;
+    }
+    .cert-portrait-frame {
+      height: 210px;
     }
     .timeline-inner {
       grid-template-columns: 1fr;
       gap: 16px;
+      padding: 24px 20px;
+    }
+    .dispatch-header-bar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+    .dispatch-world-map {
+      height: 260px;
     }
     .dispatch-grid {
       grid-template-columns: 1fr;
@@ -924,8 +1266,164 @@ const certifications = [
       width: 160px;
       height: 160px;
     }
-    .certs-grid {
-      grid-template-columns: 1fr;
+    .cert-portrait-rail {
+      max-width: 100%;
+    }
+    .cert-footer-rail {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .dispatch-inner {
+      padding: 24px 18px;
+    }
+    .dispatch-world-map {
+      height: 210px;
+    }
+    .term-line {
+      flex-direction: column;
+      gap: 2px;
+      line-height: 1.5;
+      margin-bottom: 6px;
+    }
+    .term-k {
+      width: auto;
     }
   }
 </style>
+
+<!-- ECharts Local Script & Telemetry Map Renderer -->
+<script is:inline src="/js/echarts.min.js"></script>
+<script is:inline>
+  (function() {
+    var INK = '#1C1C1A', PAPER = '#F0EFEB', MUTED = '#8F8E88', GRID = '#DEDDD6';
+
+    var obsReveal = function(id, fn) {
+      var n = document.getElementById(id);
+      if (!n) return;
+      var rendered = false;
+      var go = function() {
+        if (rendered) return;
+        rendered = true;
+        fn(n);
+      };
+
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function(es) {
+          if (es[0].isIntersecting) {
+            go();
+            io.disconnect();
+          }
+        }, { threshold: 0.1 });
+        io.observe(n);
+      }
+      // Safety fallback: render anyway if not triggered after 400ms
+      setTimeout(go, 400);
+    };
+
+    fetch('/geojson/world.json')
+      .then(function(r) {
+        if (!r.ok) throw new Error('HTTP error ' + r.status);
+        return r.json();
+      })
+      .then(function(geo) {
+        echarts.registerMap('mono-world', geo);
+        var opt = {
+          animationDuration: 900,
+          animationEasing: 'quarticOut',
+          tooltip: {
+            backgroundColor: INK,
+            borderWidth: 0,
+            padding: [10, 14],
+            textStyle: {
+              color: PAPER,
+              fontFamily: 'Inter, JetBrains Mono, sans-serif',
+              fontSize: 12
+            },
+            formatter: function(p) {
+              if (p.name === 'Taiwan') {
+                return '<span style=\"font-weight:700;letter-spacing:0.05em;\">PRIMARY NODE // TAIPEI, TAIWAN</span><br/><span style=\"color:#C6C5BF;font-size:10px;\">25.0330° N, 121.5654° E · UTC+8 (CST)</span><br/><span style=\"color:#D8D7D1;font-size:10px;\">Taipei Hybrid / On-Site &amp; Global Remote</span>';
+              }
+              return (p.name || 'Territory');
+            }
+          },
+          series: [{
+            type: 'map',
+            map: 'mono-world',
+            top: 'middle',
+            left: 'center',
+            center: [121.5, 24.0],
+            zoom: 3.8,
+            roam: true,
+            scaleLimit: {
+              min: 1.0,
+              max: 15.0
+            },
+            itemStyle: {
+              areaColor: '#E4E3DC',
+              borderColor: PAPER,
+              borderWidth: 0.7
+            },
+            emphasis: {
+              label: {
+                show: true,
+                fontFamily: 'Inter, sans-serif',
+                fontSize: 10,
+                fontWeight: 800,
+                color: INK,
+                textBorderColor: PAPER,
+                textBorderWidth: 3
+              },
+              itemStyle: {
+                areaColor: '#D8D7D1',
+                borderColor: INK,
+                borderWidth: 1.1
+              }
+            },
+            select: { disabled: true },
+            data: [
+              {
+                name: 'Taiwan',
+                itemStyle: {
+                  areaColor: INK,
+                  borderColor: INK,
+                  borderWidth: 1.2
+                },
+                emphasis: {
+                  itemStyle: {
+                    areaColor: '#000000',
+                    borderColor: INK,
+                    borderWidth: 1.5
+                  }
+                },
+                label: {
+                  show: true,
+                  formatter: 'TAIPEI, TAIWAN [UTC+8]',
+                  offset: [76, -4],
+                  fontFamily: 'JetBrains Mono, Inter, monospace',
+                  fontSize: 9.5,
+                  fontWeight: 800,
+                  color: INK,
+                  textBorderColor: PAPER,
+                  textBorderWidth: 3
+                }
+              }
+            ]
+          }]
+        };
+
+        obsReveal('dispatch-world-map', function(elDom) {
+          var g = echarts.getInstanceByDom(elDom) || echarts.init(elDom);
+          g.clear();
+          g.setOption(opt);
+        });
+
+        window.addEventListener('resize', function() {
+          echarts.getInstanceByDom(document.getElementById('dispatch-world-map'))?.resize();
+        });
+      })
+      .catch(function(err) {
+        console.error('Map loading error:', err);
+      });
+  })();
+</script>

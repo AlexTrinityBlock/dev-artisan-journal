@@ -60,12 +60,11 @@ const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
         ))}
       </div>
 
-      <a href={`/blog/${slug}`} class="read-link">
-        <span>Read Dispatch</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-          <polyline points="12 5 19 12 12 19"></polyline>
-        </svg>
+      <a href={`/blog/${slug}`} class="mono-btn-chamfer read-btn">
+        <span class="chamfer-inner">
+          <span class="btn-tag">DISPATCH //</span>
+          <span class="btn-label">Read &rarr;</span>
+        </span>
       </a>
     </div>
   </article>
@@ -77,7 +76,7 @@ const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
     flex-direction: column;
     height: 100%;
     width: 100%;
-    background-color: var(--mono-l2);
+    background-color: var(--mono-grid);
     padding: var(--mono-border-w, 0.7px);
     clip-path: polygon(
       0 0,
@@ -87,16 +86,15 @@ const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
       var(--mono-chamfer-cut, 16px) 100%,
       0 calc(100% - var(--mono-chamfer-cut, 16px))
     );
-    transition: background-color 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .article-card-wrapper:hover {
-    background-color: var(--mono-ink);
     transform: translateY(-2px);
   }
 
   .featured-card {
-    background-color: var(--mono-l1);
+    background-color: var(--mono-grid);
   }
 
   .article-card-inner {
@@ -104,7 +102,7 @@ const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
     flex-direction: column;
     flex-grow: 1;
     background-color: var(--mono-card-bg);
-    padding: 26px 22px;
+    padding: 24px 22px 20px;
     clip-path: polygon(
       0 0,
       calc(100% - var(--mono-chamfer-cut, 16px)) 0,
@@ -128,7 +126,7 @@ const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
 
   .card-tag {
     font-family: var(--mono-font-mono);
-    font-size: 10.5px;
+    font-size: 10px;
     font-weight: 600;
     color: var(--mono-ink);
     letter-spacing: 0.12em;
@@ -161,16 +159,16 @@ const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
   }
 
   .article-title {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 700;
     line-height: 1.35;
-    margin: 0 0 12px 0;
+    margin: 0 0 10px 0;
     color: var(--mono-ink);
     letter-spacing: -0.02em;
   }
 
   .article-title.big-title {
-    font-size: 20px;
+    font-size: 19px;
     font-weight: 800;
   }
 
@@ -181,12 +179,12 @@ const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
 
   .title-link:hover {
     text-decoration: underline;
-    text-decoration-thickness: 1.5px;
+    text-decoration-thickness: 1px;
   }
 
   .article-desc {
-    margin: 0 0 22px 0;
-    font-size: 13px;
+    margin: 0 0 20px 0;
+    font-size: 12.5px;
     line-height: 1.65;
     color: var(--mono-l2);
     flex-grow: 1;
@@ -197,7 +195,7 @@ const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    padding-top: 16px;
+    padding-top: 14px;
     border-top: 0.7px dashed var(--mono-grid);
     flex-wrap: wrap;
   }
@@ -208,20 +206,9 @@ const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
     gap: 6px;
   }
 
-  .read-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-family: var(--mono-font-mono);
+  .read-btn .chamfer-inner {
+    padding: 6px 12px;
     font-size: 11px;
-    font-weight: 700;
-    color: var(--mono-ink);
-    text-decoration: none;
-    transition: transform 0.15s ease;
-  }
-
-  .read-link:hover {
-    transform: translateX(3px);
   }
 
   @media (max-width: 600px) {
