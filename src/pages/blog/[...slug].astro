@@ -8,14 +8,17 @@ export async function getStaticPaths() {
     (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
   );
 
-  return sortedPosts.map((post, index) => ({
-    params: { slug: post.slug || post.id.replace(/\.[^/.]+$/, "") },
-    props: {
-      post,
-      prevPost: index < sortedPosts.length - 1 ? sortedPosts[index + 1] : null,
-      nextPost: index > 0 ? sortedPosts[index - 1] : null,
-    },
-  }));
+  return sortedPosts.map((post, index) => {
+    const slug = (post.slug || post.id).replace(/\/index$/, '').replace(/\.[^/.]+$/, '');
+    return {
+      params: { slug },
+      props: {
+        post,
+        prevPost: index < sortedPosts.length - 1 ? sortedPosts[index + 1] : null,
+        nextPost: index > 0 ? sortedPosts[index - 1] : null,
+      },
+    };
+  });
 }
 
 const { post, prevPost, nextPost } = Astro.props;

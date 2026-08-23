@@ -128,6 +128,15 @@ const certifications = [
     
     <!-- ════════ TOP HERO PROFILE (BORDERLESS EDITORIAL DESIGN) ════════ -->
     <section class="profile-hero-borderless">
+      
+      <!-- Top Section Header -->
+      <div class="profile-meta-top">
+        <span class="card-tag">SYSTEM // 01 · CANDIDATE PROFILE</span>
+        <span class="role-pill">
+          <span class="chamfer-inner">FULLSTACK &amp; GENAI ARCHITECT</span>
+        </span>
+      </div>
+
       <div class="profile-hero-layout">
         
         <div class="profile-avatar-block">
@@ -135,7 +144,7 @@ const certifications = [
             <img
               class="avatar-large"
               src="/images/avatar/avatar.jpg"
-              alt="Alex.Hsiao (Wei-Chun Hsiao) — FullStack & GenAI Systems Architect"
+              alt="Alex.Hsiao (Wei-Chun Hsiao) — FullStack &amp; GenAI Systems Architect"
               loading="lazy"
             />
           </div>
@@ -148,13 +157,6 @@ const certifications = [
         </div>
 
         <div class="profile-hero-content">
-          <div class="profile-meta-top">
-            <span class="card-tag">SYSTEM // 01 · CANDIDATE PROFILE</span>
-            <span class="role-pill">
-              <span class="chamfer-inner">FULLSTACK &amp; GENAI ARCHITECT</span>
-            </span>
-          </div>
-
           <h1 class="profile-name">Alex Hsiao <span class="profile-alias">(Wei-Chun Hsiao)</span></h1>
           
           <p class="profile-intro-lead">
@@ -552,7 +554,18 @@ const certifications = [
   /* ── Borderless Hero Profile (SYSTEM // 01 · CANDIDATE PROFILE) ── */
   .profile-hero-borderless {
     margin-bottom: 56px;
-    padding-top: 8px;
+    padding-top: 12px;
+  }
+
+  .profile-meta-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 0.7px solid var(--mono-grid);
+    flex-wrap: wrap;
   }
 
   .profile-hero-layout {
@@ -636,15 +649,6 @@ const certifications = [
   .profile-hero-content {
     flex-grow: 1;
     min-width: 0;
-  }
-
-  .profile-meta-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 12px;
-    flex-wrap: wrap;
   }
 
   .role-pill {
@@ -1294,20 +1298,31 @@ const certifications = [
   }
 
   @media (max-width: 860px) {
+    .profile-meta-top {
+      margin-bottom: 20px;
+    }
     .profile-hero-layout {
       flex-direction: column;
+      align-items: flex-start;
       gap: 28px;
     }
     .profile-avatar-block {
-      width: 180px;
+      width: 200px;
+      margin: 0 0 4px 0;
     }
     .avatar-frame {
-      width: 180px;
-      height: 180px;
+      width: 200px;
+      height: 200px;
     }
     .avatar-large {
-      width: 180px;
-      height: 180px;
+      width: 200px;
+      height: 200px;
+    }
+    .profile-name {
+      font-size: 2rem;
+    }
+    .profile-alias {
+      font-size: 1.4rem;
     }
     .profile-quick-ledger {
       grid-template-columns: 1fr;
@@ -1348,16 +1363,42 @@ const certifications = [
   }
 
   @media (max-width: 540px) {
+    .profile-meta-top {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .profile-hero-layout {
+      gap: 24px;
+    }
     .profile-avatar-block {
-      width: 160px;
+      width: 100%;
+      max-width: 220px;
+      margin: 0 auto 8px;
+      align-items: center;
     }
     .avatar-frame {
-      width: 160px;
-      height: 160px;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1 / 1;
     }
     .avatar-large {
-      width: 160px;
-      height: 160px;
+      width: 100%;
+      height: 100%;
+    }
+    .profile-name {
+      font-size: 1.75rem;
+      text-align: left;
+    }
+    .profile-alias {
+      display: block;
+      font-size: 1.2rem;
+      margin-top: 4px;
+    }
+    .profile-intro-lead {
+      font-size: 14px;
+      line-height: 1.7;
     }
     .cert-portrait-rail {
       max-width: 100%;

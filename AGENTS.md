@@ -1,12 +1,23 @@
+## Package Manager & Runtime
+
+This project uses **Bun** as its package manager and execution runtime. Never use `npm`, `pnpm`, or `yarn`.
+
+- Install dependencies: `bun install`
+- Add packages: `bun add <pkg>` (or `bun add -d <pkg>` for dev dependencies)
+- Remove packages: `bun remove <pkg>`
+
 ## Development
+
+- Build project: `bun run build`
+- Preview build: `bun run preview`
 
 When starting the dev server, use background mode:
 
 ```
-astro dev --background
+bun x astro dev --background
 ```
 
-Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
+Manage the background server with `bun x astro dev stop`, `bun x astro dev status`, and `bun x astro dev logs`.
 
 ## Documentation
 

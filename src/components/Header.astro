@@ -18,8 +18,16 @@ const navItems = [
     <!-- Logo & Status Beacon -->
     <a href="/" class="site-logo">
       <div class="beacon-node" title="System Active: Taipei Node">
-        <span class="beacon-pulse"></span>
-        <span class="beacon-core"></span>
+        <svg class="hex-beacon" width="42" height="42" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- 0. Circumscribed Outer Circle (R=21, precisely passes through all 6 vertices of Outer Hex) -->
+          <circle class="geo-outer-circle" cx="24" cy="24" r="21" stroke="var(--mono-muted)" stroke-width="0.8" vector-effect="non-scaling-stroke" fill="none" />
+          <!-- 1. Outer Hexagon (Flat-topped & Flat-bottomed, R=21) -->
+          <polygon class="geo-outer-hex" points="45,24 34.5,5.81 13.5,5.81 3,24 13.5,42.19 34.5,42.19" stroke="var(--mono-muted)" stroke-width="0.8" vector-effect="non-scaling-stroke" fill="none" />
+          <!-- 2. Middle Hexagon (Pointy-topped / Midpoint-Inscribed, r=18.19) -->
+          <polygon class="geo-mid-hex" points="24,5.81 39.75,14.91 39.75,33.09 24,42.19 8.25,33.09 8.25,14.91" stroke="var(--mono-muted)" stroke-width="0.8" vector-effect="non-scaling-stroke" fill="none" />
+          <!-- 3. Inscribed Equilateral Triangle (3 Vertices Coincident with Inner Hex Vertices) -->
+          <polygon class="geo-inner-tri" points="8.25,14.91 39.75,14.91 24,42.19" stroke="var(--mono-muted)" stroke-width="0.8" vector-effect="non-scaling-stroke" fill="none" />
+        </svg>
       </div>
       <div class="logo-text">
         <span class="logo-title">DEV ARTISAN <span class="logo-sep">//</span> JOURNAL</span>
@@ -86,44 +94,40 @@ const navItems = [
   .site-logo {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     text-decoration: none;
   }
 
   .beacon-node {
-    position: relative;
-    width: 10px;
-    height: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
   }
 
-  .beacon-core {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--mono-ink);
+  .hex-beacon {
+    width: 42px;
+    height: 42px;
+    display: block;
+    overflow: visible;
   }
 
-  .beacon-pulse {
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    border: 0.7px dashed var(--mono-muted);
-    animation: pulse 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  }
-
-  @keyframes pulse {
-    0% { transform: scale(0.7); opacity: 1; }
-    50% { transform: scale(1.4); opacity: 0.2; }
-    100% { transform: scale(0.7); opacity: 1; }
+  .geo-outer-circle,
+  .geo-outer-hex,
+  .geo-mid-hex,
+  .geo-inner-tri {
+    stroke: var(--mono-muted);
+    stroke-width: 0.8px;
+    fill: none;
   }
 
   .logo-text {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    height: 34px;
   }
 
   .logo-title {
@@ -132,6 +136,7 @@ const navItems = [
     font-weight: 800;
     letter-spacing: 0.04em;
     color: var(--mono-ink);
+    line-height: 1.2;
   }
 
   .logo-sep {
@@ -143,6 +148,7 @@ const navItems = [
     font-size: 10.5px;
     color: var(--mono-muted);
     font-weight: 500;
+    line-height: 1.25;
   }
 
   .site-nav {

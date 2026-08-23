@@ -18,7 +18,8 @@ interface Props {
 }
 
 const { post, featured = false } = Astro.props;
-const slug = post.slug || post.id.replace(/\.[^/.]+$/, "");
+const slug = (post.slug || post.id).replace(/\/index$/, "").replace(/\.[^/.]+$/, "");
+const postUrl = `/blog/${slug}`;
 const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
   year: 'numeric',
   month: 'short',
@@ -26,7 +27,14 @@ const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
 });
 ---
 
-<div class={`chamfer-card-wrapper article-card-wrapper ${featured ? 'featured-card' : ''}`}>
+<div 
+  class={`chamfer-card-wrapper article-card-wrapper ${featured ? 'featured-card' : ''}`}
+  data-href={postUrl}
+  onclick="if (!event.target.closest('a')) window.location.href = this.dataset.href;"
+  role="link"
+  tabindex="0"
+  onkeydown="if (event.key === 'Enter' && !event.target.closest('a')) window.location.href = this.dataset.href;"
+>
   <article class="chamfer-card-content article-card-inner">
     <!-- Card Header Meta -->
     <div class="card-meta">
@@ -40,7 +48,7 @@ const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
 
     <!-- Title -->
     <h3 class={`article-title ${featured ? 'big-title' : ''}`}>
-      <a href={`/blog/${slug}`} class="title-link">
+      <a href={postUrl} class="title-link">
         {post.data.title}
       </a>
     </h3>
@@ -60,7 +68,7 @@ const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
         ))}
       </div>
 
-      <a href={`/blog/${slug}`} class="mono-btn-chamfer read-btn">
+      <a href={postUrl} class="mono-btn-chamfer read-btn">
         <span class="chamfer-inner">
           <span class="btn-tag">DISPATCH //</span>
           <span class="btn-label">Read &rarr;</span>
@@ -87,10 +95,17 @@ const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
       0 calc(100% - var(--mono-chamfer-cut, 16px))
     );
     transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+    user-select: none;
   }
 
   .article-card-wrapper:hover {
     transform: translateY(-2px);
+  }
+
+  .article-card-wrapper:hover .title-link {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
   }
 
   .featured-card {

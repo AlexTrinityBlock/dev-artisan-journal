@@ -142,7 +142,7 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
       <!-- Prev / Next navigation -->
       <div class="nav-adjacent-grid">
         {prevPost ? (
-          <a href={`/blog/${prevPost.slug || prevPost.id.replace(/\.[^/.]+$/, "")}`} class="chamfer-card-wrapper adjacent-wrapper interactive prev">
+          <a href={`/blog/${(prevPost.slug || prevPost.id).replace(/\/index$/, "").replace(/\.[^/.]+$/, "")}`} class="chamfer-card-wrapper adjacent-wrapper interactive prev">
             <div class="chamfer-card-content adjacent-inner">
               <span class="adjacent-label">&larr; PREVIOUS ARTICLE</span>
               <span class="adjacent-title">{prevPost.data.title}</span>
@@ -151,7 +151,7 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
         ) : <div />}
 
         {nextPost ? (
-          <a href={`/blog/${nextPost.slug || nextPost.id.replace(/\.[^/.]+$/, "")}`} class="chamfer-card-wrapper adjacent-wrapper interactive next">
+          <a href={`/blog/${(nextPost.slug || nextPost.id).replace(/\/index$/, "").replace(/\.[^/.]+$/, "")}`} class="chamfer-card-wrapper adjacent-wrapper interactive next">
             <div class="chamfer-card-content adjacent-inner next-align">
               <span class="adjacent-label">NEXT ARTICLE &rarr;</span>
               <span class="adjacent-title">{nextPost.data.title}</span>
@@ -176,52 +176,15 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
     </div>
 
   </div>
+
+  <!-- Global inline script for charts when present -->
+  <script is:inline src="/js/echarts.min.js"></script>
 </BaseLayout>
 
 <style>
   .post-container {
-    max-width: 1060px;
-  }
-
-  /* ── Dual-Chamfer Shared Geometry ──────────────────────────── */
-  .post-header-wrapper,
-  .post-header-inner,
-  .prose-wrapper,
-  .prose-inner,
-  .toc-wrapper,
-  .toc-inner,
-  .adjacent-wrapper,
-  .adjacent-inner {
-    clip-path: polygon(
-      0 0,
-      calc(100% - var(--mono-chamfer-cut, 16px)) 0,
-      100% var(--mono-chamfer-cut, 16px),
-      100% 100%,
-      var(--mono-chamfer-cut, 16px) 100%,
-      0 calc(100% - var(--mono-chamfer-cut, 16px))
-    );
-  }
-
-  .post-header-wrapper,
-  .prose-wrapper,
-  .toc-wrapper,
-  .adjacent-wrapper {
-    background-color: var(--mono-grid);
-    padding: var(--mono-border-w, 0.7px);
+    max-width: 1140px;
     width: 100%;
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .post-header-inner,
-  .prose-inner,
-  .toc-inner,
-  .adjacent-inner {
-    background-color: var(--mono-card-bg);
-    color: var(--mono-ink);
-  }
-
-  .adjacent-wrapper:hover {
-    transform: translateY(-2px);
   }
 
   .breadcrumb {
@@ -257,12 +220,19 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
     max-width: 320px;
   }
 
+  /* ── Borderless Post Article Header ────────────────────────── */
   .post-header-wrapper {
+    background: transparent;
+    padding: 0;
+    border-bottom: 0.7px solid var(--mono-grid);
     margin-bottom: 36px;
+    clip-path: none;
   }
 
   .post-header-inner {
-    padding: 36px 32px 28px;
+    padding: 8px 0 28px;
+    background: transparent;
+    clip-path: none;
   }
 
   .card-tag {
@@ -286,12 +256,13 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
   }
 
   .post-title {
-    font-size: 2rem;
+    font-size: 2.15rem;
     font-weight: 800;
-    line-height: 1.25;
+    line-height: 1.2;
     letter-spacing: -0.025em;
     color: var(--mono-ink);
-    margin: 0 0 12px 0;
+    margin: 0 0 14px 0;
+    overflow-wrap: break-word;
   }
 
   .post-subtitle {
@@ -299,6 +270,7 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
     color: var(--mono-l3);
     line-height: 1.65;
     margin: 0 0 24px 0;
+    max-width: 900px;
   }
 
   .post-meta-bottom {
@@ -343,55 +315,74 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
     color: var(--mono-muted);
   }
 
+  /* ── Content + Sidebar Layout ─────────────────────────────── */
   .post-content-layout {
     display: grid;
-    grid-template-columns: 1fr 280px;
-    gap: 36px;
+    grid-template-columns: minmax(0, 1fr) 220px;
+    gap: 48px;
     align-items: flex-start;
+    width: 100%;
+  }
+
+  .prose-wrapper {
+    background: transparent;
+    padding: 0;
+    clip-path: none;
+    min-width: 0;
+    max-width: 100%;
   }
 
   .prose-inner {
-    padding: 40px 36px;
+    padding: 0;
+    background: transparent;
+    clip-path: none;
     min-width: 0;
+    max-width: 100%;
+    overflow-x: hidden;
   }
 
-  /* Typography styles inside article */
+  /* Typography & Elements inside Article */
   .prose-inner :global(h2) {
-    font-size: 1.4rem;
+    font-size: 1.35rem;
     font-weight: 800;
     letter-spacing: -0.02em;
     color: var(--mono-ink);
     margin-top: 40px;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
     padding-bottom: 8px;
     border-bottom: 0.7px solid var(--mono-grid);
+    overflow-wrap: break-word;
   }
 
   .prose-inner :global(h3) {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: var(--mono-ink);
     margin-top: 28px;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
+    overflow-wrap: break-word;
   }
 
   .prose-inner :global(p) {
     font-size: 14.5px;
-    line-height: 1.75;
+    line-height: 1.8;
     color: var(--mono-l2);
     margin-bottom: 20px;
+    overflow-wrap: break-word;
   }
 
-  .prose-inner :global(ul), .prose-inner :global(ol) {
+  .prose-inner :global(ul),
+  .prose-inner :global(ol) {
     margin-bottom: 20px;
-    padding-left: 24px;
+    padding-left: 22px;
     color: var(--mono-l2);
     font-size: 14px;
-    line-height: 1.7;
+    line-height: 1.75;
   }
 
   .prose-inner :global(li) {
     margin-bottom: 8px;
+    overflow-wrap: break-word;
   }
 
   .prose-inner :global(strong) {
@@ -401,33 +392,125 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 
   .prose-inner :global(blockquote) {
     border-left: 3px solid var(--mono-ink);
-    background: var(--mono-bg-subtle);
-    padding: 16px 22px;
-    border-radius: 0 var(--mono-tag-radius) var(--mono-tag-radius) 0;
+    background: var(--mono-paper);
+    border: 0.7px solid var(--mono-grid);
+    border-left: 3px solid var(--mono-ink);
+    padding: 16px 20px;
+    border-radius: 2px;
     margin: 24px 0;
-    font-style: italic;
     color: var(--mono-l2);
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+
+  .prose-inner :global(pre) {
+    background: var(--mono-dark-bg);
+    color: var(--mono-dark-ink);
+    padding: 18px 20px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 12.5px;
+    line-height: 1.6;
+    border: 0.7px solid var(--mono-dark-grid);
+    margin: 20px 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .prose-inner :global(code:not(pre code)) {
+    background: var(--mono-paper);
+    border: 0.7px solid var(--mono-grid);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.88em;
+    color: var(--mono-ink);
+    word-break: break-word;
   }
 
   .prose-inner :global(table) {
     width: 100%;
     border-collapse: collapse;
-    margin: 28px 0;
+    margin: 24px 0;
     font-size: 13px;
+    display: block;
+    overflow-x: auto;
   }
 
-  .prose-inner :global(th), .prose-inner :global(td) {
-    padding: 12px 16px;
+  .prose-inner :global(th),
+  .prose-inner :global(td) {
+    padding: 10px 14px;
     border: 0.7px solid var(--mono-grid);
     text-align: left;
   }
 
   .prose-inner :global(th) {
-    background: var(--mono-bg-subtle);
+    background: var(--mono-paper);
     font-family: var(--mono-font-mono);
-    font-size: 11.5px;
+    font-size: 11px;
     font-weight: 700;
     color: var(--mono-ink);
+  }
+
+  /* Interactive Tufte Live Chart Container */
+  .prose-inner :global(.tufte-live-card) {
+    background: var(--mono-paper);
+    border: 0.7px solid var(--mono-grid);
+    padding: 24px 22px;
+    margin: 28px 0;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .prose-inner :global(.tufte-live-card .chart-header) {
+    margin-bottom: 12px;
+  }
+
+  .prose-inner :global(.tufte-live-card .chart-title) {
+    font-family: var(--mono-font);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 4px 0;
+    color: var(--mono-ink);
+  }
+
+  .prose-inner :global(.tufte-live-card .chart-sub) {
+    font-size: 11px;
+    color: var(--mono-muted);
+    margin: 0;
+  }
+
+  .prose-inner :global(.tufte-live-card .chart-canvas) {
+    width: 100%;
+    height: 280px;
+    margin: 8px 0;
+  }
+
+  .prose-inner :global(.tufte-live-card .chart-footer) {
+    font-family: var(--mono-font-mono);
+    font-size: 9.5px;
+    color: var(--mono-faint);
+    letter-spacing: 0.08em;
+    margin-top: 8px;
+    text-transform: uppercase;
+  }
+
+  .prose-inner :global(.formula-box) {
+    font-family: var(--mono-font-mono);
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--mono-ink);
+    background: var(--mono-paper);
+    border: 0.7px solid var(--mono-grid);
+    padding: 14px 20px;
+    margin: 20px 0;
+    border-radius: 4px;
+    text-align: center;
+    letter-spacing: 0.04em;
+    overflow-x: auto;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .post-tags-row {
@@ -453,19 +536,29 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
     gap: 8px;
   }
 
-  /* Sidebar TOC */
+  /* ── Sidebar TOC ─────────────────────────────────────────── */
   .post-sidebar {
     position: sticky;
     top: 90px;
   }
 
+  .toc-wrapper {
+    background: transparent;
+    padding: 0;
+    clip-path: none;
+    border-left: 0.7px solid var(--mono-grid);
+    padding-left: 18px;
+  }
+
   .toc-inner {
-    padding: 24px 20px;
+    padding: 0;
+    background: transparent;
+    clip-path: none;
   }
 
   .toc-header {
-    margin-bottom: 14px;
-    padding-bottom: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
     border-bottom: 0.7px solid var(--mono-grid);
   }
 
@@ -477,7 +570,7 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
   }
 
   .toc-item a {
-    font-size: 12px;
+    font-size: 11.5px;
     color: var(--mono-l3);
     text-decoration: none;
     line-height: 1.4;
@@ -491,13 +584,16 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
   }
 
   .toc-item.depth-3 {
-    padding-left: 12px;
-    font-size: 11px;
+    padding-left: 10px;
+    font-size: 10.5px;
     border-left: 0.7px solid var(--mono-grid);
   }
 
+  /* ── Adjacent Articles & Bottom Navigation ────────────────── */
   .post-footer-section {
-    margin-top: 44px;
+    margin-top: 48px;
+    border-top: 0.7px solid var(--mono-grid);
+    padding-top: 32px;
   }
 
   .nav-adjacent-grid {
@@ -545,18 +641,13 @@ const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
     margin-top: 36px;
   }
 
-  @media (max-width: 860px) {
+  @media (max-width: 900px) {
     .post-content-layout {
       grid-template-columns: 1fr;
+      gap: 32px;
     }
     .post-sidebar {
       display: none;
-    }
-    .post-header-inner {
-      padding: 26px 20px;
-    }
-    .prose-inner {
-      padding: 26px 20px;
     }
     .nav-adjacent-grid {
       grid-template-columns: 1fr;
