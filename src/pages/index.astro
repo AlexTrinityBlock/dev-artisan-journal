@@ -505,7 +505,7 @@ const certifications = [
     max-width: 1040px;
   }
 
-  /* ── Dual-Chamfer Shared Geometry (0.7px --mono-grid Hairline) ── */
+  /* ── Borderless Editorial Card Architecture (Native Ground & Hairline Dividers) ── */
   .cert-card-wrapper,
   .cert-card-inner,
   .skill-group-wrapper,
@@ -514,32 +514,39 @@ const certifications = [
   .timeline-inner,
   .dispatch-wrapper,
   .dispatch-inner {
-    clip-path: polygon(
-      0 0,
-      calc(100% - var(--mono-chamfer-cut, 16px)) 0,
-      100% var(--mono-chamfer-cut, 16px),
-      100% 100%,
-      var(--mono-chamfer-cut, 16px) 100%,
-      0 calc(100% - var(--mono-chamfer-cut, 16px))
-    );
+    clip-path: none;
   }
 
   .cert-card-wrapper,
   .skill-group-wrapper,
-  .timeline-wrapper,
-  .dispatch-wrapper {
-    background-color: var(--mono-grid);
-    padding: var(--mono-border-w, 0.7px);
+  .timeline-wrapper {
+    background-color: transparent;
+    padding: 0;
     width: 100%;
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    border-bottom: 0.7px solid var(--mono-grid);
+    transition: none;
+  }
+
+  .dispatch-wrapper {
+    background-color: transparent;
+    padding: 0;
+    width: 100%;
+    border-top: 0.7px solid var(--mono-grid);
+    border-bottom: 0.7px solid var(--mono-grid);
   }
 
   .cert-card-inner,
   .skill-group-inner,
-  .timeline-inner,
-  .dispatch-inner {
-    background-color: var(--mono-card-bg);
+  .timeline-inner {
+    background-color: transparent;
     color: var(--mono-ink);
+    padding: 32px 0;
+  }
+
+  .dispatch-inner {
+    background-color: transparent;
+    color: var(--mono-ink);
+    padding: 28px 0;
   }
 
   /* ── Borderless Hero Profile (SYSTEM // 01 · CANDIDATE PROFILE) ── */
@@ -770,7 +777,8 @@ const certifications = [
   .certs-list {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    border-top: 0.7px solid var(--mono-grid);
+    gap: 0;
   }
 
   .cert-card-wrapper {
@@ -782,9 +790,9 @@ const certifications = [
     display: grid;
     grid-template-columns: 260px 1fr;
     gap: 36px;
-    padding: 36px 30px;
+    padding: 32px 0;
     width: 100%;
-    min-height: 310px;
+    min-height: 290px;
   }
 
   .cert-portrait-rail {
@@ -915,15 +923,16 @@ const certifications = [
   .skills-category-list {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    border-top: 0.7px solid var(--mono-grid);
+    gap: 0;
   }
 
   .skill-group-inner {
     display: grid;
     grid-template-columns: 260px 1fr;
     gap: 36px;
-    padding: 36px 30px;
-    min-height: 270px;
+    padding: 32px 0;
+    min-height: 250px;
   }
 
   .group-left-rail {
@@ -1024,14 +1033,15 @@ const certifications = [
   .timeline-list {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    border-top: 0.7px solid var(--mono-grid);
+    gap: 0;
   }
 
   .timeline-inner {
     display: grid;
     grid-template-columns: 260px 1fr;
     gap: 36px;
-    padding: 36px 30px;
+    padding: 32px 0;
   }
 
   .entry-meta {
