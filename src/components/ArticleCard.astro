@@ -128,10 +128,10 @@ const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
     font-family: var(--mono-font-mono);
     font-size: 10px;
     font-weight: 600;
-    color: var(--mono-ink);
+    color: var(--mono-muted);
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    background: var(--mono-bg-subtle);
+    background: var(--mono-paper);
     padding: 2px 8px;
     border-radius: var(--mono-tag-radius);
     border: 0.7px solid var(--mono-grid);
@@ -139,10 +139,11 @@ const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
   }
 
   .featured-badge {
-    background: var(--mono-ink);
-    color: var(--mono-paper);
+    background: var(--mono-paper);
+    border: 0.7px solid var(--mono-grid);
+    color: var(--mono-ink);
     font-size: 9.5px;
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: 0.08em;
     padding: 2px 6px;
     border-radius: var(--mono-tag-radius);

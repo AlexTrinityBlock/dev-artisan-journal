@@ -140,15 +140,19 @@ const certifications = [
             />
           </div>
           <div class="status-indicator-badge">
-            <span class="status-dot"></span>
-            <span>ACTIVE // TAIPEI NODE</span>
+            <span class="chamfer-inner">
+              <span class="status-dot"></span>
+              <span>ACTIVE // TAIPEI NODE</span>
+            </span>
           </div>
         </div>
 
         <div class="profile-hero-content">
           <div class="profile-meta-top">
             <span class="card-tag">SYSTEM // 01 · CANDIDATE PROFILE</span>
-            <span class="role-pill">FULLSTACK &amp; GENAI ARCHITECT</span>
+            <span class="role-pill">
+              <span class="chamfer-inner">FULLSTACK &amp; GENAI ARCHITECT</span>
+            </span>
           </div>
 
           <h1 class="profile-name">Alex Hsiao <span class="profile-alias">(Wei-Chun Hsiao)</span></h1>
@@ -300,7 +304,9 @@ const certifications = [
               <span class="entry-period">NOV 2025 – PRESENT</span>
               <span class="entry-company">Tatung System Technologies Inc. (Tatung World Tech)</span>
               <span class="entry-location">Zhongshan Dist., Taipei</span>
-              <span class="entry-role">GenAI Engineer / AI Engineer</span>
+              <span class="entry-role">
+                <span class="chamfer-inner">GenAI Engineer / AI Engineer</span>
+              </span>
             </div>
             <div class="entry-content">
               <ul class="entry-bullets">
@@ -324,7 +330,9 @@ const certifications = [
               <span class="entry-period">MAR 2025 – NOV 2025 (9 MOS)</span>
               <span class="entry-company">National Institute of Cyber Security (NICS)</span>
               <span class="entry-location">Zhongzheng Dist., Taipei</span>
-              <span class="entry-role">Software Engineer</span>
+              <span class="entry-role">
+                <span class="chamfer-inner">Software Engineer</span>
+              </span>
             </div>
             <div class="entry-content">
               <ul class="entry-bullets">
@@ -347,7 +355,9 @@ const certifications = [
               <span class="entry-period">JUN 2024 – MAR 2025 (10 MOS)</span>
               <span class="entry-company">Cloud Service Provider (Agency)</span>
               <span class="entry-location">Nangang Dist., Taipei</span>
-              <span class="entry-role">Project Engineer / Software Engineer</span>
+              <span class="entry-role">
+                <span class="chamfer-inner">Project Engineer / Software Engineer</span>
+              </span>
             </div>
             <div class="entry-content">
               <ul class="entry-bullets">
@@ -371,7 +381,9 @@ const certifications = [
               <span class="entry-period">SEP 2021 – OCT 2023 (2 YRS 2 MOS)</span>
               <span class="entry-company">Information Security Lab, NCYU CSIE</span>
               <span class="entry-location">Chiayi City, Taiwan</span>
-              <span class="entry-role">Master's Researcher &amp; Project Assistant</span>
+              <span class="entry-role">
+                <span class="chamfer-inner">Master's Researcher &amp; Project Assistant</span>
+              </span>
             </div>
             <div class="entry-content">
               <ul class="entry-bullets">
@@ -395,7 +407,9 @@ const certifications = [
               <span class="entry-period">DEC 2019 – MAR 2020 (4 MOS)</span>
               <span class="entry-company">Ticrown Asset Management Ltd.</span>
               <span class="entry-location">Daliao Dist., Kaohsiung City</span>
-              <span class="entry-role">PHP Assistant Engineer / Web Designer</span>
+              <span class="entry-role">
+                <span class="chamfer-inner">PHP Assistant Engineer / Web Designer</span>
+              </span>
             </div>
             <div class="entry-content">
               <ul class="entry-bullets">
@@ -567,20 +581,41 @@ const certifications = [
 
   .status-indicator-badge {
     display: inline-flex;
+    padding: 0.7px;
+    background-color: var(--mono-grid);
+    clip-path: polygon(
+      0 0,
+      calc(100% - 6px) 0,
+      100% 6px,
+      100% 100%,
+      6px 100%,
+      0 calc(100% - 6px)
+    );
+    width: 100%;
+  }
+
+  .status-indicator-badge .chamfer-inner {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 7px;
+    width: 100%;
     font-family: var(--mono-font-mono);
     font-size: 10px;
-    font-weight: 700;
+    font-weight: 600;
     color: var(--mono-l2);
-    background: var(--mono-bg-subtle);
-    border: 0.7px solid var(--mono-grid);
+    background: var(--mono-paper);
     padding: 5px 12px;
-    border-radius: var(--mono-pill-radius);
+    clip-path: polygon(
+      0 0,
+      calc(100% - 6px) 0,
+      100% 6px,
+      100% 100%,
+      6px 100%,
+      0 calc(100% - 6px)
+    );
     white-space: nowrap;
     letter-spacing: 0.04em;
-    width: 100%;
   }
 
   .status-dot {
@@ -606,13 +641,36 @@ const certifications = [
   }
 
   .role-pill {
+    display: inline-flex;
+    padding: 0.7px;
+    background-color: var(--mono-grid);
+    clip-path: polygon(
+      0 0,
+      calc(100% - 6px) 0,
+      100% 6px,
+      100% 100%,
+      6px 100%,
+      0 calc(100% - 6px)
+    );
+  }
+
+  .role-pill .chamfer-inner {
+    display: inline-flex;
+    align-items: center;
     font-family: var(--mono-font-mono);
     font-size: 10px;
-    font-weight: 700;
-    color: var(--mono-paper);
-    background: var(--mono-ink);
+    font-weight: 600;
+    color: var(--mono-ink);
+    background: var(--mono-paper);
     padding: 3px 9px;
-    border-radius: var(--mono-tag-radius);
+    clip-path: polygon(
+      0 0,
+      calc(100% - 6px) 0,
+      100% 6px,
+      100% 100%,
+      6px 100%,
+      0 calc(100% - 6px)
+    );
     letter-spacing: 0.06em;
   }
 
@@ -1004,16 +1062,41 @@ const certifications = [
     margin-bottom: 10px;
   }
 
+  /* Dual-Chamfer Entry Role Badge (0.7px --mono-grid hairline & 45° cuts) */
   .entry-role {
-    display: inline-block;
+    display: inline-flex;
+    padding: 0.7px;
+    background-color: var(--mono-grid);
+    clip-path: polygon(
+      0 0,
+      calc(100% - 6px) 0,
+      100% 6px,
+      100% 100%,
+      6px 100%,
+      0 calc(100% - 6px)
+    );
+    width: fit-content;
+  }
+
+  .entry-role .chamfer-inner {
+    display: inline-flex;
+    align-items: center;
     font-family: var(--mono-font-mono);
     font-size: 10px;
-    font-weight: 700;
-    color: var(--mono-paper);
-    background: var(--mono-ink);
+    font-weight: 600;
+    color: var(--mono-ink);
+    background: var(--mono-paper);
     padding: 3px 8px;
-    border-radius: var(--mono-tag-radius);
-    width: fit-content;
+    clip-path: polygon(
+      0 0,
+      calc(100% - 6px) 0,
+      100% 6px,
+      100% 100%,
+      6px 100%,
+      0 calc(100% - 6px)
+    );
+    letter-spacing: 0.04em;
+    white-space: nowrap;
   }
 
   .entry-bullets {

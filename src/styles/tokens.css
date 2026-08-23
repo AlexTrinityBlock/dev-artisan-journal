@@ -205,7 +205,7 @@ a.chamfer-card:hover {
   font-weight: 600;
   padding: 3px 8px;
   border-radius: var(--mono-tag-radius);
-  background: var(--mono-bg-subtle);
+  background: var(--mono-paper);
   border: 0.7px solid var(--mono-grid);
   color: var(--mono-l2);
 }
@@ -304,8 +304,22 @@ a.chamfer-card:hover {
 }
 
 .mono-btn-chamfer:hover .btn-label::after,
-.btn-chamfer:hover .btn-label::after {
+.btn-chamfer:hover .btn-label::after,
+.mono-btn-chamfer.active .btn-label::after,
+.btn-chamfer.active .btn-label::after {
   transform: scaleX(1);
+}
+
+.mono-btn-chamfer.active .btn-label,
+.btn-chamfer.active .btn-label {
+  color: var(--mono-ink);
+  font-weight: 700;
+}
+
+.mono-btn-chamfer.active .btn-tag,
+.btn-chamfer.active .btn-tag {
+  color: var(--mono-ink);
+  font-weight: 700;
 }
 
 .mono-btn-chamfer:active,
