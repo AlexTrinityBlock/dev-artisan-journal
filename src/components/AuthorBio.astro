@@ -1,0 +1,220 @@
+---
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+---
+
+<div class={`chamfer-card-wrapper author-box-wrapper ${compact ? 'compact' : ''}`}>
+  <div class="chamfer-card-content author-box-inner">
+    <div class="author-layout">
+      
+      <!-- Avatar / Official photo -->
+      <div class="author-avatar-wrap">
+        <img
+          class="author-avatar-img"
+          src="/images/avatar/avatar.jpg"
+          alt="Alex.Hsiao (Wei-Chun Hsiao) — personal avatar"
+          loading="lazy"
+        />
+      </div>
+
+      <!-- Details -->
+      <div class="author-details">
+        <div class="author-header">
+          <div>
+            <div class="card-tag">AUTHOR PROFILE // 01</div>
+            <h3 class="author-name">Alex.Hsiao <span class="author-full">(Wei-Chun Hsiao)</span></h3>
+            <p class="author-role">FullStack Engineer &amp; GenAI Systems Architect</p>
+          </div>
+          <a href="/" class="view-profile-btn">Full Profile &amp; CV &rarr;</a>
+        </div>
+
+        <p class="author-bio-text">
+          GenAI Engineer specializing in on-premises bare-metal GPU clustering (NVIDIA GPU Operator &amp; HAMi), stateful Multi-Agent LLMs with LangGraph, distributed microservices, and ISO/IEC 27001 ISMS governance.
+        </p>
+
+        <!-- Credentials row -->
+        <div class="creds-row">
+          <span class="cred-pill" title="NVIDIA Certified Professional: Gen AI LLMs">
+            <span class="cred-dot"></span> NVIDIA GenAI
+          </span>
+          <span class="cred-pill" title="Certified Kubernetes Administrator (CKA)">
+            <span class="cred-dot"></span> CNCF CKA
+          </span>
+          <span class="cred-pill" title="AWS Certified Solutions Architect - Professional">
+            <span class="cred-dot"></span> AWS SAP
+          </span>
+          <span class="cred-pill" title="Google Cloud Professional Cloud Architect">
+            <span class="cred-dot"></span> GCP PCA
+          </span>
+          <span class="cred-pill" title="ISO/IEC 27001 Lead Auditor">
+            <span class="cred-dot"></span> ISO 27001 Auditor
+          </span>
+          <span class="cred-pill" title="IEEE Published Researcher">
+            <span class="cred-dot"></span> IEEE Publication
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  .author-box-wrapper {
+    background-color: var(--mono-l2);
+    padding: var(--mono-border-w, 0.7px);
+    width: 100%;
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--mono-chamfer-cut, 16px)) 0,
+      100% var(--mono-chamfer-cut, 16px),
+      100% 100%,
+      var(--mono-chamfer-cut, 16px) 100%,
+      0 calc(100% - var(--mono-chamfer-cut, 16px))
+    );
+  }
+
+  .author-box-inner {
+    background-color: var(--mono-card-bg);
+    padding: 24px 20px;
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--mono-chamfer-cut, 16px)) 0,
+      100% var(--mono-chamfer-cut, 16px),
+      100% 100%,
+      var(--mono-chamfer-cut, 16px) 100%,
+      0 calc(100% - var(--mono-chamfer-cut, 16px))
+    );
+  }
+
+  .author-box-wrapper.compact .author-box-inner {
+    padding: 18px 16px;
+  }
+
+  .card-tag {
+    font-family: var(--mono-font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--mono-muted);
+    letter-spacing: 0.12em;
+    margin-bottom: 4px;
+  }
+
+  .author-layout {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .author-avatar-wrap {
+    flex-shrink: 0;
+  }
+
+  .author-avatar-img {
+    width: 56px;
+    height: 56px;
+    border-radius: 4px;
+    object-fit: cover;
+    display: block;
+    border: 0.7px solid var(--mono-l2);
+  }
+
+  .author-details {
+    flex-grow: 1;
+    min-width: 0;
+  }
+
+  .author-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+
+  .author-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--mono-ink);
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+
+  .author-full {
+    font-size: 13px;
+    color: var(--mono-muted);
+    font-weight: 500;
+  }
+
+  .author-role {
+    font-size: 12px;
+    font-family: var(--mono-font-mono);
+    color: var(--mono-l3);
+    font-weight: 600;
+    margin: 2px 0 0 0;
+  }
+
+  .view-profile-btn {
+    font-family: var(--mono-font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--mono-ink);
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: var(--mono-btn-radius);
+    background: var(--mono-bg-subtle);
+    border: 0.7px solid var(--mono-grid);
+    transition: all 0.15s ease;
+  }
+
+  .view-profile-btn:hover {
+    background: var(--mono-ink);
+    color: var(--mono-paper);
+    border-color: var(--mono-ink);
+  }
+
+  .author-bio-text {
+    font-size: 13px;
+    color: var(--mono-l2);
+    line-height: 1.6;
+    margin: 8px 0 14px 0;
+  }
+
+  .creds-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .cred-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--mono-font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: var(--mono-tag-radius);
+    background: var(--mono-bg-subtle);
+    border: 0.7px solid var(--mono-grid);
+    color: var(--mono-l2);
+  }
+
+  .cred-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--mono-ink);
+  }
+
+  @media (max-width: 600px) {
+    .author-layout {
+      flex-direction: column;
+      gap: 14px;
+    }
+  }
+</style>

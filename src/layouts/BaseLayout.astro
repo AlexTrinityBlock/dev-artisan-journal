@@ -1,0 +1,103 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/tokens.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  article?: boolean;
+}
+
+const {
+  title = 'DEV ARTISAN // JOURNAL — Alex.Hsiao',
+  description = 'Technical publication & systems architecture journal of Alex.Hsiao — FullStack & GenAI Systems Architect.',
+  image = '/images/avatar/avatar.jpg',
+  article = false,
+} = Astro.props;
+
+const currentPath = Astro.url.pathname;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  
+  <!-- Canonical & OpenGraph -->
+  <link rel="canonical" href={Astro.url.href} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={Astro.url.href} />
+  <meta property="og:type" content={article ? 'article' : 'website'} />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- Global Top Header -->
+  <Header currentPath={currentPath} />
+
+  <!-- Main Content Area -->
+  <main id="main-content" class="main-wrapper">
+    <slot />
+  </main>
+
+  <!-- Global Footer -->
+  <Footer />
+
+  <!-- Global Toast -->
+  <div id="toast" class="toast-box">Copied to clipboard</div>
+
+  <style>
+    .main-wrapper {
+      flex: 1 0 auto;
+      padding: 36px 0 64px;
+    }
+
+    .toast-box {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--mono-ink);
+      color: var(--mono-paper);
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-family: var(--mono-font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .toast-box.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+
+  <script is:inline>
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      if (!toast) return;
+      toast.textContent = message || 'Copied to clipboard';
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+  </script>
+</body>
+</html>

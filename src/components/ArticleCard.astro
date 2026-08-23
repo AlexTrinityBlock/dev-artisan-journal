@@ -1,0 +1,233 @@
+---
+interface Props {
+  post: {
+    id: string;
+    slug?: string;
+    data: {
+      title: string;
+      description: string;
+      pubDate: Date;
+      category: string;
+      tags: string[];
+      featured?: boolean;
+      readTime?: string;
+      author?: string;
+    };
+  };
+  featured?: boolean;
+}
+
+const { post, featured = false } = Astro.props;
+const slug = post.slug || post.id.replace(/\.[^/.]+$/, "");
+const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric'
+});
+---
+
+<div class={`chamfer-card-wrapper article-card-wrapper ${featured ? 'featured-card' : ''}`}>
+  <article class="chamfer-card-content article-card-inner">
+    <!-- Card Header Meta -->
+    <div class="card-meta">
+      <span class="card-tag">{post.data.category}</span>
+      <span class="meta-separator">·</span>
+      <time datetime={post.data.pubDate.toISOString()} class="date-text">{formattedDate}</time>
+      <span class="meta-separator">·</span>
+      <span class="read-time">{post.data.readTime || '5 min read'}</span>
+      {featured && <span class="featured-badge">FEATURED</span>}
+    </div>
+
+    <!-- Title -->
+    <h3 class={`article-title ${featured ? 'big-title' : ''}`}>
+      <a href={`/blog/${slug}`} class="title-link">
+        {post.data.title}
+      </a>
+    </h3>
+
+    <!-- Excerpt -->
+    <p class="article-desc">
+      {post.data.description}
+    </p>
+
+    <!-- Tags & Footer Link -->
+    <div class="card-footer">
+      <div class="tags-group">
+        {post.data.tags.map((tag) => (
+          <a href={`/tags/${tag}`} class="tag">
+            #{tag}
+          </a>
+        ))}
+      </div>
+
+      <a href={`/blog/${slug}`} class="read-link">
+        <span>Read Dispatch</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+    </div>
+  </article>
+</div>
+
+<style>
+  .article-card-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    background-color: var(--mono-l2);
+    padding: var(--mono-border-w, 0.7px);
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--mono-chamfer-cut, 16px)) 0,
+      100% var(--mono-chamfer-cut, 16px),
+      100% 100%,
+      var(--mono-chamfer-cut, 16px) 100%,
+      0 calc(100% - var(--mono-chamfer-cut, 16px))
+    );
+    transition: background-color 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .article-card-wrapper:hover {
+    background-color: var(--mono-ink);
+    transform: translateY(-2px);
+  }
+
+  .featured-card {
+    background-color: var(--mono-l1);
+  }
+
+  .article-card-inner {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    background-color: var(--mono-card-bg);
+    padding: 26px 22px;
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--mono-chamfer-cut, 16px)) 0,
+      100% var(--mono-chamfer-cut, 16px),
+      100% 100%,
+      var(--mono-chamfer-cut, 16px) 100%,
+      0 calc(100% - var(--mono-chamfer-cut, 16px))
+    );
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-family: var(--mono-font-mono);
+    font-size: 11px;
+    color: var(--mono-muted);
+  }
+
+  .card-tag {
+    font-family: var(--mono-font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--mono-ink);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--mono-bg-subtle);
+    padding: 2px 8px;
+    border-radius: var(--mono-tag-radius);
+    border: 0.7px solid var(--mono-grid);
+    margin-bottom: 0;
+  }
+
+  .featured-badge {
+    background: var(--mono-ink);
+    color: var(--mono-paper);
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 2px 6px;
+    border-radius: var(--mono-tag-radius);
+    margin-left: auto;
+  }
+
+  .meta-separator {
+    color: var(--mono-faint);
+  }
+
+  .date-text, .read-time {
+    font-size: 11px;
+    color: var(--mono-muted);
+  }
+
+  .article-title {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.35;
+    margin: 0 0 12px 0;
+    color: var(--mono-ink);
+    letter-spacing: -0.02em;
+  }
+
+  .article-title.big-title {
+    font-size: 20px;
+    font-weight: 800;
+  }
+
+  .title-link {
+    color: var(--mono-ink);
+    text-decoration: none;
+  }
+
+  .title-link:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+  }
+
+  .article-desc {
+    margin: 0 0 22px 0;
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--mono-l2);
+    flex-grow: 1;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 16px;
+    border-top: 0.7px dashed var(--mono-grid);
+    flex-wrap: wrap;
+  }
+
+  .tags-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .read-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono-font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--mono-ink);
+    text-decoration: none;
+    transition: transform 0.15s ease;
+  }
+
+  .read-link:hover {
+    transform: translateX(3px);
+  }
+
+  @media (max-width: 600px) {
+    .card-footer {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

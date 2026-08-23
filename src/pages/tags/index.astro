@@ -1,0 +1,296 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog');
+
+// Calculate tag statistics
+const tagMap: Record<string, { count: number; categories: Set<string> }> = {};
+const categoryMap: Record<string, number> = {};
+
+posts.forEach((post) => {
+  const cat = post.data.category;
+  categoryMap[cat] = (categoryMap[cat] || 0) + 1;
+
+  post.data.tags.forEach((tag) => {
+    if (!tagMap[tag]) {
+      tagMap[tag] = { count: 0, categories: new Set() };
+    }
+    tagMap[tag].count++;
+    tagMap[tag].categories.add(cat);
+  });
+});
+
+const sortedTags = Object.entries(tagMap).sort((a, b) => b[1].count - a[1].count);
+const sortedCategories = Object.entries(categoryMap).sort((a, b) => b[1] - a[1]);
+---
+
+<BaseLayout
+  title="Topics & Architecture Taxonomy — DEV ARTISAN // JOURNAL"
+  description="Explore technical articles categorized by domain: Bare-Metal GPU Virtualization, Multi-Agent Systems, Kubernetes, Cloud Security, and ISO 27001 ISMS."
+>
+  <div class="container">
+    
+    <header class="chamfer-card-wrapper topics-header-wrapper">
+      <div class="chamfer-card-content topics-header-inner">
+        <span class="card-tag">SYSTEM // 03 · TAXONOMY INDEX</span>
+        <h1 class="header-title">Technical Domains &amp; Topic Tags</h1>
+        <p class="header-desc">
+          Browse {posts.length} engineering articles categorized across primary systems domains and fine-grained technology tags.
+        </p>
+      </div>
+    </header>
+
+    <!-- Categories Section -->
+    <section class="tax-section">
+      <div class="section-heading">
+        <span class="sec-label">PRIMARY SYSTEMS DOMAINS</span>
+        <span class="sec-line"></span>
+      </div>
+
+      <div class="categories-grid">
+        {sortedCategories.map(([cat, count]) => (
+          <a href={`/tags/${cat}`} class="chamfer-card-wrapper category-card-wrapper interactive">
+            <div class="chamfer-card-content category-card-inner">
+              <div class="cat-head">
+                <span class="card-tag">// DOMAIN</span>
+                <span class="cat-count">{count} {count === 1 ? 'Article' : 'Articles'}</span>
+              </div>
+              <h3 class="cat-badge">{cat}</h3>
+              <p class="cat-desc">
+                Articles and architecture blueprints related to {cat.toLowerCase()}.
+              </p>
+              <div class="cat-footer">
+                <span>View dispatches &rarr;</span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- Tags Cloud Section -->
+    <section class="tax-section" style="margin-top: 36px;">
+      <div class="section-heading">
+        <span class="sec-label">INDIVIDUAL TECHNOLOGY TAGS ({sortedTags.length})</span>
+        <span class="sec-line"></span>
+      </div>
+
+      <div class="chamfer-card-wrapper tags-wall-wrapper">
+        <div class="chamfer-card-content tags-wall-inner">
+          {sortedTags.map(([tag, data]) => (
+            <a href={`/tags/${tag}`} class="tag-wall-item">
+              <span class="tag-hash">#</span>
+              <span class="tag-name">{tag}</span>
+              <span class="tag-badge-num">{data.count}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+  </div>
+</BaseLayout>
+
+<style>
+  /* ── Dual-Chamfer Shared Geometry ──────────────────────────── */
+  .topics-header-wrapper,
+  .topics-header-inner,
+  .category-card-wrapper,
+  .category-card-inner,
+  .tags-wall-wrapper,
+  .tags-wall-inner {
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--mono-chamfer-cut, 16px)) 0,
+      100% var(--mono-chamfer-cut, 16px),
+      100% 100%,
+      var(--mono-chamfer-cut, 16px) 100%,
+      0 calc(100% - var(--mono-chamfer-cut, 16px))
+    );
+  }
+
+  .topics-header-wrapper,
+  .category-card-wrapper,
+  .tags-wall-wrapper {
+    background-color: var(--mono-l2);
+    padding: var(--mono-border-w, 0.7px);
+    width: 100%;
+    transition: background-color 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .topics-header-inner,
+  .category-card-inner,
+  .tags-wall-inner {
+    background-color: var(--mono-card-bg);
+    color: var(--mono-ink);
+  }
+
+  .topics-header-wrapper {
+    margin-bottom: 44px;
+  }
+
+  .topics-header-inner {
+    padding: 36px 32px;
+  }
+
+  .card-tag {
+    font-family: var(--mono-font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--mono-muted);
+    letter-spacing: 0.12em;
+    display: block;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  .header-title {
+    font-size: 1.85rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--mono-ink);
+    margin: 0 0 10px 0;
+  }
+
+  .header-desc {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--mono-l2);
+    margin: 0;
+  }
+
+  .tax-section {
+    margin-bottom: 48px;
+  }
+
+  .section-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .sec-label {
+    font-family: var(--mono-font-mono);
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--mono-muted);
+    letter-spacing: 0.08em;
+  }
+
+  .sec-line {
+    flex-grow: 1;
+    height: 1px;
+    background: var(--mono-grid);
+  }
+
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  .category-card-wrapper {
+    text-decoration: none;
+    display: flex;
+  }
+
+  .category-card-wrapper:hover {
+    background-color: var(--mono-ink);
+    transform: translateY(-2px);
+  }
+
+  .category-card-inner {
+    display: flex;
+    flex-direction: column;
+    padding: 24px 22px;
+    width: 100%;
+    height: 100%;
+  }
+
+  .cat-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 8px;
+  }
+
+  .cat-badge {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--mono-ink);
+    letter-spacing: -0.02em;
+    margin: 0 0 10px 0;
+  }
+
+  .cat-count {
+    font-family: var(--mono-font-mono);
+    font-size: 10.5px;
+    color: var(--mono-muted);
+  }
+
+  .cat-desc {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--mono-l2);
+    margin: 0 0 18px 0;
+    flex-grow: 1;
+  }
+
+  .cat-footer {
+    font-family: var(--mono-font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--mono-ink);
+    padding-top: 12px;
+    border-top: 0.7px dashed var(--mono-grid);
+  }
+
+  .tags-wall-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 28px 24px;
+  }
+
+  .tag-wall-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono-font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 7px 14px;
+    border-radius: var(--mono-tag-radius);
+    background: var(--mono-bg-subtle);
+    border: 0.7px solid var(--mono-grid);
+    color: var(--mono-l2);
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+
+  .tag-wall-item:hover {
+    background: var(--mono-ink);
+    color: var(--mono-paper);
+    border-color: var(--mono-ink);
+  }
+
+  .tag-hash {
+    color: var(--mono-muted);
+  }
+
+  .tag-badge-num {
+    background: var(--mono-grid);
+    color: var(--mono-ink);
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+  }
+
+  .tag-wall-item:hover .tag-badge-num {
+    background: #363530;
+    color: var(--mono-paper);
+  }
+</style>

@@ -1,0 +1,564 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts.sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const categories = Array.from(new Set(allPosts.map((p) => p.data.category)));
+const allTags = allPosts.flatMap((p) => p.data.tags);
+const tagCounts = allTags.reduce((acc, tag) => {
+  acc[tag] = (acc[tag] || 0) + 1;
+  return acc;
+}, {} as Record<string, number>);
+
+const topTags = Object.entries(tagCounts)
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 10);
+---
+
+<BaseLayout
+  title="Articles — DEV ARTISAN // JOURNAL"
+  description="Technical articles and architecture dispatches by Alex.Hsiao — FullStack & GenAI Systems Architect."
+>
+  <div class="container">
+
+    <header class="chamfer-card-wrapper feed-header-wrapper">
+      <div class="chamfer-card-content feed-header-inner">
+        <span class="card-tag">SYSTEM // 02 · TECHNICAL DISPATCHES</span>
+        <h1 class="header-title">Articles &amp; Architecture Briefs</h1>
+        <p class="header-desc">
+          {allPosts.length > 0
+            ? `Browse ${allPosts.length} engineering articles across ${categories.length} domains.`
+            : 'New engineering articles will be published here.'}
+        </p>
+      </div>
+    </header>
+
+    <div class="main-layout-grid">
+      <div class="articles-stream">
+
+        {allPosts.length > 0 ? (
+          <>
+            <div class="chamfer-card-wrapper filter-bar-wrapper">
+              <div class="chamfer-card-content filter-bar-inner">
+                <div class="filter-tabs" id="categoryFilter">
+                  <button class="filter-tab active" data-filter="all">All Articles ({allPosts.length})</button>
+                  {categories.map((cat) => (
+                    <button class="filter-tab" data-filter={cat}>{cat}</button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <section class="recent-posts-section">
+              <div class="section-label-row">
+                <span class="section-label-text">LATEST TECHNICAL DISPATCHES</span>
+                <span class="section-label-line"></span>
+              </div>
+
+              <div class="posts-grid" id="postsContainer">
+                {sortedPosts.map((post) => (
+                  <div class="post-item-wrapper" data-category={post.data.category} data-tags={post.data.tags.join(',')}>
+                    <ArticleCard post={post} />
+                  </div>
+                ))}
+              </div>
+            </section>
+          </>
+        ) : (
+          <section class="chamfer-card-wrapper empty-state-wrapper">
+            <div class="chamfer-card-content empty-state-inner">
+              <div class="empty-glyph" aria-hidden="true">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+              </div>
+              <h2 class="empty-title">No dispatches published yet</h2>
+              <p class="empty-desc">
+                The journal is fresh. Engineering articles on GPU clusters, multi-agent systems, and infrastructure will land here soon.
+              </p>
+            </div>
+          </section>
+        )}
+
+      </div>
+
+      <aside class="sidebar-stream">
+
+        <div class="chamfer-card-wrapper widget-wrapper">
+          <div class="chamfer-card-content widget-inner">
+            <div class="widget-header">
+              <span class="card-tag">SYSTEM // AUTHOR</span>
+            </div>
+            <div class="author-mini-head">
+              <img class="author-avatar-sq" src="/images/avatar/avatar.jpg" alt="Alex.Hsiao avatar" loading="lazy" />
+              <div>
+                <h3 class="author-title-text">Alex.Hsiao</h3>
+                <p class="author-sub-text">GenAI Engineer</p>
+              </div>
+            </div>
+            <p class="author-desc-text">
+              Specializing in full-stack Python &amp; Node systems, distributed message brokers (RabbitMQ), Kubernetes vGPU virtualization, and cloud infrastructure.
+            </p>
+            <div class="widget-links">
+              <a href="/" class="btn btn-primary btn-block">View Full CV &amp; Credentials &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="chamfer-card-wrapper widget-wrapper">
+          <div class="chamfer-card-content widget-inner">
+            <div class="widget-header">
+              <span class="card-tag">SYSTEM // VERIFIED CREDENTIALS</span>
+            </div>
+            <ul class="creds-list">
+              <li>
+                <a href="https://www.credly.com/badges/f2df353f-b36d-41d5-b652-fbcea74abc6c/public_url" target="_blank" rel="noopener noreferrer" class="cred-item">
+                  <span class="cred-code">NVIDIA</span>
+                  <span class="cred-name">Generative AI LLMs Pro</span>
+                  <span class="cred-arrow">↗</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.credly.com/badges/fcbae132-9ad2-4995-ae14-6feeaa914d28/public_url" target="_blank" rel="noopener noreferrer" class="cred-item">
+                  <span class="cred-code">CNCF</span>
+                  <span class="cred-name">Certified K8s Admin (CKA)</span>
+                  <span class="cred-arrow">↗</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.credly.com/badges/13a54046-b8d0-40df-9094-8222ec7b0d2e" target="_blank" rel="noopener noreferrer" class="cred-item">
+                  <span class="cred-code">AWS</span>
+                  <span class="cred-name">Solutions Architect Pro (SAP)</span>
+                  <span class="cred-arrow">↗</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.credly.com/badges/d0031cb8-c858-4a63-8f54-521020f54a44" target="_blank" rel="noopener noreferrer" class="cred-item">
+                  <span class="cred-code">GCP</span>
+                  <span class="cred-name">Professional Cloud Architect</span>
+                  <span class="cred-arrow">↗</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://tksg.org/admin/tool/certificate/index.php?code=5615205852WH" target="_blank" rel="noopener noreferrer" class="cred-item">
+                  <span class="cred-code">ISMS</span>
+                  <span class="cred-name">ISO/IEC 27001 Lead Auditor</span>
+                  <span class="cred-arrow">↗</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://ieeexplore.ieee.org/abstract/document/10210155" target="_blank" rel="noopener noreferrer" class="cred-item">
+                  <span class="cred-code">IEEE</span>
+                  <span class="cred-name">Deep Learning SQLi/XSS Paper</span>
+                  <span class="cred-arrow">↗</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {topTags.length > 0 && (
+          <div class="chamfer-card-wrapper widget-wrapper">
+            <div class="chamfer-card-content widget-inner">
+              <div class="widget-header">
+                <span class="card-tag">SYSTEM // TOPICS</span>
+              </div>
+              <div class="topic-cloud">
+                {topTags.map(([tag, count]) => (
+                  <a href={`/tags/${tag}`} class="tag">
+                    <span>#{tag}</span>
+                    <span class="topic-count">{count}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div class="chamfer-card-wrapper widget-wrapper dispatch-widget">
+          <div class="chamfer-card-content widget-inner">
+            <div class="widget-header">
+              <span class="card-tag">SYSTEM // DISPATCH CHANNEL</span>
+            </div>
+            <p class="dispatch-text">
+              Open for Senior FullStack, GenAI Systems, and GPU Cluster Architecture opportunities in Taipei &amp; Remote.
+            </p>
+            <div class="dispatch-btns">
+              <a href="mailto:q123717111@gmail.com" class="btn btn-primary btn-block">
+                q123717111@gmail.com
+              </a>
+              <button class="btn btn-block" onclick="navigator.clipboard.writeText('q123717111@gmail.com'); showToast('Email copied to clipboard!');">
+                [Copy Email]
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+
+  </div>
+</BaseLayout>
+
+<style>
+  /* ── Dual-Chamfer Shared Geometry ──────────────────────────── */
+  .feed-header-wrapper,
+  .feed-header-inner,
+  .filter-bar-wrapper,
+  .filter-bar-inner,
+  .empty-state-wrapper,
+  .empty-state-inner,
+  .widget-wrapper,
+  .widget-inner {
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--mono-chamfer-cut, 16px)) 0,
+      100% var(--mono-chamfer-cut, 16px),
+      100% 100%,
+      var(--mono-chamfer-cut, 16px) 100%,
+      0 calc(100% - var(--mono-chamfer-cut, 16px))
+    );
+  }
+
+  .feed-header-wrapper,
+  .filter-bar-wrapper,
+  .empty-state-wrapper,
+  .widget-wrapper {
+    background-color: var(--mono-l2);
+    padding: var(--mono-border-w, 0.7px);
+    width: 100%;
+    transition: background-color 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .feed-header-inner,
+  .filter-bar-inner,
+  .empty-state-inner,
+  .widget-inner {
+    background-color: var(--mono-card-bg);
+    color: var(--mono-ink);
+  }
+
+  .feed-header-wrapper {
+    margin-bottom: 40px;
+  }
+
+  .feed-header-inner {
+    padding: 36px 32px;
+  }
+
+  .card-tag {
+    font-family: var(--mono-font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--mono-muted);
+    letter-spacing: 0.12em;
+    display: block;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  .header-title {
+    font-size: 1.85rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--mono-ink);
+    margin: 0 0 10px 0;
+  }
+
+  .header-desc {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--mono-l2);
+    margin: 0;
+  }
+
+  .main-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 36px;
+    align-items: flex-start;
+  }
+
+  .articles-stream {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .filter-bar-inner {
+    padding: 14px 18px;
+  }
+
+  .filter-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .filter-tab {
+    font-family: var(--mono-font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: var(--mono-btn-radius);
+    border: 0.7px solid var(--mono-grid);
+    background: var(--mono-bg-subtle);
+    color: var(--mono-l3);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .filter-tab:hover {
+    background: var(--mono-ink);
+    color: var(--mono-paper);
+    border-color: var(--mono-ink);
+  }
+
+  .filter-tab.active {
+    background: var(--mono-ink);
+    color: var(--mono-paper);
+    border-color: var(--mono-ink);
+  }
+
+  .recent-posts-section {
+    margin-top: 4px;
+  }
+
+  .section-label-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .section-label-text {
+    font-family: var(--mono-font-mono);
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--mono-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .section-label-line {
+    flex-grow: 1;
+    height: 1px;
+    background: var(--mono-grid);
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .post-item-wrapper {
+    display: flex;
+  }
+
+  /* ── Empty State ───────────────────────────────────────────── */
+  .empty-state-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 72px 32px;
+    gap: 16px;
+  }
+
+  .empty-glyph {
+    color: var(--mono-faint);
+    margin-bottom: 4px;
+  }
+
+  .empty-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--mono-ink);
+    margin: 0;
+  }
+
+  .empty-desc {
+    font-size: 13.5px;
+    color: var(--mono-muted);
+    max-width: 440px;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* ── Sidebar ───────────────────────────────────────────────── */
+  .sidebar-stream {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .widget-inner {
+    padding: 26px 22px;
+  }
+
+  .widget-header {
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 0.7px solid var(--mono-grid);
+  }
+
+  .author-mini-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .author-avatar-sq {
+    width: 48px;
+    height: 48px;
+    border-radius: 4px;
+    object-fit: cover;
+    display: block;
+    border: 0.7px solid var(--mono-l2);
+  }
+
+  .author-title-text {
+    font-size: 14.5px;
+    font-weight: 800;
+    color: var(--mono-ink);
+    margin: 0;
+  }
+
+  .author-sub-text {
+    font-size: 11px;
+    color: var(--mono-muted);
+    font-family: var(--mono-font-mono);
+    margin: 2px 0 0 0;
+  }
+
+  .author-desc-text {
+    font-size: 12.5px;
+    color: var(--mono-l3);
+    line-height: 1.65;
+    margin: 0 0 16px 0;
+  }
+
+  .btn-block {
+    width: 100%;
+  }
+
+  .creds-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cred-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--mono-l2);
+    text-decoration: none;
+    padding: 8px 10px;
+    border-radius: var(--mono-tag-radius);
+    background: var(--mono-bg-subtle);
+    border: 0.7px solid var(--mono-grid);
+    transition: all 0.15s ease;
+  }
+
+  .cred-item:hover {
+    border-color: var(--mono-ink);
+    background: var(--mono-paper);
+    transform: translateX(2px);
+  }
+
+  .cred-code {
+    font-family: var(--mono-font-mono);
+    font-size: 9.5px;
+    font-weight: 700;
+    background: var(--mono-ink);
+    color: var(--mono-paper);
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+
+  .cred-name {
+    flex-grow: 1;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .cred-arrow {
+    color: var(--mono-muted);
+    font-size: 10px;
+  }
+
+  .topic-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .topic-count {
+    background: var(--mono-grid);
+    color: var(--mono-ink);
+    font-size: 9.5px;
+    padding: 0 4px;
+    border-radius: 3px;
+    margin-left: 2px;
+  }
+
+  .dispatch-text {
+    font-size: 12.5px;
+    color: var(--mono-l3);
+    line-height: 1.65;
+    margin: 0 0 16px 0;
+  }
+
+  .dispatch-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  @media (max-width: 960px) {
+    .main-layout-grid {
+      grid-template-columns: 1fr;
+    }
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    const postItems = document.querySelectorAll('.post-item-wrapper');
+
+    filterTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const filterVal = tab.getAttribute('data-filter');
+        filterTabs.forEach((t) => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        postItems.forEach((item) => {
+          const cat = item.getAttribute('data-category');
+          item.style.display = filterVal === 'all' || cat === filterVal ? 'flex' : 'none';
+        });
+      });
+    });
+  });
+</script>

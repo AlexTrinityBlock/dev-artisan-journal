@@ -1,0 +1,180 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+
+  // Collect all unique tags and categories
+  const allTags = new Set<string>();
+  posts.forEach((post) => {
+    post.data.tags.forEach((t) => allTags.add(t));
+    allTags.add(post.data.category);
+  });
+
+  return Array.from(allTags).map((tag) => {
+    const filteredPosts = posts
+      .filter((post) => post.data.tags.includes(tag) || post.data.category === tag)
+      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+    return {
+      params: { tag },
+      props: { tag, posts: filteredPosts },
+    };
+  });
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<BaseLayout
+  title={`Articles tagged with #${tag} — DEV ARTISAN // JOURNAL`}
+  description={`Browse technical articles, architecture blueprints, and systems logs related to ${tag}.`}
+>
+  <div class="container">
+    
+    <!-- Tag Header -->
+    <header class="chamfer-card-wrapper tag-header-wrapper">
+      <div class="chamfer-card-content tag-header-inner">
+        <div class="tag-meta-top">
+          <a href="/tags" class="back-topics-link">&larr; All Topics &amp; Taxonomy</a>
+          <span class="meta-dot"></span>
+          <span class="count-badge">{posts.length} {posts.length === 1 ? 'Dispatch' : 'Dispatches'}</span>
+        </div>
+
+        <div class="card-tag">SYSTEM // 04 · TOPIC FILTER</div>
+
+        <h1 class="tag-title">
+          <span class="tag-hash">#</span>{tag}
+        </h1>
+
+        <p class="tag-desc">
+          Technical publications and architectural blueprints indexed under <strong>{tag}</strong>.
+        </p>
+      </div>
+    </header>
+
+    <!-- Articles Grid -->
+    <section class="tagged-posts-section">
+      <div class="posts-grid">
+        {posts.map((post) => (
+          <ArticleCard post={post} />
+        ))}
+      </div>
+    </section>
+
+    <div class="back-home-wrap">
+      <a href="/" class="btn btn-primary">&larr; Return to Home Feed</a>
+    </div>
+
+  </div>
+</BaseLayout>
+
+<style>
+  /* ── Dual-Chamfer Shared Geometry ──────────────────────────── */
+  .tag-header-wrapper,
+  .tag-header-inner {
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--mono-chamfer-cut, 16px)) 0,
+      100% var(--mono-chamfer-cut, 16px),
+      100% 100%,
+      var(--mono-chamfer-cut, 16px) 100%,
+      0 calc(100% - var(--mono-chamfer-cut, 16px))
+    );
+  }
+
+  .tag-header-wrapper {
+    background-color: var(--mono-l2);
+    padding: var(--mono-border-w, 0.7px);
+    width: 100%;
+    margin-bottom: 44px;
+  }
+
+  .tag-header-inner {
+    background-color: var(--mono-card-bg);
+    color: var(--mono-ink);
+    padding: 36px 32px;
+  }
+
+  .tag-meta-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono-font-mono);
+    font-size: 11px;
+    color: var(--mono-muted);
+    margin-bottom: 16px;
+  }
+
+  .card-tag {
+    font-family: var(--mono-font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--mono-muted);
+    letter-spacing: 0.12em;
+    display: block;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .back-topics-link {
+    color: var(--mono-l2);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .back-topics-link:hover {
+    color: var(--mono-ink);
+    text-decoration: underline;
+  }
+
+  .count-badge {
+    background: var(--mono-bg-subtle);
+    border: 0.7px solid var(--mono-grid);
+    padding: 2px 6px;
+    border-radius: var(--mono-tag-radius);
+    font-weight: 700;
+    color: var(--mono-ink);
+  }
+
+  .tag-title {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--mono-ink);
+    margin: 0 0 10px 0;
+    font-family: var(--mono-font-mono);
+  }
+
+  .tag-hash {
+    color: var(--mono-muted);
+  }
+
+  .tag-desc {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--mono-l2);
+    margin: 0;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 44px;
+  }
+
+  .back-home-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 28px;
+  }
+
+  @media (max-width: 768px) {
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
