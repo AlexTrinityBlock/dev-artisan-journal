@@ -14,8 +14,8 @@ const blog = defineCollection({
       featured: z.boolean().default(false),
       author: z.string().default('Alex.Hsiao'),
       readTime: z.string().default('5 min read'),
-      heroImage: z.union([image(), z.string()]).optional(),
-      banner: z.union([image(), z.string()]).optional(),
+      heroImage: z.string().optional(),
+      banner: z.string().optional(),
     }),
 });
 
