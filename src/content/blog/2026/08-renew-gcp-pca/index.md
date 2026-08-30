@@ -22,7 +22,7 @@ The renewal path is managed by **Google Cloud**, contains **15 activities**, and
 
 Through a curated collection of on-demand courses, labs, and skill badges, the path reviews the latest Google Cloud technologies and gives you real-world, applied experience — from new fundamentals to designing and managing modern solutions.
 
-![Course screenshot: AI and LLM-related content in the curriculum](/images/posts/2026/08/30/renew-GCP-PCA-2026-08-30-091841.jpg)
+![Course screenshot: a catalog of AI and LLM courses in the renewal curriculum](/images/posts/2026/08/30/renew-GCP-PCA-course1-2026-08-30-091840.jpg)
 
 ## The Surprise: AI Is Everywhere
 
