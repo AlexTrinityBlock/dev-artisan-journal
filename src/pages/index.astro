@@ -200,56 +200,10 @@ const certifications = [
       <div class="hero-divider"></div>
     </section>
 
-    <!-- ════════ TECHNICAL SKILLS MATRIX ════════ -->
-    <section class="section-block">
-      <div class="section-head">
-        <span class="head-tag">// 01 · PRODUCTION TECHNICAL TAXONOMY</span>
-        <h2 class="head-title">End-to-End Technology Stack &amp; Infrastructure Tools</h2>
-        <p class="head-desc">Six Professional Certifications &amp; IEEE Peer-Reviewed Publication.</p>
-      </div>
-
-      <div class="skills-category-list">
-        {skillGroups.map((group) => (
-          <div class="chamfer-card-wrapper skill-group-wrapper">
-            <div class="chamfer-card-content skill-group-inner">
-              
-              <!-- Left Column: 240px Left Rail (Skills & Proficiency) -->
-              <div class="group-left-rail">
-                <div class="group-header">
-                  <span class="card-tag">{group.tag}</span>
-                  <h3 class="group-title">{group.title}</h3>
-                </div>
-                <div class="group-skills-stack">
-                  {group.skills.map((skill) => (
-                    <div class="skill-row">
-                      <span class="skill-name">{skill.name}</span>
-                      <span class="skill-level">{skill.level}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <!-- Right Column: 1fr (Integrated Production Architecture Narrative) -->
-              <div class="group-right-content">
-                <div class="group-synopsis-head">
-                  <span class="synopsis-label">PRODUCTION ARCHITECTURE &amp; DEPLOYMENT CONTEXT</span>
-                </div>
-                <p class="group-synopsis-text">{group.synopsis}</p>
-                <div class="group-stack-footer">
-                  <span class="stack-footer-label">KEY STACK:</span> {group.stack}
-                </div>
-              </div>
-
-            </div>
-          </div>
-        ))}
-      </div>
-    </section>
-
     <!-- ════════ VERIFIED CERTIFICATIONS & PUBLICATIONS ════════ -->
     <section class="section-block">
       <div class="section-head">
-        <span class="head-tag">// 02 · VERIFIED CREDENTIALS</span>
+        <span class="head-tag">// 01 · VERIFIED CREDENTIALS</span>
         <h2 class="head-title">Six Professional Certifications &amp; IEEE Peer-Reviewed Publication</h2>
         <p class="head-desc">100% authentic credentials with direct public verification badges.</p>
       </div>
@@ -293,6 +247,51 @@ const certifications = [
                       <span class="btn-label">Public Credential [↗]</span>
                     </span>
                   </a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ════════ TECHNICAL SKILLS MATRIX ════════ -->
+    <section class="section-block">
+      <div class="section-head">
+        <span class="head-tag">// 02 · PRODUCTION TECHNICAL TAXONOMY</span>
+        <h2 class="head-title">End-to-End Technology Stack &amp; Infrastructure Tools</h2>
+      </div>
+
+      <div class="skills-category-list">
+        {skillGroups.map((group) => (
+          <div class="chamfer-card-wrapper skill-group-wrapper">
+            <div class="chamfer-card-content skill-group-inner">
+              
+              <!-- Left Column: 240px Left Rail (Skills & Proficiency) -->
+              <div class="group-left-rail">
+                <div class="group-header">
+                  <span class="card-tag">{group.tag}</span>
+                  <h3 class="group-title">{group.title}</h3>
+                </div>
+                <div class="group-skills-stack">
+                  {group.skills.map((skill) => (
+                    <div class="skill-row">
+                      <span class="skill-name">{skill.name}</span>
+                      <span class="skill-level">{skill.level}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <!-- Right Column: 1fr (Integrated Production Architecture Narrative) -->
+              <div class="group-right-content">
+                <div class="group-synopsis-head">
+                  <span class="synopsis-label">PRODUCTION ARCHITECTURE &amp; DEPLOYMENT CONTEXT</span>
+                </div>
+                <p class="group-synopsis-text">{group.synopsis}</p>
+                <div class="group-stack-footer">
+                  <span class="stack-footer-label">KEY STACK:</span> {group.stack}
                 </div>
               </div>
 
