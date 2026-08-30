@@ -497,6 +497,285 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
     text-transform: uppercase;
   }
 
+  /* ── Color Lab (Gray Dead Zone exhibit) ───────────────────── */
+  .prose-inner :global(.color-lab) {
+    background: var(--mono-paper);
+    border: 0.7px solid var(--mono-grid);
+    padding: 24px 22px 18px;
+    margin: 28px 0;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .prose-inner :global(.cl-head) {
+    margin-bottom: 14px;
+  }
+
+  .prose-inner :global(.cl-title) {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--mono-ink);
+    margin: 6px 0 4px;
+  }
+
+  .prose-inner :global(.cl-sub) {
+    font-size: 11px;
+    color: var(--mono-muted);
+    margin: 0;
+  }
+
+  .prose-inner :global(.cl-grid) {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .prose-inner :global(.cl-card) {
+    background: var(--mono-paper);
+    border: 0.7px solid var(--mono-grid);
+    border-radius: 4px;
+    padding: 14px 14px 12px;
+  }
+
+  .prose-inner :global(.cl-card-tag) {
+    margin-bottom: 10px;
+  }
+
+  .prose-inner :global(.cl-row) {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .prose-inner :global(.cl-wheel-wrap) {
+    position: relative;
+    flex-shrink: 0;
+    align-self: center;
+  }
+
+  .prose-inner :global(.cl-wheel) {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 0.7px solid var(--mono-grid);
+    touch-action: none;
+    cursor: grab;
+    display: block;
+  }
+
+  .prose-inner :global(.cl-wheel:active) {
+    cursor: grabbing;
+  }
+
+  .prose-inner :global(.cl-hue-badge) {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .prose-inner :global(.cl-hue-badge-inner) {
+    text-align: center;
+    background: var(--mono-paper);
+    border: 0.7px solid var(--mono-grid);
+    border-radius: 3px;
+    padding: 3px 8px;
+  }
+
+  .prose-inner :global(.cl-hue-label) {
+    display: block;
+    font-family: var(--mono-font-mono);
+    font-size: 6.5px;
+    letter-spacing: 0.12em;
+    color: var(--mono-muted);
+    text-transform: uppercase;
+  }
+
+  .prose-inner :global(.cl-hue-val) {
+    display: block;
+    font-family: var(--mono-font-mono);
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--mono-ink);
+  }
+
+  .prose-inner :global(.cl-main) {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .prose-inner :global(.cl-hero) {
+    min-height: 64px;
+    border: 0.7px solid var(--mono-grid);
+    border-radius: 4px;
+  }
+
+  .prose-inner :global(.cl-swatches) {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+  }
+
+  .prose-inner :global(.cl-swatch) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-width: 0;
+    padding: 4px 2px;
+    background: var(--mono-bg-subtle);
+    border: 0.7px solid var(--mono-grid);
+    border-radius: 3px;
+  }
+
+  .prose-inner :global(.cl-dot) {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 0.7px solid var(--mono-grid);
+    flex-shrink: 0;
+    display: inline-block;
+  }
+
+  .prose-inner :global(.cl-hex) {
+    font-family: var(--mono-font-mono);
+    font-size: 9px;
+    color: var(--mono-l4);
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .prose-inner :global(.cl-hex:hover) {
+    color: var(--mono-ink);
+    text-decoration: underline;
+  }
+
+  .prose-inner :global(.cl-controls) {
+    margin-top: 10px;
+  }
+
+  .prose-inner :global(.cl-ctrl-row) {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+  }
+
+  .prose-inner :global(.cl-label) {
+    font-family: var(--mono-font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mono-muted);
+  }
+
+  .prose-inner :global(.cl-val) {
+    font-family: var(--mono-font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--mono-ink);
+  }
+
+  .prose-inner :global(.cl-range) {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 18px;
+    background: transparent;
+    cursor: pointer;
+    margin: 0;
+  }
+
+  /* Thin hairline track */
+  .prose-inner :global(.cl-range)::-webkit-slider-runnable-track {
+    height: 2px;
+    background: var(--mono-grid);
+    border-radius: 1px;
+  }
+  .prose-inner :global(.cl-range)::-moz-range-track {
+    height: 2px;
+    background: var(--mono-grid);
+    border-radius: 1px;
+  }
+
+  /* Hollow (outline-only) thumb */
+  .prose-inner :global(.cl-range)::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    margin-top: -5px;
+    border-radius: 50%;
+    background: var(--mono-paper);
+    border: 1px solid var(--mono-ink);
+  }
+  .prose-inner :global(.cl-range)::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--mono-paper);
+    border: 1px solid var(--mono-ink);
+  }
+
+  .prose-inner :global(.cl-presets) {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+
+  .prose-inner :global(.cl-preset) {
+    font-family: var(--mono-font-mono);
+    font-size: 9.5px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border: 0.7px solid var(--mono-grid);
+    border-radius: 3px;
+    background: var(--mono-paper);
+    color: var(--mono-l3);
+    cursor: pointer;
+  }
+
+  .prose-inner :global(.cl-preset:hover) {
+    color: var(--mono-ink);
+    border-color: var(--mono-l5);
+  }
+
+  .prose-inner :global(.cl-preset.active) {
+    background: var(--mono-ink);
+    color: var(--mono-paper);
+    border-color: var(--mono-ink);
+  }
+
+  .prose-inner :global(.cl-foot) {
+    font-family: var(--mono-font-mono);
+    font-size: 9.5px;
+    color: var(--mono-faint);
+    letter-spacing: 0.08em;
+    margin-top: 14px;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 560px) {
+    .prose-inner :global(.cl-row) {
+      flex-direction: column;
+      align-items: center;
+    }
+    .prose-inner :global(.cl-main) {
+      width: 100%;
+    }
+  }
+
   .prose-inner :global(.formula-box) {
     font-family: var(--mono-font-mono);
     font-size: 12.5px;
