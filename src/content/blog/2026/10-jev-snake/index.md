@@ -1,12 +1,12 @@
 ---
 title: "Jev Plays Snake: Two Small Interfaces for a Decision Model"
-description: "A hands-on TypeSafe Jev demo: file a document into the folders you define, then watch a 10×9 Snake game where every move is a typed Choice — in your browser, with your own API key."
+description: "A hands-on TypeSafe Jev demo: file a document into the folders you define, watch a 10×9 Snake game driven by typed Choices, and compare the System One schema with OpenAI's Decisions API."
 pubDate: 2026-10-18
 category: "AI"
-tags: ["TypeSafe", "Jev", "AI", "JavaScript", "Interaction"]
+tags: ["TypeSafe", "Jev", "OpenAI", "AI", "JavaScript", "Interaction"]
 featured: false
 author: "Alex.Hsiao"
-readTime: "10 min read"
+readTime: "16 min read"
 ---
 
 # Jev Plays Snake: Two Small Interfaces for a Decision Model
@@ -376,6 +376,206 @@ The two exhibits look unrelated, but they share the same four moves:
 The second row is where most prompt-based systems go wrong. More context is not automatically better. Jev's own documentation lists “large state full of irrelevant detail” as a failure mode: unrelated material acts as a distractor, and accuracy falls. The fix is to filter and structure in code before the request.
 
 The fourth row is the part that makes the system testable. The model returns a probability distribution; the code decides the threshold, the fallback, and the human-escalation path. When the policy changes, you change a number in code — not a paragraph in a prompt.
+
+## Two schemas for the same idea
+
+The exhibits above use TypeSafe's **[System One](https://docs.typesafe.ai/concepts/system-one)** schema. As of October 2026 there is a second public schema for the same job: OpenAI's **[Decisions API](https://developers.openai.com/api/docs/guides/decisions)**. The two are close enough to compare field by field, and different enough that the comparison clarifies what a decision-model API actually is.
+
+System One is not just Jev's private request body. Cloudflare's **[Clef](https://developers.cloudflare.com/workers-ai/models/clef)** and **Clef-flash** implement the same shape — `state`, a `questions` map, and `noul` / `choice` / `score` primitives with `criteria` — with multimodal extensions. That makes System One a schema in the practical sense: more than one model can speak it. The OpenAI Decisions API is a second schema, served by one endpoint and, today, one model.
+
+### Side by side
+
+| Dimension | System One (Jev, Clef) | OpenAI Decisions (GPT-6 Luna) |
+| :-- | :-- | :-- |
+| **Endpoint** | `POST /v1/systemone` | `POST /v1/decisions` |
+| **Evidence field** | `state`: string, JSON object, or array of text | `input`: string, or a message/content array with text and images |
+| **Input modality** | Jev 1.13: text. Clef: text, JSON, images, video. | Text and images |
+| **Question collection** | Map. The key is your question ID; it is not sent to the model. | Array. Each question has an optional `name`, echoed in the answer. |
+| **Yes/no primitive** | `noul` → `noul` probability | `predicate` → `probability` |
+| **Choice primitive** | `choice` → `choice`, `probabilities` map, `confidence` | `choice` → `choice`, `probabilities` array, `confidence` |
+| **Score primitive** | `score` → `score`, `legend`, `probabilities` map, `confidence` | `score` → `score`, `probabilities` array, `confidence` |
+| **Options and levels** | `criteria`: map for Choice, array for Score, optional `{true,false}` for Noul | `choices`: `{value, description}` array; `levels`: `{label, description}` array |
+| **Instructions** | Required. Can be a string, object, or array. | Required. String. |
+| **Answer collection** | `answers` object keyed by question ID | `answers` array in question order |
+| **Refusal** | No dedicated answer type. Use calibrated probabilities and guardrail questions. | Per-question `refusal` answer; optional `safety_identifier` request field. |
+| **Limits** | Context-bound: 64k per request, 32k per question; 262k with the long-context header. | 1–200 questions; 2–255 choices per Choice; current limits in the docs. |
+| **Model and price** | Jev 1.13/1.14: $0.042 per 1M input tokens, output free. | GPT-6 Luna: $0.10 per 1M input tokens, no output or cache charges. Public beta. |
+| **Adoption** | Jev, plus Cloudflare Clef and Clef-flash. | OpenAI endpoint; GPT-6 Luna only today. |
+
+Two rows are worth correcting from the folklore version of this comparison. First, **both schemas require `instructions`**. The real difference is where the options live: System One puts them in `criteria`; OpenAI puts them in `choices` or `levels`. Second, OpenAI's `predicate` does **not** return a separate "condition indicator." It returns `{ type, name, probability }`; the condition lives in the `instructions` string. The statistical object is the same as a `noul`.
+
+### The same three questions in both
+
+Here is a support-ticket decision in System One. The state is a structured object, and the questions are keyed by ID:
+
+```json title="System One — POST /v1/systemone"
+{
+  "model": "jev-latest",
+  "state": {
+    "message": "I was charged twice for order A-104. Please refund the duplicate.",
+    "order_id": "A-104"
+  },
+  "questions": {
+    "department": {
+      "type": "choice",
+      "instructions": "Which team should handle this message?",
+      "criteria": {
+        "billing": "Payments, invoices, and refunds.",
+        "technical": "Bugs, outages, and integrations.",
+        "shipping": "Delivery and tracking.",
+        "other": "None of the above."
+      }
+    },
+    "refund_requested": {
+      "type": "noul",
+      "instructions": "Does the customer explicitly request a refund?"
+    },
+    "frustration": {
+      "type": "score",
+      "instructions": "How frustrated is the customer?",
+      "criteria": ["Calm", "Frustrated but civil", "Very angry"]
+    }
+  }
+}
+```
+
+And here is the same decision in the OpenAI Decisions format. The evidence is message-shaped, the questions are an array, and every question carries a name:
+
+```json title="OpenAI Decisions — POST /v1/decisions"
+{
+  "model": "gpt-6-luna",
+  "input": "Order A-104: I was charged twice. Please refund the duplicate.",
+  "questions": [
+    {
+      "type": "choice",
+      "name": "department",
+      "instructions": "Which team should handle this message?",
+      "choices": [
+        { "value": "billing", "description": "Payments, invoices, and refunds." },
+        { "value": "technical", "description": "Bugs, outages, and integrations." },
+        { "value": "shipping", "description": "Delivery and tracking." },
+        { "value": "other", "description": "None of the above." }
+      ]
+    },
+    {
+      "type": "predicate",
+      "name": "refund_requested",
+      "instructions": "Does the customer explicitly request a refund?"
+    },
+    {
+      "type": "score",
+      "name": "frustration",
+      "instructions": "How frustrated is the customer?",
+      "levels": [
+        { "label": "Calm", "description": "Neutral, matter-of-fact." },
+        { "label": "Frustrated but civil", "description": "Annoyed, still constructive." },
+        { "label": "Very angry", "description": "Hostile or threatening to leave." }
+      ]
+    }
+  ]
+}
+```
+
+The responses mirror the two collection styles:
+
+```json title="System One — response"
+{
+  "model": "jev-1.13.0",
+  "answers": {
+    "department": {
+      "type": "choice",
+      "choice": "billing",
+      "confidence": 0.93,
+      "probabilities": {
+        "billing": 0.95,
+        "technical": 0.02,
+        "shipping": 0.01,
+        "other": 0.02
+      }
+    },
+    "refund_requested": { "type": "noul", "noul": 0.98 },
+    "frustration": {
+      "type": "score",
+      "score": 1.1,
+      "legend": {
+        "0": "Calm",
+        "1": "Frustrated but civil",
+        "2": "Very angry"
+      },
+      "probabilities": { "0": 0.1, "1": 0.7, "2": 0.2 },
+      "confidence": 0.55
+    }
+  },
+  "usage": { "input_tokens": 420, "output_tokens": 40 }
+}
+```
+
+```json title="OpenAI Decisions — response"
+{
+  "model": "gpt-6-luna",
+  "answers": [
+    {
+      "type": "choice",
+      "name": "department",
+      "choice": "billing",
+      "confidence": 0.93,
+      "probabilities": [
+        { "value": "billing", "probability": 0.95 },
+        { "value": "technical", "probability": 0.02 },
+        { "value": "shipping", "probability": 0.01 },
+        { "value": "other", "probability": 0.02 }
+      ]
+    },
+    {
+      "type": "predicate",
+      "name": "refund_requested",
+      "probability": 0.98
+    },
+    {
+      "type": "score",
+      "name": "frustration",
+      "score": 1.1,
+      "confidence": 0.55,
+      "probabilities": [
+        { "value": 0, "label": "Calm", "probability": 0.1 },
+        { "value": 1, "label": "Frustrated but civil", "probability": 0.7 },
+        { "value": 2, "label": "Very angry", "probability": 0.2 }
+      ]
+    }
+  ],
+  "usage": { "input_tokens": 420 }
+}
+```
+
+The values are illustrative. The shapes are the point.
+
+### What the table hides
+
+**`state` is evidence-shaped; `input` is message-shaped.** System One accepts a JSON object or array directly, so a ticket record and its policy can travel as structured data. OpenAI's `input` is a string or a message array; structured evidence has to be serialized into text or a content part. If your state is already a record, System One asks less of your code. If your state is an image or a conversation, the Decisions API is the more natural fit.
+
+**Map keys vs array names.** System One's question key is for your code; the model never sees it. OpenAI's `name` is part of the question object and is echoed in the answer, and answers arrive in question order. Both are easy to map into code, but they fail differently: a missing System One key is a lookup miss; a missing OpenAI name is an ordered-array position you have to trust.
+
+**`criteria` vs `choices` / `levels`.** System One compresses the rubric into `criteria`: a map for Choice, an ordered array for Score, and an optional `{true, false}` object for Noul. OpenAI makes the options explicit: `choices` is an array of `{value, description}`, and `levels` is an array of `{label, description}`. The latter is more verbose, but it also lets a choice value be a boolean and keeps labels separate from the values. Both schemas still require `instructions`.
+
+**`noul` vs `predicate`.** Same idea, different field name. Both return one probability that the statement is true. TypeSafe calls it `noul`; OpenAI calls it `probability`. Neither has a separate confidence field for that primitive, because the probability is the uncertainty.
+
+**Refusal is a channel, not a probability.** OpenAI can return a per-question `refusal` answer, and the other questions in the same request can still answer. It also accepts an optional `safety_identifier` — an opaque, caller-provided end-user ID scoped to the verified organization. System One has no dedicated refusal answer type; you express guardrails as Noul questions and decide what to do with the probability and confidence in code. That is a real architectural choice: OpenAI gives you a refusal channel, TypeSafe gives you a number to threshold.
+
+**Object vs array returns.** System One keys answers by your question ID, so order does not matter. OpenAI returns answers in the same order as the questions array, with `name` as the stable identifier. Both return full probability distributions for Choice and Score. System One's Score answer includes a `legend`; OpenAI's Score probabilities carry the `label` and `value` on each entry.
+
+**Price and modality.** Jev lists $0.042 per 1M input tokens with output free; GPT-6 Luna Decisions lists $0.10 per 1M input tokens with no output or cache charges. Tokenization and request size differ, so compare on your own workload rather than multiplying list prices. The bigger difference is input: Jev 1.13 is text-only, while the Decisions API accepts images, and Clef extends the System One shape to images and video.
+
+**Adoption and portability.** System One has more than one implementation: Jev and Cloudflare's Clef/Clef-flash. The OpenAI Decisions API is a single-vendor endpoint with one model today. If you want the same schema to survive a model swap, System One is the more portable contract; if you want OpenAI's model and image handling, Decisions is the direct path.
+
+### Which one should you use?
+
+- **Use System One** when the evidence is structured JSON, the workload is text-heavy, you want several independent questions in one request, and you want calibrated probabilities you can threshold. It is also the better fit when you want the option to run the same schema on Jev or Clef.
+- **Use OpenAI Decisions** when you need text plus images, you are already in the OpenAI SDK ecosystem, or you want the `safety_identifier` / per-question `refusal` semantics.
+- **Use neither as your control flow.** Both return decisions; your code should still own routing, thresholds, retries, and the human-escalation path. The schema decides the shape of the answer, not the policy.
+
+The two formats are not wire-compatible, but they are close enough to normalize. A small adapter can map `state` ↔ `input`, the question map ↔ array, and `noul` ↔ `predicate`; the rest is field renaming. Some API gateways already expose both shapes behind one route. That is a compatibility layer, not a standard.
+
+One caveat before you pin either one: the OpenAI Decisions API is in public beta and currently accepts only `gpt-6-luna`; TypeSafe's Jev is at 1.13/1.14, and Clef is an open-weight model with its own limits and prices. The table above reflects the public docs as of **2026-10-18**. Check the current docs before freezing a schema in your codebase.
 
 ## Run it yourself
 
