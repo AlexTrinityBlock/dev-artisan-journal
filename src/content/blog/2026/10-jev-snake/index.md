@@ -1,6 +1,6 @@
 ---
 title: "Jev Plays Snake: Two Small Interfaces for a Decision Model"
-description: "A hands-on TypeSafe Jev demo: file a document into one of five folders, then watch a 10×9 Snake game where every move is a typed Choice — in your browser, with your own API key."
+description: "A hands-on TypeSafe Jev demo: file a document into the folders you define, then watch a 10×9 Snake game where every move is a typed Choice — in your browser, with your own API key."
 pubDate: 2026-10-18
 category: "AI"
 tags: ["TypeSafe", "Jev", "AI", "JavaScript", "Interaction"]
@@ -65,17 +65,11 @@ There is no backend on this page. The key you paste is stored in `localStorage` 
       <button class="jev-text-btn" id="jev-key-clear" type="button">Forget</button>
     </div>
     <div class="jev-transport">
-      <span class="jev-label">TRANSPORT</span>
-      <div class="jev-seg" role="group" aria-label="Request transport">
-        <button class="jev-seg-btn active" data-transport="direct" type="button" aria-pressed="true">Direct</button>
-        <button class="jev-seg-btn" data-transport="relay" type="button" aria-pressed="false">Relay</button>
-      </div>
-      <div class="jev-relay-wrap" id="jev-relay-wrap" hidden>
-        <input class="jev-input" id="jev-relay-input" type="url" autocomplete="off" spellcheck="false" placeholder="https://your-worker.workers.dev" aria-label="Relay base URL" />
-      </div>
-      <span class="jev-hint" id="jev-transport-hint">Direct is pure frontend. It needs TypeSafe to allow this origin (CORS).</span>
+      <label class="jev-label" for="jev-relay-input">RELAY BASE URL</label>
+      <input class="jev-input" id="jev-relay-input" type="url" autocomplete="off" spellcheck="false" placeholder="https://your-worker.workers.dev" aria-label="Relay base URL" />
+      <span class="jev-hint" id="jev-relay-hint">Paste the HTTPS base URL of your Cloudflare Worker. It is saved in this browser.</span>
     </div>
-    <div class="jev-endpoint" id="jev-endpoint">https://api.typesafe.ai/v1/systemone</div>
+    <div class="jev-endpoint" id="jev-endpoint">ADD A RELAY URL</div>
   </div>
 </div>
 
@@ -85,7 +79,7 @@ There is no backend on this page. The key you paste is stored in `localStorage` 
     <p class="jev-error-title" id="jev-error-title">Request failed.</p>
     <p class="jev-error-detail" id="jev-error-detail"></p>
     <div class="jev-error-actions">
-      <button class="jev-text-btn" id="jev-error-relay" type="button" hidden>Switch to Relay</button>
+      <button class="jev-text-btn" id="jev-error-relay" type="button" hidden>Relay URL</button>
     </div>
   </div>
   <button class="jev-error-close" id="jev-error-close" type="button" aria-label="Dismiss error">
@@ -93,13 +87,15 @@ There is no backend on this page. The key you paste is stored in `localStorage` 
   </button>
 </div>
 
-<p><strong>A CORS reality check.</strong> At the time of writing, TypeSafe's API returns <code>Access-Control-Allow-Origin</code> only for <code>https://console.typesafe.ai</code>. A static site on another origin cannot read a direct response, no matter how correct the key is. The <strong>Direct</strong> transport is still the pure-frontend path — it starts working the moment TypeSafe allowlists this origin. Until then, <strong>Relay</strong> is the honest workaround: a tiny proxy you control. The key goes from your browser to that relay and then to TypeSafe; it never goes to a public CORS proxy. The section below has a 30-line Cloudflare Worker you can deploy for free.</p>
+<p><strong>A CORS reality check.</strong> At the time of writing, TypeSafe's API returns <code>Access-Control-Allow-Origin</code> only for <code>https://console.typesafe.ai</code>. A static site on another origin cannot read a direct response, no matter how correct the key is. This demo therefore exposes only the <strong>Relay</strong> transport: a tiny proxy you control. The page is still pure frontend; the relay is a transport adapter, not a backend. The key goes from your browser to that relay and then to TypeSafe; it never goes to a public CORS proxy. The section below has a 30-line Cloudflare Worker you can deploy for free. If TypeSafe later allowlists your origin, you can point <code>baseUrl()</code> at the API directly and remove the relay.</p>
 
 ## Exhibit 01 — The filing cabinet
 
 The first exhibit is deliberately mundane: a file lands in a shared drive, and someone has to choose a folder. The interesting part is how little the model needs to know, and how much the code still controls.
 
-The state is the file name plus an optional excerpt. The questions are a five-way **Choice** and a **Noul** for sensitive content. Both are asked in the same request, against the same state, and evaluated independently.
+The state is the file name plus an optional excerpt. The questions are a **Choice** over the folder set — five starter folders, any custom folders you add, and **Unknown** — and a **Noul** for sensitive content. Both are asked in the same request, against the same state, and evaluated independently.
+
+The folder manager is part of the exhibit. Add a folder and give it a one-line description; that description becomes part of the `criteria` rubric. Custom folders are saved in `localStorage`, so they survive a reload; **Reset** restores the five starters. **Unknown** is always present and cannot be removed. It is the honest "none of these" answer, so Jev can decline to force a file into a bad folder. When it chooses Unknown, the UI tells you to review the file instead of pretending the classification succeeded.
 
 <div class="chamfer-card-wrapper jev-shell" id="jev-files">
   <div class="chamfer-card-content jev-shell-inner">
@@ -107,7 +103,7 @@ The state is the file name plus an optional excerpt. The questions are a five-wa
       <div>
         <span class="card-tag">EXHIBIT // 01 · CHOICE + NOUL</span>
         <h4 class="jev-h4">The filing cabinet</h4>
-        <p class="jev-p">Type a file name, add an excerpt if you have one, and let Jev choose among five folders. The bars are the full probability distribution.</p>
+        <p class="jev-p">Type a file name, add an excerpt if you have one, and let Jev choose among the starter folders, your own custom folders, or Unknown. The bars are the full probability distribution.</p>
       </div>
       <div class="jev-status" data-state="ready">
         <span class="jev-dot" aria-hidden="true"></span>
@@ -139,12 +135,33 @@ The state is the file name plus an optional excerpt. The questions are a five-wa
       </form>
       <div class="jev-folders" id="jev-folders" aria-live="polite"></div>
     </div>
+    <div class="jev-folder-manager">
+      <div class="jev-folder-manager-head">
+        <span class="jev-label">CUSTOM FOLDERS</span>
+        <div class="jev-folder-manager-tools">
+          <span class="jev-hint" id="jev-folder-count">0 / 8</span>
+          <button class="jev-text-btn" id="jev-reset-folders" type="button" hidden>Reset</button>
+        </div>
+      </div>
+      <form class="jev-folder-add" id="jev-folder-form">
+        <input class="jev-input" id="jev-new-folder" type="text" maxlength="32" autocomplete="off" spellcheck="false" placeholder="Folder name" aria-label="Custom folder name" />
+        <input class="jev-input" id="jev-new-folder-desc" type="text" maxlength="120" autocomplete="off" spellcheck="false" placeholder="What belongs here? (optional)" aria-label="Custom folder description" />
+        <button class="mono-btn-chamfer" id="jev-add-folder" type="submit">
+          <span class="chamfer-inner"><span class="btn-tag">ADD //</span><span class="btn-label">Folder</span></span>
+        </button>
+      </form>
+      <div class="jev-custom-list" id="jev-custom-list" aria-live="polite"></div>
+    </div>
     <div class="jev-file-result" id="jev-file-result" hidden>
       <div class="jev-file-chip">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/></svg>
         <span class="jev-file-chip-name" id="jev-file-chip-name"></span>
         <span class="jev-chip-arrow" aria-hidden="true">→</span>
         <span class="jev-chip-folder" id="jev-file-chip-folder"></span>
+      </div>
+      <div class="jev-unknown-note" id="jev-file-unknown-note" hidden>
+        <span class="card-tag">REVIEW //</span>
+        <p>No folder fits. Jev chose Unknown, so this file should go to a human or to a new folder you define.</p>
       </div>
       <div class="jev-telemetry" id="jev-file-telemetry"></div>
       <div class="jev-probs" id="jev-file-probs"></div>
@@ -153,7 +170,7 @@ The state is the file name plus an optional excerpt. The questions are a five-wa
       <summary>Inspect the request</summary>
       <pre id="jev-file-json"></pre>
     </details>
-    <div class="jev-foot">STATE = FILE NAME + EXCERPT · QUESTIONS = 1 CHOICE + 1 NOUL · ANSWER = FOLDER + PROBABILITIES + CONFIDENCE · ICONS: LUCIDE (ISC)</div>
+    <div class="jev-foot">STATE = FILE NAME + EXCERPT · QUESTIONS = 1 CHOICE + 1 NOUL · ANSWER = FOLDER + PROBABILITIES + CONFIDENCE · UNKNOWN ALWAYS AVAILABLE · ICONS: LUCIDE (ISC)</div>
   </div>
 </div>
 
@@ -177,7 +194,8 @@ The entire integration is one object. The folder names are the keys of `criteria
         "Engineering": "Source code, architecture notes, incident reports, API specs, infrastructure, technical documentation.",
         "Legal": "Contracts, NDAs, terms of service, compliance policies, licenses, regulatory filings.",
         "Marketing": "Campaign briefs, ad copy, brand assets, social posts, landing pages, market research.",
-        "People": "Resumes, offer letters, performance reviews, onboarding, HR policies, employee records."
+        "People": "Resumes, offer letters, performance reviews, onboarding, HR policies, employee records.",
+        "Unknown": "No listed folder fits, or the file is too ambiguous to file with confidence."
       }
     },
     "sensitive": {
@@ -203,7 +221,8 @@ A representative response is just as small:
         "Engineering": 0.0,
         "Legal": 0.0,
         "Marketing": 0.0,
-        "People": 0.0
+        "People": 0.0,
+        "Unknown": 0.0
       }
     },
     "sensitive": { "type": "noul", "noul": 0.66 }
@@ -212,7 +231,7 @@ A representative response is just as small:
 }
 ```
 
-There is no parsing step. `folder.choice` is already one of the five keys. `sensitive.noul` is already a number between 0 and 1. The code decides whether 0.66 is worth a review flag — Jev does not make that policy decision.
+There is no parsing step. `folder.choice` is already one of the keys you supplied. `sensitive.noul` is already a number between 0 and 1. The code decides whether 0.66 is worth a review flag — Jev does not make that policy decision.
 
 ## Exhibit 02 — Snake, with Jev at the controls
 
@@ -232,7 +251,7 @@ The question is a **Choice** whose options are only the legal moves. Code has al
       <div>
         <span class="card-tag">EXHIBIT // 02 · CHOICE</span>
         <h4 class="jev-h4">Jev plays Snake</h4>
-        <p class="jev-p">10 × 9 grid. No arrow keys. Every move is one API call with the full matrix and a legal action set. The run pauses after every three food points.</p>
+        <p class="jev-p">10 × 9 grid. No arrow keys. Every move is one API call with the full matrix and a legal action set. The run pauses after every ten food points.</p>
       </div>
       <div class="jev-status" data-state="ready">
         <span class="jev-dot" aria-hidden="true"></span>
@@ -283,8 +302,8 @@ The question is a **Choice** whose options are only the legal moves. Code has al
           <button class="jev-text-btn" id="jev-snake-reset" type="button">New run</button>
         </div>
         <div class="jev-gate" id="jev-snake-gate" hidden>
-          <span class="card-tag">TOKEN BUDGET // 3 FOOD</span>
-          <p>Jev has reached three food points. The run is paused so you can decide whether to keep spending tokens. Each move is one request.</p>
+          <span class="card-tag">TOKEN BUDGET // 10 FOOD</span>
+          <p>Jev has reached ten food points. The run is paused so you can decide whether to keep spending tokens. Each move is one request.</p>
           <div class="jev-gate-actions">
             <button class="mono-btn-chamfer" id="jev-snake-continue" type="button">
               <span class="chamfer-inner"><span class="btn-tag">NEXT //</span><span class="btn-label">Continue run</span></span>
@@ -337,9 +356,9 @@ The instruction tells Jev the coordinate convention — row 0 is the top, column
 
 <blockquote><p><strong>Design note:</strong> the action space is filtered in code, not in the prompt. This is the “code owns the workflow” rule in miniature. Jev chooses a direction; code guarantees the direction is legal. The model is doing judgment, not bookkeeping.</p></blockquote>
 
-### Why the run pauses at three
+### Why the run pauses at ten
 
-Every move is a request. Jev is cheap — input is $42 per billion tokens, output is free — but “cheap” is not “free,” and a long run adds up. A typical move on this board is roughly 600 input tokens, so a 30-move run costs about 18,000 tokens, or roughly $0.0008 at the current price. The pause at three food points is a budget gate, not a technical limit: you can continue, end the run, or wait and inspect the matrix first.
+Every move is a request. Jev is cheap — input is $42 per billion tokens, output is free — but “cheap” is not “free,” and a long run adds up. A typical move on this board is roughly 600 input tokens. A 10-food run is often 60–100 moves, so expect roughly 36,000–60,000 input tokens, or about $0.0015–$0.0025 at the current price. The pause at ten food points is a budget gate, not a technical limit: you can continue, end the run, or wait and inspect the matrix first.
 
 The gate also gives you a natural place to watch the model's behavior. Did it take the shortest path? Did it get trapped by its own body? Did confidence drop before a mistake? Those are the questions worth asking when you evaluate a decision model on your own data.
 
@@ -349,7 +368,7 @@ The two exhibits look unrelated, but they share the same four moves:
 
 | Move | Filing cabinet | Snake |
 | :-- | :-- | :-- |
-| **Constrain the answer** | Five folder keys | Only the legal directions |
+| **Constrain the answer** | Folder keys + Unknown | Only the legal directions |
 | **Give only relevant state** | File name + excerpt | Matrix + legend + head + food |
 | **Ask independent questions** | Folder + sensitive in one call | One move per call, because the board changes |
 | **Keep policy in code** | What to do with `sensitive` | Filtering illegal moves and gating tokens |
@@ -387,7 +406,7 @@ curl https://api.typesafe.ai/v1/systemone \
 
 ### A relay you control
 
-If you want the deployed page to work from a browser, deploy a tiny relay. This Cloudflare Worker forwards only two paths and keeps the CORS allowlist tight:
+The deployed page needs a relay because of the CORS allowlist. Deploy a tiny one; this Cloudflare Worker forwards only two paths and keeps the CORS allowlist tight:
 
 ```js
 export default {
@@ -432,6 +451,8 @@ export default {
 
 Set `ALLOWED_ORIGIN` to your own origin. The relay sees the `Authorization` header, so self-host it, keep the allowlist narrow, and do not log request bodies. This is not a public CORS proxy; it is a small piece of infrastructure you own.
 
+After deploying, paste `https://your-worker.workers.dev` into the page's Relay field (base only, no `/v1/systemone`) and press **Test connection**.
+
 For local development, the same idea in Bun:
 
 ```ts
@@ -471,7 +492,7 @@ Bun.serve({
 });
 ```
 
-Run it with `bun run relay.ts`, then set the page's Transport to Relay and use `http://localhost:8787`.
+Run it with `bun run relay.ts`, then paste `http://localhost:8787` into the page's Relay field. This local HTTP relay is for local development: an HTTPS page cannot call a loopback HTTP relay (browsers block the private address space), so use the HTTPS Worker for the deployed site.
 
 > **Do not use a public CORS proxy for this.** It would receive your key in the `Authorization` header. A relay you control is the only version of this pattern I would ship.
 
@@ -481,7 +502,7 @@ Run it with `bun run relay.ts`, then set the page's Transport to Relay and use `
 - **Language.** English is the primary training language. Jev accepts other languages, including CJK, but accuracy is lower. Test on your own content before relying on it.
 - **Literal reading.** Jev answers the question you wrote, not the one you meant. Put boundary cases in `criteria`, and split a judgment if it needs several independent factors.
 - **Numbers and dates.** Keep arithmetic, counting, and date comparisons in code. Use Jev for the extraction or the judgment, not the calculation.
-- **Cost.** Input is $42 per billion tokens; output tokens are free. A Snake move is a few hundred input tokens, so the gate at three food points is mostly about discipline, not price.
+- **Cost.** Input is $42 per billion tokens; output tokens are free. A Snake move is a few hundred input tokens, so the gate at ten food points is mostly about discipline, not price.
 - **Security.** The key in this demo lives in `localStorage`. Use a scoped key, revoke it when done, and never commit it. The test key used to validate this article is not in the repository.
 
 The point of both exhibits is not that a model can play Snake. It is that a model can return a **typed decision** at a specific point in a workflow, and the rest of the system can stay ordinary code. That is a much smaller, more testable interface than “generate an answer and hope it parses.”
@@ -708,49 +729,15 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
 }
 
 .jev-transport {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
+  display: grid;
+  gap: 5px;
   margin-top: 12px;
   padding-top: 12px;
   border-top: 0.7px dashed var(--mono-grid);
 }
 
-.jev-seg {
-  display: inline-flex;
-  gap: 2px;
-  padding: 2px;
-  border: 0.7px solid var(--mono-grid);
-  border-radius: 3px;
-}
-
-.jev-seg-btn {
-  border: 0;
-  background: transparent;
-  padding: 5px 10px;
-  color: var(--mono-muted);
-  font-family: var(--mono-font-mono);
-  font-size: 9.5px;
-  font-weight: 600;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background 150ms ease, color 150ms ease;
-}
-
-.jev-seg-btn:hover {
-  color: var(--mono-ink);
-}
-
-.jev-seg-btn.active {
-  background: var(--mono-ink);
-  color: var(--mono-paper);
-}
-
-.jev-relay-wrap {
-  flex: 1 1 260px;
-  min-width: 0;
+.jev-transport .jev-input {
+  width: 100%;
 }
 
 .jev-hint,
@@ -890,7 +877,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
 
 .jev-folders {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 7px;
 }
 
@@ -905,6 +892,14 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
 
 .jev-folder.is-choice {
   border-color: var(--mono-ink);
+}
+
+.jev-folder.is-unknown {
+  border-style: dashed;
+}
+
+.jev-folder.is-custom .jev-folder-desc {
+  color: var(--mono-l3);
 }
 
 .jev-folder.is-choice::after {
@@ -954,7 +949,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
 
 .jev-folder-name {
   display: block;
-  font-size: 10.5px;
+  font-size: 11.5px;
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: -0.015em;
@@ -992,6 +987,99 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
 
 .jev-folder.is-choice .jev-folder-bar i {
   background: var(--mono-ink);
+}
+
+.jev-folder-manager {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 0.7px dashed var(--mono-grid);
+}
+
+.jev-folder-manager-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 7px;
+}
+
+.jev-folder-manager-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.jev-folder-add {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) auto;
+  gap: 7px;
+  align-items: stretch;
+}
+
+.jev-folder-add .mono-btn-chamfer {
+  white-space: nowrap;
+}
+
+.jev-folder-add .mono-btn-chamfer .chamfer-inner {
+  height: 100%;
+}
+
+.jev-custom-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.jev-custom-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 4px 3px 8px;
+  border: 0.7px solid var(--mono-grid);
+  font-family: var(--mono-font-mono);
+  font-size: 9.5px;
+  color: var(--mono-l2);
+}
+
+.jev-custom-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--mono-muted);
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.jev-custom-remove:hover {
+  color: var(--mono-ink);
+}
+
+.jev-custom-empty {
+  font-family: var(--mono-font-mono);
+  font-size: 9.5px;
+  line-height: 1.5;
+  color: var(--mono-faint);
+}
+
+.jev-unknown-note {
+  margin-top: 10px;
+  padding: 9px 11px;
+  border: 0.7px solid var(--mono-ink);
+  border-left: 3px solid var(--mono-ink);
+}
+
+.jev-shell .jev-unknown-note p {
+  margin: 3px 0 0;
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: var(--mono-l2);
 }
 
 .jev-file-result {
@@ -1436,6 +1524,14 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .jev-folder-add {
+    grid-template-columns: 1fr;
+  }
+
+  .jev-folder-add .mono-btn-chamfer {
+    width: 100%;
+  }
+
   .jev-telemetry,
   .jev-telemetry-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1479,18 +1575,16 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
 (() => {
   'use strict';
 
-  const DIRECT_BASE = 'https://api.typesafe.ai';
   const LS = {
     key: 'jev.key.v1',
-    transport: 'jev.transport.v1',
-    relay: 'jev.relay.v1'
+    relay: 'jev.relay.v1',
+    folders: 'jev.folders.v1'
   };
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
   const app = {
     key: '',
-    transport: 'direct',
     relay: ''
   };
 
@@ -1506,11 +1600,9 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
   function readStored() {
     try {
       app.key = localStorage.getItem(LS.key) || '';
-      app.transport = localStorage.getItem(LS.transport) === 'relay' ? 'relay' : 'direct';
       app.relay = localStorage.getItem(LS.relay) || '';
     } catch (err) {
       app.key = '';
-      app.transport = 'direct';
       app.relay = '';
     }
   }
@@ -1532,12 +1624,9 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
   }
 
   function baseUrl() {
-    if (app.transport === 'relay') {
-      const url = app.relay.trim().replace(/\/+$/, '');
-      if (!url) throw new Error('Add a relay base URL first.');
-      return url;
-    }
-    return DIRECT_BASE;
+    const url = app.relay.trim().replace(/\/+$/, '');
+    if (!url) throw new Error('Add a relay base URL first.');
+    return url;
   }
 
   class ApiError extends Error {
@@ -1561,8 +1650,8 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     try {
       res = await fetch(base + path, { ...options, headers });
     } catch (err) {
-      const wrapped = new Error('Network request failed. In Direct mode this is usually CORS.');
-      wrapped.cors = app.transport === 'direct';
+      const wrapped = new Error('Network request failed.');
+      wrapped.network = true;
       wrapped.cause = err;
       throw wrapped;
     }
@@ -1583,12 +1672,20 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
   }
 
   function describeError(err) {
-    if (err && err.cors) {
+    if (err && err.message === 'Add a relay base URL first.') {
       return {
-        title: 'The browser blocked the request (CORS).',
+        title: 'Add a relay URL.',
         detail:
-          'TypeSafe currently allows browser calls only from console.typesafe.ai. ' +
-          'Switch Transport to Relay, or ask TypeSafe to allow this origin.',
+          'Paste the HTTPS base URL of your Cloudflare Worker. The demo appends /v1/systemone to it.',
+        relay: true
+      };
+    }
+    if (err && err.network) {
+      return {
+        title: 'Could not reach the relay.',
+        detail:
+          'Check the relay URL, that the Worker is deployed, and that its ALLOWED_ORIGIN matches this page. ' +
+          'The Worker must be HTTPS.',
         relay: true
       };
     }
@@ -1669,6 +1766,13 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     return false;
   }
 
+  function requireRelay() {
+    if (app.relay.trim()) return true;
+    showToast('Add your relay URL first.');
+    focusRelay();
+    return false;
+  }
+
   function setKeyStatus(text, stateName) {
     const status = $('#jev-key-status');
     if (!status) return;
@@ -1684,44 +1788,39 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     if (test) test.disabled = !app.key;
   }
 
-  function applyTransport() {
-    $$('.jev-seg-btn').forEach((btn) => {
-      const active = btn.dataset.transport === app.transport;
-      btn.classList.toggle('active', active);
-      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
-    });
-    const relayWrap = $('#jev-relay-wrap');
-    if (relayWrap) relayWrap.hidden = app.transport !== 'relay';
-    const relayInput = $('#jev-relay-input');
-    if (relayInput && relayInput.value !== app.relay) relayInput.value = app.relay;
-    const hint = $('#jev-transport-hint');
+  function renderRelayMeta() {
+    const hint = $('#jev-relay-hint');
     if (hint) {
-      hint.textContent =
-        app.transport === 'relay'
-          ? 'The request goes browser → your relay → TypeSafe. The relay sees the Authorization header.'
-          : 'Direct is pure frontend. It needs TypeSafe to allow this origin (CORS).';
+      hint.textContent = app.relay.trim()
+        ? 'Saved in this browser. The request goes browser → relay → TypeSafe.'
+        : 'Paste the HTTPS base URL of your Cloudflare Worker. It is saved in this browser.';
     }
     const endpoint = $('#jev-endpoint');
     if (endpoint) {
-      endpoint.textContent =
-        (app.transport === 'relay' && app.relay ? app.relay.replace(/\/+$/, '') : DIRECT_BASE) +
-        '/v1/systemone';
+      endpoint.textContent = app.relay.trim()
+        ? app.relay.trim().replace(/\/+$/, '') + '/v1/systemone'
+        : 'ADD A RELAY URL';
     }
   }
 
-  function switchToRelay() {
-    app.transport = 'relay';
-    store(LS.transport, app.transport);
-    applyTransport();
+  function syncRelayUI() {
     const relayInput = $('#jev-relay-input');
-    if (relayInput) {
-      relayInput.focus();
-      relayInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (relayInput && document.activeElement !== relayInput && relayInput.value !== app.relay) {
+      relayInput.value = app.relay;
     }
+    renderRelayMeta();
+  }
+
+  function focusRelay() {
+    const input = $('#jev-relay-input');
+    if (!input) return;
+    input.focus();
+    input.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
   async function testConnection() {
     if (!requireKey()) return;
+    if (!requireRelay()) return;
     clearError();
     setKeyStatus('TESTING', 'working');
     const button = $('#jev-key-test');
@@ -1748,7 +1847,10 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
   const FILE_ICON =
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>';
 
-  const FOLDERS = [
+  const UNKNOWN_ICON =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>';
+
+  const DEFAULT_FOLDERS = [
     {
       name: 'Finance',
       desc: 'Invoices · budgets · tax',
@@ -1776,6 +1878,16 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     }
   ];
 
+  const UNKNOWN_FOLDER = {
+    name: 'Unknown',
+    desc: 'No folder fits',
+    long: 'No listed folder fits, or the file is too ambiguous to file with confidence.',
+    kind: 'unknown'
+  };
+
+  const MAX_CUSTOM_FOLDERS = 8;
+  let customFolders = [];
+
   const SAMPLES = {
     invoice: { name: 'Q3_invoice_acme_2026.pdf', excerpt: '' },
     incident: {
@@ -1789,21 +1901,156 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     }
   };
 
+  function isReservedName(name) {
+    const lower = name.toLowerCase();
+    return lower === 'unknown' || DEFAULT_FOLDERS.some((folder) => folder.name.toLowerCase() === lower);
+  }
+
+  function loadCustomFolders() {
+    try {
+      const raw = localStorage.getItem(LS.folders);
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return;
+      customFolders = parsed
+        .filter((item) => item && typeof item.name === 'string')
+        .map((item) => ({
+          name: item.name.trim().replace(/\s+/g, ' '),
+          desc: typeof item.desc === 'string' ? item.desc.trim().replace(/\s+/g, ' ') : ''
+        }))
+        .filter((item) => item.name && !isReservedName(item.name))
+        .slice(0, MAX_CUSTOM_FOLDERS);
+    } catch (err) {
+      customFolders = [];
+    }
+  }
+
+  function saveCustomFolders() {
+    store(LS.folders, JSON.stringify(customFolders));
+  }
+
+  function allFolders() {
+    return [
+      ...DEFAULT_FOLDERS.map((folder) => ({ ...folder, kind: 'default' })),
+      ...customFolders.map((folder) => ({
+        ...folder,
+        kind: 'custom',
+        long:
+          folder.desc ||
+          'Custom folder named ' + folder.name + '. Use the folder name and the file itself to decide.'
+      }))
+    ];
+  }
+
+  function folderOptions() {
+    return [...allFolders(), UNKNOWN_FOLDER];
+  }
+
+  function addCustomFolder(name, desc) {
+    const cleanName = name.trim().replace(/\s+/g, ' ');
+    const cleanDesc = desc.trim().replace(/\s+/g, ' ');
+
+    if (!cleanName) {
+      showToast('Type a folder name first.');
+      return false;
+    }
+    if (cleanName.length > 32) {
+      showToast('Folder names are limited to 32 characters.');
+      return false;
+    }
+    if (customFolders.length >= MAX_CUSTOM_FOLDERS) {
+      showToast('Up to ' + MAX_CUSTOM_FOLDERS + ' custom folders.');
+      return false;
+    }
+    if (
+      isReservedName(cleanName) ||
+      customFolders.some((folder) => folder.name.toLowerCase() === cleanName.toLowerCase())
+    ) {
+      showToast('That folder already exists.');
+      return false;
+    }
+
+    customFolders.push({ name: cleanName, desc: cleanDesc });
+    saveCustomFolders();
+    return true;
+  }
+
+  function removeCustomFolder(index) {
+    if (index < 0 || index >= customFolders.length) return;
+    const removed = customFolders.splice(index, 1)[0];
+    saveCustomFolders();
+    renderFolders();
+    renderCustomList();
+    clearFileResult();
+    updateFileJson(buildFilePayload());
+    showToast('Removed ' + removed.name + '.');
+  }
+
+  function resetCustomFolders() {
+    customFolders = [];
+    saveCustomFolders();
+    renderFolders();
+    renderCustomList();
+    clearFileResult();
+    updateFileJson(buildFilePayload());
+    showToast('Custom folders reset.');
+  }
+
   function renderFolders() {
     const host = $('#jev-folders');
     if (!host) return;
-    host.innerHTML = FOLDERS.map(
-      (folder) => `
-        <div class="jev-folder" data-folder="${esc(folder.name)}" aria-label="${esc(folder.name)}: no result yet">
-          <div class="jev-folder-top">
-            <span class="jev-folder-icon">${FOLDER_ICON}</span>
-            <span class="jev-folder-pct" data-pct>—</span>
-          </div>
-          <span class="jev-folder-name">${esc(folder.name)}</span>
-          <span class="jev-folder-desc">${esc(folder.desc)}</span>
-          <span class="jev-folder-bar" aria-hidden="true"><i></i></span>
-        </div>`
-    ).join('');
+    host.innerHTML = folderOptions()
+      .map((folder) => {
+        const kind = folder.kind || 'default';
+        const icon = kind === 'unknown' ? UNKNOWN_ICON : FOLDER_ICON;
+        const classes = ['jev-folder'];
+        if (kind === 'unknown') classes.push('is-unknown');
+        if (kind === 'custom') classes.push('is-custom');
+        return `
+          <div class="${classes.join(' ')}" data-folder="${esc(folder.name)}" data-kind="${kind}" aria-label="${esc(folder.name)}: no result yet">
+            <div class="jev-folder-top">
+              <span class="jev-folder-icon">${icon}</span>
+              <span class="jev-folder-pct" data-pct>—</span>
+            </div>
+            <span class="jev-folder-name">${esc(folder.name)}</span>
+            <span class="jev-folder-desc">${esc(folder.desc || (kind === 'custom' ? 'Custom folder' : ''))}</span>
+            <span class="jev-folder-bar" aria-hidden="true"><i></i></span>
+          </div>`;
+      })
+      .join('');
+  }
+
+  function renderCustomList() {
+    const host = $('#jev-custom-list');
+    const count = $('#jev-folder-count');
+    const reset = $('#jev-reset-folders');
+
+    if (count) count.textContent = customFolders.length + ' / ' + MAX_CUSTOM_FOLDERS;
+    if (reset) reset.hidden = customFolders.length === 0;
+    if (!host) return;
+
+    if (!customFolders.length) {
+      host.innerHTML =
+        '<span class="jev-custom-empty">No custom folders yet. The starter folders and Unknown are always available.</span>';
+      return;
+    }
+
+    host.innerHTML = customFolders
+      .map(
+        (folder, index) => `
+          <span class="jev-custom-chip">
+            <span>${esc(folder.name)}</span>
+            <button class="jev-custom-remove" type="button" data-remove-index="${index}" aria-label="Remove ${esc(folder.name)}">×</button>
+          </span>`
+      )
+      .join('');
+  }
+
+  function clearFileResult() {
+    const result = $('#jev-file-result');
+    if (result) result.hidden = true;
+    const unknown = $('#jev-file-unknown-note');
+    if (unknown) unknown.hidden = true;
   }
 
   function buildFilePayload() {
@@ -1820,7 +2067,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
           type: 'choice',
           instructions:
             'Which folder should this file be filed into? Judge from the file name and any excerpt. Pick the single best folder.',
-          criteria: Object.fromEntries(FOLDERS.map((folder) => [folder.name, folder.long]))
+          criteria: Object.fromEntries(folderOptions().map((folder) => [folder.name, folder.long]))
         },
         sensitive: {
           type: 'noul',
@@ -1842,8 +2089,11 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     const sensitive = data.answers && data.answers.sensitive;
     const probabilities = folderAnswer.probabilities || {};
 
-    FOLDERS.forEach((folder) => {
-      const card = $('#jev-folders [data-folder="' + folder.name + '"]');
+    const folderHost = $('#jev-folders');
+    folderOptions().forEach((folder) => {
+      const card = Array.from(folderHost.querySelectorAll('.jev-folder')).find(
+        (el) => el.dataset.folder === folder.name
+      );
       if (!card) return;
       const probability = Number(probabilities[folder.name] || 0);
       card.style.setProperty('--p', String(probability));
@@ -1859,6 +2109,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
 
     $('#jev-file-chip-name').textContent = fileName;
     $('#jev-file-chip-folder').textContent = folderAnswer.choice;
+    $('#jev-file-unknown-note').hidden = folderAnswer.choice !== 'Unknown';
     $('#jev-file-result').hidden = false;
 
     $('#jev-file-telemetry').innerHTML = `
@@ -1886,6 +2137,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
   async function classifyFile(event) {
     event.preventDefault();
     if (!requireKey()) return;
+    if (!requireRelay()) return;
     clearError();
 
     const nameInput = $('#jev-file-name');
@@ -2327,7 +2579,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
       renderMove(answer, choice, corrected);
       addLog(choice, answer, corrected);
 
-      if (game.score > 0 && game.score % 3 === 0 && game.score !== game.lastGate) {
+      if (game.score > 0 && game.score % 10 === 0 && game.score !== game.lastGate) {
         game.lastGate = game.score;
         game.gate = true;
         game.running = false;
@@ -2366,6 +2618,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
 
   function startSnake() {
     if (!requireKey()) return;
+    if (!requireRelay()) return;
     clearError();
     if (game.gameOver || (game.steps === 0 && !game.running)) {
       resetGame();
@@ -2468,20 +2721,12 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
 
     $('#jev-key-test').addEventListener('click', testConnection);
     $('#jev-error-close').addEventListener('click', clearError);
-    $('#jev-error-relay').addEventListener('click', switchToRelay);
-
-    $$('.jev-seg-btn').forEach((button) => {
-      button.addEventListener('click', () => {
-        app.transport = button.dataset.transport === 'relay' ? 'relay' : 'direct';
-        store(LS.transport, app.transport);
-        applyTransport();
-      });
-    });
+    $('#jev-error-relay').addEventListener('click', focusRelay);
 
     $('#jev-relay-input').addEventListener('input', (event) => {
       app.relay = event.target.value.trim();
       store(LS.relay, app.relay);
-      applyTransport();
+      renderRelayMeta();
     });
 
     $('#jev-file-form').addEventListener('submit', classifyFile);
@@ -2491,6 +2736,29 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     $$('.jev-sample').forEach((button) => {
       button.addEventListener('click', () => loadSample(button.dataset.sample));
     });
+
+    $('#jev-folder-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const nameInput = $('#jev-new-folder');
+      const descInput = $('#jev-new-folder-desc');
+      if (!addCustomFolder(nameInput.value, descInput.value)) return;
+      nameInput.value = '';
+      descInput.value = '';
+      renderFolders();
+      renderCustomList();
+      clearFileResult();
+      updateFileJson(buildFilePayload());
+      showToast('Folder added.');
+      nameInput.focus();
+    });
+
+    $('#jev-custom-list').addEventListener('click', (event) => {
+      const button = event.target.closest('[data-remove-index]');
+      if (!button) return;
+      removeCustomFolder(Number(button.dataset.removeIndex));
+    });
+
+    $('#jev-reset-folders').addEventListener('click', resetCustomFolders);
 
     $('#jev-snake-start').addEventListener('click', startSnake);
     $('#jev-snake-pause').addEventListener('click', pauseSnake);
@@ -2510,8 +2778,10 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
   function init() {
     readStored();
     syncKeyUI();
-    applyTransport();
+    loadCustomFolders();
     renderFolders();
+    renderCustomList();
+    syncRelayUI();
     resetGame();
     bindEvents();
     updateFileJson(buildFilePayload());
