@@ -1,0 +1,1119 @@
+{
+  "source": "jev",
+  "model": "jev-1.13.0",
+  "generatedAt": "2026-10-18T13:23:32.206Z",
+  "seed": 20261018,
+  "rules": {
+    "cols": 10,
+    "rows": 9,
+    "initialSnake": [
+      {
+        "r": 4,
+        "c": 3
+      },
+      {
+        "r": 4,
+        "c": 2
+      },
+      {
+        "r": 4,
+        "c": 1
+      }
+    ],
+    "initialDirection": "right"
+  },
+  "outcome": {
+    "state": "GAME OVER",
+    "score": 12,
+    "steps": 102,
+    "inputTokens": 64954
+  },
+  "steps": [
+    {
+      "step": 1,
+      "move": "right",
+      "confidence": 0.31,
+      "probabilities": {
+        "up": 0.46,
+        "right": 0.54,
+        "down": 0
+      },
+      "input_tokens": 645
+    },
+    {
+      "step": 2,
+      "move": "right",
+      "confidence": 0.49,
+      "probabilities": {
+        "up": 0.34,
+        "right": 0.66,
+        "down": 0
+      },
+      "input_tokens": 645
+    },
+    {
+      "step": 3,
+      "move": "up",
+      "confidence": 0.28,
+      "probabilities": {
+        "up": 0.52,
+        "right": 0.48,
+        "down": 0
+      },
+      "input_tokens": 645
+    },
+    {
+      "step": 4,
+      "move": "right",
+      "confidence": 0.79,
+      "probabilities": {
+        "up": 0.14,
+        "right": 0.86,
+        "left": 0
+      },
+      "input_tokens": 645
+    },
+    {
+      "step": 5,
+      "move": "right",
+      "confidence": 1,
+      "probabilities": {
+        "up": 0,
+        "right": 1,
+        "down": 0
+      },
+      "input_tokens": 645
+    },
+    {
+      "step": 6,
+      "move": "right",
+      "confidence": 1,
+      "probabilities": {
+        "up": 0,
+        "right": 1,
+        "down": 0
+      },
+      "input_tokens": 645
+    },
+    {
+      "step": 7,
+      "move": "down",
+      "confidence": 0.88,
+      "probabilities": {
+        "up": 0.01,
+        "right": 0.07,
+        "down": 0.92
+      },
+      "input_tokens": 645
+    },
+    {
+      "step": 8,
+      "move": "left",
+      "confidence": 0.31,
+      "probabilities": {
+        "right": 0,
+        "down": 0.46,
+        "left": 0.54
+      },
+      "input_tokens": 645
+    },
+    {
+      "step": 9,
+      "move": "left",
+      "confidence": 0.41,
+      "probabilities": {
+        "up": 0.01,
+        "down": 0.38,
+        "left": 0.61
+      },
+      "input_tokens": 645
+    },
+    {
+      "step": 10,
+      "move": "left",
+      "confidence": 0.31,
+      "probabilities": {
+        "up": 0.01,
+        "down": 0.45,
+        "left": 0.54
+      },
+      "input_tokens": 645
+    },
+    {
+      "step": 11,
+      "move": "left",
+      "confidence": 0.43,
+      "probabilities": {
+        "up": 0,
+        "down": 0.38,
+        "left": 0.62
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 12,
+      "move": "down",
+      "confidence": 0.3,
+      "probabilities": {
+        "up": 0,
+        "down": 0.53,
+        "left": 0.47
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 13,
+      "move": "left",
+      "confidence": 0.25,
+      "probabilities": {
+        "right": 0,
+        "down": 0.5,
+        "left": 0.5
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 14,
+      "move": "left",
+      "confidence": 0.37,
+      "probabilities": {
+        "up": 0.01,
+        "down": 0.41,
+        "left": 0.58
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 15,
+      "move": "left",
+      "confidence": 0.59,
+      "probabilities": {
+        "up": 0,
+        "down": 0.27,
+        "left": 0.73
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 16,
+      "move": "left",
+      "confidence": 0.41,
+      "probabilities": {
+        "up": 0,
+        "down": 0.39,
+        "left": 0.61
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 17,
+      "move": "down",
+      "confidence": 0.98,
+      "probabilities": {
+        "up": 0.01,
+        "down": 0.99
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 18,
+      "move": "down",
+      "confidence": 0.56,
+      "probabilities": {
+        "right": 0.22,
+        "down": 0.78
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 19,
+      "move": "down",
+      "confidence": 0.4,
+      "probabilities": {
+        "right": 0.3,
+        "down": 0.7
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 20,
+      "move": "right",
+      "confidence": 1,
+      "probabilities": {
+        "right": 1
+      },
+      "input_tokens": 594
+    },
+    {
+      "step": 21,
+      "move": "right",
+      "confidence": 0.52,
+      "probabilities": {
+        "up": 0.24,
+        "right": 0.76
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 22,
+      "move": "right",
+      "confidence": 0.28,
+      "probabilities": {
+        "up": 0.36,
+        "right": 0.64
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 23,
+      "move": "up",
+      "confidence": 0.04,
+      "probabilities": {
+        "up": 0.52,
+        "right": 0.48
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 24,
+      "move": "up",
+      "confidence": 0.64,
+      "probabilities": {
+        "up": 0.76,
+        "right": 0.24,
+        "left": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 25,
+      "move": "up",
+      "confidence": 0.61,
+      "probabilities": {
+        "up": 0.74,
+        "right": 0.26,
+        "left": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 26,
+      "move": "up",
+      "confidence": 0.46,
+      "probabilities": {
+        "up": 0.64,
+        "right": 0.36,
+        "left": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 27,
+      "move": "up",
+      "confidence": 0.33,
+      "probabilities": {
+        "up": 0.55,
+        "right": 0.45,
+        "left": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 28,
+      "move": "right",
+      "confidence": 0.85,
+      "probabilities": {
+        "up": 0.1,
+        "right": 0.9,
+        "left": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 29,
+      "move": "right",
+      "confidence": 1,
+      "probabilities": {
+        "up": 0,
+        "right": 1,
+        "down": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 30,
+      "move": "right",
+      "confidence": 1,
+      "probabilities": {
+        "up": 0,
+        "right": 1,
+        "down": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 31,
+      "move": "right",
+      "confidence": 1,
+      "probabilities": {
+        "up": 0,
+        "right": 1,
+        "down": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 32,
+      "move": "right",
+      "confidence": 1,
+      "probabilities": {
+        "up": 0,
+        "right": 1,
+        "down": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 33,
+      "move": "down",
+      "confidence": 0.58,
+      "probabilities": {
+        "up": 0.01,
+        "right": 0.27,
+        "down": 0.72
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 34,
+      "move": "left",
+      "confidence": 0.33,
+      "probabilities": {
+        "right": 0,
+        "down": 0.45,
+        "left": 0.55
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 35,
+      "move": "down",
+      "confidence": 0.04,
+      "probabilities": {
+        "down": 0.52,
+        "left": 0.48
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 36,
+      "move": "left",
+      "confidence": 0.35,
+      "probabilities": {
+        "right": 0,
+        "down": 0.43,
+        "left": 0.57
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 37,
+      "move": "left",
+      "confidence": 0.46,
+      "probabilities": {
+        "up": 0.01,
+        "down": 0.35,
+        "left": 0.64
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 38,
+      "move": "down",
+      "confidence": 0.31,
+      "probabilities": {
+        "up": 0.01,
+        "down": 0.54,
+        "left": 0.45
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 39,
+      "move": "left",
+      "confidence": 0.28,
+      "probabilities": {
+        "right": 0.01,
+        "down": 0.47,
+        "left": 0.52
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 40,
+      "move": "down",
+      "confidence": 0.31,
+      "probabilities": {
+        "up": 0.01,
+        "down": 0.54,
+        "left": 0.45
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 41,
+      "move": "left",
+      "confidence": 0.38,
+      "probabilities": {
+        "right": 0,
+        "down": 0.41,
+        "left": 0.59
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 42,
+      "move": "down",
+      "confidence": 0.86,
+      "probabilities": {
+        "up": 0.01,
+        "down": 0.91,
+        "left": 0.08
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 43,
+      "move": "right",
+      "confidence": 0.98,
+      "probabilities": {
+        "right": 0.99,
+        "left": 0.01
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 44,
+      "move": "right",
+      "confidence": 1,
+      "probabilities": {
+        "right": 1
+      },
+      "input_tokens": 594
+    },
+    {
+      "step": 45,
+      "move": "up",
+      "confidence": 0.12,
+      "probabilities": {
+        "up": 0.56,
+        "right": 0.44
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 46,
+      "move": "up",
+      "confidence": 0.78,
+      "probabilities": {
+        "up": 0.89,
+        "right": 0.11
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 47,
+      "move": "up",
+      "confidence": 0.72,
+      "probabilities": {
+        "up": 0.81,
+        "right": 0.19,
+        "left": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 48,
+      "move": "up",
+      "confidence": 0.61,
+      "probabilities": {
+        "up": 0.74,
+        "right": 0.26,
+        "left": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 49,
+      "move": "up",
+      "confidence": 0.61,
+      "probabilities": {
+        "up": 0.74,
+        "right": 0.26,
+        "left": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 50,
+      "move": "up",
+      "confidence": 0.58,
+      "probabilities": {
+        "up": 0.72,
+        "right": 0.28,
+        "left": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 51,
+      "move": "right",
+      "confidence": 0.27,
+      "probabilities": {
+        "up": 0.49,
+        "right": 0.51,
+        "left": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 52,
+      "move": "right",
+      "confidence": 0.37,
+      "probabilities": {
+        "up": 0.42,
+        "right": 0.58,
+        "down": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 53,
+      "move": "up",
+      "confidence": 0.27,
+      "probabilities": {
+        "up": 0.51,
+        "right": 0.49,
+        "down": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 54,
+      "move": "right",
+      "confidence": 0.86,
+      "probabilities": {
+        "up": 0.09,
+        "right": 0.91,
+        "left": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 55,
+      "move": "right",
+      "confidence": 1,
+      "probabilities": {
+        "up": 0,
+        "right": 1,
+        "down": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 56,
+      "move": "down",
+      "confidence": 0.98,
+      "probabilities": {
+        "up": 0.01,
+        "down": 0.99
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 57,
+      "move": "down",
+      "confidence": 0.68,
+      "probabilities": {
+        "down": 0.84,
+        "left": 0.16
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 58,
+      "move": "down",
+      "confidence": 0.7,
+      "probabilities": {
+        "down": 0.85,
+        "left": 0.15
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 59,
+      "move": "down",
+      "confidence": 0.3,
+      "probabilities": {
+        "down": 0.65,
+        "left": 0.35
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 60,
+      "move": "down",
+      "confidence": 0.24,
+      "probabilities": {
+        "down": 0.62,
+        "left": 0.38
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 61,
+      "move": "left",
+      "confidence": 0.02,
+      "probabilities": {
+        "down": 0.49,
+        "left": 0.51
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 62,
+      "move": "down",
+      "confidence": 0.34,
+      "probabilities": {
+        "up": 0,
+        "down": 0.56,
+        "left": 0.44
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 63,
+      "move": "down",
+      "confidence": 0.48,
+      "probabilities": {
+        "right": 0.01,
+        "down": 0.65,
+        "left": 0.34
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 64,
+      "move": "left",
+      "confidence": 0.98,
+      "probabilities": {
+        "right": 0.01,
+        "left": 0.99
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 65,
+      "move": "left",
+      "confidence": 1,
+      "probabilities": {
+        "up": 0,
+        "left": 1
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 66,
+      "move": "left",
+      "confidence": 0.42,
+      "probabilities": {
+        "up": 0.29,
+        "left": 0.71
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 67,
+      "move": "left",
+      "confidence": 0.12,
+      "probabilities": {
+        "up": 0.44,
+        "left": 0.56
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 68,
+      "move": "up",
+      "confidence": 0.04,
+      "probabilities": {
+        "up": 0.52,
+        "left": 0.48
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 69,
+      "move": "up",
+      "confidence": 0.56,
+      "probabilities": {
+        "up": 0.71,
+        "right": 0.03,
+        "left": 0.26
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 70,
+      "move": "up",
+      "confidence": 0.53,
+      "probabilities": {
+        "up": 0.69,
+        "right": 0.01,
+        "left": 0.3
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 71,
+      "move": "up",
+      "confidence": 0.45,
+      "probabilities": {
+        "up": 0.63,
+        "right": 0.01,
+        "left": 0.36
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 72,
+      "move": "up",
+      "confidence": 0.41,
+      "probabilities": {
+        "up": 0.61,
+        "right": 0.01,
+        "left": 0.38
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 73,
+      "move": "left",
+      "confidence": 0.94,
+      "probabilities": {
+        "up": 0.04,
+        "right": 0,
+        "left": 0.96
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 74,
+      "move": "up",
+      "confidence": 0.91,
+      "probabilities": {
+        "up": 0.94,
+        "down": 0,
+        "left": 0.06
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 75,
+      "move": "right",
+      "confidence": 0.8,
+      "probabilities": {
+        "up": 0.13,
+        "right": 0.87,
+        "left": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 76,
+      "move": "right",
+      "confidence": 0.98,
+      "probabilities": {
+        "up": 0.01,
+        "right": 0.99
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 77,
+      "move": "down",
+      "confidence": 0.3,
+      "probabilities": {
+        "up": 0,
+        "right": 0.47,
+        "down": 0.53
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 78,
+      "move": "down",
+      "confidence": 0.4,
+      "probabilities": {
+        "right": 0.3,
+        "down": 0.7
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 79,
+      "move": "down",
+      "confidence": 0.2,
+      "probabilities": {
+        "right": 0.4,
+        "down": 0.6
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 80,
+      "move": "down",
+      "confidence": 0.28,
+      "probabilities": {
+        "right": 0.36,
+        "down": 0.64
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 81,
+      "move": "right",
+      "confidence": 0.4,
+      "probabilities": {
+        "right": 0.6,
+        "down": 0.4,
+        "left": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 82,
+      "move": "right",
+      "confidence": 0.45,
+      "probabilities": {
+        "up": 0,
+        "right": 0.63,
+        "down": 0.37
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 83,
+      "move": "right",
+      "confidence": 0.34,
+      "probabilities": {
+        "up": 0,
+        "right": 0.56,
+        "down": 0.44
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 84,
+      "move": "down",
+      "confidence": 0.3,
+      "probabilities": {
+        "up": 0,
+        "right": 0.47,
+        "down": 0.53
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 85,
+      "move": "down",
+      "confidence": 1,
+      "probabilities": {
+        "right": 0,
+        "down": 1,
+        "left": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 86,
+      "move": "left",
+      "confidence": 0.34,
+      "probabilities": {
+        "right": 0.33,
+        "left": 0.67
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 87,
+      "move": "up",
+      "confidence": 0.12,
+      "probabilities": {
+        "up": 0.56,
+        "left": 0.44
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 88,
+      "move": "left",
+      "confidence": 1,
+      "probabilities": {
+        "left": 1
+      },
+      "input_tokens": 594
+    },
+    {
+      "step": 89,
+      "move": "left",
+      "confidence": 0.72,
+      "probabilities": {
+        "down": 0.14,
+        "left": 0.86
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 90,
+      "move": "left",
+      "confidence": 0.48,
+      "probabilities": {
+        "down": 0.26,
+        "left": 0.74
+      },
+      "input_tokens": 620
+    },
+    {
+      "step": 91,
+      "move": "up",
+      "confidence": 0.64,
+      "probabilities": {
+        "up": 0.76,
+        "down": 0.01,
+        "left": 0.23
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 92,
+      "move": "up",
+      "confidence": 0.59,
+      "probabilities": {
+        "up": 0.73,
+        "right": 0.27,
+        "left": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 93,
+      "move": "up",
+      "confidence": 0.31,
+      "probabilities": {
+        "up": 0.54,
+        "right": 0.46,
+        "left": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 94,
+      "move": "right",
+      "confidence": 0.91,
+      "probabilities": {
+        "up": 0.06,
+        "right": 0.94,
+        "left": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 95,
+      "move": "right",
+      "confidence": 0.98,
+      "probabilities": {
+        "up": 0,
+        "right": 0.99,
+        "down": 0.01
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 96,
+      "move": "right",
+      "confidence": 1,
+      "probabilities": {
+        "up": 0,
+        "right": 1,
+        "down": 0
+      },
+      "input_tokens": 646
+    },
+    {
+      "step": 97,
+      "move": "up",
+      "confidence": 0.95,
+      "probabilities": {
+        "up": 0.97,
+        "right": 0.03,
+        "down": 0
+      },
+      "input_tokens": 647
+    },
+    {
+      "step": 98,
+      "move": "up",
+      "confidence": 0.64,
+      "probabilities": {
+        "up": 0.76,
+        "right": 0,
+        "left": 0.24
+      },
+      "input_tokens": 647
+    },
+    {
+      "step": 99,
+      "move": "left",
+      "confidence": 0.82,
+      "probabilities": {
+        "up": 0.12,
+        "right": 0,
+        "left": 0.88
+      },
+      "input_tokens": 647
+    },
+    {
+      "step": 100,
+      "move": "left",
+      "confidence": 1,
+      "probabilities": {
+        "up": 0,
+        "down": 0,
+        "left": 1
+      },
+      "input_tokens": 647
+    },
+    {
+      "step": 101,
+      "move": "down",
+      "confidence": 0.51,
+      "probabilities": {
+        "up": 0.01,
+        "down": 0.67,
+        "left": 0.32
+      },
+      "input_tokens": 648
+    },
+    {
+      "step": 102,
+      "move": "right",
+      "confidence": 0.98,
+      "probabilities": {
+        "right": 0.99,
+        "left": 0.01
+      },
+      "input_tokens": 622
+    }
+  ]
+}

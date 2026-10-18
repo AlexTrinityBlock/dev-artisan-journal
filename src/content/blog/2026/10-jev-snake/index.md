@@ -1,12 +1,12 @@
 ---
 title: "Jev Plays Snake: Two Small Interfaces for a Decision Model"
-description: "A hands-on TypeSafe Jev demo: file a document into the folders you define, watch a 10×9 Snake game driven by typed Choices, and compare the System One schema with OpenAI's Decisions API."
+description: "A hands-on TypeSafe Jev demo: an auto-playing filing cabinet, a 102-step structured Snake replay, and a side-by-side of the System One schema vs OpenAI's Decisions API."
 pubDate: 2026-10-18
 category: "AI"
 tags: ["TypeSafe", "Jev", "OpenAI", "AI", "JavaScript", "Interaction"]
 featured: false
 author: "Alex.Hsiao"
-readTime: "16 min read"
+readTime: "17 min read"
 ---
 
 # Jev Plays Snake: Two Small Interfaces for a Decision Model
@@ -35,15 +35,17 @@ The other half of the contract is architectural: **code owns the workflow.** Jev
 
 ## Your key, your browser, your bill
 
-There is no backend on this page. The key you paste is stored in `localStorage` under `jev.key.v1` and sent only to the endpoint you choose. That is convenient, and it is also a real security boundary: any script running on this origin can read `localStorage`. Use a dedicated key with a spending limit, and revoke it when you are done experimenting.
+There is no backend on this page. Both exhibits open in **replay mode**: the filing cabinet cycles through structured answers, and the Snake board plays a 102-step trace recorded with Jev. Neither needs a key or a Worker.
+
+The key is only for **live mode**. When you add one, it is stored in `localStorage` under `jev.key.v1` and sent only to the endpoint you choose. That is convenient, and it is also a real security boundary: any script running on this origin can read `localStorage`. Use a dedicated key with a spending limit, and revoke it when you are done experimenting.
 
 <div class="chamfer-card-wrapper jev-shell" id="jev-auth">
   <div class="chamfer-card-content jev-shell-inner">
     <div class="jev-ex-head">
       <div>
-        <span class="card-tag">EXHIBIT // 00 · AUTHENTICATION</span>
+        <span class="card-tag">OPTIONAL // LIVE MODE</span>
         <h4 class="jev-h4">Bring your own Jev key</h4>
-        <p class="jev-p">The key stays in this browser. Nothing is committed to the repository, and nothing is sent to this site's host.</p>
+        <p class="jev-p">The demos below run without a key. Add one only when you switch an exhibit to live mode. The key stays in this browser; nothing is committed to the repository, and nothing is sent to this site's host.</p>
       </div>
       <div class="jev-status" id="jev-key-status" data-state="empty" role="status" aria-live="polite">
         <span class="jev-dot" aria-hidden="true"></span>
@@ -93,6 +95,8 @@ There is no backend on this page. The key you paste is stored in `localStorage` 
 
 The first exhibit is deliberately mundane: a file lands in a shared drive, and someone has to choose a folder. The interesting part is how little the model needs to know, and how much the code still controls.
 
+It opens in **auto demo**: five answers recorded with `jev-1.13.0` cycle through the starter folders, including an Unknown case, without calling an API. Press **Take control** when you want to type your own file and run it live. The auto demo stops the moment you edit a field or submit the form.
+
 The state is the file name plus an optional excerpt. The questions are a **Choice** over the folder set — five starter folders, any custom folders you add, and **Unknown** — and a **Noul** for sensitive content. Both are asked in the same request, against the same state, and evaluated independently.
 
 The folder manager is part of the exhibit. Add a folder and give it a one-line description; that description becomes part of the `criteria` rubric. Custom folders are saved in `localStorage`, so they survive a reload; **Reset** restores the five starters. **Unknown** is always present and cannot be removed. It is the honest "none of these" answer, so Jev can decline to force a file into a bad folder. When it chooses Unknown, the UI tells you to review the file instead of pretending the classification succeeded.
@@ -105,10 +109,28 @@ The folder manager is part of the exhibit. Add a folder and give it a one-line d
         <h4 class="jev-h4">The filing cabinet</h4>
         <p class="jev-p">Type a file name, add an excerpt if you have one, and let Jev choose among the starter folders, your own custom folders, or Unknown. The bars are the full probability distribution.</p>
       </div>
-      <div class="jev-status" data-state="ready">
+      <div class="jev-status" id="jev-file-status" data-state="working">
         <span class="jev-dot" aria-hidden="true"></span>
-        <span>READY</span>
+        <span id="jev-file-state">DEMO</span>
       </div>
+    </div>
+    <div class="jev-demo-bar" id="jev-file-demo-bar">
+      <div class="jev-demo-main">
+        <span class="jev-demo-dot" aria-hidden="true"></span>
+        <span class="jev-demo-mode" id="jev-file-demo-mode">AUTO DEMO</span>
+        <span class="jev-demo-index" id="jev-file-demo-index">01 / 05</span>
+        <span class="jev-demo-dots" id="jev-file-demo-dots" aria-hidden="true">
+          <i></i><i></i><i></i><i></i><i></i>
+        </span>
+      </div>
+      <div class="jev-demo-actions">
+        <button class="jev-text-btn" id="jev-file-demo-pause" type="button">Pause demo</button>
+        <button class="jev-text-btn" id="jev-file-demo-takeover" type="button">Take control</button>
+      </div>
+    </div>
+    <div class="jev-manual-note" id="jev-file-manual-note" hidden>
+      <span class="card-tag">MANUAL //</span>
+      <p>Auto demo paused. Add your key above, then classify a file. <button class="jev-text-btn" id="jev-file-demo-resume" type="button">Resume demo</button></p>
     </div>
     <div class="jev-file-grid">
       <form id="jev-file-form">
@@ -237,6 +259,8 @@ There is no parsing step. `folder.choice` is already one of the keys you supplie
 
 The second exhibit is the fun one, and also the stricter test of the contract. The board is **10 columns × 9 rows**. You cannot steer the snake. Jev chooses every move.
 
+It opens as a **structured replay**: a 102-step trace recorded with `jev-1.13.0`, stored as about 20 KB of JSON. The browser reconstructs the board from the seed and the recorded moves, then plays it back from the first move to `GAME OVER`. No key, relay, or API request is involved. Press **Go live** when you want to run the same loop against Jev with your own key.
+
 Each turn sends the same state shape:
 
 - A **compact matrix** of all 90 cells, one string per row: `0` empty, `1` head, `2` body, `3` food.
@@ -251,11 +275,22 @@ The question is a **Choice** whose options are only the legal moves. Code has al
       <div>
         <span class="card-tag">EXHIBIT // 02 · CHOICE</span>
         <h4 class="jev-h4">Jev plays Snake</h4>
-        <p class="jev-p">10 × 9 grid. No arrow keys. Every move is one API call with the full matrix and a legal action set. The run pauses after every ten food points — or use <strong>Run to end</strong> to skip the gate and play until the board ends.</p>
+        <p class="jev-p">10 × 9 grid. No arrow keys. The board opens with a <strong>structured replay</strong> recorded with Jev — 102 moves, no key or Worker required. Switch to live mode to call the API yourself; the run pauses after every ten food points, or use <strong>Run to end</strong> to skip the gate.</p>
       </div>
-      <div class="jev-status" data-state="ready">
+      <div class="jev-status" id="jev-snake-status" data-state="working">
         <span class="jev-dot" aria-hidden="true"></span>
-        <span id="jev-state">READY</span>
+        <span id="jev-state">REPLAY</span>
+      </div>
+    </div>
+    <div class="jev-snake-modebar">
+      <div class="jev-snake-mode-main">
+        <span class="card-tag">MODE //</span>
+        <strong id="jev-snake-mode-label">STRUCTURED REPLAY</strong>
+        <span id="jev-snake-mode-note">Loading trace…</span>
+      </div>
+      <div class="jev-snake-mode-actions">
+        <button class="jev-mode-btn is-active" id="jev-snake-mode-replay" type="button">Watch replay</button>
+        <button class="jev-mode-btn" id="jev-snake-mode-live" type="button">Go live</button>
       </div>
     </div>
     <div class="jev-snake-grid">
@@ -293,7 +328,15 @@ The question is a **Choice** whose options are only the legal moves. Code has al
             <span><b>3</b> FOOD</span>
           </div>
         </div>
-        <div class="jev-snake-actions">
+        <div class="jev-snake-replay-actions" id="jev-snake-replay-actions">
+          <button class="mono-btn-chamfer" id="jev-snake-replay-play" type="button">
+            <span class="chamfer-inner"><span class="btn-tag">PLAY //</span><span class="btn-label">Pause replay</span></span>
+          </button>
+          <button class="jev-text-btn" id="jev-snake-replay-restart" type="button">Restart</button>
+          <button class="jev-text-btn" id="jev-snake-replay-speed" type="button">Speed 4×</button>
+          <span class="jev-replay-progress" id="jev-snake-replay-progress">STEP 000 / 102</span>
+        </div>
+        <div class="jev-snake-actions" id="jev-snake-live-actions" hidden>
           <button class="mono-btn-chamfer" id="jev-snake-start" type="button">
             <span class="chamfer-inner"><span class="btn-tag">RUN //</span><span class="btn-label">Start run</span></span>
           </button>
@@ -325,7 +368,7 @@ The question is a **Choice** whose options are only the legal moves. Code has al
     <div style="margin-top: 10px;">
       <button class="jev-text-btn" id="jev-snake-copy" type="button">Copy current request</button>
     </div>
-    <div class="jev-foot">STATE = 9 × 10 MATRIX + LEGEND + HEAD + DIRECTION + FOOD + LEGAL MOVES · QUESTION = 1 CHOICE · ONE REQUEST PER MOVE</div>
+    <div class="jev-foot">MODE = REPLAY (20 KB TRACE) / LIVE (KEY + RELAY) · STATE = 9 × 10 MATRIX + LEGEND + HEAD + DIRECTION + FOOD + LEGAL MOVES · QUESTION = 1 CHOICE</div>
   </div>
 </div>
 
@@ -362,7 +405,7 @@ The instruction tells Jev the coordinate convention — row 0 is the top, column
 
 ### Why the run pauses at ten
 
-Every move is a request. Jev is cheap — input is $42 per billion tokens, output is free — but “cheap” is not “free,” and a long run adds up. A typical move on this board is roughly 600 input tokens. A 10-food run is often 60–100 moves, so expect roughly 36,000–60,000 input tokens, or about $0.0015–$0.0025 at the current price. The pause at ten food points is a budget gate, not a technical limit: you can continue, end the run, or wait and inspect the matrix first.
+Every move is a request **in live mode**. Jev is cheap — input is $42 per billion tokens, output is free — but “cheap” is not “free,” and a long run adds up. A typical move on this board is roughly 600 input tokens. A 10-food run is often 60–100 moves, so expect roughly 36,000–60,000 input tokens, or about $0.0015–$0.0025 at the current price. The pause at ten food points is a budget gate, not a technical limit: you can continue, end the run, or wait and inspect the matrix first. The replay has no gate; it is already paid for.
 
 **Run to end** is the deliberate bypass. It keeps the same loop but ignores the ten-food gate, stopping only at game over, a full board, an error, or **Stop**. The button is separate from **Start run** because skipping a budget gate should be a conscious choice, not the default. If you want to watch the model's behavior without clicking through every gate, use it; if you want to inspect the matrix at each milestone, stay on the manual run.
 
@@ -762,6 +805,34 @@ curl https://api.typesafe.ai/v1/systemone \
   }'
 ```
 
+### The replay trace
+
+The replay on this page is one JSON file, not a video. It is about 20 KB:
+
+```json
+{
+  "source": "jev",
+  "model": "jev-1.13.0",
+  "seed": 20261018,
+  "outcome": { "state": "GAME OVER", "score": 12, "steps": 102, "inputTokens": 64954 },
+  "steps": [
+    { "step": 1, "move": "right", "confidence": 0.31, "probabilities": { "up": 0.46, "right": 0.54, "down": 0 }, "input_tokens": 645 }
+  ]
+}
+```
+
+Each step stores only the decision: direction, confidence, probabilities, and input tokens. The board is reconstructed deterministically from the seed, the fixed rules, and the move list, so the file does not need 102 copies of the 90-cell matrix.
+
+Generate it with your own key:
+
+```bash
+TYPESAFE_API_KEY=... bun run record:snake
+```
+
+The script calls `/v1/systemone` directly from Node — no CORS, no Worker, no browser key. It writes `public/data/jev-snake-replay.json` and never stores the key. If you only want a layout fixture, `bun run record:snake:mock` produces a scripted trace instead; the page labels it `SCRIPTED REPLAY`.
+
+The committed trace was recorded with `jev-1.13.0`: 102 steps, 12 food, 64,954 input tokens. Visitors replay it without a key or a relay. The live mode below is unchanged; it still needs both.
+
 ### A relay you control
 
 The deployed page needs a relay because of the CORS allowlist. Deploy a tiny one; this Cloudflare Worker forwards only two paths and keeps the CORS allowlist tight:
@@ -948,6 +1019,16 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
   letter-spacing: 0.1em;
   color: var(--mono-muted);
   text-transform: uppercase;
+}
+
+.jev-ex-head .jev-status > span:last-child {
+  display: inline-block;
+  width: 128px;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-variant-numeric: tabular-nums;
 }
 
 .jev-dot {
@@ -1441,6 +1522,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
 }
 
 .jev-file-result {
+  min-height: 250px;
   margin-top: 16px;
   padding-top: 14px;
   border-top: 0.7px dashed var(--mono-grid);
@@ -1641,6 +1723,10 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
   min-width: 0;
 }
 
+.jev-snake-panel .jev-probs {
+  min-height: 74px;
+}
+
 .jev-telemetry-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1673,6 +1759,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
 }
 
 .jev-move-readout strong {
+  min-width: 6.5ch;
   font-family: var(--mono-font-mono);
   font-size: 16px;
   font-weight: 800;
@@ -1756,12 +1843,229 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
   font-weight: 800;
 }
 
-.jev-snake-actions {
+.jev-demo-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 0 0 14px;
+  padding: 9px 0;
+  border-top: 0.7px solid var(--mono-grid);
+  border-bottom: 0.7px solid var(--mono-grid);
+}
+
+.jev-demo-main {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  font-family: var(--mono-font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mono-muted);
+}
+
+.jev-demo-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--mono-ink);
+  animation: jev-blink 1s steps(2, end) infinite;
+}
+
+.jev-demo-mode {
+  display: inline-block;
+  min-width: 12ch;
+  color: var(--mono-ink);
+  font-weight: 800;
+}
+
+.jev-demo-index {
+  display: inline-block;
+  min-width: 7ch;
+  color: var(--mono-faint);
+}
+
+.jev-demo-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 2px;
+}
+
+.jev-demo-dots i {
+  display: block;
+  width: 14px;
+  height: 2px;
+  background: var(--mono-grid);
+  transition: background 150ms ease;
+}
+
+.jev-demo-dots i.is-active {
+  background: var(--mono-ink);
+}
+
+.jev-demo-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.jev-demo-actions #jev-file-demo-pause {
+  justify-content: flex-end;
+  min-width: 88px;
+}
+
+.jev-manual-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border: 0.7px solid var(--mono-ink);
+  background: var(--mono-paper);
+}
+
+.jev-manual-note p {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: var(--mono-l2);
+}
+
+.jev-manual-note .jev-text-btn {
+  margin-left: 4px;
+}
+
+.jev-snake-modebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 0 0 14px;
+  padding: 9px 0;
+  border-top: 0.7px solid var(--mono-grid);
+  border-bottom: 0.7px solid var(--mono-grid);
+}
+
+.jev-snake-mode-main {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.jev-snake-mode-main .card-tag {
+  margin-bottom: 0;
+}
+
+.jev-snake-mode-main strong {
+  min-width: 17ch;
+  font-family: var(--mono-font-mono);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--mono-ink);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.jev-snake-mode-main span:last-child {
+  display: block;
+  flex: 1 1 220px;
+  min-width: 0;
+  height: 1.5em;
+  line-height: 1.5;
+  font-family: var(--mono-font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.04em;
+  color: var(--mono-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.jev-snake-mode-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.jev-mode-btn {
+  border: 0.7px solid var(--mono-grid);
+  background: var(--mono-paper);
+  color: var(--mono-muted);
+  padding: 4px 8px;
+  font-family: var(--mono-font-mono);
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.jev-mode-btn:hover {
+  color: var(--mono-ink);
+  border-color: var(--mono-ink);
+}
+
+.jev-mode-btn.is-active {
+  background: var(--mono-ink);
+  border-color: var(--mono-ink);
+  color: var(--mono-paper);
+}
+
+.jev-snake-actions,
+.jev-snake-replay-actions {
   display: flex;
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
   margin-top: 12px;
+}
+
+.jev-snake-replay-actions {
+  padding-top: 10px;
+  border-top: 0.7px dashed var(--mono-grid);
+}
+
+.jev-snake-replay-actions #jev-snake-replay-play .chamfer-inner {
+  min-width: 128px;
+  justify-content: center;
+}
+
+.jev-snake-replay-actions #jev-snake-replay-speed {
+  min-width: 72px;
+  justify-content: flex-start;
+}
+
+.jev-snake-actions .mono-btn-chamfer .chamfer-inner {
+  min-width: 122px;
+  justify-content: center;
+}
+
+.jev-snake-actions .jev-text-btn {
+  min-width: 54px;
+  justify-content: center;
+}
+
+.jev-replay-progress {
+  min-width: 124px;
+  margin-left: auto;
+  font-family: var(--mono-font-mono);
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--mono-muted);
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .jev-gate {
@@ -1787,6 +2091,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
 }
 
 .jev-log {
+  min-height: 96px;
   margin-top: 12px;
   padding-top: 8px;
   border-top: 0.7px solid var(--mono-grid);
@@ -2360,6 +2665,16 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .jev-demo-bar,
+  .jev-snake-modebar {
+    align-items: flex-start;
+  }
+
+  .jev-replay-progress {
+    width: 100%;
+    margin-left: 0;
+  }
+
   .jev-key-row {
     flex-direction: column;
   }
@@ -2377,6 +2692,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
 @media (prefers-reduced-motion: reduce) {
   .jev-food,
   .jev-status[data-state="working"] .jev-dot,
+  .jev-demo-dot,
   .jev-shell .mono-btn-chamfer.is-loading .btn-label {
     animation: none;
   }
@@ -2724,6 +3040,101 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     }
   };
 
+  const DEMO_FILES = [
+    {
+      name: 'Q3_invoice_acme_2026.pdf',
+      excerpt: '',
+      folder: 'Finance',
+      confidence: 1,
+      sensitive: 0.75,
+      tokens: 515,
+      probabilities: {
+        'Finance': 1,
+        'Engineering': 0,
+        'Legal': 0,
+        'Marketing': 0,
+        'People': 0,
+        'Unknown': 0
+      }
+    },
+    {
+      name: 'incident_postmortem_2026-10-02.md',
+      excerpt: 'Root cause: expired TLS certificate on the edge gateway. 43 minutes of elevated 502s.',
+      folder: 'Engineering',
+      confidence: 1,
+      sensitive: 0.23,
+      tokens: 550,
+      probabilities: {
+        'Finance': 0,
+        'Engineering': 1,
+        'Legal': 0,
+        'Marketing': 0,
+        'People': 0,
+        'Unknown': 0
+      }
+    },
+    {
+      name: 'mutual_nda_signed_v4.pdf',
+      excerpt: '',
+      folder: 'Legal',
+      confidence: 1,
+      sensitive: 0.92,
+      tokens: 512,
+      probabilities: {
+        'Finance': 0,
+        'Engineering': 0,
+        'Legal': 1,
+        'Marketing': 0,
+        'People': 0,
+        'Unknown': 0
+      }
+    },
+    {
+      name: 'resume_jane_doe.pdf',
+      excerpt: '10 years of backend engineering, distributed systems, Go and Rust.',
+      folder: 'People',
+      confidence: 1,
+      sensitive: 0.86,
+      tokens: 531,
+      probabilities: {
+        'Finance': 0,
+        'Engineering': 0,
+        'Legal': 0,
+        'Marketing': 0,
+        'People': 1,
+        'Unknown': 0
+      }
+    },
+    {
+      name: 'notes_untitled.txt',
+      excerpt: 'Loose notes with no clear owner or topic.',
+      folder: 'Unknown',
+      confidence: 1,
+      sensitive: 0.13,
+      tokens: 527,
+      probabilities: {
+        'Finance': 0,
+        'Engineering': 0,
+        'Legal': 0,
+        'Marketing': 0,
+        'People': 0,
+        'Unknown': 1
+      }
+    },
+  ];
+
+  const fileDemo = {
+    mode: 'auto',
+    running: false,
+    userPaused: false,
+    index: 0,
+    runId: 0,
+    inView: false,
+    reduced: false
+  };
+
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
   function isReservedName(name) {
     const lower = name.toLowerCase();
     return lower === 'unknown' || DEFAULT_FOLDERS.some((folder) => folder.name.toLowerCase() === lower);
@@ -2957,8 +3368,175 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     }
   }
 
+  function fileDemoData(sample) {
+    return {
+      model: 'jev-1.13.0',
+      answers: {
+        folder: {
+          type: 'choice',
+          choice: sample.folder,
+          confidence: sample.confidence,
+          probabilities: sample.probabilities
+        },
+        sensitive: { type: 'noul', noul: sample.sensitive }
+      },
+      usage: { input_tokens: sample.tokens, output_tokens: 38 }
+    };
+  }
+
+  function setFileStatus(text, stateName) {
+    const el = $('#jev-file-state');
+    if (el) el.textContent = text;
+    const status = $('#jev-file-status');
+    if (status) status.dataset.state = stateName || 'ready';
+  }
+
+  function resetFileVisuals() {
+    const host = $('#jev-folders');
+    if (host) {
+      folderOptions().forEach((folder) => {
+        const card = Array.from(host.querySelectorAll('.jev-folder')).find(
+          (el) => el.dataset.folder === folder.name
+        );
+        if (!card) return;
+        card.style.setProperty('--p', '0');
+        const pct = card.querySelector('[data-pct]');
+        if (pct) pct.textContent = '—';
+        card.classList.remove('is-choice');
+        card.setAttribute('aria-label', folder.name + ': no result yet');
+      });
+    }
+    const result = $('#jev-file-result');
+    if (result) result.hidden = false;
+    const chipName = $('#jev-file-chip-name');
+    if (chipName) chipName.textContent = '';
+    const chipFolder = $('#jev-file-chip-folder');
+    if (chipFolder) chipFolder.textContent = '…';
+    const unknown = $('#jev-file-unknown-note');
+    if (unknown) unknown.hidden = true;
+    const probs = $('#jev-file-probs');
+    if (probs) probs.innerHTML = '';
+    const telemetry = $('#jev-file-telemetry');
+    if (telemetry) telemetry.innerHTML = '';
+  }
+
+  function setFileDemoInputs(sample) {
+    const name = $('#jev-file-name');
+    const excerpt = $('#jev-file-excerpt');
+    if (name) name.value = sample.name;
+    if (excerpt) excerpt.value = sample.excerpt;
+    updateFileJson(buildFilePayload());
+  }
+
+  function updateFileDemoUI() {
+    const mode = $('#jev-file-demo-mode');
+    const index = $('#jev-file-demo-index');
+    const pause = $('#jev-file-demo-pause');
+    const takeover = $('#jev-file-demo-takeover');
+    const dots = $$('#jev-file-demo-dots i');
+
+    if (mode) {
+      mode.textContent =
+        fileDemo.mode === 'manual'
+          ? 'MANUAL MODE'
+          : fileDemo.userPaused
+            ? 'DEMO PAUSED'
+            : 'AUTO DEMO';
+    }
+    if (index) {
+      const current = (fileDemo.index % DEMO_FILES.length) + 1;
+      index.textContent =
+        String(current).padStart(2, '0') + ' / ' + String(DEMO_FILES.length).padStart(2, '0');
+    }
+    if (pause) {
+      pause.textContent =
+        fileDemo.mode === 'manual'
+          ? 'Resume demo'
+          : fileDemo.userPaused
+            ? 'Play demo'
+            : 'Pause demo';
+    }
+    if (takeover) takeover.hidden = fileDemo.mode === 'manual';
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('is-active', fileDemo.mode !== 'manual' && i === fileDemo.index);
+    });
+  }
+
+  async function showFileDemoSample(sample, index, runId) {
+    setFileDemoInputs(sample);
+    resetFileVisuals();
+    fileDemo.index = index;
+    updateFileDemoUI();
+    setFileStatus('DEMO · CLASSIFYING', 'working');
+    await sleep(900);
+    if (runId !== fileDemo.runId || fileDemo.mode !== 'auto' || fileDemo.userPaused) return;
+    renderFileResult(fileDemoData(sample), sample.name);
+    setFileStatus('DEMO · ' + sample.folder.toUpperCase(), 'ok');
+    await sleep(2400);
+  }
+
+  async function runFileDemo() {
+    if (fileDemo.mode !== 'auto' || fileDemo.userPaused || fileDemo.running) return;
+    const runId = ++fileDemo.runId;
+    fileDemo.running = true;
+    updateFileDemoUI();
+    while (runId === fileDemo.runId && fileDemo.mode === 'auto' && !fileDemo.userPaused) {
+      for (let i = 0; i < DEMO_FILES.length; i += 1) {
+        if (runId !== fileDemo.runId || fileDemo.mode !== 'auto' || fileDemo.userPaused) {
+          fileDemo.running = false;
+          return;
+        }
+        await showFileDemoSample(DEMO_FILES[i], i, runId);
+        if (runId !== fileDemo.runId) {
+          fileDemo.running = false;
+          return;
+        }
+        await sleep(650);
+      }
+    }
+    fileDemo.running = false;
+  }
+
+  function startFileDemo() {
+    if (fileDemo.mode !== 'auto' || fileDemo.userPaused || fileDemo.running) return;
+    runFileDemo();
+  }
+
+  function pauseFileDemo(auto) {
+    fileDemo.running = false;
+    fileDemo.runId += 1;
+    if (!auto) {
+      fileDemo.userPaused = true;
+      setFileStatus('DEMO PAUSED', 'ready');
+    }
+    updateFileDemoUI();
+  }
+
+  function takeOverFileDemo() {
+    if (fileDemo.mode === 'manual') return;
+    fileDemo.mode = 'manual';
+    fileDemo.userPaused = true;
+    fileDemo.running = false;
+    fileDemo.runId += 1;
+    const note = $('#jev-file-manual-note');
+    if (note) note.hidden = false;
+    setFileStatus('MANUAL', 'ready');
+    updateFileDemoUI();
+  }
+
+  function resumeFileDemo() {
+    fileDemo.mode = 'auto';
+    fileDemo.userPaused = false;
+    const note = $('#jev-file-manual-note');
+    if (note) note.hidden = true;
+    setFileStatus('DEMO', 'working');
+    updateFileDemoUI();
+    startFileDemo();
+  }
+
   async function classifyFile(event) {
     event.preventDefault();
+    takeOverFileDemo();
     if (!requireKey()) return;
     if (!requireRelay()) return;
     clearError();
@@ -2973,6 +3551,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
 
     const payload = buildFilePayload();
     updateFileJson(payload);
+    setFileStatus('LIVE · CLASSIFYING', 'working');
 
     const button = $('#jev-file-submit');
     const label = button ? button.querySelector('.btn-label') : null;
@@ -2989,7 +3568,10 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
         body: JSON.stringify(payload)
       });
       renderFileResult(data, fileName);
+      const liveFolder = data.answers && data.answers.folder && data.answers.folder.choice;
+      setFileStatus('LIVE · ' + String(liveFolder || 'READY').toUpperCase(), 'ok');
     } catch (err) {
+      setFileStatus('ERROR', 'error');
       showError(err);
     } finally {
       if (button) {
@@ -3041,12 +3623,28 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     gameOver: false,
     gate: false,
     autoRun: false,
+    mode: 'replay',
     seed: 20261018,
     inFlight: false,
     timer: null,
     lastGate: -1,
     runId: 0,
     log: []
+  };
+
+  const REPLAY_BASE_MS = 480;
+  const replay = {
+    trace: null,
+    index: 0,
+    playing: false,
+    timer: null,
+    speed: 4,
+    runId: 0,
+    complete: false,
+    userPaused: false,
+    inView: false,
+    loading: true,
+    error: null
   };
 
   function rand() {
@@ -3338,6 +3936,214 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     }
   }
 
+  function updateReplayUI() {
+    const progress = $('#jev-snake-replay-progress');
+    const speed = $('#jev-snake-replay-speed');
+    const play = $('#jev-snake-replay-play');
+    const label = play ? play.querySelector('.btn-label') : null;
+    const tag = play ? play.querySelector('.btn-tag') : null;
+    const modeLabel = $('#jev-snake-mode-label');
+    const modeNote = $('#jev-snake-mode-note');
+    const replayMode = $('#jev-snake-mode-replay');
+    const liveMode = $('#jev-snake-mode-live');
+
+    if (progress) {
+      const total = replay.trace ? replay.trace.steps.length : '—';
+      progress.textContent = 'STEP ' + String(replay.index).padStart(3, '0') + ' / ' + total;
+    }
+    if (speed) speed.textContent = 'Speed ' + replay.speed + '×';
+    if (play) play.hidden = game.mode !== 'replay';
+    if (label) {
+      label.textContent = replay.complete
+        ? 'Replay again'
+        : replay.playing
+          ? 'Pause replay'
+          : 'Play replay';
+    }
+    if (tag) tag.textContent = replay.complete ? 'AGAIN //' : 'PLAY //';
+    if (modeLabel) {
+      modeLabel.textContent = game.mode === 'live' ? 'LIVE MODE' : 'STRUCTURED REPLAY';
+    }
+    if (modeNote) {
+      if (game.mode === 'live') {
+        modeNote.textContent = 'Live mode · add a key + relay above · one request per move';
+      } else if (replay.loading) {
+        modeNote.textContent = 'Loading trace…';
+      } else if (replay.error) {
+        modeNote.textContent = 'Replay unavailable · go live or check /data/jev-snake-replay.json';
+      } else if (replay.trace) {
+        modeNote.textContent =
+          (replay.trace.source === 'jev'
+            ? 'Recorded with ' + (replay.trace.model || 'Jev')
+            : 'Scripted trace') +
+          ' · ' +
+          replay.trace.steps.length +
+          ' steps · ' +
+          replay.trace.outcome.score +
+          ' food · no key required';
+      } else {
+        modeNote.textContent = 'Structured trace · no key required';
+      }
+      modeNote.title = modeNote.textContent;
+    }
+    if (replayMode) replayMode.classList.toggle('is-active', game.mode === 'replay');
+    if (liveMode) liveMode.classList.toggle('is-active', game.mode === 'live');
+    const replayActions = $('#jev-snake-replay-actions');
+    const liveActions = $('#jev-snake-live-actions');
+    if (replayActions) replayActions.hidden = game.mode !== 'replay';
+    if (liveActions) liveActions.hidden = game.mode !== 'live';
+  }
+
+  function setSnakeMode(mode, options = {}) {
+    if (game.mode === mode && !options.force) return;
+    replay.playing = false;
+    replay.runId += 1;
+    clearTimeout(replay.timer);
+    replay.timer = null;
+    game.mode = mode;
+    game.running = false;
+    game.paused = false;
+    game.gate = false;
+    game.autoRun = false;
+    game.inFlight = false;
+    resetGame();
+    const gate = $('#jev-snake-gate');
+    if (gate) gate.hidden = true;
+
+    if (mode === 'live') {
+      replay.userPaused = true;
+      setSnakeState('READY');
+    } else {
+      replay.index = 0;
+      replay.complete = false;
+      replay.userPaused = false;
+      setSnakeState('REPLAY');
+      if (replay.trace && replay.inView) playReplay();
+    }
+    updateReplayUI();
+    updateSnakeButtons();
+  }
+
+  async function loadReplay() {
+    try {
+      const res = await fetch('/data/jev-snake-replay.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      if (!data || !Array.isArray(data.steps) || !data.steps.length) {
+        throw new Error('The trace has no steps.');
+      }
+      replay.trace = data;
+      replay.loading = false;
+      replay.error = null;
+      replay.index = 0;
+      replay.complete = false;
+      updateReplayUI();
+      if (game.mode === 'replay' && replay.inView && !replay.userPaused) {
+        playReplay();
+      }
+    } catch (err) {
+      replay.loading = false;
+      replay.error = err;
+      updateReplayUI();
+    }
+  }
+
+  function playReplay() {
+    if (game.mode !== 'replay' || !replay.trace) return;
+    if (replay.complete) {
+      restartReplay();
+      return;
+    }
+    if (replay.playing) return;
+    if (replay.index >= replay.trace.steps.length) {
+      finishReplay();
+      return;
+    }
+    replay.playing = true;
+    replay.userPaused = false;
+    const runId = ++replay.runId;
+    setSnakeState('REPLAY');
+    updateReplayUI();
+    stepReplay(runId);
+  }
+
+  function pauseReplay(auto) {
+    replay.playing = false;
+    replay.runId += 1;
+    clearTimeout(replay.timer);
+    replay.timer = null;
+    if (!auto) {
+      replay.userPaused = true;
+      setSnakeState('PAUSED');
+    }
+    updateReplayUI();
+  }
+
+  function restartReplay() {
+    replay.playing = false;
+    replay.runId += 1;
+    clearTimeout(replay.timer);
+    replay.timer = null;
+    replay.index = 0;
+    replay.complete = false;
+    replay.userPaused = false;
+    resetGame();
+    setSnakeState('REPLAY');
+    updateReplayUI();
+    playReplay();
+  }
+
+  function finishReplay() {
+    replay.playing = false;
+    replay.complete = true;
+    replay.runId += 1;
+    clearTimeout(replay.timer);
+    replay.timer = null;
+    const outcome = replay.trace && replay.trace.outcome ? replay.trace.outcome.state : 'GAME OVER';
+    setSnakeState(outcome);
+    updateReplayUI();
+  }
+
+  function stepReplay(runId) {
+    if (runId !== replay.runId || !replay.playing || game.mode !== 'replay') return;
+    if (!replay.trace || replay.index >= replay.trace.steps.length) {
+      finishReplay();
+      return;
+    }
+    const legal = legalMoves();
+    if (!legal.length) {
+      finishReplay();
+      return;
+    }
+    const step = replay.trace.steps[replay.index];
+    let move = step.move;
+    let corrected = Boolean(step.corrected);
+    if (legal.indexOf(move) === -1) {
+      move = legal[0];
+      corrected = true;
+    }
+    applyMove(move);
+    game.tokens += Number(step.input_tokens || 0);
+    renderBoard();
+    renderMove(step, move, corrected);
+    addLog(move, step, corrected);
+    replay.index += 1;
+    updateReplayUI();
+    if (replay.index >= replay.trace.steps.length || game.gameOver) {
+      finishReplay();
+      return;
+    }
+    replay.timer = setTimeout(
+      () => stepReplay(runId),
+      Math.max(60, Math.round(REPLAY_BASE_MS / replay.speed))
+    );
+  }
+
+  function cycleReplaySpeed() {
+    replay.speed = replay.speed === 1 ? 2 : replay.speed === 2 ? 4 : 1;
+    updateReplayUI();
+  }
+
   function resetGame() {
     game.runId += 1;
     clearTimeout(game.timer);
@@ -3379,6 +4185,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
   }
 
   async function stepSnake() {
+    if (game.mode !== 'live') return;
     if (!game.running || game.paused || game.gameOver || game.inFlight) return;
 
     const legal = legalMoves();
@@ -3464,6 +4271,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
   }
 
   function startSnake() {
+    if (game.mode !== 'live') return;
     if (!requireKey()) return;
     if (!requireRelay()) return;
     clearError();
@@ -3482,6 +4290,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
   }
 
   function autoSnake() {
+    if (game.mode !== 'live') return;
     if (!requireKey()) return;
     if (!requireRelay()) return;
     clearError();
@@ -3603,11 +4412,31 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
       copyText(JSON.stringify(buildFilePayload(), null, 2), 'Request JSON copied.');
     });
     $$('.jev-sample').forEach((button) => {
-      button.addEventListener('click', () => loadSample(button.dataset.sample));
+      button.addEventListener('click', () => {
+        takeOverFileDemo();
+        loadSample(button.dataset.sample);
+      });
     });
+    $('#jev-file-name').addEventListener('input', takeOverFileDemo);
+    $('#jev-file-excerpt').addEventListener('input', takeOverFileDemo);
+    $('#jev-file-demo-pause').addEventListener('click', () => {
+      if (fileDemo.mode === 'manual') {
+        resumeFileDemo();
+      } else if (fileDemo.userPaused) {
+        resumeFileDemo();
+      } else {
+        pauseFileDemo(false);
+      }
+    });
+    $('#jev-file-demo-takeover').addEventListener('click', () => {
+      takeOverFileDemo();
+      showToast('Auto demo paused. Add your key above to run live.');
+    });
+    $('#jev-file-demo-resume').addEventListener('click', resumeFileDemo);
 
     $('#jev-folder-form').addEventListener('submit', (event) => {
       event.preventDefault();
+      takeOverFileDemo();
       const nameInput = $('#jev-new-folder');
       const descInput = $('#jev-new-folder-desc');
       if (!addCustomFolder(nameInput.value, descInput.value)) return;
@@ -3624,10 +4453,28 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     $('#jev-custom-list').addEventListener('click', (event) => {
       const button = event.target.closest('[data-remove-index]');
       if (!button) return;
+      takeOverFileDemo();
       removeCustomFolder(Number(button.dataset.removeIndex));
     });
 
-    $('#jev-reset-folders').addEventListener('click', resetCustomFolders);
+    $('#jev-reset-folders').addEventListener('click', () => {
+      takeOverFileDemo();
+      resetCustomFolders();
+    });
+
+    $('#jev-snake-mode-replay').addEventListener('click', () => setSnakeMode('replay'));
+    $('#jev-snake-mode-live').addEventListener('click', () => setSnakeMode('live'));
+    $('#jev-snake-replay-play').addEventListener('click', () => {
+      if (replay.complete) {
+        restartReplay();
+      } else if (replay.playing) {
+        pauseReplay(false);
+      } else {
+        playReplay();
+      }
+    });
+    $('#jev-snake-replay-restart').addEventListener('click', restartReplay);
+    $('#jev-snake-replay-speed').addEventListener('click', cycleReplaySpeed);
 
     $('#jev-snake-start').addEventListener('click', startSnake);
     $('#jev-snake-auto').addEventListener('click', autoSnake);
@@ -3656,6 +4503,53 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     resetGame();
     bindEvents();
     updateFileJson(buildFilePayload());
+
+    fileDemo.reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (fileDemo.reduced) {
+      setFileDemoInputs(DEMO_FILES[0]);
+      renderFileResult(fileDemoData(DEMO_FILES[0]), DEMO_FILES[0].name);
+      fileDemo.userPaused = true;
+      setFileStatus('DEMO · READY', 'ready');
+    } else {
+      setFileStatus('DEMO', 'working');
+    }
+    updateFileDemoUI();
+
+    const fileObserver = new IntersectionObserver(
+      (entries) => {
+        fileDemo.inView = entries.some((entry) => entry.isIntersecting);
+        if (fileDemo.inView && fileDemo.mode === 'auto' && !fileDemo.userPaused) {
+          startFileDemo();
+        } else if (!fileDemo.inView && fileDemo.running) {
+          pauseFileDemo(true);
+        }
+      },
+      { threshold: 0.2 }
+    );
+    const fileExhibit = $('#jev-files');
+    if (fileExhibit) fileObserver.observe(fileExhibit);
+
+    setSnakeMode('replay', { force: true });
+    loadReplay();
+    const snakeObserver = new IntersectionObserver(
+      (entries) => {
+        replay.inView = entries.some((entry) => entry.isIntersecting);
+        if (
+          replay.inView &&
+          game.mode === 'replay' &&
+          replay.trace &&
+          !replay.complete &&
+          !replay.userPaused
+        ) {
+          playReplay();
+        } else if (!replay.inView && replay.playing) {
+          pauseReplay(true);
+        }
+      },
+      { threshold: 0.2 }
+    );
+    const snakeExhibit = $('#jev-snake');
+    if (snakeExhibit) snakeObserver.observe(snakeExhibit);
   }
 
   if (document.readyState === 'loading') {
