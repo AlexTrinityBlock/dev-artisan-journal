@@ -153,7 +153,7 @@ The state is the file name plus an optional excerpt. The questions are a five-wa
       <summary>Inspect the request</summary>
       <pre id="jev-file-json"></pre>
     </details>
-    <div class="jev-foot">STATE = FILE NAME + EXCERPT · QUESTIONS = 1 CHOICE + 1 NOUL · ANSWER = FOLDER + PROBABILITIES + CONFIDENCE</div>
+    <div class="jev-foot">STATE = FILE NAME + EXCERPT · QUESTIONS = 1 CHOICE + 1 NOUL · ANSWER = FOLDER + PROBABILITIES + CONFIDENCE · ICONS: LUCIDE (ISC)</div>
   </div>
 </div>
 
@@ -2424,6 +2424,9 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     game.gate = false;
     game.paused = false;
     game.running = false;
+    game.gameOver = true;
+    clearTimeout(game.timer);
+    game.timer = null;
     const gate = $('#jev-snake-gate');
     if (gate) gate.hidden = true;
     setSnakeState('ENDED');
