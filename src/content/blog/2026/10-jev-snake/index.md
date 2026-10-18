@@ -251,7 +251,7 @@ The question is a **Choice** whose options are only the legal moves. Code has al
       <div>
         <span class="card-tag">EXHIBIT // 02 · CHOICE</span>
         <h4 class="jev-h4">Jev plays Snake</h4>
-        <p class="jev-p">10 × 9 grid. No arrow keys. Every move is one API call with the full matrix and a legal action set. The run pauses after every ten food points.</p>
+        <p class="jev-p">10 × 9 grid. No arrow keys. Every move is one API call with the full matrix and a legal action set. The run pauses after every ten food points — or use <strong>Run to end</strong> to skip the gate and play until the board ends.</p>
       </div>
       <div class="jev-status" data-state="ready">
         <span class="jev-dot" aria-hidden="true"></span>
@@ -297,17 +297,21 @@ The question is a **Choice** whose options are only the legal moves. Code has al
           <button class="mono-btn-chamfer" id="jev-snake-start" type="button">
             <span class="chamfer-inner"><span class="btn-tag">RUN //</span><span class="btn-label">Start run</span></span>
           </button>
+          <button class="mono-btn-chamfer" id="jev-snake-auto" type="button">
+            <span class="chamfer-inner"><span class="btn-tag">AUTO //</span><span class="btn-label">Run to end</span></span>
+          </button>
           <button class="jev-text-btn" id="jev-snake-pause" type="button">Pause</button>
           <button class="jev-text-btn" id="jev-snake-stop" type="button">Stop</button>
           <button class="jev-text-btn" id="jev-snake-reset" type="button">New run</button>
         </div>
         <div class="jev-gate" id="jev-snake-gate" hidden>
           <span class="card-tag">TOKEN BUDGET // 10 FOOD</span>
-          <p>Jev has reached ten food points. The run is paused so you can decide whether to keep spending tokens. Each move is one request.</p>
+          <p>Jev has reached ten food points. The run is paused so you can decide whether to keep spending tokens. Each move is one request. <strong>Run to end</strong> skips this gate and continues until the board ends.</p>
           <div class="jev-gate-actions">
             <button class="mono-btn-chamfer" id="jev-snake-continue" type="button">
               <span class="chamfer-inner"><span class="btn-tag">NEXT //</span><span class="btn-label">Continue run</span></span>
             </button>
+            <button class="jev-text-btn" id="jev-snake-auto-gate" type="button">Run to end</button>
             <button class="jev-text-btn" id="jev-snake-end" type="button">End run</button>
           </div>
         </div>
@@ -360,6 +364,8 @@ The instruction tells Jev the coordinate convention — row 0 is the top, column
 
 Every move is a request. Jev is cheap — input is $42 per billion tokens, output is free — but “cheap” is not “free,” and a long run adds up. A typical move on this board is roughly 600 input tokens. A 10-food run is often 60–100 moves, so expect roughly 36,000–60,000 input tokens, or about $0.0015–$0.0025 at the current price. The pause at ten food points is a budget gate, not a technical limit: you can continue, end the run, or wait and inspect the matrix first.
 
+**Run to end** is the deliberate bypass. It keeps the same loop but ignores the ten-food gate, stopping only at game over, a full board, an error, or **Stop**. The button is separate from **Start run** because skipping a budget gate should be a conscious choice, not the default. If you want to watch the model's behavior without clicking through every gate, use it; if you want to inspect the matrix at each milestone, stay on the manual run.
+
 The gate also gives you a natural place to watch the model's behavior. Did it take the shortest path? Did it get trapped by its own body? Did confidence drop before a mistake? Those are the questions worth asking when you evaluate a decision model on your own data.
 
 ## The pattern behind both
@@ -385,28 +391,143 @@ System One is not just Jev's private request body. Cloudflare's **[Clef](https:/
 
 ### Side by side
 
-| Dimension | System One (Jev, Clef) | OpenAI Decisions (GPT-6 Luna) |
-| :-- | :-- | :-- |
-| **Endpoint** | `POST /v1/systemone` | `POST /v1/decisions` |
-| **Evidence field** | `state`: string, JSON object, or array of text | `input`: string, or a message/content array with text and images |
-| **Input modality** | Jev 1.13: text. Clef: text, JSON, images, video. | Text and images |
-| **Question collection** | Map. The key is your question ID; it is not sent to the model. | Array. Each question has an optional `name`, echoed in the answer. |
-| **Yes/no primitive** | `noul` → `noul` probability | `predicate` → `probability` |
-| **Choice primitive** | `choice` → `choice`, `probabilities` map, `confidence` | `choice` → `choice`, `probabilities` array, `confidence` |
-| **Score primitive** | `score` → `score`, `legend`, `probabilities` map, `confidence` | `score` → `score`, `probabilities` array, `confidence` |
-| **Options and levels** | `criteria`: map for Choice, array for Score, optional `{true,false}` for Noul | `choices`: `{value, description}` array; `levels`: `{label, description}` array |
-| **Instructions** | Required. Can be a string, object, or array. | Required. String. |
-| **Answer collection** | `answers` object keyed by question ID | `answers` array in question order |
-| **Refusal** | No dedicated answer type. Use calibrated probabilities and guardrail questions. | Per-question `refusal` answer; optional `safety_identifier` request field. |
-| **Limits** | Context-bound: 64k per request, 32k per question; 262k with the long-context header. | 1–200 questions; 2–255 choices per Choice; current limits in the docs. |
-| **Model and price** | Jev 1.13/1.14: $0.042 per 1M input tokens, output free. | GPT-6 Luna: $0.10 per 1M input tokens, no output or cache charges. Public beta. |
-| **Adoption** | Jev, plus Cloudflare Clef and Clef-flash. | OpenAI endpoint; GPT-6 Luna only today. |
+<div class="api-spec chamfer-card-wrapper dark">
+  <div class="chamfer-card-content">
+    <div class="api-spec-head">
+      <div>
+        <span class="card-tag">SPEC MATRIX // DECISION PROTOCOLS</span>
+        <h3 class="api-spec-title">Two contracts, one typed answer</h3>
+        <p class="api-spec-sub">Both endpoints return probabilities instead of prose. The wire format is where they diverge.</p>
+      </div>
+      <div class="api-spec-status" aria-label="Public docs, 2026-10-18">
+        <span class="api-spec-dot" aria-hidden="true"></span>
+        <span>PUBLIC DOCS<br>2026-10-18</span>
+      </div>
+    </div>
+    <div class="api-spec-endpoints">
+      <div class="api-endpoint">
+        <span class="api-endpoint-tag">S1 // SYSTEM ONE</span>
+        <code class="api-endpoint-path">POST /v1/systemone</code>
+        <span class="api-endpoint-flow">
+          <span class="api-flow-node">state</span><span class="api-flow-arrow">→</span>
+          <span class="api-flow-node">questions{}</span><span class="api-flow-arrow">→</span>
+          <span class="api-flow-node">answers{}</span>
+        </span>
+      </div>
+      <div class="api-endpoint is-openai">
+        <span class="api-endpoint-tag">OA // DECISIONS</span>
+        <code class="api-endpoint-path">POST /v1/decisions</code>
+        <span class="api-endpoint-flow">
+          <span class="api-flow-node">input</span><span class="api-flow-arrow">→</span>
+          <span class="api-flow-node">questions[]</span><span class="api-flow-arrow">→</span>
+          <span class="api-flow-node">answers[]</span>
+        </span>
+      </div>
+    </div>
+    <div class="api-spec-scroll">
+      <table class="api-spec-table">
+        <thead>
+          <tr>
+            <th scope="col">Field</th>
+            <th scope="col">System One <span class="api-table-note">Jev / Clef</span></th>
+            <th scope="col">OpenAI Decisions <span class="api-table-note">GPT-6 Luna</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Evidence</th>
+            <td><code>state</code> — string, object, or array</td>
+            <td><code>input</code> — string, messages, or images</td>
+          </tr>
+          <tr>
+            <th scope="row">Modality</th>
+            <td>Jev: text. Clef: text / JSON / image / video.</td>
+            <td>Text + image</td>
+          </tr>
+          <tr>
+            <th scope="row">Questions</th>
+            <td>Map keyed by ID. The key is not sent.</td>
+            <td>Array. Optional <code>name</code> is echoed.</td>
+          </tr>
+          <tr>
+            <th scope="row">Yes / no</th>
+            <td><code>noul</code> → <code>noul</code></td>
+            <td><code>predicate</code> → <code>probability</code></td>
+          </tr>
+          <tr>
+            <th scope="row">Choice</th>
+            <td><code>choice</code> + <code>probabilities{}</code> + <code>confidence</code></td>
+            <td><code>choice</code> + <code>probabilities[]</code> + <code>confidence</code></td>
+          </tr>
+          <tr>
+            <th scope="row">Score</th>
+            <td><code>score</code> + <code>legend</code> + <code>probabilities{}</code> + <code>confidence</code></td>
+            <td><code>score</code> + <code>probabilities[]</code> + <code>confidence</code></td>
+          </tr>
+          <tr>
+            <th scope="row">Options</th>
+            <td><code>criteria</code> — map / array / object</td>
+            <td><code>choices[]</code> or <code>levels[]</code></td>
+          </tr>
+          <tr>
+            <th scope="row">Instructions</th>
+            <td>Required. String / object / array.</td>
+            <td>Required. String.</td>
+          </tr>
+          <tr>
+            <th scope="row">Answers</th>
+            <td><code>answers{}</code> keyed by ID</td>
+            <td><code>answers[]</code> in question order</td>
+          </tr>
+          <tr>
+            <th scope="row">Refusal</th>
+            <td>No answer type. Threshold in code.</td>
+            <td>Per-question <code>refusal</code>; optional <code>safety_identifier</code>.</td>
+          </tr>
+          <tr>
+            <th scope="row">Limits</th>
+            <td>64k / request; 32k / question; 262k long context.</td>
+            <td>1–200 questions; 2–255 choices.</td>
+          </tr>
+          <tr>
+            <th scope="row">Model</th>
+            <td>Jev 1.13 / 1.14 + Clef</td>
+            <td>GPT-6 Luna (public beta)</td>
+          </tr>
+          <tr>
+            <th scope="row">Price</th>
+            <td>$0.042 / 1M input; output free</td>
+            <td>$0.10 / 1M input; no output or cache charge</td>
+          </tr>
+          <tr>
+            <th scope="row">Adoption</th>
+            <td>Jev + Clef / Clef-flash</td>
+            <td>OpenAI endpoint only</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="api-spec-swipe" aria-hidden="true">SWIPE TABLE →</div>
+    <div class="api-spec-foot">
+      <span>MONO / HAIRLINE 0.7PX</span>
+      <span>SCHEMA DRIFT: CHECK DOCS</span>
+      <span>JEV · CLEF · GPT-6 LUNA</span>
+    </div>
+  </div>
+</div>
 
 Two rows are worth correcting from the folklore version of this comparison. First, **both schemas require `instructions`**. The real difference is where the options live: System One puts them in `criteria`; OpenAI puts them in `choices` or `levels`. Second, OpenAI's `predicate` does **not** return a separate "condition indicator." It returns `{ type, name, probability }`; the condition lives in the `instructions` string. The statistical object is the same as a `noul`.
 
 ### The same three questions in both
 
 Here is a support-ticket decision in System One. The state is a structured object, and the questions are keyed by ID:
+
+<div class="api-console">
+  <div class="api-console-bar">
+    <span class="api-console-title">REQUEST // SYSTEM ONE</span>
+    <span class="api-console-meta">POST /v1/systemone · JSON</span>
+  </div>
+  <div class="api-console-body">
 
 ```json title="System One — POST /v1/systemone"
 {
@@ -439,7 +560,18 @@ Here is a support-ticket decision in System One. The state is a structured objec
 }
 ```
 
+  </div>
+  <div class="api-console-foot"><span>STATE → QUESTIONS{}</span><span>APPLICATION/JSON</span></div>
+</div>
+
 And here is the same decision in the OpenAI Decisions format. The evidence is message-shaped, the questions are an array, and every question carries a name:
+
+<div class="api-console">
+  <div class="api-console-bar">
+    <span class="api-console-title">REQUEST // OPENAI DECISIONS</span>
+    <span class="api-console-meta">POST /v1/decisions · JSON</span>
+  </div>
+  <div class="api-console-body">
 
 ```json title="OpenAI Decisions — POST /v1/decisions"
 {
@@ -476,7 +608,18 @@ And here is the same decision in the OpenAI Decisions format. The evidence is me
 }
 ```
 
+  </div>
+  <div class="api-console-foot"><span>INPUT → QUESTIONS[]</span><span>APPLICATION/JSON</span></div>
+</div>
+
 The responses mirror the two collection styles:
+
+<div class="api-console">
+  <div class="api-console-bar">
+    <span class="api-console-title">RESPONSE // SYSTEM ONE</span>
+    <span class="api-console-meta">200 OK · ANSWERS{}</span>
+  </div>
+  <div class="api-console-body">
 
 ```json title="System One — response"
 {
@@ -509,6 +652,17 @@ The responses mirror the two collection styles:
   "usage": { "input_tokens": 420, "output_tokens": 40 }
 }
 ```
+
+  </div>
+  <div class="api-console-foot"><span>KEYED BY QUESTION ID</span><span>PROBABILITY DISTRIBUTION</span></div>
+</div>
+
+<div class="api-console">
+  <div class="api-console-bar">
+    <span class="api-console-title">RESPONSE // OPENAI DECISIONS</span>
+    <span class="api-console-meta">200 OK · ANSWERS[]</span>
+  </div>
+  <div class="api-console-body">
 
 ```json title="OpenAI Decisions — response"
 {
@@ -546,6 +700,10 @@ The responses mirror the two collection styles:
   "usage": { "input_tokens": 420 }
 }
 ```
+
+  </div>
+  <div class="api-console-foot"><span>ORDERED BY QUESTIONS[]</span><span>PROBABILITY DISTRIBUTION</span></div>
+</div>
 
 The values are illustrative. The shapes are the point.
 
@@ -1639,6 +1797,471 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
   color: var(--mono-muted);
 }
 
+/* ------------------------------------------------------------------ */
+/* API spec matrix + request/response consoles                         */
+/* ------------------------------------------------------------------ */
+
+.api-spec {
+  margin: 28px 0;
+  min-width: 0;
+  max-width: 100%;
+  background: var(--mono-dark-grid);
+}
+
+.api-spec .chamfer-card-content {
+  min-width: 0;
+  padding: 0;
+  background: var(--mono-dark-bg);
+  color: var(--mono-dark-ink);
+}
+
+.api-spec-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  min-width: 0;
+  padding: 20px 20px 16px;
+  border-bottom: 0.7px solid var(--mono-dark-grid);
+  background-image:
+    linear-gradient(var(--mono-dark-grid-soft) 0.7px, transparent 0.7px),
+    linear-gradient(90deg, var(--mono-dark-grid-soft) 0.7px, transparent 0.7px);
+  background-size: 26px 26px;
+  background-position: -0.7px -0.7px;
+}
+
+.api-spec .card-tag {
+  color: var(--mono-dark-l5);
+}
+
+.api-spec .api-spec-head h3.api-spec-title {
+  margin: 4px 0 6px;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--mono-dark-l1);
+}
+
+.api-spec .api-spec-head p.api-spec-sub {
+  max-width: 520px;
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--mono-dark-l4);
+}
+
+.api-spec-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  flex-shrink: 0;
+  padding-left: 14px;
+  border-left: 0.7px solid var(--mono-dark-grid);
+  font-family: var(--mono-font-mono);
+  font-size: 8px;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: 0.12em;
+  color: var(--mono-dark-l5);
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.api-spec-dot {
+  width: 5px;
+  height: 5px;
+  margin-top: 3px;
+  border-radius: 50%;
+  background: var(--mono-dark-l1);
+  animation: api-pulse 2.4s steps(2, end) infinite;
+}
+
+.api-spec-endpoints {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7px;
+  min-width: 0;
+  background: var(--mono-dark-grid);
+  border-bottom: 0.7px solid var(--mono-dark-grid);
+}
+
+.api-endpoint {
+  min-width: 0;
+  padding: 14px 16px 13px;
+  background: var(--mono-dark-bg);
+  position: relative;
+}
+
+.api-endpoint::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 26px;
+  height: 0.7px;
+  background: var(--mono-dark-l5);
+}
+
+.api-endpoint-tag {
+  display: block;
+  margin-bottom: 5px;
+  font-family: var(--mono-font-mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--mono-dark-l5);
+}
+
+.api-spec .api-endpoint code.api-endpoint-path {
+  display: block;
+  margin: 0 0 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--mono-dark-l1);
+  font-family: var(--mono-font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.api-endpoint-flow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-family: var(--mono-font-mono);
+  font-size: 8px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: var(--mono-dark-l4);
+}
+
+.api-flow-node {
+  padding: 2px 5px;
+  border: 0.7px solid var(--mono-dark-grid);
+  background: var(--mono-dark-surface);
+  color: var(--mono-dark-l3);
+}
+
+.api-flow-arrow {
+  color: var(--mono-dark-l6);
+  font-size: 10px;
+}
+
+.api-spec-scroll {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  background: var(--mono-dark-bg);
+  border-bottom: 0.7px solid var(--mono-dark-grid);
+  -webkit-overflow-scrolling: touch;
+}
+
+.api-spec .api-spec-scroll table.api-spec-table {
+  display: table;
+  width: 100%;
+  min-width: 640px;
+  margin: 0;
+  border-collapse: collapse;
+  table-layout: fixed;
+  overflow-x: visible;
+  font-size: 10.5px;
+  line-height: 1.55;
+  color: var(--mono-dark-l2);
+}
+
+.api-spec .api-spec-table thead th {
+  padding: 9px 12px;
+  border: 0;
+  border-bottom: 0.7px solid var(--mono-dark-grid);
+  background: var(--mono-dark-bg);
+  color: var(--mono-dark-l5);
+  font-family: var(--mono-font-mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-align: left;
+  text-transform: uppercase;
+  vertical-align: bottom;
+}
+
+.api-spec .api-spec-table thead th:nth-child(1) { width: 18%; }
+.api-spec .api-spec-table thead th:nth-child(2) { width: 41%; }
+.api-spec .api-spec-table thead th:nth-child(3) { width: 41%; }
+
+.api-spec .api-spec-table tbody th {
+  padding: 8px 12px;
+  border: 0;
+  border-bottom: 0.7px solid var(--mono-dark-grid-soft);
+  background: var(--mono-dark-bg);
+  color: var(--mono-dark-l4);
+  font-family: var(--mono-font-mono);
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+  vertical-align: top;
+}
+
+.api-spec .api-spec-table tbody td {
+  padding: 8px 12px;
+  border: 0;
+  border-bottom: 0.7px solid var(--mono-dark-grid-soft);
+  background: var(--mono-dark-bg);
+  color: var(--mono-dark-l2);
+  font-size: 10.5px;
+  line-height: 1.55;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+.api-spec .api-spec-table tbody tr:last-child th,
+.api-spec .api-spec-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.api-spec .api-spec-table tbody tr:hover th,
+.api-spec .api-spec-table tbody tr:hover td {
+  background: var(--mono-dark-surface);
+}
+
+.api-spec .api-spec-table td code,
+.api-spec .api-spec-table th code {
+  padding: 1px 4px;
+  border: 0.7px solid var(--mono-dark-grid);
+  border-radius: 2px;
+  background: var(--mono-dark-surface);
+  color: var(--mono-dark-l1);
+  font-family: var(--mono-font-mono);
+  font-size: 9.5px;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.api-table-note {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--mono-font-mono);
+  font-size: 7.5px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--mono-dark-l6);
+  text-transform: none;
+}
+
+.api-spec-swipe {
+  display: none;
+}
+
+.api-spec-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  min-width: 0;
+  padding: 8px 12px;
+  border-top: 0.7px solid var(--mono-dark-grid);
+  background: var(--mono-dark-bg);
+  font-family: var(--mono-font-mono);
+  font-size: 7.5px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--mono-dark-l6);
+  text-transform: uppercase;
+}
+
+.api-console {
+  position: relative;
+  min-width: 0;
+  max-width: 100%;
+  margin: 18px 0 22px;
+  border: 0.7px solid var(--mono-dark-grid);
+  background: var(--mono-dark-bg);
+  clip-path: polygon(
+    0 0,
+    calc(100% - 8px) 0,
+    100% 8px,
+    100% 100%,
+    8px 100%,
+    0 calc(100% - 8px)
+  );
+}
+
+.api-console-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  border-bottom: 0.7px solid var(--mono-dark-grid);
+  background: var(--mono-dark-surface);
+  font-family: var(--mono-font-mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--mono-dark-l4);
+  text-transform: uppercase;
+}
+
+.api-console-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--mono-dark-l1);
+}
+
+.api-console-title::before {
+  content: '';
+  width: 4px;
+  height: 4px;
+  background: var(--mono-dark-l1);
+  transform: rotate(45deg);
+}
+
+.api-console-meta {
+  color: var(--mono-dark-l5);
+  text-align: right;
+}
+
+.api-console-body {
+  position: relative;
+  background: var(--mono-dark-bg);
+}
+
+.api-console-body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 0.7px;
+  background: var(--mono-dark-grid);
+  pointer-events: none;
+}
+
+.api-console-body pre.astro-code {
+  margin: 0 !important;
+  padding: 16px 16px 16px 46px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: var(--mono-dark-bg) !important;
+  color: var(--mono-dark-ink) !important;
+  font-size: 11px !important;
+  line-height: 1.65 !important;
+  filter: grayscale(1) contrast(1.06);
+  counter-reset: api-line;
+  max-width: none;
+  box-sizing: border-box;
+}
+
+.api-console-body pre.astro-code .line {
+  position: relative;
+}
+
+.api-console-body pre.astro-code .line::before {
+  counter-increment: api-line;
+  content: counter(api-line, decimal-leading-zero);
+  position: absolute;
+  left: -32px;
+  width: 22px;
+  text-align: right;
+  color: var(--mono-dark-l7);
+  font-family: var(--mono-font-mono);
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  user-select: none;
+}
+
+.api-console-body pre.astro-code:focus-visible {
+  outline: 1px solid var(--mono-dark-l5);
+  outline-offset: -2px;
+}
+
+.api-console-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 6px 12px;
+  border-top: 0.7px solid var(--mono-dark-grid);
+  background: var(--mono-dark-bg);
+  font-family: var(--mono-font-mono);
+  font-size: 7.5px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--mono-dark-l6);
+  text-transform: uppercase;
+}
+
+@keyframes api-pulse {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0.25; }
+}
+
+@media (max-width: 640px) {
+  .api-spec-head {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .api-spec-status {
+    padding-left: 0;
+    border-left: 0;
+    text-align: left;
+  }
+
+  .api-spec-endpoints {
+    grid-template-columns: 1fr;
+  }
+
+  .api-spec-scroll {
+    border-bottom: 0;
+  }
+
+  .api-spec-swipe {
+    display: flex;
+    justify-content: flex-end;
+    padding: 4px 12px;
+    border-top: 0.7px solid var(--mono-dark-grid);
+    background: var(--mono-dark-bg);
+    font-family: var(--mono-font-mono);
+    font-size: 7.5px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--mono-dark-l6);
+  }
+
+  .api-console-bar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .api-console-meta {
+    text-align: left;
+  }
+
+  .api-console-body pre.astro-code {
+    font-size: 10px !important;
+    padding-left: 38px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .api-spec-dot {
+    animation: none;
+  }
+}
+
 .jev-req {
   margin-top: 12px;
   border-top: 0.7px solid var(--mono-grid);
@@ -2417,6 +3040,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     paused: false,
     gameOver: false,
     gate: false,
+    autoRun: false,
     seed: 20261018,
     inFlight: false,
     timer: null,
@@ -2672,6 +3296,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
 
   function updateSnakeButtons() {
     const start = $('#jev-snake-start');
+    const auto = $('#jev-snake-auto');
     const pause = $('#jev-snake-pause');
     const stop = $('#jev-snake-stop');
 
@@ -2688,6 +3313,20 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
               : game.steps > 0
                 ? 'Resume run'
                 : 'Start run';
+      }
+    }
+    if (auto) {
+      auto.disabled = game.autoRun;
+      auto.classList.toggle('active', game.autoRun);
+      const label = auto.querySelector('.btn-label');
+      if (label) {
+        label.textContent = game.autoRun
+          ? 'Auto running'
+          : game.gameOver
+            ? 'Run again'
+            : game.gate
+              ? 'Finish run'
+              : 'Run to end';
       }
     }
     if (pause) {
@@ -2718,6 +3357,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     game.paused = false;
     game.gameOver = false;
     game.gate = false;
+    game.autoRun = false;
     game.seed = 20261018;
     game.lastGate = -1;
     game.log = [];
@@ -2745,6 +3385,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     if (!legal.length) {
       game.running = false;
       game.gameOver = true;
+      game.autoRun = false;
       setSnakeState('GAME OVER');
       updateSnakeButtons();
       return;
@@ -2781,21 +3422,26 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
 
       if (game.score > 0 && game.score % 10 === 0 && game.score !== game.lastGate) {
         game.lastGate = game.score;
-        game.gate = true;
-        game.running = false;
-        game.paused = true;
-        game.inFlight = false;
-        setSnakeState('GATE · ' + game.score + ' FOOD');
-        const gate = $('#jev-snake-gate');
-        if (gate) gate.hidden = false;
-        updateSnakeButtons();
-        return;
+        if (game.autoRun) {
+          setSnakeState('AUTO · ' + game.score + ' FOOD');
+        } else {
+          game.gate = true;
+          game.running = false;
+          game.paused = true;
+          game.inFlight = false;
+          setSnakeState('GATE · ' + game.score + ' FOOD');
+          const gate = $('#jev-snake-gate');
+          if (gate) gate.hidden = false;
+          updateSnakeButtons();
+          return;
+        }
       }
     } catch (err) {
       if (runId !== game.runId) return;
       game.running = false;
       game.paused = false;
       game.inFlight = false;
+      game.autoRun = false;
       setSnakeState('ERROR');
       showError(err);
       updateSnakeButtons();
@@ -2806,11 +3452,12 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     game.inFlight = false;
 
     if (game.running && !game.paused && !game.gameOver) {
-      setSnakeState('RUNNING');
+      setSnakeState(game.autoRun ? 'AUTO' : 'RUNNING');
       game.timer = setTimeout(() => {
         if (runId === game.runId) stepSnake();
       }, 700);
     } else if (game.gameOver) {
+      game.autoRun = false;
       setSnakeState('GAME OVER');
     }
     updateSnakeButtons();
@@ -2823,6 +3470,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     if (game.gameOver || (game.steps === 0 && !game.running)) {
       resetGame();
     }
+    game.autoRun = false;
     game.running = true;
     game.paused = false;
     game.gate = false;
@@ -2831,6 +3479,24 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     setSnakeState('RUNNING');
     updateSnakeButtons();
     stepSnake();
+  }
+
+  function autoSnake() {
+    if (!requireKey()) return;
+    if (!requireRelay()) return;
+    clearError();
+    if (game.gameOver || (game.steps === 0 && !game.running && !game.paused)) {
+      resetGame();
+    }
+    game.autoRun = true;
+    game.running = true;
+    game.paused = false;
+    game.gate = false;
+    const gate = $('#jev-snake-gate');
+    if (gate) gate.hidden = true;
+    setSnakeState('AUTO');
+    updateSnakeButtons();
+    if (!game.inFlight) stepSnake();
   }
 
   function pauseSnake() {
@@ -2844,7 +3510,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     } else if (game.paused && !game.gameOver) {
       game.paused = false;
       game.running = true;
-      setSnakeState('RUNNING');
+      setSnakeState(game.autoRun ? 'AUTO' : 'RUNNING');
       if (!game.inFlight) stepSnake();
     }
     updateSnakeButtons();
@@ -2854,6 +3520,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     game.running = false;
     game.paused = false;
     game.gate = false;
+    game.autoRun = false;
     clearTimeout(game.timer);
     game.timer = null;
     const gate = $('#jev-snake-gate');
@@ -2865,6 +3532,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
   function continueSnake() {
     game.gate = false;
     game.paused = false;
+    game.autoRun = false;
     game.running = true;
     const gate = $('#jev-snake-gate');
     if (gate) gate.hidden = true;
@@ -2876,6 +3544,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
   function endSnake() {
     game.gate = false;
     game.paused = false;
+    game.autoRun = false;
     game.running = false;
     game.gameOver = true;
     clearTimeout(game.timer);
@@ -2961,6 +3630,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
     $('#jev-reset-folders').addEventListener('click', resetCustomFolders);
 
     $('#jev-snake-start').addEventListener('click', startSnake);
+    $('#jev-snake-auto').addEventListener('click', autoSnake);
     $('#jev-snake-pause').addEventListener('click', pauseSnake);
     $('#jev-snake-stop').addEventListener('click', stopSnake);
     $('#jev-snake-reset').addEventListener('click', () => {
@@ -2968,6 +3638,7 @@ If you build something with it, the docs are at [docs.typesafe.ai](https://docs.
       showToast('New run ready.');
     });
     $('#jev-snake-continue').addEventListener('click', continueSnake);
+    $('#jev-snake-auto-gate').addEventListener('click', autoSnake);
     $('#jev-snake-end').addEventListener('click', endSnake);
     $('#jev-snake-copy').addEventListener('click', () => {
       const payload = buildSnakePayload(legalMoves());
