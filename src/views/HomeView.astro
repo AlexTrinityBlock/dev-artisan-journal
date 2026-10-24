@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
 import { getCV } from '../data/cv';
+import { entryIcon, skillIcon } from '../data/icons';
 import type { Lang } from '../i18n/config';
 import { useTranslations } from '../i18n/ui';
 
@@ -139,7 +141,7 @@ const mapLabel = data.dispatch.mapLabel;
       <div class="section-head">
         <span class="head-tag">{data.sections.skills.tag}</span>
         <h2 class="head-title head-title-icon">
-          <svg class="head-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></svg>
+          <Icon name="layers" class="head-icon" size={22} />
           <span>{data.sections.skills.title}</span>
         </h2>
       </div>
@@ -158,7 +160,10 @@ const mapLabel = data.dispatch.mapLabel;
                 <div class="group-skills-stack">
                   {group.skills.map((skill) => (
                     <div class="skill-row">
-                      <span class="skill-name">{skill.name}</span>
+                      <span class="skill-name">
+                        <Icon name={skillIcon(skill.name)} class="skill-icon" size={13} />
+                        {skill.name}
+                      </span>
                       <span class="skill-level">{skill.level}</span>
                     </div>
                   ))}
@@ -187,7 +192,7 @@ const mapLabel = data.dispatch.mapLabel;
       <div class="section-head">
         <span class="head-tag">{data.sections.timeline.tag}</span>
         <h2 class="head-title head-title-icon">
-          <svg class="head-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>
+          <Icon name="route" class="head-icon" size={22} />
           <span>{data.sections.timeline.title}</span>
         </h2>
       </div>
@@ -197,7 +202,10 @@ const mapLabel = data.dispatch.mapLabel;
           <div class="chamfer-card-wrapper timeline-wrapper">
             <article class="chamfer-card-content timeline-inner">
               <div class="entry-meta">
-                <span class="card-tag">{entry.tag}</span>
+                <span class="card-tag">
+                  <Icon name={entryIcon(entry.tag)} class="tag-icon" size={14} />
+                  {entry.tag}
+                </span>
                 <span class="entry-period">{entry.period}</span>
                 <span class="entry-company">{entry.company}</span>
                 <span class="entry-location">{entry.location}</span>
@@ -572,12 +580,6 @@ const mapLabel = data.dispatch.mapLabel;
     gap: 10px;
   }
 
-  .head-icon {
-    width: 22px;
-    height: 22px;
-    flex: none;
-    color: var(--mono-muted);
-  }
 
   .head-desc {
     font-size: 13.5px;
@@ -792,6 +794,9 @@ const mapLabel = data.dispatch.mapLabel;
   }
 
   .skill-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
     font-weight: 600;
     color: var(--mono-ink);
   }
@@ -859,6 +864,12 @@ const mapLabel = data.dispatch.mapLabel;
   .entry-meta {
     display: flex;
     flex-direction: column;
+  }
+
+  .entry-meta .card-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
   }
 
   .entry-period {

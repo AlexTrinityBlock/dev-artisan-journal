@@ -407,3 +407,29 @@ pre {
     padding: 0 16px;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   ICON GLYPHS (Lucide, 1.5px stroke) — global because the <svg>
+   is emitted by src/components/Icon.astro and therefore falls
+   outside the calling component's scoped style hash.
+   ═══════════════════════════════════════════════════════════════ */
+.head-icon {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  color: var(--mono-muted);
+}
+
+.skill-icon {
+  width: 13px;
+  height: 13px;
+  flex: none;
+  color: var(--mono-muted);
+}
+
+.tag-icon {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  color: var(--mono-l3);
+}
