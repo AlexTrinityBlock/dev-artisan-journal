@@ -1,0 +1,17 @@
+# https://blog.alextrinitywolf.com/robots.txt
+# All crawlers are welcome. Every page (EN / 繁中 / 简体中文) is indexable.
+
+User-agent: *
+Allow: /
+
+# Explicitly allow the major engines (rule of least surprise).
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+Sitemap: https://blog.alextrinitywolf.com/sitemap.xml

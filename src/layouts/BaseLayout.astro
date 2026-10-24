@@ -2,40 +2,79 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/tokens.css';
+import { defaultLang, langMeta, locales, type Lang } from '../i18n/config';
+import { localeHref, stripLang } from '../i18n/utils';
+import { useTranslations } from '../i18n/ui';
 
 interface Props {
+  lang: Lang;
   title?: string;
   description?: string;
   image?: string;
   article?: boolean;
+  /** Locale-less paths for the pages that actually exist in each language. */
+  alternates?: Partial<Record<Lang, string>>;
 }
 
 const {
-  title = 'DEV ARTISAN // JOURNAL — Alex.Hsiao',
-  description = 'Technical publication & systems architecture journal of Alex.Hsiao — FullStack & GenAI Systems Architect.',
+  lang,
+  title = useTranslations(lang).site.title,
+  description = useTranslations(lang).site.description,
   image = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/images/avatar/avatar.jpg`,
   article = false,
+  alternates,
 } = Astro.props;
 
-const currentPath = Astro.url.pathname;
+const t = useTranslations(lang);
+const meta = langMeta[lang];
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const path = stripLang(Astro.url.pathname);
+
+// Absolute URLs (hreflang, canonical, og:url) need an origin.
+const origin = Astro.site ?? new URL(Astro.url.origin);
+const absolute = (href: string) => new URL(href, origin).href;
+
+// Emit hreflang only for pages that exist in that language.
+const alternatePaths: Partial<Record<Lang, string>> =
+  alternates ?? Object.fromEntries(locales.map((locale) => [locale, path]));
+const alternateLinks = locales
+  .filter((locale) => alternatePaths[locale] !== undefined)
+  .map((locale) => ({
+    lang: locale,
+    hreflang: langMeta[locale].hreflang,
+    href: absolute(localeHref(locale, alternatePaths[locale] ?? path)),
+  }));
+const xDefault = absolute(localeHref(defaultLang, alternatePaths[defaultLang] ?? path));
+const canonical = absolute(localeHref(lang, alternatePaths[lang] ?? path));
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang={meta.htmlLang} dir={meta.dir}>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
   <meta name="description" content={description} />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <link rel="icon" type="image/svg+xml" href={`${baseUrl}/favicon.svg`} />
-  
-  <!-- Canonical & OpenGraph -->
-  <link rel="canonical" href={Astro.url.href} />
+
+  <!-- Canonical, hreflang alternates & OpenGraph -->
+  <link rel="canonical" href={canonical} />
+  {alternateLinks.map((alt) => (
+    <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+  ))}
+  <link rel="alternate" hreflang="x-default" href={xDefault} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
-  <meta property="og:url" content={Astro.url.href} />
+  <meta property="og:url" content={canonical} />
   <meta property="og:type" content={article ? 'article' : 'website'} />
+  <meta property="og:locale" content={meta.ogLocale} />
+  {locales
+    .filter((locale) => locale !== lang && alternatePaths[locale] !== undefined)
+    .map((locale) => (
+      <meta property="og:locale:alternate" content={langMeta[locale].ogLocale} />
+    ))}
+  <meta property="og:image" content={absolute(image)} />
   <meta name="twitter:card" content="summary_large_image" />
 
   <!-- Google Fonts: Inter & JetBrains Mono -->
@@ -48,7 +87,10 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 </head>
 <body>
   <!-- Global Top Header -->
-  <Header currentPath={currentPath} />
+  <Header
+    lang={lang}
+    missing={locales.filter((locale) => alternatePaths[locale] === undefined)}
+  />
 
   <!-- Main Content Area -->
   <main id="main-content" class="main-wrapper">
@@ -56,10 +98,10 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
   </main>
 
   <!-- Global Footer -->
-  <Footer />
+  <Footer lang={lang} />
 
   <!-- Global Toast -->
-  <div id="toast" class="toast-box">Copied to clipboard</div>
+  <div id="toast" class="toast-box">{t.toast.copied}</div>
 
   <style>
     .main-wrapper {
@@ -92,11 +134,11 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
     }
   </style>
 
-  <script is:inline>
+  <script is:inline define:vars={{ toastFallback: t.toast.copied }}>
     function showToast(message) {
       const toast = document.getElementById('toast');
       if (!toast) return;
-      toast.textContent = message || 'Copied to clipboard';
+      toast.textContent = message || toastFallback;
       toast.classList.add('show');
       setTimeout(() => {
         toast.classList.remove('show');

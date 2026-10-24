@@ -1,11 +1,15 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import AuthorBio from '../components/AuthorBio.astro';
+import type { Lang } from '../i18n/config';
+import { entrySlug } from '../i18n/posts';
+import { formatDate, localeHref, postHref, tagHref } from '../i18n/utils';
+import { useTranslations } from '../i18n/ui';
 
 interface Props {
+  lang: Lang;
   post: {
     id: string;
-    slug?: string;
     data: {
       title: string;
       description: string;
@@ -21,40 +25,39 @@ interface Props {
   headings?: { depth: number; slug: string; text: string }[];
   prevPost?: any;
   nextPost?: any;
+  /** Locales that actually have a version of this article. */
+  available: Lang[];
 }
 
-const { post, headings = [], prevPost, nextPost } = Astro.props;
+const { lang, post, headings = [], prevPost, nextPost, available } = Astro.props;
+const t = useTranslations(lang);
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-});
-
+const formattedDate = formatDate(new Date(post.data.pubDate), lang, 'long');
 const formattedUpdatedDate = post.data.updatedDate
-  ? new Date(post.data.updatedDate).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
+  ? formatDate(new Date(post.data.updatedDate), lang, 'long')
   : null;
 
 const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
-const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const slug = entrySlug(post.id);
+const articlesHref = localeHref(lang, '/articles');
+const shareMessage = t.toast.linkCopied.replace(/'/g, "\\'");
 ---
 
 <BaseLayout
+  lang={lang}
   title={`${post.data.title} — DEV ARTISAN // JOURNAL`}
   description={post.data.description}
   article={true}
+  alternates={Object.fromEntries(available.map((code) => [code, `/blog/${slug}`]))}
 >
   <div class="container post-container">
     
     <!-- Breadcrumb -->
     <nav class="breadcrumb" aria-label="Breadcrumb">
-      <a href={`${baseUrl}/articles`}>Articles</a>
+      <a href={articlesHref}>{t.post.breadcrumbArticles}</a>
       <span class="crumb-sep">/</span>
-      <a href={`${baseUrl}/tags/${post.data.category}`}>{post.data.category}</a>
+      <a href={tagHref(lang, post.data.category)}>{post.data.category}</a>
       <span class="crumb-sep">/</span>
       <span class="crumb-current">{post.data.title}</span>
     </nav>
@@ -66,8 +69,14 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
           <span class="card-tag">{post.data.category}</span>
           <span class="meta-dot"></span>
           <time datetime={post.data.pubDate.toISOString()}>{formattedDate}</time>
+          {formattedUpdatedDate && (
+            <>
+              <span class="meta-dot"></span>
+              <span>UPDATED {formattedUpdatedDate}</span>
+            </>
+          )}
           <span class="meta-dot"></span>
-          <span>{post.data.readTime || '5 min read'}</span>
+          <span>{t.post.readTime(Number(post.data.readTime?.match(/\d+/)?.[0] ?? 5))}</span>
         </div>
 
         <h1 class="post-title">{post.data.title}</h1>
@@ -78,14 +87,14 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
             <img class="author-mini-avatar" src={`${baseUrl}/images/avatar/avatar.jpg`} alt="Alex.Hsiao avatar" loading="lazy" />
             <div class="author-meta">
               <span class="author-name">{post.data.author || 'Alex.Hsiao'}</span>
-              <span class="author-title">FullStack &amp; GenAI Architect · CKA &amp; ISO 27001 Auditor</span>
+              <span class="author-title">{t.post.authorTitle}</span>
             </div>
           </div>
 
-          <button class="mono-btn-chamfer share-btn" onclick="navigator.clipboard.writeText(window.location.href); showToast('Article URL copied to clipboard!');">
+          <button class="mono-btn-chamfer share-btn" onclick={`navigator.clipboard.writeText(window.location.href); showToast('${shareMessage}');`}>
             <span class="chamfer-inner">
-              <span class="btn-tag">SHARE //</span>
-              <span class="btn-label">Copy Link</span>
+              <span class="btn-tag">{t.post.share}</span>
+              <span class="btn-label">{t.post.copyLink}</span>
             </span>
           </button>
         </div>
@@ -102,10 +111,10 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 
           <!-- Article Tags & Share Row -->
           <div class="post-tags-row">
-            <span class="tags-label">TOPICS:</span>
+            <span class="tags-label">{t.post.topics}</span>
             <div class="tags-list">
               {post.data.tags.map((tag) => (
-                <a href={`${baseUrl}/tags/${tag}`} class="tag">
+                <a href={tagHref(lang, tag)} class="tag">
                   #{tag}
                 </a>
               ))}
@@ -120,7 +129,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
           <div class="chamfer-card-wrapper toc-wrapper">
             <div class="chamfer-card-content toc-inner">
               <div class="toc-header">
-                <span class="card-tag">SYSTEM // TOC</span>
+                <span class="card-tag">{t.post.toc}</span>
               </div>
               <nav class="toc-nav">
                 <ul>
@@ -143,18 +152,18 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
       <!-- Prev / Next navigation -->
       <div class="nav-adjacent-grid">
         {prevPost ? (
-          <a href={`${baseUrl}/blog/${(prevPost.slug || prevPost.id).replace(/\/index$/, "").replace(/\.[^/.]+$/, "")}`} class="chamfer-card-wrapper adjacent-wrapper interactive prev">
+          <a href={postHref(lang, entrySlug(prevPost.id))} class="chamfer-card-wrapper adjacent-wrapper interactive prev">
             <div class="chamfer-card-content adjacent-inner">
-              <span class="adjacent-label">&larr; PREVIOUS ARTICLE</span>
+              <span class="adjacent-label">{t.post.prev}</span>
               <span class="adjacent-title">{prevPost.data.title}</span>
             </div>
           </a>
         ) : <div />}
 
         {nextPost ? (
-          <a href={`${baseUrl}/blog/${(nextPost.slug || nextPost.id).replace(/\/index$/, "").replace(/\.[^/.]+$/, "")}`} class="chamfer-card-wrapper adjacent-wrapper interactive next">
+          <a href={postHref(lang, entrySlug(nextPost.id))} class="chamfer-card-wrapper adjacent-wrapper interactive next">
             <div class="chamfer-card-content adjacent-inner next-align">
-              <span class="adjacent-label">NEXT ARTICLE &rarr;</span>
+              <span class="adjacent-label">{t.post.next}</span>
               <span class="adjacent-title">{nextPost.data.title}</span>
             </div>
           </a>
@@ -163,14 +172,14 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 
       <!-- Author Bio -->
       <div style="margin-top: 32px;">
-        <AuthorBio />
+        <AuthorBio lang={lang} />
       </div>
 
       <div class="back-home-wrap">
-        <a href={`${baseUrl}/articles`} class="mono-btn-chamfer">
+        <a href={articlesHref} class="mono-btn-chamfer">
           <span class="chamfer-inner">
             <span class="btn-tag">NAV //</span>
-            <span class="btn-label">&larr; Back to All Articles</span>
+            <span class="btn-label">&larr; {t.post.backToArticles}</span>
           </span>
         </a>
       </div>

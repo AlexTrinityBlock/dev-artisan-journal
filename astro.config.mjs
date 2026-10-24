@@ -8,6 +8,14 @@ import rehypeKatex from 'rehype-katex';
 export default defineConfig({
   site: 'https://blog.alextrinitywolf.com',
   base: '/',
+  // English at the root, `/zh-hant/` and `/zh-hans/` for the Chinese editions.
+  i18n: {
+    locales: ['en', 'zh-hant', 'zh-hans'],
+    defaultLocale: 'en',
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
   markdown: {
     remarkPlugins: [remarkMath],
     rehypePlugins: [rehypeKatex],

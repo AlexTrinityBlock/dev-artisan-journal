@@ -1,0 +1,22 @@
+---
+import { render } from 'astro:content';
+import PostLayout from '../../../layouts/PostLayout.astro';
+import { availableLangs, buildPostPaths } from '../../../i18n/posts';
+
+export const getStaticPaths = () => buildPostPaths('zh-hant');
+
+const { post, prevPost, nextPost } = Astro.props;
+const { Content, headings } = await render(post);
+const available = await availableLangs(post);
+---
+
+<PostLayout
+  lang="zh-hant"
+  post={post}
+  headings={headings}
+  prevPost={prevPost}
+  nextPost={nextPost}
+  available={available}
+>
+  <Content />
+</PostLayout>

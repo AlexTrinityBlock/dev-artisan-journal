@@ -1,0 +1,29 @@
+---
+import TagView from '../../../views/TagView.astro';
+import { getPosts } from '../../../i18n/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPosts('zh-hant');
+
+  const allTags = new Set<string>();
+  posts.forEach((post) => {
+    post.data.tags.forEach((tag) => allTags.add(tag));
+    allTags.add(post.data.category);
+  });
+
+  return Array.from(allTags).map((tag) => {
+    const filteredPosts = posts
+      .filter((post) => post.data.tags.includes(tag) || post.data.category === tag)
+      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+    return {
+      params: { tag },
+      props: { tag, posts: filteredPosts },
+    };
+  });
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<TagView lang="zh-hant" tag={tag} posts={posts} />

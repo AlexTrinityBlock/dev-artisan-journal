@@ -1,7 +1,16 @@
 ---
+import type { Lang } from '../i18n/config';
+import { localeHref } from '../i18n/utils';
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
 const currentYear = new Date().getFullYear();
-const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
-const homeHref = baseUrl ? `${baseUrl}/` : '/';
+const homeHref = localeHref(lang, '/');
 ---
 
 <footer class="site-footer">
@@ -12,30 +21,28 @@ const homeHref = baseUrl ? `${baseUrl}/` : '/';
       <div class="footer-col brand-col">
         <div class="footer-brand">
           <span class="brand-title">DEV ARTISAN // JOURNAL</span>
-          <p class="brand-desc">
-            A technical publication focused on bare-metal GPU clustering, multi-agent AI orchestration, Kubernetes infrastructure, and ISO/IEC 27001 DevSecOps governance.
-          </p>
+          <p class="brand-desc">{t.footer.brandDesc}</p>
         </div>
         <div class="footer-node-telemetry">
           <span class="telemetry-badge">
-            <span class="chamfer-inner">OPERATIONAL // TAIPEI, TAIWAN</span>
+            <span class="chamfer-inner">{t.footer.operational}</span>
           </span>
         </div>
       </div>
 
       <!-- Col 2: Navigation -->
       <div class="footer-col">
-        <span class="col-title">NAVIGATION</span>
+        <span class="col-title">{t.footer.navigation}</span>
         <ul class="footer-links">
-          <li><a href={homeHref}>Home &amp; Profile</a></li>
-          <li><a href={`${baseUrl}/articles`}>Articles</a></li>
-          <li><a href={`${baseUrl}/tags`}>Topics &amp; Taxonomy</a></li>
+          <li><a href={homeHref}>{t.footer.navHome}</a></li>
+          <li><a href={localeHref(lang, '/articles')}>{t.footer.navArticles}</a></li>
+          <li><a href={localeHref(lang, '/tags')}>{t.footer.navTopics}</a></li>
         </ul>
       </div>
 
       <!-- Col 3: Verified Credentials -->
       <div class="footer-col">
-        <span class="col-title">CREDENTIALS</span>
+        <span class="col-title">{t.footer.credentials}</span>
         <ul class="footer-links">
           <li><a href="https://www.credly.com/badges/f2df353f-b36d-41d5-b652-fbcea74abc6c/public_url" target="_blank" rel="noopener noreferrer">NVIDIA GenAI LLMs ↗</a></li>
           <li><a href="https://www.credly.com/badges/fcbae132-9ad2-4995-ae14-6feeaa914d28/public_url" target="_blank" rel="noopener noreferrer">CNCF CKA Administrator ↗</a></li>
@@ -49,13 +56,11 @@ const homeHref = baseUrl ? `${baseUrl}/` : '/';
 
     <!-- Bottom Bar -->
     <div class="footer-bottom">
-      <div class="bottom-copy">
-        &copy; {currentYear} Alex.Hsiao (Wei-Chun Hsiao). Crafted with Astro &amp; Design Token Mono Palette.
-      </div>
+      <div class="bottom-copy">{t.footer.copyright(currentYear)}</div>
       <div class="bottom-meta">
-        <span>FONT: INTER / MONO</span>
+        <span>{t.footer.fontMeta}</span>
         <span>·</span>
-        <span>PALETTE: #1C1C1A / #F0EFEB</span>
+        <span>{t.footer.paletteMeta}</span>
       </div>
     </div>
 

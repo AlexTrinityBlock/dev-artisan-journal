@@ -1,8 +1,12 @@
 ---
+import type { Lang } from '../i18n/config';
+import { entrySlug } from '../i18n/posts';
+import { formatDate, postHref, readMinutes, tagHref } from '../i18n/utils';
+import { useTranslations } from '../i18n/ui';
+
 interface Props {
   post: {
     id: string;
-    slug?: string;
     data: {
       title: string;
       description: string;
@@ -14,18 +18,17 @@ interface Props {
       author?: string;
     };
   };
+  lang: Lang;
   featured?: boolean;
 }
 
-const { post, featured = false } = Astro.props;
+const { post, lang, featured = false } = Astro.props;
+const t = useTranslations(lang);
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
-const slug = (post.slug || post.id).replace(/\/index$/, "").replace(/\.[^/.]+$/, "");
-const postUrl = `${baseUrl}/blog/${slug}`;
-const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric'
-});
+
+const postUrl = postHref(lang, entrySlug(post.id));
+const formattedDate = formatDate(new Date(post.data.pubDate), lang, 'short');
+const readTime = t.post.readTime(readMinutes(post.data.readTime));
 ---
 
 <div 
@@ -43,8 +46,8 @@ const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
       <span class="meta-separator">·</span>
       <time datetime={post.data.pubDate.toISOString()} class="date-text">{formattedDate}</time>
       <span class="meta-separator">·</span>
-      <span class="read-time">{post.data.readTime || '5 min read'}</span>
-      {featured && <span class="featured-badge">FEATURED</span>}
+      <span class="read-time">{readTime}</span>
+      {featured && <span class="featured-badge">{t.card.featured}</span>}
     </div>
 
     <!-- Title -->
@@ -63,7 +66,7 @@ const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
     <div class="card-footer">
       <div class="tags-group">
         {post.data.tags.map((tag) => (
-          <a href={`${baseUrl}/tags/${tag}`} class="tag">
+          <a href={tagHref(lang, tag)} class="tag">
             #{tag}
           </a>
         ))}
@@ -71,8 +74,8 @@ const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
 
       <a href={postUrl} class="mono-btn-chamfer read-btn">
         <span class="chamfer-inner">
-          <span class="btn-tag">DISPATCH //</span>
-          <span class="btn-label">Read &rarr;</span>
+          <span class="btn-tag">{t.card.readTag}</span>
+          <span class="btn-label">{t.card.read} &rarr;</span>
         </span>
       </a>
     </div>
