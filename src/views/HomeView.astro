@@ -15,6 +15,13 @@ const t = useTranslations(lang);
 const data = getCV(lang);
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 
+
+const cvLabel: Record<Lang, string> = {
+  en: 'DOWNLOAD // PDF',
+  'zh-hant': '下載 // PDF',
+  'zh-hans': '下载 // PDF',
+};
+
 // Strings consumed by the inline ECharts script (define:vars).
 const mapTooltip = data.dispatch.mapTooltip;
 const mapSub = data.dispatch.mapSub;
@@ -72,6 +79,14 @@ const mapLabel = data.dispatch.mapLabel;
                 <span class="ledger-v">{item.v}</span>
               </div>
             ))}
+          </div>
+          <div class="hero-actions">
+            <a class="mono-btn-chamfer" href={`${baseUrl}/cv/`}>
+              <span class="chamfer-inner">
+                <span class="btn-tag">CV</span>
+                <span class="btn-label">{cvLabel[lang]}</span>
+              </span>
+            </a>
           </div>
         </div>
 
@@ -539,6 +554,14 @@ const mapLabel = data.dispatch.mapLabel;
     font-weight: 600;
     color: var(--mono-ink);
     line-height: 1.4;
+  }
+
+  .hero-actions {
+    margin-top: 18px;
+  }
+
+  .hero-actions .mono-btn-chamfer {
+    display: inline-flex;
   }
 
   .hero-divider {
