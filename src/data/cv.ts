@@ -262,13 +262,17 @@ const en: CVData = {
       location: 'Zhongshan Dist., Taipei',
       role: 'GenAI Engineer / AI Engineer',
       bullets: [
-        'Lead developer for <strong>"AI Enhance Management System"</strong>, an automated hardware material management and intelligence system.',
+        'Introduced LLM AI Agents into office automation, building an internal web application that automates form filling and classification.',
+        'Delivered an enterprise asset management system for a client, integrating hybrid AI Agent, Document Search, Tool Call, <strong>RAG</strong>, and BM25 with S3-compatible file management, GIS coordinates, agent-based SQL querying, and automated AI Agent performance evaluation; deployed local models on <strong>RTX PRO 6000</strong> GPUs with Multi-Token Prediction, serving inference via vLLM and llama.cpp on Kubernetes across multiple GPUs.',
+        'Contributed to <strong>WAF (CrowdSec)</strong> and <strong>Vault (OpenBao)</strong> deployments, establishing reliable and secure containerized infrastructure.',
+        'Contributed to an agent-based business card automation system.',
+        'Assisted in rolling out GPU server clusters and establishing standard operating procedures for LLM deployment.',
         'Spearheaded full-stack development for Generative AI Agent web applications utilizing React.js, FastAPI, and LangGraph multi-agent orchestration.',
         'Architected and managed containerized GPU clusters for AI workloads, optimizing compute density and vGPU allocation with <strong>NVIDIA GPU Operator and HAMi</strong>.',
         'Engineered custom QR code applications and high-throughput asynchronous message queues via RabbitMQ.',
       ],
       stack:
-        'React.js, FastAPI, LangGraph, SQL Server, PostgreSQL, RabbitMQ, IIS, HAMi, GPU Operator, Longhorn',
+        'React.js, FastAPI, LangGraph, SQL Server, PostgreSQL, RabbitMQ, IIS, HAMi, GPU Operator, Longhorn, Cloudflare Tunnel, llama.cpp',
     },
     {
       tag: 'NODE // NATIONAL CYBER SECURITY',
@@ -535,13 +539,17 @@ const zhHant: CVData = {
       location: '台北市中山區',
       role: 'GenAI 工程師 / AI 工程師',
       bullets: [
-        '擔任「<strong>AI 強化管理系統</strong>」主力開發者，打造硬體物料管理與智慧化系統。',
+        '將 LLM AI Agent 導入辦公室自動化，建立公司內部網頁應用，讓表單填寫與分類自動化。',
+        '於專案中為客戶建置企業資產管理系統，整合混合 AI Agent、Document Search、Tool Call、<strong>RAG</strong> 與 BM25，具備 S3 相容檔案管理、GIS 地理座標、Agent 式 SQL 查詢與 AI Agent 效能自動評估；以 <strong>RTX PRO 6000</strong> GPU 本地部署模型並支援 Multi-Token Prediction，推論服務運行於 Kubernetes 上的 vLLM 與 llama.cpp，採多卡執行。',
+        '參與 <strong>WAF（CrowdSec）</strong>與 <strong>Vault（OpenBao）</strong>建置，打造可靠且安全的容器化環境。',
+        '參與基於 Agent 的名片自動化系統建置。',
+        '協助導入 GPU Server 叢集，並協助建立大語言模型部署標準作業流程。',
         '主導生成式 AI Agent 網頁應用的全端開發，採用 React.js、FastAPI 與 LangGraph 多代理協作。',
         '規劃並維運容器化 GPU 叢集，以 <strong>NVIDIA GPU Operator 與 HAMi</strong> 最佳化運算密度與 vGPU 配置。',
         '開發自訂 QR Code 應用，並以 RabbitMQ 建構高吞吐非同步訊息佇列。',
       ],
       stack:
-        'React.js、FastAPI、LangGraph、SQL Server、PostgreSQL、RabbitMQ、IIS、HAMi、GPU Operator、Longhorn',
+        'React.js、FastAPI、LangGraph、SQL Server、PostgreSQL、RabbitMQ、IIS、HAMi、GPU Operator、Longhorn、Cloudflare Tunnel、llama.cpp',
     },
     {
       tag: 'NODE // NATIONAL CYBER SECURITY',
@@ -808,13 +816,17 @@ const zhHans: CVData = {
       location: '台北市中山区',
       role: 'GenAI 工程师 / AI 工程师',
       bullets: [
-        '担任「<strong>AI 强化管理系统</strong>」主力开发者，打造硬件物料管理与智能化系统。',
+        '将 LLM AI Agent 导入办公室自动化，建立公司内部网页应用，让表单填写与分类自动化。',
+        '于项目中为客户构建企业资产管理系统，集成混合 AI Agent、Document Search、Tool Call、<strong>RAG</strong> 与 BM25，具备 S3 兼容文件管理、GIS 地理坐标、Agent 式 SQL 查询与 AI Agent 性能自动评估；以 <strong>RTX PRO 6000</strong> GPU 本地部署模型并支持 Multi-Token Prediction，推理服务运行于 Kubernetes 上的 vLLM 与 llama.cpp，采多卡运行。',
+        '参与 <strong>WAF（CrowdSec）</strong>与 <strong>Vault（OpenBao）</strong>搭建，打造可靠且安全的容器化环境。',
+        '参与基于 Agent 的名片自动化系统搭建。',
+        '协助导入 GPU Server 集群，并协助建立大语言模型部署标准操作流程。',
         '主导生成式 AI Agent 网页应用的全栈开发，采用 React.js、FastAPI 与 LangGraph 多代理协作。',
         '规划并运维容器化 GPU 集群，以 <strong>NVIDIA GPU Operator 与 HAMi</strong> 优化计算密度与 vGPU 分配。',
         '开发自定义 QR Code 应用，并以 RabbitMQ 构建高吞吐异步消息队列。',
       ],
       stack:
-        'React.js、FastAPI、LangGraph、SQL Server、PostgreSQL、RabbitMQ、IIS、HAMi、GPU Operator、Longhorn',
+        'React.js、FastAPI、LangGraph、SQL Server、PostgreSQL、RabbitMQ、IIS、HAMi、GPU Operator、Longhorn、Cloudflare Tunnel、llama.cpp',
     },
     {
       tag: 'NODE // NATIONAL CYBER SECURITY',
