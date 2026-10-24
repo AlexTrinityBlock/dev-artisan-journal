@@ -38,7 +38,7 @@ export interface TimelineEntry {
   location: string;
   role: string;
   bullets: string[];
-  stack: string;
+  stack?: string;
 }
 
 export interface CVData {
@@ -273,6 +273,18 @@ const en: CVData = {
       ],
       stack:
         'React.js, FastAPI, LangGraph, SQL Server, PostgreSQL, RabbitMQ, IIS, HAMi, GPU Operator, Longhorn, Cloudflare Tunnel, llama.cpp',
+    },
+    {
+      tag: 'NODE // ACADEMIC ADVISORY',
+      period: 'SEP 2025 – JUN 2026',
+      company: 'AIGC Research Club, National Chiayi University',
+      location: 'Chiayi City',
+      role: 'Faculty Advisor / Technical Consultant',
+      bullets: [
+        'Invited as faculty advisor and guest lecturer during the club’s founding period, helping define its AIGC research direction and academic ethics guidelines.',
+        'Taught in person throughout the term, sharing the latest generative AI trends and hands-on practice with members and raising the club’s overall technical level.',
+        'Advised club operations and organizational development, helping the club clear the university’s review and run stably.',
+      ],
     },
     {
       tag: 'NODE // NATIONAL CYBER SECURITY',
@@ -552,6 +564,18 @@ const zhHant: CVData = {
         'React.js、FastAPI、LangGraph、SQL Server、PostgreSQL、RabbitMQ、IIS、HAMi、GPU Operator、Longhorn、Cloudflare Tunnel、llama.cpp',
     },
     {
+      tag: 'NODE // ACADEMIC ADVISORY',
+      period: '2025 年 9 月 – 2026 年 6 月',
+      company: '國立嘉義大學 AIGC 研究社',
+      location: '嘉義市',
+      role: '社團指導老師 / 專業技術顧問（Faculty Advisor）',
+      bullets: [
+        '於社團草創期受邀擔任指導老師與專業講師，協助定義 AIGC 技術研究方向與學術倫理規範。',
+        '於學期中親自授課，將生成式 AI 的最新趨勢與實作經驗傳授給社員，提升整體技術水平。',
+        '指導社務運作與組織發展，協助社團順利通過校方審核並穩定運作。',
+      ],
+    },
+    {
       tag: 'NODE // NATIONAL CYBER SECURITY',
       period: '2025 年 3 月 – 2025 年 11 月（9 個月）',
       company: '國家資通安全研究院（NICS）',
@@ -827,6 +851,18 @@ const zhHans: CVData = {
       ],
       stack:
         'React.js、FastAPI、LangGraph、SQL Server、PostgreSQL、RabbitMQ、IIS、HAMi、GPU Operator、Longhorn、Cloudflare Tunnel、llama.cpp',
+    },
+    {
+      tag: 'NODE // ACADEMIC ADVISORY',
+      period: '2025 年 9 月 – 2026 年 6 月',
+      company: '国立嘉义大学 AIGC 研究社',
+      location: '嘉义市',
+      role: '社团指导老师 / 专业技术顾问（Faculty Advisor）',
+      bullets: [
+        '在社团草创期受邀担任指导老师与专业讲师，协助定义 AIGC 技术研究方向与学术伦理规范。',
+        '于学期中亲自授课，将生成式 AI 的最新趋势与实作经验传授给社员，提升整体技术水平。',
+        '指导社务运作与组织发展，协助社团通过校方审核并稳定运作。',
+      ],
     },
     {
       tag: 'NODE // NATIONAL CYBER SECURITY',

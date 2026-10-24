@@ -205,9 +205,11 @@ const mapLabel = data.dispatch.mapLabel;
                     <li set:html={bullet} />
                   ))}
                 </ul>
-                <div class="entry-stack">
-                  <span class="stack-label">{t.cv.stackShort}</span> {entry.stack}
-                </div>
+                {entry.stack && (
+                  <div class="entry-stack">
+                    <span class="stack-label">{t.cv.stackShort}</span> {entry.stack}
+                  </div>
+                )}
               </div>
             </article>
           </div>
