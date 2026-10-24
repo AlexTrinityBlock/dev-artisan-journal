@@ -95,14 +95,12 @@ const en: CVData = {
       { k: 'TARGET ROLES', v: 'FullStack Engineer / GenAI Systems Architect' },
       { k: 'EXPERIENCE', v: '~3 Years Enterprise FullStack & ML' },
       { k: 'EDUCATION', v: 'M.S. in CSIE, National Chiayi University' },
-      { k: 'LANGUAGE', v: 'English (~3 Yrs Professional Proficiency)' },
     ],
   },
   sections: {
     certs: {
       tag: '// 01 · VERIFIED CREDENTIALS',
       title: 'Six Professional Certifications & IEEE Peer-Reviewed Publication',
-      desc: '100% authentic credentials with direct public verification badges.',
     },
     skills: {
       tag: '// 02 · PRODUCTION TECHNICAL TAXONOMY',
@@ -260,7 +258,7 @@ const en: CVData = {
       period: 'NOV 2025 – PRESENT',
       company: 'Tatung System Technologies Inc. (Tatung World Tech)',
       location: 'Zhongshan Dist., Taipei',
-      role: 'GenAI Engineer / AI Engineer',
+      role: 'GenAI Engineer',
       bullets: [
         'Introduced LLM AI Agents into office automation, building an internal web application that automates form filling and classification.',
         'Delivered an enterprise asset management system for a client, integrating hybrid AI Agent, Document Search, Tool Call, <strong>RAG</strong>, and BM25 with S3-compatible file management, GIS coordinates, agent-based SQL querying, and automated AI Agent performance evaluation; deployed local models on <strong>RTX PRO 6000</strong> GPUs with Multi-Token Prediction, serving inference via vLLM and llama.cpp on Kubernetes across multiple GPUs.',
@@ -384,14 +382,12 @@ const zhHant: CVData = {
       { k: 'TARGET ROLES', v: '全端工程師 / GenAI 系統架構師' },
       { k: 'EXPERIENCE', v: '約 3 年企業級全端與 ML 經驗' },
       { k: 'EDUCATION', v: '國立嘉義大學資訊工程學系碩士' },
-      { k: 'LANGUAGE', v: '英文（約 3 年專業工作程度）' },
     ],
   },
   sections: {
     certs: {
       tag: '// 01 · VERIFIED CREDENTIALS',
       title: '六項專業認證與 IEEE 同儕審查論文',
-      desc: '100% 真實可驗證的公開認證徽章。',
     },
     skills: {
       tag: '// 02 · PRODUCTION TECHNICAL TAXONOMY',
@@ -549,7 +545,7 @@ const zhHant: CVData = {
       period: '2025 年 11 月 – 迄今',
       company: '大同世界科技（Tatung System Technologies）',
       location: '台北市中山區',
-      role: 'GenAI 工程師 / AI 工程師',
+      role: 'GenAI 工程師',
       bullets: [
         '將 LLM AI Agent 導入辦公室自動化，建立公司內部網頁應用，讓表單填寫與分類自動化。',
         '於專案中為客戶建置企業資產管理系統，整合混合 AI Agent、Document Search、Tool Call、<strong>RAG</strong> 與 BM25，具備 S3 相容檔案管理、GIS 地理座標、Agent 式 SQL 查詢與 AI Agent 效能自動評估；以 <strong>RTX PRO 6000</strong> GPU 本地部署模型並支援 Multi-Token Prediction，推論服務運行於 Kubernetes 上的 vLLM 與 llama.cpp，採多卡執行。',
@@ -673,14 +669,12 @@ const zhHans: CVData = {
       { k: 'TARGET ROLES', v: '全栈工程师 / GenAI 系统架构师' },
       { k: 'EXPERIENCE', v: '约 3 年企业级全栈与 ML 经验' },
       { k: 'EDUCATION', v: '国立嘉义大学信息工程学系硕士' },
-      { k: 'LANGUAGE', v: '英文（约 3 年专业工作程度）' },
     ],
   },
   sections: {
     certs: {
       tag: '// 01 · VERIFIED CREDENTIALS',
       title: '六项专业认证与 IEEE 同行评审论文',
-      desc: '100% 真实可验证的公开认证徽章。',
     },
     skills: {
       tag: '// 02 · PRODUCTION TECHNICAL TAXONOMY',
@@ -838,7 +832,7 @@ const zhHans: CVData = {
       period: '2025 年 11 月 – 至今',
       company: '大同世界科技（Tatung System Technologies）',
       location: '台北市中山区',
-      role: 'GenAI 工程师 / AI 工程师',
+      role: 'GenAI 工程师',
       bullets: [
         '将 LLM AI Agent 导入办公室自动化，建立公司内部网页应用，让表单填写与分类自动化。',
         '于项目中为客户构建企业资产管理系统，集成混合 AI Agent、Document Search、Tool Call、<strong>RAG</strong> 与 BM25，具备 S3 兼容文件管理、GIS 地理坐标、Agent 式 SQL 查询与 AI Agent 性能自动评估；以 <strong>RTX PRO 6000</strong> GPU 本地部署模型并支持 Multi-Token Prediction，推理服务运行于 Kubernetes 上的 vLLM 与 llama.cpp，采多卡运行。',

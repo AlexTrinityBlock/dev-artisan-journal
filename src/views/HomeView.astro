@@ -83,7 +83,7 @@ const mapLabel = data.dispatch.mapLabel;
       <div class="section-head">
         <span class="head-tag">{data.sections.certs.tag}</span>
         <h2 class="head-title">{data.sections.certs.title}</h2>
-        <p class="head-desc">{data.sections.certs.desc}</p>
+        {data.sections.certs.desc && <p class="head-desc">{data.sections.certs.desc}</p>}
       </div>
 
       <div class="certs-list">
@@ -496,6 +496,11 @@ const mapLabel = data.dispatch.mapLabel;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 16px 28px;
+  }
+
+  /* Keep an odd ledger count from leaving a lopsided gap. */
+  .profile-quick-ledger > .ledger-item:last-child:nth-child(odd) {
+    grid-column: span 2;
   }
 
   .ledger-item {
@@ -1109,6 +1114,9 @@ const mapLabel = data.dispatch.mapLabel;
     }
     .profile-quick-ledger {
       grid-template-columns: 1fr;
+    }
+    .profile-quick-ledger > .ledger-item:last-child:nth-child(odd) {
+      grid-column: auto;
     }
     .skill-group-inner {
       grid-template-columns: 1fr;
