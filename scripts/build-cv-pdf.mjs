@@ -13,7 +13,7 @@
 
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 
 const base = (process.argv[2] ?? 'http://localhost:4331').replace(/\/$/, '');
 
@@ -37,7 +37,8 @@ const pages = [
 mkdirSync('public/cv', { recursive: true });
 
 for (const [route, locale] of pages) {
-  const out = join('public', 'cv', `alex-hsiao-cv-${locale}.pdf`);
+  // Chrome resolves --print-to-pdf against its own cwd, so pass an absolute path.
+  const out = resolve('public', 'cv', `alex-hsiao-cv-${locale}.pdf`);
   execFileSync(chrome, [
     '--headless=new',
     '--disable-gpu',

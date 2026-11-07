@@ -1,7 +1,7 @@
-﻿# DEV ARTISAN // JOURNAL
+# DEV ARTISAN // JOURNAL
 
 > **Technical Publication & Systems Architecture Journal**  
-> Authored by **Alex Hsiao (Wei-Chun Hsiao)** — FullStack Engineer & GenAI Systems Architect.  
+> Authored by **Alex Hsiao (Wei-Chun Hsiao)** — Full-Stack GenAI Engineer.  
 > **Website**: [https://blog.alextrinitywolf.com/](https://blog.alextrinitywolf.com/)
 
 <p align="center">
@@ -12,7 +12,7 @@
 
 ## Candidate Profile & Executive Summary
 
-Currently serving as a **GenAI Engineer & Systems Architect** in Taipei, Taiwan with ~3 years of enterprise experience across full-stack software development, bare-metal GPU virtualization, distributed microservices, and ISO/IEC 27001 compliance.
+Currently serving as a **Full-Stack GenAI Engineer** in Taipei, Taiwan with ~4.5 years of software engineering experience (3 years enterprise) across full-stack application development, LLM agents and RAG pipelines, containerized GPU infrastructure, distributed microservices, and ISO/IEC 27001 compliance.
 
 - **Target Roles**: FullStack Engineer / GenAI Systems Architect / Cloud Infrastructure Engineer
 - **Location**: Taipei, Taiwan (UTC+8 · Open to Taipei On-site/Hybrid & Global Remote)
@@ -30,6 +30,7 @@ Currently serving as a **GenAI Engineer & Systems Architect** in Taipei, Taiwan 
 | **AWS Solutions Architect – Professional (SAP)** | Amazon Web Services | [Verify Badge [->]](https://www.credly.com/badges/13a54046-b8d0-40df-9094-8222ec7b0d2e) |
 | **Google Cloud Professional Cloud Architect (PCA)** | Google Cloud | [Verify Badge [->]](https://www.credly.com/badges/d0031cb8-c858-4a63-8f54-521020f54a44) |
 | **ISO/IEC 27001 Lead Auditor (InfoSec)** | TKSG ISMS | [Verify Cert (#5615205852WH) [->]](https://tksg.org/admin/tool/certificate/index.php?code=5615205852WH) |
+| **PCPP1 – Certified Professional Python Programmer Level 1** | OpenEDG Python Institute | [Verify Badge [->]](https://www.credly.com/badges/07249b48-0f1a-4b15-bf4a-f875a4fbec6b) |
 | **IEEE Xplore Peer-Reviewed Publication** | IEEE Xplore | [IEEE Doc: 10210155 [->]](https://ieeexplore.ieee.org/abstract/document/10210155) |
 
 ---

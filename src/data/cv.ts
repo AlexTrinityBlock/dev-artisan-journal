@@ -51,6 +51,7 @@ export interface CVData {
     alias: string;
     intro: string;
     ledger: { k: string; v: string }[];
+    metrics: { value: string; label: string }[];
   };
   sections: {
     certs: SectionHead;
@@ -79,22 +80,28 @@ export interface CVData {
 
 const en: CVData = {
   seo: {
-    title: 'Alex.Hsiao (Wei-Chun Hsiao) — FullStack & GenAI Systems Architect',
+    title: 'Alex.Hsiao (Wei-Chun Hsiao) — Full-Stack GenAI Engineer',
     description:
-      'Curriculum Vitae and verified credentials of Alex.Hsiao — FullStack Engineer & GenAI Systems Architect. 6 professional certifications, IEEE publication, and ~3 years enterprise experience.',
+      'Curriculum Vitae and verified credentials of Alex.Hsiao — Full-Stack GenAI Engineer. 6 professional certifications, an IEEE publication, and ~4.5 years of software engineering experience.',
   },
   hero: {
     tag: 'SYSTEM // 01 · CANDIDATE PROFILE',
-    role: 'FULLSTACK & GENAI ARCHITECT',
+    role: 'FULL-STACK GENAI ENGINEER',
     status: 'ACTIVE // TAIPEI NODE',
     name: 'Alex Hsiao',
     alias: '(Wei-Chun Hsiao)',
     intro:
-      'Currently serving as a <strong>GenAI Engineer</strong> with hands-on expertise spanning full-stack application development, bare-metal GPU virtualization (NVIDIA GPU Operator & HAMi), stateful Multi-Agent LLMs with LangGraph, distributed microservices, and ISO/IEC 27001 security compliance.',
+      'Currently serving as a <strong>Full-Stack GenAI Engineer</strong> at Tatung System Technologies, with hands-on expertise spanning full-stack application development, LLM agents and RAG pipelines, containerized GPU infrastructure (NVIDIA GPU Operator & HAMi), stateful Multi-Agent LLMs with LangGraph, distributed microservices, and ISO/IEC 27001 security compliance.',
     ledger: [
       { k: 'TARGET ROLES', v: 'FullStack Engineer / GenAI Systems Architect' },
       { k: 'EXPERIENCE', v: '~3 Years Enterprise FullStack & ML' },
+      { k: 'TOTAL EXPERIENCE', v: '~4.5 Years incl. Master’s Research' },
       { k: 'EDUCATION', v: 'M.S. in CSIE, National Chiayi University' },
+    ],
+    metrics: [
+      { value: '1M', label: 'tokens usable context on one H100' },
+      { value: '0', label: 'vulnerabilities · 6 hardened images' },
+      { value: '95.3%', label: 'AI Agent accuracy · 300 questions' },
     ],
   },
   sections: {
@@ -201,13 +208,15 @@ const en: CVData = {
       skills: [
         { name: 'vLLM Inference Engine', level: 'Enterprise' },
         { name: 'LangGraph Multi-Agents', level: 'Production' },
+        { name: 'RAG & Hybrid Retrieval', level: 'Production' },
+        { name: 'LLM Agent Evaluation', level: 'Production' },
         { name: 'HAMi vGPU Slicing', level: 'Enterprise' },
         { name: 'NVIDIA GPU Operator', level: 'Production' },
         { name: 'PyTorch & TensorFlow', level: '~3 Years' },
       ],
       synopsis:
-        'Architecting containerized GPU clusters on bare-metal Kubernetes with NVIDIA GPU Operator and HAMi vGPU dynamic slicing to maximize compute density and hardware utilization. Designing stateful, autonomous multi-agent orchestration pipelines with LangGraph and low-latency LLM streaming inference endpoints via vLLM.',
-      stack: 'K8s GPU Operator · HAMi · LangGraph · vLLM · PyTorch · HuggingFace',
+        'Architecting on-premises containerized GPU infrastructure with NVIDIA GPU Operator and HAMi vGPU slicing to maximize compute density and hardware utilization. Designing stateful multi-agent orchestration with LangGraph, retrieval-augmented generation (RAG) over hybrid vector + BM25 retrieval with PGroonga, low-latency streaming inference via vLLM, and automated Agent evaluation across 300-question test suites.',
+      stack: 'Kubernetes GPU Operator · HAMi · LangGraph · RAG (PGroonga) · vLLM · Valkey · PyTorch · HuggingFace',
     },
     {
       tag: 'SYSTEM // BACKEND & AMQP',
@@ -258,19 +267,21 @@ const en: CVData = {
       period: 'NOV 2025 – PRESENT',
       company: 'Tatung System Technologies Inc. (Tatung World Tech)',
       location: 'Zhongshan Dist., Taipei',
-      role: 'GenAI Engineer',
+      role: 'Full-Stack GenAI Engineer',
       bullets: [
-        'Introduced LLM AI Agents into office automation, building an internal web application that automates form filling and classification.',
-        'Delivered an enterprise asset management system for a client, integrating hybrid AI Agent, Document Search, Tool Call, <strong>RAG</strong>, and BM25 with S3-compatible file management, GIS coordinates, agent-based SQL querying, and automated AI Agent performance evaluation; deployed local models on <strong>RTX PRO 6000</strong> GPUs with Multi-Token Prediction, serving inference via vLLM and llama.cpp on Kubernetes across multiple GPUs.',
-        'Contributed to <strong>WAF (CrowdSec)</strong> and <strong>Vault (OpenBao)</strong> deployments, establishing reliable and secure containerized infrastructure.',
-        'Contributed to an agent-based business card automation system.',
-        'Assisted in rolling out GPU server clusters and establishing standard operating procedures for LLM deployment.',
-        'Spearheaded full-stack development for Generative AI Agent web applications utilizing React.js, FastAPI, and LangGraph multi-agent orchestration.',
-        'Architected and managed containerized GPU clusters for AI workloads, optimizing compute density and vGPU allocation with <strong>NVIDIA GPU Operator and HAMi</strong>.',
-        'Engineered custom QR code applications and high-throughput asynchronous message queues via RabbitMQ.',
+        'Built an enterprise property-leasing management system for a real-estate leasing client — 13 functional modules and 21 sidebar pages — owning system design, application development, and infrastructure end to end: hybrid AI Agent, document search, tool calling, <strong>RAG</strong> with hybrid vector + BM25 (PGroonga) retrieval across 8 business entity types, S3-compatible file management, GIS coordinates, agent-based SQL querying, and automated Agent evaluation. Enforced data access through dual-layer guardrails (Row-Level Security + read-only DB account).',
+        'Built an internal material automation system that reads purchase orders and quotations and converts them into SAP material master data, replacing manual entry for 113 users: median extraction time 41 seconds versus 15 minutes by hand (~22× faster; 4 of 22 batches routed to manual review).',
+        'Extended a 120B model’s usable context from ~30K to 1M tokens on a single H100 by offloading the KV cache to CPU RAM (140 GB) with FP8 KV-cache quantization and Multi-Token Prediction speculative decoding — verified at 990,016 tokens in one request, 10/10 runs successful with zero preemptions.',
+        'Deployed local LLMs on a client’s <strong>RTX PRO 6000</strong> GPUs with Multi-Token Prediction, serving inference via vLLM and llama.cpp in parallel on the same Kubernetes cluster across multiple GPUs.',
+        'Delivered container hardening and security scanning for a financial-sector client’s AI platform: 6 hardened SUSE Linux Enterprise 16.1 images (all non-root) with zero vulnerabilities across Trivy, SUSE OVAL and OSV-Scanner, plus zero failures against the PCI-DSS v4.0.1 configuration baseline.',
+        'Leading pre-bid architecture design for a financial-sector AI Agent platform: designing the deployment architecture for AI Agent services on Kubernetes, integrating external APIs and a SQL Agent, with Azure OpenAI as the model backend.',
+        'Deployed containerized GPU clusters with NVIDIA GPU Operator and <strong>HAMi</strong> vGPU slicing to serve the property-leasing system’s AI workloads, maximizing compute density across shared GPUs.',
+        'Built <strong>WAF (CrowdSec)</strong> and <strong>Vault (OpenBao)</strong> for the property-leasing system, establishing reliable and secure containerized infrastructure.',
+        'Designed the property-leasing system’s dual messaging layer: RabbitMQ for long-running AI extraction jobs and Valkey Stream for inter-Agent communication and chat state, with task cancellation handled directly by the backend API.',
+        'Contributed to an agent-based business card automation system, and engineered custom QR code applications with high-throughput asynchronous message queues.',
       ],
       stack:
-        'React.js, FastAPI, LangGraph, SQL Server, PostgreSQL, RabbitMQ, IIS, HAMi, GPU Operator, Longhorn, Cloudflare Tunnel, llama.cpp',
+        'React.js, FastAPI, LangGraph, vLLM, llama.cpp, Azure OpenAI, PGroonga, Valkey, RabbitMQ, PostgreSQL, Kubernetes, Kubespray, Helm, NVIDIA GPU Operator, HAMi, Longhorn, CrowdSec, OpenBao',
     },
     {
       tag: 'NODE // ACADEMIC ADVISORY',
@@ -366,22 +377,28 @@ const en: CVData = {
 
 const zhHant: CVData = {
   seo: {
-    title: 'Alex.Hsiao（Wei-Chun Hsiao）— 全端與 GenAI 系統架構師',
+    title: 'Alex.Hsiao（Wei-Chun Hsiao）— 全端 GenAI 工程師',
     description:
-      'Alex.Hsiao 的完整履歷與可驗證認證 — 全端工程師暨 GenAI 系統架構師。六項專業認證、IEEE 論文發表，以及約 3 年企業級實務經驗。',
+      'Alex.Hsiao 的完整履歷與可驗證認證 — 全端 GenAI 工程師。六項專業認證、IEEE 論文發表，以及約 4.5 年軟體工程經驗。',
   },
   hero: {
     tag: 'SYSTEM // 01 · CANDIDATE PROFILE',
-    role: 'FULLSTACK & GENAI ARCHITECT',
+    role: 'FULL-STACK GENAI ENGINEER',
     status: 'ACTIVE // TAIPEI NODE',
     name: 'Alex Hsiao',
     alias: '（Wei-Chun Hsiao）',
     intro:
-      '目前擔任 <strong>GenAI 工程師</strong>，實務經驗涵蓋全端應用開發、裸機 GPU 虛擬化（NVIDIA GPU Operator 與 HAMi）、以 LangGraph 打造具狀態的多代理 LLM、分散式微服務，以及 ISO/IEC 27001 安全合規。',
+      '目前於大同世界科技擔任 <strong>全端 GenAI 工程師</strong>，實務經驗涵蓋全端應用開發、LLM Agent 與 RAG 檢索流程、容器化 GPU 基礎設施（NVIDIA GPU Operator 與 HAMi）、以 LangGraph 打造具狀態的多代理 LLM、分散式微服務，以及 ISO/IEC 27001 安全合規。',
     ledger: [
       { k: 'TARGET ROLES', v: '全端工程師 / GenAI 系統架構師' },
       { k: 'EXPERIENCE', v: '約 3 年企業級全端與 ML 經驗' },
+      { k: 'TOTAL EXPERIENCE', v: '約 4.5 年（含碩士研究）' },
       { k: 'EDUCATION', v: '國立嘉義大學資訊工程學系碩士' },
+    ],
+    metrics: [
+      { value: '1M', label: 'tokens · 單張 H100 可用上下文' },
+      { value: '0', label: '漏洞 · 6 個硬化映像' },
+      { value: '95.3%', label: 'AI Agent 準確率 · 300 題' },
     ],
   },
   sections: {
@@ -488,13 +505,15 @@ const zhHant: CVData = {
       skills: [
         { name: 'vLLM 推論引擎', level: '企業級' },
         { name: 'LangGraph 多代理系統', level: '生產環境' },
+        { name: 'RAG 混合檢索', level: '生產環境' },
+        { name: 'LLM Agent 評測', level: '生產環境' },
         { name: 'HAMi vGPU 切分', level: '企業級' },
         { name: 'NVIDIA GPU Operator', level: '生產環境' },
         { name: 'PyTorch 與 TensorFlow', level: '約 3 年' },
       ],
       synopsis:
-        '在裸機 Kubernetes 上以 NVIDIA GPU Operator 與 HAMi vGPU 動態切分建構容器化 GPU 叢集，最大化運算密度與硬體使用率。以 LangGraph 設計具狀態、可自主運作的多代理協作流程，並透過 vLLM 提供低延遲的 LLM 串流推論端點。',
-      stack: 'K8s GPU Operator · HAMi · LangGraph · vLLM · PyTorch · HuggingFace',
+        '在地端 Kubernetes 上以 NVIDIA GPU Operator 與 HAMi vGPU 切分建構容器化 GPU 基礎設施，最大化運算密度與硬體使用率。以 LangGraph 設計具狀態的多代理協作流程，以 PGroonga 實作向量與 BM25 混合檢索（RAG）、透過 vLLM 提供低延遲串流推論，並以 300 題測試集自動評測 Agent。',
+      stack: 'Kubernetes GPU Operator · HAMi · LangGraph · RAG (PGroonga) · vLLM · Valkey · PyTorch · HuggingFace',
     },
     {
       tag: 'SYSTEM // BACKEND & AMQP',
@@ -545,19 +564,21 @@ const zhHant: CVData = {
       period: '2025 年 11 月 – 迄今',
       company: '大同世界科技（Tatung System Technologies）',
       location: '台北市中山區',
-      role: 'GenAI 工程師',
+      role: '全端 GenAI 工程師',
       bullets: [
-        '將 LLM AI Agent 導入辦公室自動化，建立公司內部網頁應用，讓表單填寫與分類自動化。',
-        '於專案中為客戶建置企業資產管理系統，整合混合 AI Agent、Document Search、Tool Call、<strong>RAG</strong> 與 BM25，具備 S3 相容檔案管理、GIS 地理座標、Agent 式 SQL 查詢與 AI Agent 效能自動評估；以 <strong>RTX PRO 6000</strong> GPU 本地部署模型並支援 Multi-Token Prediction，推論服務運行於 Kubernetes 上的 vLLM 與 llama.cpp，採多卡執行。',
-        '參與 <strong>WAF（CrowdSec）</strong>與 <strong>Vault（OpenBao）</strong>建置，打造可靠且安全的容器化環境。',
-        '參與基於 Agent 的名片自動化系統建置。',
-        '協助導入 GPU Server 叢集，並協助建立大語言模型部署標準作業流程。',
-        '主導生成式 AI Agent 網頁應用的全端開發，採用 React.js、FastAPI 與 LangGraph 多代理協作。',
-        '規劃並維運容器化 GPU 叢集，以 <strong>NVIDIA GPU Operator 與 HAMi</strong> 最佳化運算密度與 vGPU 配置。',
-        '開發自訂 QR Code 應用，並以 RabbitMQ 建構高吞吐非同步訊息佇列。',
+        '為房地產租賃業客戶建置企業級房地產租賃管理系統，含 13 個功能模組與 21 個側邊欄頁面，從系統設計、應用開發到基礎設施建置全程負責：混合 AI Agent、文件搜尋、工具呼叫、橫跨 8 類業務實體的向量與 BM25（PGroonga）混合檢索 <strong>RAG</strong>、S3 相容檔案管理、GIS 地理座標、Agent 式 SQL 查詢，以及 Agent 自動評測；並以雙層防護（Row-Level Security 與唯讀資料庫帳號）管制資料存取。',
+        '建置公司內部的物料自動化系統，自動判讀採購單與報價單並轉換為 SAP 物料主檔資料，取代 113 位使用者的人工逐筆輸入：AI 提取中位數 41 秒，人工約需 15 分鐘（約 22 倍速；22 筆批次中 4 筆轉人工複核）。',
+        '在單張 H100 上把 120B 模型的可用上下文從約 30K 提升到 1M tokens：將 KV Cache 卸載至 CPU RAM（140 GB），搭配 FP8 KV Cache 量化與 Multi-Token Prediction 投機解碼；實測單一請求 990,016 tokens，10 次全數成功、零搶占。',
+        '在客戶的 <strong>RTX PRO 6000</strong> GPU 上部署本地 LLM 並支援 Multi-Token Prediction，於同一個 Kubernetes 叢集上以多卡平行執行 vLLM 與 llama.cpp 提供推論服務。',
+        '為金融業客戶的 AI 平台交付容器加固與安全掃描：6 個 SUSE Linux Enterprise 16.1 加固映像（全部非 root），Trivy、SUSE OVAL 與 OSV-Scanner 掃描 0 漏洞，PCI-DSS v4.0.1 設定基準檢查 0 項失敗。',
+        '為金融業客戶進行 AI Agent 平台的前期架構設計：規劃 AI Agent 服務在 Kubernetes 上的部署架構，整合外部 API 與 SQL Agent，並以 Azure OpenAI 作為模型後端。',
+        '以 NVIDIA GPU Operator 與 <strong>HAMi</strong> vGPU 切分部署容器化 GPU 叢集，承載該房地產租賃管理系統的 AI 工作負載，在共享 GPU 上最大化運算密度。',
+        '為該房地產租賃管理系統建置 <strong>WAF（CrowdSec）</strong>與 <strong>Vault（OpenBao）</strong>，打造可靠且安全的容器化基礎設施。',
+        '設計該房地產租賃管理系統的雙訊息架構：以 RabbitMQ 處理長時間的 AI 文件提取任務，以 Valkey Stream 處理 Agent 之間的溝通與對話狀態，任務取消由後端 API 直接處理。',
+        '參與基於 Agent 的名片自動化系統建置，並開發自訂 QR Code 應用與高吞吐非同步訊息佇列。',
       ],
       stack:
-        'React.js、FastAPI、LangGraph、SQL Server、PostgreSQL、RabbitMQ、IIS、HAMi、GPU Operator、Longhorn、Cloudflare Tunnel、llama.cpp',
+        'React.js、FastAPI、LangGraph、vLLM、llama.cpp、Azure OpenAI、PGroonga、Valkey、RabbitMQ、PostgreSQL、Kubernetes、Kubespray、Helm、NVIDIA GPU Operator、HAMi、Longhorn、CrowdSec、OpenBao',
     },
     {
       tag: 'NODE // ACADEMIC ADVISORY',
@@ -653,22 +674,28 @@ const zhHant: CVData = {
 
 const zhHans: CVData = {
   seo: {
-    title: 'Alex.Hsiao（Wei-Chun Hsiao）— 全栈与 GenAI 系统架构师',
+    title: 'Alex.Hsiao（Wei-Chun Hsiao）— 全栈 GenAI 工程师',
     description:
-      'Alex.Hsiao 的完整履历与可验证认证 — 全栈工程师暨 GenAI 系统架构师。六项专业认证、IEEE 论文发表，以及约 3 年企业级实践经验。',
+      'Alex.Hsiao 的完整履历与可验证认证 — 全栈 GenAI 工程师。六项专业认证、IEEE 论文发表，以及约 4.5 年软件工程经验。',
   },
   hero: {
     tag: 'SYSTEM // 01 · CANDIDATE PROFILE',
-    role: 'FULLSTACK & GENAI ARCHITECT',
+    role: 'FULL-STACK GENAI ENGINEER',
     status: 'ACTIVE // TAIPEI NODE',
     name: 'Alex Hsiao',
     alias: '（Wei-Chun Hsiao）',
     intro:
-      '目前担任 <strong>GenAI 工程师</strong>，实践经验涵盖全栈应用开发、裸机 GPU 虚拟化（NVIDIA GPU Operator 与 HAMi）、以 LangGraph 构建有状态的多代理 LLM、分布式微服务，以及 ISO/IEC 27001 安全合规。',
+      '目前于大同世界科技担任 <strong>全栈 GenAI 工程师</strong>，实践经验涵盖全栈应用开发、LLM Agent 与 RAG 检索流程、容器化 GPU 基础设施（NVIDIA GPU Operator 与 HAMi）、以 LangGraph 构建有状态的多代理 LLM、分布式微服务，以及 ISO/IEC 27001 安全合规。',
     ledger: [
       { k: 'TARGET ROLES', v: '全栈工程师 / GenAI 系统架构师' },
       { k: 'EXPERIENCE', v: '约 3 年企业级全栈与 ML 经验' },
+      { k: 'TOTAL EXPERIENCE', v: '约 4.5 年（含硕士研究）' },
       { k: 'EDUCATION', v: '国立嘉义大学信息工程学系硕士' },
+    ],
+    metrics: [
+      { value: '1M', label: 'tokens · 单张 H100 可用上下文' },
+      { value: '0', label: '漏洞 · 6 个硬化镜像' },
+      { value: '95.3%', label: 'AI Agent 准确率 · 300 题' },
     ],
   },
   sections: {
@@ -775,13 +802,15 @@ const zhHans: CVData = {
       skills: [
         { name: 'vLLM 推理引擎', level: '企业级' },
         { name: 'LangGraph 多代理系统', level: '生产环境' },
+        { name: 'RAG 混合检索', level: '生产环境' },
+        { name: 'LLM Agent 评测', level: '生产环境' },
         { name: 'HAMi vGPU 切分', level: '企业级' },
         { name: 'NVIDIA GPU Operator', level: '生产环境' },
         { name: 'PyTorch 与 TensorFlow', level: '约 3 年' },
       ],
       synopsis:
-        '在裸机 Kubernetes 上以 NVIDIA GPU Operator 与 HAMi vGPU 动态切分构建容器化 GPU 集群，最大化计算密度与硬件利用率。以 LangGraph 设计有状态、可自主运行的多代理协作流程，并通过 vLLM 提供低延迟的 LLM 流式推理端点。',
-      stack: 'K8s GPU Operator · HAMi · LangGraph · vLLM · PyTorch · HuggingFace',
+        '在地端 Kubernetes 上以 NVIDIA GPU Operator 与 HAMi vGPU 切分构建容器化 GPU 基础设施，最大化计算密度与硬件利用率。以 LangGraph 设计有状态的多代理协作流程，以 PGroonga 实现向量与 BM25 混合检索（RAG）、通过 vLLM 提供低延迟流式推理，并以 300 题测试集自动评测 Agent。',
+      stack: 'Kubernetes GPU Operator · HAMi · LangGraph · RAG (PGroonga) · vLLM · Valkey · PyTorch · HuggingFace',
     },
     {
       tag: 'SYSTEM // BACKEND & AMQP',
@@ -832,19 +861,21 @@ const zhHans: CVData = {
       period: '2025 年 11 月 – 至今',
       company: '大同世界科技（Tatung System Technologies）',
       location: '台北市中山区',
-      role: 'GenAI 工程师',
+      role: '全栈 GenAI 工程师',
       bullets: [
-        '将 LLM AI Agent 导入办公室自动化，建立公司内部网页应用，让表单填写与分类自动化。',
-        '于项目中为客户构建企业资产管理系统，集成混合 AI Agent、Document Search、Tool Call、<strong>RAG</strong> 与 BM25，具备 S3 兼容文件管理、GIS 地理坐标、Agent 式 SQL 查询与 AI Agent 性能自动评估；以 <strong>RTX PRO 6000</strong> GPU 本地部署模型并支持 Multi-Token Prediction，推理服务运行于 Kubernetes 上的 vLLM 与 llama.cpp，采多卡运行。',
-        '参与 <strong>WAF（CrowdSec）</strong>与 <strong>Vault（OpenBao）</strong>搭建，打造可靠且安全的容器化环境。',
-        '参与基于 Agent 的名片自动化系统搭建。',
-        '协助导入 GPU Server 集群，并协助建立大语言模型部署标准操作流程。',
-        '主导生成式 AI Agent 网页应用的全栈开发，采用 React.js、FastAPI 与 LangGraph 多代理协作。',
-        '规划并运维容器化 GPU 集群，以 <strong>NVIDIA GPU Operator 与 HAMi</strong> 优化计算密度与 vGPU 分配。',
-        '开发自定义 QR Code 应用，并以 RabbitMQ 构建高吞吐异步消息队列。',
+        '为房地产租赁业客户构建企业级房地产租赁管理系统，含 13 个功能模块与 21 个侧边栏页面，从系统设计、应用开发到基础设施建设全程负责：混合 AI Agent、文档搜索、工具调用、横跨 8 类业务实体的向量与 BM25（PGroonga）混合检索 <strong>RAG</strong>、S3 兼容文件管理、GIS 地理坐标、Agent 式 SQL 查询，以及 Agent 自动评测；并以双层防护（Row-Level Security 与只读数据库账号）管控数据访问。',
+        '构建公司内部的物料自动化系统，自动判读采购单与报价单并转换为 SAP 物料主档数据，取代 113 位使用者的人工逐笔录入：AI 提取中位数 41 秒，人工约需 15 分钟（约 22 倍速；22 笔批次中 4 笔转人工复核）。',
+        '在单张 H100 上把 120B 模型的可用上下文从约 30K 提升到 1M tokens：将 KV Cache 卸载至 CPU RAM（140 GB），搭配 FP8 KV Cache 量化与 Multi-Token Prediction 投机解码；实测单请求 990,016 tokens，10 次全部成功、零抢占。',
+        '在客户的 <strong>RTX PRO 6000</strong> GPU 上部署本地 LLM 并支持 Multi-Token Prediction，于同一个 Kubernetes 集群上以多卡并行运行 vLLM 与 llama.cpp 提供推理服务。',
+        '为金融业客户的 AI 平台交付容器加固与安全扫描：6 个 SUSE Linux Enterprise 16.1 加固镜像（全部非 root），Trivy、SUSE OVAL 与 OSV-Scanner 扫描 0 漏洞，PCI-DSS v4.0.1 配置基线检查 0 项失败。',
+        '为金融业客户进行 AI Agent 平台的前期架构设计：规划 AI Agent 服务在 Kubernetes 上的部署架构，整合外部 API 与 SQL Agent，并以 Azure OpenAI 作为模型后端。',
+        '以 NVIDIA GPU Operator 与 <strong>HAMi</strong> vGPU 切分部署容器化 GPU 集群，承载该房地产租赁管理系统的 AI 工作负载，在共享 GPU 上最大化计算密度。',
+        '为该房地产租赁管理系统搭建 <strong>WAF（CrowdSec）</strong>与 <strong>Vault（OpenBao）</strong>，打造可靠且安全的容器化基础设施。',
+        '设计该房地产租赁管理系统的双消息架构：以 RabbitMQ 处理长时间的 AI 文档提取任务，以 Valkey Stream 处理 Agent 之间的通信与对话状态，任务取消由后端 API 直接处理。',
+        '参与基于 Agent 的名片自动化系统搭建，并开发自定义 QR Code 应用与高吞吐异步消息队列。',
       ],
       stack:
-        'React.js、FastAPI、LangGraph、SQL Server、PostgreSQL、RabbitMQ、IIS、HAMi、GPU Operator、Longhorn、Cloudflare Tunnel、llama.cpp',
+        'React.js、FastAPI、LangGraph、vLLM、llama.cpp、Azure OpenAI、PGroonga、Valkey、RabbitMQ、PostgreSQL、Kubernetes、Kubespray、Helm、NVIDIA GPU Operator、HAMi、Longhorn、CrowdSec、OpenBao',
     },
     {
       tag: 'NODE // ACADEMIC ADVISORY',

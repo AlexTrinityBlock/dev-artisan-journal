@@ -129,10 +129,10 @@ const en: UIStrings = {
   site: {
     title: 'DEV ARTISAN // JOURNAL — Alex.Hsiao',
     description:
-      'Technical publication & systems architecture journal of Alex.Hsiao — FullStack & GenAI Systems Architect.',
+      'Technical publication & systems architecture journal of Alex.Hsiao — Full-Stack GenAI Engineer.',
   },
   header: {
-    logoSub: 'Alex.Hsiao · FullStack & GenAI Architect',
+    logoSub: 'Alex.Hsiao · Full-Stack GenAI Engineer',
     beacon: 'System Active: Taipei Node',
     navLabel: 'Main Navigation',
     nav: {
@@ -176,8 +176,8 @@ const en: UIStrings = {
   },
   author: {
     tag: 'AUTHOR PROFILE // 01',
-    role: 'FullStack Engineer & GenAI Systems Architect',
-    bio: 'GenAI Engineer specializing in on-premises bare-metal GPU clustering (NVIDIA GPU Operator & HAMi), stateful Multi-Agent LLMs with LangGraph, distributed microservices, and ISO/IEC 27001 ISMS governance.',
+    role: 'Full-Stack GenAI Engineer',
+    bio: 'Full-Stack GenAI Engineer specializing in LLM agents and RAG pipelines, on-premises GPU clustering (NVIDIA GPU Operator & HAMi), stateful Multi-Agent LLMs with LangGraph, distributed microservices, and ISO/IEC 27001 ISMS governance.',
     button: 'Full Profile & CV',
     creds: [
       'NVIDIA GenAI',
@@ -191,7 +191,7 @@ const en: UIStrings = {
   articles: {
     metaTitle: 'Articles — DEV ARTISAN // JOURNAL',
     metaDescription:
-      'Technical articles and architecture dispatches by Alex.Hsiao — FullStack & GenAI Systems Architect.',
+      'Technical articles and architecture dispatches by Alex.Hsiao — Full-Stack GenAI Engineer.',
     tag: 'SYSTEM // 02 · TECHNICAL DISPATCHES',
     title: 'Articles & Architecture Briefs',
     desc: (posts, domains) =>
@@ -202,7 +202,7 @@ const en: UIStrings = {
     emptyDesc:
       'The journal is fresh. Engineering articles on GPU clusters, multi-agent systems, and infrastructure will land here soon.',
     authorTag: 'SYSTEM // AUTHOR',
-    authorRole: 'GenAI Engineer',
+    authorRole: 'Full-Stack GenAI Engineer',
     authorBio:
       'Specializing in full-stack Python & Node systems, distributed message brokers (RabbitMQ), Kubernetes vGPU virtualization, and cloud infrastructure.',
     cvButton: 'View Profile & Credentials',
@@ -249,7 +249,7 @@ const en: UIStrings = {
     prev: '← PREVIOUS ARTICLE',
     next: 'NEXT ARTICLE →',
     backToArticles: 'Back to All Articles',
-    authorTitle: 'FullStack & GenAI Architect · CKA & ISO 27001 Auditor',
+    authorTitle: 'Full-Stack GenAI Engineer · CKA & ISO 27001 Auditor',
     readTime: (minutes) => `${minutes} min read`,
     translationPending: 'Not translated yet',
     viewOriginal: 'Read the English original',
@@ -266,10 +266,10 @@ const zhHant: UIStrings = {
   site: {
     title: 'DEV ARTISAN // JOURNAL — Alex.Hsiao',
     description:
-      'Alex.Hsiao 的技術刊物與系統架構筆記 — 全端與 GenAI 系統架構師。',
+      'Alex.Hsiao 的技術刊物與系統架構筆記 — 全端 GenAI 工程師。',
   },
   header: {
-    logoSub: 'Alex.Hsiao · 全端與 GenAI 架構師',
+    logoSub: 'Alex.Hsiao · 全端 GenAI 工程師',
     beacon: '系統運作中：台北節點',
     navLabel: '主要導覽',
     nav: {
@@ -313,8 +313,8 @@ const zhHant: UIStrings = {
   },
   author: {
     tag: 'AUTHOR PROFILE // 01',
-    role: '全端工程師暨 GenAI 系統架構師',
-    bio: 'GenAI 工程師，專精於地端裸機 GPU 叢集（NVIDIA GPU Operator 與 HAMi）、以 LangGraph 建構具狀態的多代理 LLM 系統、分散式微服務，以及 ISO/IEC 27001 ISMS 治理。',
+    role: '全端 GenAI 工程師',
+    bio: '全端 GenAI 工程師，專精於 LLM Agent 與 RAG 檢索流程、地端 GPU 叢集（NVIDIA GPU Operator 與 HAMi）、以 LangGraph 建構具狀態的多代理 LLM 系統、分散式微服務，以及 ISO/IEC 27001 ISMS 治理。',
     button: '完整履歷與簡介',
     creds: [
       'NVIDIA GenAI',
@@ -328,7 +328,7 @@ const zhHant: UIStrings = {
   articles: {
     metaTitle: '文章 — DEV ARTISAN // JOURNAL',
     metaDescription:
-      'Alex.Hsiao 的技術文章與架構筆記 — 全端與 GenAI 系統架構師。',
+      'Alex.Hsiao 的技術文章與架構筆記 — 全端 GenAI 工程師。',
     tag: 'SYSTEM // 02 · TECHNICAL DISPATCHES',
     title: '文章與架構簡報',
     desc: (posts, domains) =>
@@ -339,7 +339,7 @@ const zhHant: UIStrings = {
     emptyDesc:
       '刊物剛剛起步。關於 GPU 叢集、多代理系統與基礎設施的工程文章即將陸續上線。',
     authorTag: 'SYSTEM // AUTHOR',
-    authorRole: 'GenAI 工程師',
+    authorRole: '全端 GenAI 工程師',
     authorBio:
       '專精於 Python 與 Node 全端系統、分散式訊息中介（RabbitMQ）、Kubernetes vGPU 虛擬化與雲端基礎設施。',
     cvButton: '檢視簡介與認證',
@@ -384,7 +384,7 @@ const zhHant: UIStrings = {
     prev: '← 上一篇',
     next: '下一篇 →',
     backToArticles: '回到文章列表',
-    authorTitle: '全端與 GenAI 架構師 · CKA 與 ISO 27001 主導稽核員',
+    authorTitle: '全端 GenAI 工程師 · CKA 與 ISO 27001 主導稽核員',
     readTime: (minutes) => `約 ${minutes} 分鐘`,
     translationPending: '尚未翻譯',
     viewOriginal: '閱讀英文原文',
@@ -401,10 +401,10 @@ const zhHans: UIStrings = {
   site: {
     title: 'DEV ARTISAN // JOURNAL — Alex.Hsiao',
     description:
-      'Alex.Hsiao 的技术刊物与系统架构笔记 — 全栈与 GenAI 系统架构师。',
+      'Alex.Hsiao 的技术刊物与系统架构笔记 — 全栈 GenAI 工程师。',
   },
   header: {
-    logoSub: 'Alex.Hsiao · 全栈与 GenAI 架构师',
+    logoSub: 'Alex.Hsiao · 全栈 GenAI 工程师',
     beacon: '系统运行中：台北节点',
     navLabel: '主导航',
     nav: {
@@ -448,8 +448,8 @@ const zhHans: UIStrings = {
   },
   author: {
     tag: 'AUTHOR PROFILE // 01',
-    role: '全栈工程师暨 GenAI 系统架构师',
-    bio: 'GenAI 工程师，专精于本地裸机 GPU 集群（NVIDIA GPU Operator 与 HAMi）、以 LangGraph 构建有状态的多代理 LLM 系统、分布式微服务，以及 ISO/IEC 27001 ISMS 治理。',
+    role: '全栈 GenAI 工程师',
+    bio: '全栈 GenAI 工程师，专精于 LLM Agent 与 RAG 检索流程、本地 GPU 集群（NVIDIA GPU Operator 与 HAMi）、以 LangGraph 构建有状态的多代理 LLM 系统、分布式微服务，以及 ISO/IEC 27001 ISMS 治理。',
     button: '完整履历与简介',
     creds: [
       'NVIDIA GenAI',
@@ -463,7 +463,7 @@ const zhHans: UIStrings = {
   articles: {
     metaTitle: '文章 — DEV ARTISAN // JOURNAL',
     metaDescription:
-      'Alex.Hsiao 的技术文章与架构笔记 — 全栈与 GenAI 系统架构师。',
+      'Alex.Hsiao 的技术文章与架构笔记 — 全栈 GenAI 工程师。',
     tag: 'SYSTEM // 02 · TECHNICAL DISPATCHES',
     title: '文章与架构简报',
     desc: (posts, domains) =>
@@ -474,7 +474,7 @@ const zhHans: UIStrings = {
     emptyDesc:
       '刊物刚刚起步。关于 GPU 集群、多代理系统与基础设施的工程文章即将陆续上线。',
     authorTag: 'SYSTEM // AUTHOR',
-    authorRole: 'GenAI 工程师',
+    authorRole: '全栈 GenAI 工程师',
     authorBio:
       '专精于 Python 与 Node 全栈系统、分布式消息中间件（RabbitMQ）、Kubernetes vGPU 虚拟化与云基础设施。',
     cvButton: '查看简介与认证',
@@ -519,7 +519,7 @@ const zhHans: UIStrings = {
     prev: '← 上一篇',
     next: '下一篇 →',
     backToArticles: '返回文章列表',
-    authorTitle: '全栈与 GenAI 架构师 · CKA 与 ISO 27001 主任审核员',
+    authorTitle: '全栈 GenAI 工程师 · CKA 与 ISO 27001 主任审核员',
     readTime: (minutes) => `约 ${minutes} 分钟`,
     translationPending: '尚未翻译',
     viewOriginal: '阅读英文原文',
