@@ -284,6 +284,17 @@ const en: CVData = {
         'React.js, FastAPI, LangGraph, vLLM, llama.cpp, Azure OpenAI, PGroonga, Valkey, RabbitMQ, PostgreSQL, Kubernetes, Kubespray, Helm, NVIDIA GPU Operator, HAMi, Longhorn, CrowdSec, OpenBao',
     },
     {
+      tag: 'NODE // TECHNICAL TRAINING',
+      period: 'SEP 2026 – DEC 2026 (IN PROGRESS)',
+      company: 'Gtalent Education (大數智能教育)',
+      location: 'Live online',
+      role: 'Technical Instructor — NVIDIA NCA-GENL',
+      bullets: [
+        'Teaching the NVIDIA NCA-GENL generative AI associate certification program: 5 modules and 32 one-hour live-online sessions delivered on weekends (15 of 32 sessions completed as of Nov 2026).',
+        'Built the syllabus from NVIDIA’s official NCA-GENL exam study guide, spanning core machine learning, data analysis, experimentation, LLM software development and trustworthy AI, with PyTorch/Keras labs and paper readings from Transformer architectures to KV-cache compression.',
+      ],
+    },
+    {
       tag: 'NODE // ACADEMIC ADVISORY',
       period: 'SEP 2025 – JUN 2026',
       company: 'AIGC Research Club, National Chiayi University',
@@ -581,6 +592,17 @@ const zhHant: CVData = {
         'React.js、FastAPI、LangGraph、vLLM、llama.cpp、Azure OpenAI、PGroonga、Valkey、RabbitMQ、PostgreSQL、Kubernetes、Kubespray、Helm、NVIDIA GPU Operator、HAMi、Longhorn、CrowdSec、OpenBao',
     },
     {
+      tag: 'NODE // TECHNICAL TRAINING',
+      period: '2026 年 9 月 – 2026 年 12 月（進行中）',
+      company: '大數智能教育（Gtalent Education）',
+      location: '線上直播',
+      role: 'NVIDIA NCA-GENL 生成式 AI 助理級證照班 講師',
+      bullets: [
+        '講授 NVIDIA NCA-GENL 生成式 AI 助理級證照課程：5 篇章、32 堂各 1 小時的線上直播課，週末授課（截至 2026 年 11 月已完成 15 堂）。',
+        '依 NVIDIA 官方 NCA-GENL 考試學習手冊規劃課綱，涵蓋機器學習核心、資料分析、實驗實作、LLM 軟體開發與可信賴 AI，搭配 PyTorch／Keras 實作與論文導讀（自 Transformer 架構到 KV Cache 壓縮）。',
+      ],
+    },
+    {
       tag: 'NODE // ACADEMIC ADVISORY',
       period: '2025 年 9 月 – 2026 年 6 月',
       company: '國立嘉義大學 AIGC 研究社',
@@ -876,6 +898,17 @@ const zhHans: CVData = {
       ],
       stack:
         'React.js、FastAPI、LangGraph、vLLM、llama.cpp、Azure OpenAI、PGroonga、Valkey、RabbitMQ、PostgreSQL、Kubernetes、Kubespray、Helm、NVIDIA GPU Operator、HAMi、Longhorn、CrowdSec、OpenBao',
+    },
+    {
+      tag: 'NODE // TECHNICAL TRAINING',
+      period: '2026 年 9 月 – 2026 年 12 月（进行中）',
+      company: '大数智能教育（Gtalent Education）',
+      location: '线上直播',
+      role: 'NVIDIA NCA-GENL 生成式 AI 助理级证照班 讲师',
+      bullets: [
+        '讲授 NVIDIA NCA-GENL 生成式 AI 助理级证照课程：5 篇章、32 堂各 1 小时的线上直播课，周末授课（截至 2026 年 11 月已完成 15 堂）。',
+        '依 NVIDIA 官方 NCA-GENL 考试学习手册规划课纲，涵盖机器学习核心、数据分析、实验实作、LLM 软件开发与可信赖 AI，搭配 PyTorch／Keras 实作与论文导读（自 Transformer 架构到 KV Cache 压缩）。',
+      ],
     },
     {
       tag: 'NODE // ACADEMIC ADVISORY',

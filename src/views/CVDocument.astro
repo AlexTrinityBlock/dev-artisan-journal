@@ -73,13 +73,16 @@ const site = new URL(Astro.site ?? 'https://blog.alextrinitywolf.com').host;
 // A CV stays readable at two pages; the site keeps the full bullet list.
 const bulletLimit: Record<string, number> = {
   'NODE // CURRENT': 4,
+  'NODE // TECHNICAL TRAINING': 1,
   'NODE // ACADEMIC ADVISORY': 1,
   'NODE // NATIONAL CYBER SECURITY': 2,
   'NODE // CLOUD ARCHITECTURE': 2,
   'NODE // RESEARCH & THESIS': 2,
   'NODE // EARLY CAREER': 1,
 };
-const jobs = data.timeline.map((entry) => ({
+// The print CV stops at 2021: the four-month 2019 web role stays on the site only.
+const printedTimeline = data.timeline.filter((entry) => entry.tag !== 'NODE // EARLY CAREER');
+const jobs = printedTimeline.map((entry) => ({
   ...entry,
   shown: entry.bullets.slice(0, bulletLimit[entry.tag] ?? entry.bullets.length),
 }));
@@ -376,7 +379,7 @@ const icons = {
         display: grid;
         grid-template-columns: 38mm 1fr;
         gap: 6mm;
-        padding: 1.6mm 0;
+        padding: 1.5mm 0;
         border-bottom: 0.7px solid var(--mono-grid);
         break-inside: avoid;
       }
@@ -488,7 +491,7 @@ const icons = {
 
       /* Page two carries fewer blocks, so it gets a roomier rhythm. */
       .page:last-of-type section {
-        margin-top: 5mm;
+        margin-top: 4.6mm;
       }
 
       .page:last-of-type .row {
