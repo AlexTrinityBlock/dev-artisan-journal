@@ -29,7 +29,14 @@ readTime: "22 min read"
 
 本文所有差距都是**百分点**：从 45% 到 46% 是 +1 个百分点。0.13 个百分点几乎是平手；5 个百分点就是明显差距。
 
-<p class="ragx-paper-link"><span>原始论文</span> <a href="https://arxiv.org/abs/2610.30755" target="_blank" rel="noopener noreferrer">arXiv:2610.30755 ↗</a></p>
+<div class="ragx-paper-cta">
+  <a class="mono-btn-chamfer ragx-paper-btn" href="https://arxiv.org/abs/2610.30755" target="_blank" rel="noopener noreferrer">
+    <span class="chamfer-inner">
+      <span class="btn-tag">ARXIV</span>
+      <span class="btn-label">阅读论文 ↗</span>
+    </span>
+  </a>
+</div>
 
 <div class="chamfer-card-wrapper ragx-card">
   <div class="chamfer-card-content">
@@ -1069,7 +1076,7 @@ MemoryAgentBench 的四种能力之一是 **test-time learning（测试时学习
 
 | 章节 | 约略 tokens | 256/32 窗口数 | 建议 reader 单位 |
 | :-- | --: | --: | :-- |
-| 开头 + 论点 | 1,077 | 5 | 3–5 个窗口 |
+| 开头 + 论点 | 1,070 | 5 | 3–5 个窗口 |
 | 「Naive」的意思 | 1,003 | 5 | 3–5 个窗口 |
 | Benchmark 地图 | 1,259 | 6 | 3–6 个窗口 |
 | 为什么 coverage 会赢 | 614 | 3 | 2–3 个窗口 |
@@ -1080,7 +1087,7 @@ MemoryAgentBench 的四种能力之一是 **test-time learning（测试时学习
 | 成本 | 779 | 4 | 2–4 个窗口 |
 | 切块规格 | 1,139 | 5 | 3–5 个窗口 |
 | 保留意见 + 检查清单 | 782 | 4 | 2–4 个窗口 |
-| **正文合计** | **9,935** | **48** | **Top-15 = 展开前 3,840 tokens** |
+| **正文合计** | **9,928** | **48** | **Top-15 = 展开前 3,840 tokens** |
 
 两个实务提醒：
 
@@ -1397,6 +1404,8 @@ article.prose-inner .ragx-kicker + h2 { margin-top: 4px; }
 article.prose-inner p.ragx-paper-link { display: flex; align-items: baseline; gap: 8px; font-family: var(--mono-font-mono); font-size: 8px; font-weight: 600; letter-spacing: 0.1em; color: var(--mono-muted); margin: 0 0 18px; }
 .ragx-paper-link a { color: var(--mono-ink); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 0.7px; }
 .ragx-paper-link a:hover { text-decoration-thickness: 1.2px; }
+.ragx-paper-cta { margin: 0 0 22px; }
+.ragx-paper-cta .mono-btn-chamfer { vertical-align: middle; }
 
 
 .mx-card { width: 100%; }

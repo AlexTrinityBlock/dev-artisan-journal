@@ -29,7 +29,14 @@ Two things sit outside that count. **Full-context** is not a memory system; it i
 
 All gaps in this article are in **percentage points**: moving from 45% to 46% is +1 point. A 0.13-point gap is essentially a tie; a 5-point gap is substantial.
 
-<p class="ragx-paper-link"><span>ORIGINAL PAPER</span> <a href="https://arxiv.org/abs/2610.30755" target="_blank" rel="noopener noreferrer">arXiv:2610.30755 ↗</a></p>
+<div class="ragx-paper-cta">
+  <a class="mono-btn-chamfer ragx-paper-btn" href="https://arxiv.org/abs/2610.30755" target="_blank" rel="noopener noreferrer">
+    <span class="chamfer-inner">
+      <span class="btn-tag">ARXIV</span>
+      <span class="btn-label">READ THE PAPER ↗</span>
+    </span>
+  </a>
+</div>
 
 <div class="chamfer-card-wrapper ragx-card">
   <div class="chamfer-card-content">
@@ -1069,7 +1076,7 @@ I ran the same tokenizer over the body of this post. The counts below exclude fr
 
 | Section | Approx. tokens | Windows @ 256/32 | Recommended reader unit |
 | :-- | --: | --: | :-- |
-| Opening + thesis | 946 | 5 | 3–5 windows |
+| Opening + thesis | 941 | 5 | 3–5 windows |
 | What "naive" means | 787 | 4 | 2–4 windows |
 | Benchmark map | 1,057 | 5 | 3–5 windows |
 | Why coverage wins | 567 | 3 | 2–3 windows |
@@ -1080,7 +1087,7 @@ I ran the same tokenizer over the body of this post. The counts below exclude fr
 | Cost | 718 | 4 | 2–3 windows |
 | Chunking spec | 1,000 | 5 | 3–5 windows |
 | Caveats + checklist | 646 | 4 | 2–4 windows |
-| **Total body** | **8,490** | **44** | **Top-15 = 3,840 tokens before expansion** |
+| **Total body** | **8,485** | **44** | **Top-15 = 3,840 tokens before expansion** |
 
 Two practical notes:
 
@@ -1397,6 +1404,8 @@ article.prose-inner .ragx-kicker + h2 { margin-top: 4px; }
 article.prose-inner p.ragx-paper-link { display: flex; align-items: baseline; gap: 8px; font-family: var(--mono-font-mono); font-size: 8px; font-weight: 600; letter-spacing: 0.1em; color: var(--mono-muted); margin: 0 0 18px; }
 .ragx-paper-link a { color: var(--mono-ink); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 0.7px; }
 .ragx-paper-link a:hover { text-decoration-thickness: 1.2px; }
+.ragx-paper-cta { margin: 0 0 22px; }
+.ragx-paper-cta .mono-btn-chamfer { vertical-align: middle; }
 
 
 .mx-card { width: 100%; }

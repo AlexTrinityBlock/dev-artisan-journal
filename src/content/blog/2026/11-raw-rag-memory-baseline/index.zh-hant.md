@@ -29,7 +29,14 @@ readTime: "22 min read"
 
 本文所有差距都是**百分點**：從 45% 到 46% 是 +1 個百分點。0.13 個百分點幾乎是平手；5 個百分點就是明顯差距。
 
-<p class="ragx-paper-link"><span>原始論文</span> <a href="https://arxiv.org/abs/2610.30755" target="_blank" rel="noopener noreferrer">arXiv:2610.30755 ↗</a></p>
+<div class="ragx-paper-cta">
+  <a class="mono-btn-chamfer ragx-paper-btn" href="https://arxiv.org/abs/2610.30755" target="_blank" rel="noopener noreferrer">
+    <span class="chamfer-inner">
+      <span class="btn-tag">ARXIV</span>
+      <span class="btn-label">閱讀論文 ↗</span>
+    </span>
+  </a>
+</div>
 
 <div class="chamfer-card-wrapper ragx-card">
   <div class="chamfer-card-content">
@@ -1069,7 +1076,7 @@ MemoryAgentBench 的四種能力之一是 **test-time learning（測試時學習
 
 | 章節 | 約略 tokens | 256/32 窗格數 | 建議 reader 單位 |
 | :-- | --: | --: | :-- |
-| 開頭 + 論點 | 1,230 | 6 | 3–6 個窗格 |
+| 開頭 + 論點 | 1,225 | 6 | 3–6 個窗格 |
 | 「Naive」的意思 | 1,129 | 5 | 3–5 個窗格 |
 | Benchmark 地圖 | 1,412 | 7 | 4–7 個窗格 |
 | 為什麼 coverage 會贏 | 707 | 4 | 2–4 個窗格 |
@@ -1080,7 +1087,7 @@ MemoryAgentBench 的四種能力之一是 **test-time learning（測試時學習
 | 成本 | 840 | 4 | 2–4 個窗格 |
 | 切塊規格 | 1,253 | 6 | 3–6 個窗格 |
 | 保留意見 + 檢查清單 | 915 | 4 | 2–4 個窗格 |
-| **正文合計** | **11,209** | **54** | **Top-15 = 展開前 3,840 tokens** |
+| **正文合計** | **11,204** | **54** | **Top-15 = 展開前 3,840 tokens** |
 
 兩個實務提醒：
 
@@ -1397,6 +1404,8 @@ article.prose-inner .ragx-kicker + h2 { margin-top: 4px; }
 article.prose-inner p.ragx-paper-link { display: flex; align-items: baseline; gap: 8px; font-family: var(--mono-font-mono); font-size: 8px; font-weight: 600; letter-spacing: 0.1em; color: var(--mono-muted); margin: 0 0 18px; }
 .ragx-paper-link a { color: var(--mono-ink); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 0.7px; }
 .ragx-paper-link a:hover { text-decoration-thickness: 1.2px; }
+.ragx-paper-cta { margin: 0 0 22px; }
+.ragx-paper-cta .mono-btn-chamfer { vertical-align: middle; }
 
 
 .mx-card { width: 100%; }
