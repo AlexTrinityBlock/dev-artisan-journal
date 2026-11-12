@@ -6,7 +6,7 @@ category: "AI"
 tags: ["RAG", "Memory", "LLM", "PaperNotes", "Retrieval"]
 featured: false
 author: "Alex.Hsiao"
-readTime: "25 min read"
+readTime: "27 min read"
 ---
 
 # Raw History Is the Memory System: What a Naive RAG Baseline Exposes
@@ -696,6 +696,11 @@ The chart above is precise but unfriendly. Here is the same pipeline translated 
   </div>
 </div>
 
+<figure class="fig">
+  <img src="/images/raw-rag/fig03-pipelines.png" alt="Three side-by-side pipeline diagrams for Memora, EverMemOS, and raw RAG, arranged in build, store, and recall rows" width="2040" height="1225" loading="lazy" />
+  <figcaption><b>Fig. 3 (paper)</b> — Three pipelines side by side — Memora, EverMemOS, and the paper's raw RAG — read top to bottom through build, store, and recall. The right-hand column is the whole argument: dialogue becomes flat chunks, chunks become embeddings, and top-k plus a reranker carry recall, with no extraction, graph, or profile anywhere. Source: <a href="https://arxiv.org/abs/2610.30755">Bao et al., arXiv:2610.30755</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
+
 The paper reports a 256-token window as the default, but the ablation shows the exact size is not sacred: windows from **128 to 1,024 tokens** do not significantly change the MemoryAgentBench total. What does matter is **reranking** and **moderate depth**. Removing the cross-encoder costs **3.92 percentage points**. Returning only one item costs **11.73 percentage points**. Returning 120 items costs **14.57 percentage points**, mostly on long-range understanding and conflict resolution.
 
 <div class="ragx-kicker"><svg class="ragx-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ragx-i-clipboard-list"></use></svg><span>SECTION 02</span></div>
@@ -902,6 +907,11 @@ The complete-store oracle pushes the argument further. *Gold* means the answer k
 
 Every system improves when retrieval is taken out of the equation. But the systems that preserve raw conversational content — Raw-RAG and MemMachine — recover closest to the raw-evidence ceiling. The transformed stores remain further away. Raw-RAG's 57.54 is still about four percentage points below the 61.60 raw-evidence ceiling, and that residue is what ingestion already threw away: merged fields, summaries that smoothed over a correction, facts detached from their source. Complete access cannot reconstruct what was never stored.
 
+<figure class="fig">
+  <img src="/images/raw-rag/fig05-complete-store.png" alt="Grouped horizontal bars for seven systems on MEME comparing native retrieval with complete-store accuracy against a dashed raw-evidence ceiling, with the gap to raw listed at right" width="2800" height="2204" loading="lazy" />
+  <figcaption><b>Fig. 5 (paper)</b> — GPT-4o-mini on MEME: native retrieval versus complete store, with the gap to raw evidence on the right. The dashed line is the 61.60 raw-evidence ceiling, and the whiskers on the complete-store bars are paired 95% intervals. Handing every system its own complete store lifts all seven, but only the two that kept raw conversation — Raw-RAG and MemMachine — land within about four points of the ceiling. Source: <a href="https://arxiv.org/abs/2610.30755">Bao et al., arXiv:2610.30755</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
+
 The authors are careful about the interpretation: the residual gap is not a pure measure of information loss. Evidence assembly, ordering, and position effects such as *lost in the middle* can also contribute. But the direction is consistent, and it matches the path analysis.
 
 <div class="ragx-kicker"><svg class="ragx-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ragx-i-history"></use></svg><span>SECTION 05</span></div>
@@ -915,6 +925,11 @@ A memory layer like Mem0 reads a new message and decides what to do with it: **A
 A concrete example: the user says "I live in Munich." Later they say "I moved to Berlin." An **UPDATE** overwrites the Munich memory with Berlin. An **append-only ADD** keeps both, with timestamps, so the reader can see that Berlin is newer. A **DELETE** removes the Munich memory. **NONE** leaves both untouched.
 
 On LoCoMo, UPDATE and DELETE together are only **4.39% of 33,902 decisions**. On LongMemEval, **where each of the 500 questions carries its own ~115k-token history**, they are **2.46% of 428,858 decisions**; the decision count is much larger than the question count because every history is processed separately. "Effective mutations" — updates or deletions that actually changed stored text — are only **1.90%** and **1.34%**; many proposed updates were duplicates or malformed.
+
+<figure class="fig">
+  <img src="/images/raw-rag/fig02-mem0-mutations.png" alt="Two-panel chart of Mem0 write decisions: stacked composition bars for LoCoMo and LongMemEval on top, and per-conversation proposed versus effective update-and-delete rates below" width="3200" height="1476" loading="lazy" />
+  <figcaption><b>Fig. 2 (paper)</b> — Mem0 proposes few mutations, and fewer still take effect. Top: distribution of write actions. Bottom: per-conversation proposed and effective mutation rates on LoCoMo (left) and LongMemEval (right); dashed lines are decision-weighted means, and every rate is a share of emitted decisions. The practical read: most decisions are NONE, and in every LoCoMo conversation the effective bar sits below the proposed bar — the layer rewrites far less than its own policy implies. Source: <a href="https://arxiv.org/abs/2610.30755">Bao et al., arXiv:2610.30755</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
 
 Then the authors run a simple experiment: replace UPDATE with **append-only ADD** (keep the old memory and add the new one), and DELETE with **NONE** (do nothing). If accuracy does not drop, the explicit rewrite was not helping on this benchmark. LoCoMo accuracy rises from **67.36% to 69.42%**, and no category drops.
 
@@ -1001,6 +1016,11 @@ Three different timing tests are summarised here, and they answer three differen
 | Mem0 | 4,025.23 | 117.72 | 4,142.95 |
 | EverMemOS | 8,217.69 | 1,083.79 | 9,301.48 |
 
+<figure class="fig">
+  <img src="/images/raw-rag/fig01-accuracy-ingestion.png" alt="Radial bar chart of accuracy for seven benchmark-model settings, beside a line chart of cumulative ingestion time against context length where Raw-RAG stays near zero and Memora reaches 27 hours" width="1963" height="1247" loading="lazy" />
+  <figcaption><b>Fig. 1 (paper)</b> — The paper's own summary: Raw-RAG is competitive on all seven settings and its ingestion cost stays flat as the BEAM conversation grows. The left panel uses truncated scales per sector, so compare within a sector, not across bar lengths. Source: <a href="https://arxiv.org/abs/2610.30755">Bao et al., arXiv:2610.30755</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
+
 **Test 2: the BEAM conversation.** This is one 1,710-message conversation approaching one million tokens, and it measures **ingestion only**. Raw-RAG takes about **20 minutes**; MemOS, the next system to finish, takes about **3¼ hours**; Memora takes nearly **27 hours**. Some systems did not finish, which is why the comparison says "next completed run." Memora is one of the systems in the BEAM comparison; it does not appear in the smaller MEME table.
 
 **Test 3: the MemoryAgentBench ablation.** This is a different benchmark (14 sources, 103K–1.44M tokens), and it measures the **three additive memory operations**: atomic facts, summaries, and graph expansion. They cost **21.6–109.3 million LLM-generated tokens** — roughly tens of thousands to a hundred thousand pages of text — and **2.9–8.8 hours** of ingest-plus-search. Raw-RAG's baseline on the **same** benchmark takes about **12 minutes**. Raw-RAG's ingestion uses embedding calls, not LLM generation, so the token comparison is not like-for-like; the time difference is the more meaningful number.
@@ -1028,6 +1048,11 @@ This is the part worth copying into a design doc. Raw-RAG's defaults are:
 | Deduplication | **Off** by default | Turning it on costs 2.39 percentage points in the tested setting. |
 | Query | Original question | No query rewriting — the user's question is not rephrased before search. |
 | Index | Flat, fixed after ingestion | One simple list, with no hierarchy, no graph, and no updates after ingestion. |
+
+<figure class="fig">
+  <img src="/images/raw-rag/fig04-topk-sensitivity.png" alt="Line chart of MemoryAgentBench total against final top-k from 1 to 120, flat between 5 and 60 and falling sharply at 120, with error bars at each point" width="2400" height="1552" loading="lazy" />
+  <figcaption><b>Fig. 4 (paper)</b> — Final top-k sensitivity: the solid line is the MemoryAgentBench total on the left axis, the right axis is the change from the default k = 15, and the error bars are paired 95% intervals. The curve is flat from k = 5 to k = 60 and only breaks at k = 120, so the exact cutoff is forgiving but returning everything is not. Source: <a href="https://arxiv.org/abs/2610.30755">Bao et al., arXiv:2610.30755</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
 
 ### One paragraph, three windows
 
@@ -1077,17 +1102,17 @@ I ran the same tokenizer over the body of this post. The counts below exclude fr
 | Section | Approx. tokens | Windows @ 256/32 | Recommended reader unit |
 | :-- | --: | --: | :-- |
 | Opening + thesis | 941 | 5 | 3–5 windows |
-| What "naive" means | 787 | 4 | 2–4 windows |
+| What "naive" means | 888 | 4 | 2–4 windows |
 | Benchmark map | 1,057 | 5 | 3–5 windows |
 | Why coverage wins | 567 | 3 | 2–3 windows |
-| Paths and complete store | 941 | 5 | 3–5 windows |
-| Mutation audit | 646 | 3 | 2–3 windows |
+| Paths and complete store | 1,063 | 5 | 3–5 windows |
+| Mutation audit | 774 | 4 | 2–4 windows |
 | Where complexity wins | 380 | 2 | 1–2 windows |
 | Ablations | 802 | 4 | 2–4 windows |
-| Cost | 718 | 4 | 2–3 windows |
-| Chunking spec | 1,000 | 5 | 3–5 windows |
+| Cost | 796 | 4 | 2–4 windows |
+| Chunking spec | 1,109 | 5 | 3–5 windows |
 | Caveats + checklist | 646 | 4 | 2–4 windows |
-| **Total body** | **8,485** | **44** | **Top-15 = 3,840 tokens before expansion** |
+| **Total body** | **9,023** | **45** | **Top-15 = 3,840 tokens before expansion** |
 
 Two practical notes:
 

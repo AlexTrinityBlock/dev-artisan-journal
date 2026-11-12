@@ -696,6 +696,11 @@ readTime: "22 min read"
   </div>
 </div>
 
+<figure class="fig">
+  <img src="/images/raw-rag/fig03-pipelines.png" alt="Memora、EverMemOS 與 Raw-RAG 三條管線並排，依 build、store、recall 三列由上而下對照" width="2040" height="1225" loading="lazy" />
+  <figcaption><b>圖 3（論文原圖）</b> — 三條管線並排——Memora、EverMemOS，以及論文自己的簡單 RAG（naive RAG）——由上而下依 build、store、recall 三個階段對照。最右欄就是整篇論文的論點：對話變成平坦 chunk，chunk 變成 embedding，再靠 top-k 與 reranker 完成 recall；全程沒有抽取、沒有圖譜，也沒有使用者畫像。來源：<a href="https://arxiv.org/abs/2610.30755">Bao et al., arXiv:2610.30755</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
+
 論文預設 256-token 窗格，但消融實驗顯示這個數字不是神聖的：**128 到 1,024 token** 的窗格對 MemoryAgentBench 總分沒有顯著影響。真正有影響的是 **reranking** 與 **適度的檢索深度**。移除 cross-encoder 會掉 **3.92 個百分點**；只回傳一個項目會掉 **11.73 個百分點**；回傳 120 個項目會掉 **14.57 個百分點**，主要發生在 long-range understanding 與 conflict resolution。
 
 <div class="ragx-kicker"><svg class="ragx-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ragx-i-clipboard-list"></use></svg><span>章節 02</span></div>
@@ -902,6 +907,11 @@ Complete-store oracle 把論點推得更遠。*Gold* 指的是答案卷：作者
 
 把檢索從方程式中拿掉之後，每個系統都變好。但保留原始對話內容的系統——Raw-RAG 與 MemMachine——最接近 raw-evidence 天花板。被轉換過的 store 差距更大。Raw-RAG 的 57.54 離 61.60 還有約 4 個百分點，那就是 ingestion 留下的殘影：被合併的欄位、把更正磨平的摘要、失去來源的事實。再完整的存取權，也重建不了當初沒有存下的東西。
 
+<figure class="fig">
+  <img src="/images/raw-rag/fig05-complete-store.png" alt="七個系統在 MEME 上的分組橫條圖，比較原生檢索與完整 store 的準確率，並以虛線標出 raw evidence 天花板、右側列出與 raw 的差距" width="2800" height="2204" loading="lazy" />
+  <figcaption><b>圖 5（論文原圖）</b> — GPT-4o-mini 在 MEME 上：原生檢索 vs. 完整 store，右側是與 raw evidence 的差距。虛線是 61.60 的 raw-evidence 天花板，完整 store 長條上的誤差線為成對 95% 區間。把完整 store 交給每個系統，七個系統都會進步；但只有保留原始對話的 Raw-RAG 與 MemMachine，能落在距天花板約 4 個百分點以內。來源：<a href="https://arxiv.org/abs/2610.30755">Bao et al., arXiv:2610.30755</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
+
 作者對解讀很克制：殘餘差距不是純粹的資訊損失量測。證據組裝、排序，以及 *lost in the middle* 之類的位置效應，也可能有貢獻。但方向是一致的，而且與 path 分析的結果吻合。
 
 <div class="ragx-kicker"><svg class="ragx-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ragx-i-history"></use></svg><span>章節 05</span></div>
@@ -915,6 +925,11 @@ Complete-store oracle 把論點推得更遠。*Gold* 指的是答案卷：作者
 具體例子：使用者先說「我住在慕尼黑」，後來說「我搬到柏林了」。**UPDATE** 會用柏林覆蓋慕尼黑那則記憶；**append-only ADD** 會兩則都留著、各自帶時間戳，讓 reader 看得出柏林比較新；**DELETE** 會刪掉慕尼黑；**NONE** 則兩則都不動。
 
 在 LoCoMo 上，UPDATE 與 DELETE 合計只占 33,902 次決策的 **4.39%**。在 LongMemEval 上，**每一題都帶著自己的約 115k-token 歷史**，它們只占 428,858 次決策的 **2.46%**；決策數遠大於題數，因為每一段歷史都分開處理。真正造成持久文字改變的「有效變更」只有 **1.90%** 與 **1.34%**；許多提出的 update 是重複的或格式錯誤的。
+
+<figure class="fig">
+  <img src="/images/raw-rag/fig02-mem0-mutations.png" alt="Mem0 寫入決策的兩層圖表：上層是 LoCoMo 與 LongMemEval 的決策組成橫條，下層是各對話提出與有效 UPDATE+DELETE 的比率" width="3200" height="1476" loading="lazy" />
+  <figcaption><b>圖 2（論文原圖）</b> — Mem0 提出的變更很少，真正生效的更少。上：寫入動作分布。下：LoCoMo（左）與 LongMemEval（右）每段對話的提出變更率與有效變更率；虛線是依決策加權的平均，所有比率都是占全部送出決策的比例。實際讀法：大多數決策都是 NONE，而且 LoCoMo 每段對話的有效變更都低於提出變更——這一層真正改寫的幅度，遠小於它的策略所暗示的。來源：<a href="https://arxiv.org/abs/2610.30755">Bao et al., arXiv:2610.30755</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
 
 接著作者做了一個簡單實驗：把 UPDATE 換成**append-only ADD**（保留舊記憶，另外新增一則），把 DELETE 換成 **NONE**（什麼都不做）。如果準確率沒有下降，就代表在這個 benchmark 上，顯式改寫並沒有幫上忙。LoCoMo 準確率從 **67.36% 上升到 69.42%**，而且沒有任何類別下降。
 
@@ -1001,6 +1016,11 @@ MemoryAgentBench 的四種能力之一是 **test-time learning（測試時學習
 | Mem0 | 4,025.23 | 117.72 | 4,142.95 |
 | EverMemOS | 8,217.69 | 1,083.79 | 9,301.48 |
 
+<figure class="fig">
+  <img src="/images/raw-rag/fig01-accuracy-ingestion.png" alt="左為七個 benchmark–model 設定的環形長條圖，右為累積匯入時間對 context 長度的折線圖，Raw-RAG 貼近零而 Memora 達 27 小時" width="1963" height="1247" loading="lazy" />
+  <figcaption><b>圖 1（論文原圖）</b> — 論文自己的總結：Raw-RAG 在七個設定上都具競爭力，而且隨著 BEAM 對話變長，ingestion 成本幾乎不變。左圖每個扇形使用不同的截斷尺度，因此要在同一扇形內比較，不要跨扇形比長度。來源：<a href="https://arxiv.org/abs/2610.30755">Bao et al., arXiv:2610.30755</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
+
 **測試 2：BEAM 對話。** 這是一段 1,710 則訊息、接近一百萬 token 的對話，只量**匯入**。Raw-RAG 約 **20 分鐘**；下一個完成的系統 MemOS 約 **3 小時 15 分**；Memora 則要將近 **27 小時**。有些系統沒有跑完，所以文中說「下一個完成的跑分」。Memora 是 BEAM 比較中的一個系統，沒有出現在較小的 MEME 表裡。
 
 **測試 3：MemoryAgentBench 消融。** 這是另一個 benchmark（14 個來源、103K–1.44M token），量的是**三個外加的記憶操作**：原子事實、摘要與圖譜擴展。它們需要 **2,160 萬到 1.093 億個 LLM 生成 token**——大約是數萬到十萬頁文字——以及 **2.9 到 8.8 小時**的匯入加搜尋。Raw-RAG 在**同一個** benchmark 的基線約 **12 分鐘**。Raw-RAG 的匯入使用 embedding 呼叫，不是 LLM 生成，所以 token 數字不是同類比較；時間差距是比較有意義的數字。
@@ -1028,6 +1048,11 @@ MemoryAgentBench 的四種能力之一是 **test-time learning（測試時學習
 | 去重 | 預設**關閉** | 在測試設定中開啟會掉 2.39 個百分點。 |
 | Query | 原始問題 | 不做 query rewriting（改寫查詢）：使用者問什麼就搜什麼。 |
 | Index | 扁平、ingestion 後固定 | 一份簡單清單，沒有階層、沒有圖，匯入後不再更新。 |
+
+<figure class="fig">
+  <img src="/images/raw-rag/fig04-topk-sensitivity.png" alt="MemoryAgentBench 總分對 final top-k（1 到 120）的折線圖，5 到 60 之間近乎持平，120 明顯下墜，每點附誤差線" width="2400" height="1552" loading="lazy" />
+  <figcaption><b>圖 4（論文原圖）</b> — Final top-k 敏感度：實線是左軸的 MemoryAgentBench 總分，右軸是相對於預設 k = 15 的變化，誤差線為成對 95% 區間。曲線在 k = 5 到 60 之間幾乎持平，只有 k = 120 才明顯下滑——cutoff 不必抓得很精準，但把整個索引都倒給 reader 一定不行。來源：<a href="https://arxiv.org/abs/2610.30755">Bao et al., arXiv:2610.30755</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
 
 ### 一段文字，三個窗格
 
@@ -1077,17 +1102,17 @@ MemoryAgentBench 的四種能力之一是 **test-time learning（測試時學習
 | 章節 | 約略 tokens | 256/32 窗格數 | 建議 reader 單位 |
 | :-- | --: | --: | :-- |
 | 開頭 + 論點 | 1,225 | 6 | 3–6 個窗格 |
-| 「Naive」的意思 | 1,132 | 5 | 3–5 個窗格 |
+| 「Naive」的意思 | 1,266 | 6 | 3–6 個窗格 |
 | Benchmark 地圖 | 1,412 | 7 | 4–7 個窗格 |
 | 為什麼 coverage 會贏 | 707 | 4 | 2–4 個窗格 |
-| 路徑與 complete store | 1,165 | 6 | 3–6 個窗格 |
-| 變更審計 | 870 | 4 | 2–4 個窗格 |
+| 路徑與 complete store | 1,317 | 6 | 3–6 個窗格 |
+| 變更審計 | 1,036 | 5 | 3–5 個窗格 |
 | 複雜度仍有價值的地方 | 539 | 3 | 2–3 個窗格 |
 | 消融實驗 | 1,149 | 5 | 3–5 個窗格 |
-| 成本 | 840 | 4 | 2–4 個窗格 |
-| 切塊規格 | 1,253 | 6 | 3–6 個窗格 |
+| 成本 | 951 | 5 | 3–5 個窗格 |
+| 切塊規格 | 1,396 | 7 | 4–7 個窗格 |
 | 保留意見 + 檢查清單 | 915 | 4 | 2–4 個窗格 |
-| **正文合計** | **11,207** | **54** | **Top-15 = 展開前 3,840 tokens** |
+| **正文合計** | **11,913** | **58** | **Top-15 = 展開前 3,840 tokens** |
 
 兩個實務提醒：
 

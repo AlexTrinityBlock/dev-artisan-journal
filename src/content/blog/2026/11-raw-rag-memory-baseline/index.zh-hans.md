@@ -696,6 +696,11 @@ readTime: "22 min read"
   </div>
 </div>
 
+<figure class="fig">
+  <img src="/images/raw-rag/fig03-pipelines.png" alt="Memora、EverMemOS 与 Raw-RAG 三条管线并排，按 build、store、recall 三列由上而下对照" width="2040" height="1225" loading="lazy" />
+  <figcaption><b>图 3（论文原图）</b> — 三条管线并排——Memora、EverMemOS，以及论文自己的简单 RAG（naive RAG）——由上而下按 build、store、recall 三个阶段对照。最右栏就是整篇论文的论点：对话变成扁平 chunk，chunk 变成 embedding，再靠 top-k 与 reranker 完成 recall；全程没有抽取、没有图谱，也没有用户画像。来源：<a href="https://arxiv.org/abs/2610.30755">Bao et al., arXiv:2610.30755</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
+
 论文默认 256-token 窗口，但消融实验显示这个数字不是神圣的：**128 到 1,024 token** 的窗口对 MemoryAgentBench 总分没有显著影响。真正有影响的是 **reranking** 与 **适度的检索深度**。移除 cross-encoder 会掉 **3.92 个百分点**；只返回一个项目会掉 **11.73 个百分点**；返回 120 个项目会掉 **14.57 个百分点**，主要发生在 long-range understanding 与 conflict resolution。
 
 <div class="ragx-kicker"><svg class="ragx-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ragx-i-clipboard-list"></use></svg><span>章节 02</span></div>
@@ -902,6 +907,11 @@ Complete-store oracle 把论点推得更远。*Gold* 指的是答案卷：作者
 
 把检索从方程式中拿掉之后，每个系统都变好。但保留原始对话内容的系统——Raw-RAG 与 MemMachine——最接近 raw-evidence 天花板。被转换过的 store 差距更大。Raw-RAG 的 57.54 离 61.60 还有约 4 个百分点，那就是 ingestion 留下的残影：被合并的字段、把更正磨平的摘要、失去来源的事实。再完整的存取权，也重建不了当初没有存下的东西。
 
+<figure class="fig">
+  <img src="/images/raw-rag/fig05-complete-store.png" alt="七个系统在 MEME 上的分组横条图，比较原生检索与完整 store 的准确率，并以虚线标出 raw evidence 天花板、右侧列出与 raw 的差距" width="2800" height="2204" loading="lazy" />
+  <figcaption><b>图 5（论文原图）</b> — GPT-4o-mini 在 MEME 上：原生检索 vs. 完整 store，右侧是与 raw evidence 的差距。虚线是 61.60 的 raw-evidence 天花板，完整 store 长条上的误差线为成对 95% 区间。把完整 store 交给每个系统，七个系统都会进步；但只有保留原始对话的 Raw-RAG 与 MemMachine，能落在距天花板约 4 个百分点以内。来源：<a href="https://arxiv.org/abs/2610.30755">Bao et al., arXiv:2610.30755</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
+
 作者对解读很克制：残余差距不是纯粹的信息损失量测。证据组装、排序，以及 *lost in the middle* 之类的位置效应，也可能有贡献。但方向是一致的，而且与 path 分析的结果吻合。
 
 <div class="ragx-kicker"><svg class="ragx-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#ragx-i-history"></use></svg><span>章节 05</span></div>
@@ -915,6 +925,11 @@ Complete-store oracle 把论点推得更远。*Gold* 指的是答案卷：作者
 具体例子：用户先说「我住在慕尼黑」，后来说「我搬到柏林了」。**UPDATE** 会用柏林覆盖慕尼黑那条记忆；**append-only ADD** 会两条都留着、各自带时间戳，让 reader 看得出柏林更新；**DELETE** 会删掉慕尼黑；**NONE** 则两条都不动。
 
 在 LoCoMo 上，UPDATE 与 DELETE 合计只占 33,902 次决策的 **4.39%**。在 LongMemEval 上，**每一题都带着自己的约 115k-token 历史**，它们只占 428,858 次决策的 **2.46%**；决策数远大于题数，因为每一段历史都分开处理。真正造成持久文字改变的「有效变更」只有 **1.90%** 与 **1.34%**；许多提出的 update 是重复的或格式错误的。
+
+<figure class="fig">
+  <img src="/images/raw-rag/fig02-mem0-mutations.png" alt="Mem0 写入决策的两层图表：上层是 LoCoMo 与 LongMemEval 的决策组成横条，下层是各对话提出与有效 UPDATE+DELETE 的比率" width="3200" height="1476" loading="lazy" />
+  <figcaption><b>图 2（论文原图）</b> — Mem0 提出的变更很少，真正生效的更少。上：写入动作分布。下：LoCoMo（左）与 LongMemEval（右）每段对话的提出变更率与有效变更率；虚线是按决策加权的平均，所有比率都是占全部发出决策的比例。实际读法：大多数决策都是 NONE，而且 LoCoMo 每段对话的有效变更都低于提出变更——这一层真正改写的幅度，远小于它的策略所暗示的。来源：<a href="https://arxiv.org/abs/2610.30755">Bao et al., arXiv:2610.30755</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
 
 接着作者做了一个简单实验：把 UPDATE 换成**append-only ADD**（保留旧记忆，另外新增一条），把 DELETE 换成 **NONE**（什么都不做）。如果准确率没有下降，就代表在这个 benchmark 上，显式改写并没有帮上忙。LoCoMo 准确率从 **67.36% 上升到 69.42%**，而且没有任何类别下降。
 
@@ -1001,6 +1016,11 @@ MemoryAgentBench 的四种能力之一是 **test-time learning（测试时学习
 | Mem0 | 4,025.23 | 117.72 | 4,142.95 |
 | EverMemOS | 8,217.69 | 1,083.79 | 9,301.48 |
 
+<figure class="fig">
+  <img src="/images/raw-rag/fig01-accuracy-ingestion.png" alt="左为七个 benchmark–model 设定的环形长条图，右为累积导入时间对 context 长度的折线图，Raw-RAG 贴近零而 Memora 达 27 小时" width="1963" height="1247" loading="lazy" />
+  <figcaption><b>图 1（论文原图）</b> — 论文自己的总结：Raw-RAG 在七个设定上都具竞争力，而且随着 BEAM 对话变长，ingestion 成本几乎不变。左图每个扇形使用不同的截断尺度，因此要在同一扇形内比较，不要跨扇形比长度。来源：<a href="https://arxiv.org/abs/2610.30755">Bao et al., arXiv:2610.30755</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
+
 **测试 2：BEAM 对话。** 这是一段 1,710 条消息、接近一百万 token 的对话，只量**导入**。Raw-RAG 约 **20 分钟**；下一个完成的系统 MemOS 约 **3 小时 15 分**；Memora 则要将近 **27 小时**。有些系统没有跑完，所以文中说「下一个完成的跑分」。Memora 是 BEAM 比较中的一个系统，没有出现在较小的 MEME 表里。
 
 **测试 3：MemoryAgentBench 消融。** 这是另一个 benchmark（14 个来源、103K–1.44M token），量的是**三个外加的记忆操作**：原子事实、摘要与图谱扩展。它们需要 **2,160 万到 1.093 亿个 LLM 生成 token**——大约是数万到十万页文字——以及 **2.9 到 8.8 小时**的导入加检索。Raw-RAG 在**同一个** benchmark 的基线约 **12 分钟**。Raw-RAG 的导入使用 embedding 调用，不是 LLM 生成，所以 token 数字不是同类比较；时间差距是更有意义的数字。
@@ -1028,6 +1048,11 @@ MemoryAgentBench 的四种能力之一是 **test-time learning（测试时学习
 | 去重 | 默认**关闭** | 在测试设置中开启会掉 2.39 个百分点。 |
 | Query | 原始问题 | 不做 query rewriting（改写查询）：用户问什么就搜什么。 |
 | Index | 扁平、ingestion 后固定 | 一份简单列表，没有层级、没有图，导入后不再更新。 |
+
+<figure class="fig">
+  <img src="/images/raw-rag/fig04-topk-sensitivity.png" alt="MemoryAgentBench 总分对 final top-k（1 到 120）的折线图，5 到 60 之间近乎持平，120 明显下跌，每点附误差线" width="2400" height="1552" loading="lazy" />
+  <figcaption><b>图 4（论文原图）</b> — Final top-k 敏感度：实线是左轴的 MemoryAgentBench 总分，右轴是相对于默认 k = 15 的变化，误差线为成对 95% 区间。曲线在 k = 5 到 60 之间几乎持平，只有 k = 120 才明显下滑——cutoff 不必抓得很精准，但把整个索引都倒给 reader 一定不行。来源：<a href="https://arxiv.org/abs/2610.30755">Bao et al., arXiv:2610.30755</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
 
 ### 一段文字，三个窗口
 
@@ -1077,17 +1102,17 @@ MemoryAgentBench 的四种能力之一是 **test-time learning（测试时学习
 | 章节 | 约略 tokens | 256/32 窗口数 | 建议 reader 单位 |
 | :-- | --: | --: | :-- |
 | 开头 + 论点 | 1,070 | 5 | 3–5 个窗口 |
-| 「Naive」的意思 | 1,005 | 5 | 3–5 个窗口 |
+| 「Naive」的意思 | 1,129 | 5 | 3–5 个窗口 |
 | Benchmark 地图 | 1,259 | 6 | 3–6 个窗口 |
 | 为什么 coverage 会赢 | 614 | 3 | 2–3 个窗口 |
-| 路径与 complete store | 1,061 | 5 | 3–5 个窗口 |
-| 变更审计 | 772 | 4 | 2–4 个窗口 |
+| 路径与 complete store | 1,202 | 6 | 3–6 个窗口 |
+| 变更审计 | 930 | 5 | 3–5 个窗口 |
 | 复杂度仍有价值的地方 | 463 | 2 | 1–2 个窗口 |
 | 消融实验 | 986 | 5 | 3–5 个窗口 |
-| 成本 | 779 | 4 | 2–4 个窗口 |
-| 切块规格 | 1,139 | 5 | 3–5 个窗口 |
+| 成本 | 878 | 4 | 2–4 个窗口 |
+| 切块规格 | 1,266 | 6 | 3–6 个窗口 |
 | 保留意见 + 检查清单 | 782 | 4 | 2–4 个窗口 |
-| **正文合计** | **9,930** | **48** | **Top-15 = 展开前 3,840 tokens** |
+| **正文合计** | **10,579** | **51** | **Top-15 = 展开前 3,840 tokens** |
 
 两个实务提醒：
 
