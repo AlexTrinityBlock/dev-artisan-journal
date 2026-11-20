@@ -18,6 +18,7 @@ import { join, resolve } from 'node:path';
 const base = (process.argv[2] ?? 'http://localhost:4331').replace(/\/$/, '');
 
 const chromeCandidates = [
+  process.env.CHROME_PATH,
   `${process.env.ProgramFiles}\\Google\\Chrome\\Application\\chrome.exe`,
   `${process.env['ProgramFiles(x86)']}\\Google\\Chrome\\Application\\chrome.exe`,
   `${process.env.LOCALAPPDATA}\\Google\\Chrome\\Application\\chrome.exe`,
@@ -42,6 +43,7 @@ for (const [route, locale] of pages) {
   execFileSync(chrome, [
     '--headless=new',
     '--disable-gpu',
+    ...(process.env.CHROME_NO_SANDBOX === '1' ? ['--no-sandbox'] : []),
     '--no-pdf-header-footer',
     '--virtual-time-budget=15000',
     `--print-to-pdf=${out}`,

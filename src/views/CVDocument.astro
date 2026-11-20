@@ -40,7 +40,7 @@ const copy = {
     education: '學歷',
     stack: '技術棧',
     verify: '驗證',
-    download: '下載 PDF',
+    download: '下載我的簡歷',
     print: '列印',
     educationLine: '國立嘉義大學 資訊工程學系 碩士',
     educationNote: '碩士論文發表於 IEEE Xplore（文獻 10210155）：結合 CNN、BiGRU 與多頭自注意力之 SQLi／XSS 偵測架構。',
@@ -57,7 +57,7 @@ const copy = {
     education: '学历',
     stack: '技术栈',
     verify: '验证',
-    download: '下载 PDF',
+    download: '下载我的简历',
     print: '打印',
     educationLine: '国立嘉义大学 信息工程学系 硕士',
     educationNote: '硕士论文发表于 IEEE Xplore（文献 10210155）：结合 CNN、BiGRU 与多头自注意力之 SQLi／XSS 检测架构。',
@@ -297,32 +297,6 @@ const icons = {
         font-size: 8.5pt;
         line-height: 1.45;
         color: var(--mono-l2);
-      }
-
-      .metrics {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1.2mm 6mm;
-        margin-top: 2.2mm;
-        padding-top: 1.6mm;
-        border-top: 0.7px solid var(--mono-grid);
-      }
-
-      .metrics div {
-        display: flex;
-        align-items: baseline;
-        gap: 1.2mm;
-        font-size: 6.6pt;
-        line-height: 1.35;
-        color: var(--mono-l3);
-      }
-
-      .metrics b {
-        font-family: var(--mono);
-        font-size: 9pt;
-        font-weight: 800;
-        letter-spacing: -0.01em;
-        color: var(--mono-ink);
       }
 
       .contact {
@@ -604,15 +578,6 @@ const icons = {
         <h1>{data.hero.name} <span class="alias">{data.hero.alias}</span></h1>
         <p class="role">{data.hero.role}</p>
         <p class="intro" set:html={data.hero.intro} />
-
-        <div class="metrics">
-          {data.hero.metrics.map((metric) => (
-            <div>
-              <b>{metric.value}</b>
-              {metric.label}
-            </div>
-          ))}
-        </div>
 
         <div class="contact">
           <div><span>MAIL</span><a href={`mailto:${email}`}>{email}</a></div>

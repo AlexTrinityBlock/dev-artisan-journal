@@ -51,7 +51,6 @@ export interface CVData {
     alias: string;
     intro: string;
     ledger: { k: string; v: string }[];
-    metrics: { value: string; label: string }[];
   };
   sections: {
     certs: SectionHead;
@@ -97,11 +96,6 @@ const en: CVData = {
       { k: 'EXPERIENCE', v: '~3 Years Enterprise FullStack & ML' },
       { k: 'TOTAL EXPERIENCE', v: '~4.5 Years incl. Master’s Research' },
       { k: 'EDUCATION', v: 'M.S. in CSIE, National Chiayi University' },
-    ],
-    metrics: [
-      { value: '1M', label: 'tokens usable context on one H100' },
-      { value: '0', label: 'vulnerabilities · 6 hardened images' },
-      { value: '95.3%', label: 'AI Agent accuracy · 300 questions' },
     ],
   },
   sections: {
@@ -406,11 +400,6 @@ const zhHant: CVData = {
       { k: 'TOTAL EXPERIENCE', v: '約 4.5 年（含碩士研究）' },
       { k: 'EDUCATION', v: '國立嘉義大學資訊工程學系碩士' },
     ],
-    metrics: [
-      { value: '1M', label: 'tokens · 單張 H100 可用上下文' },
-      { value: '0', label: '漏洞 · 6 個硬化映像' },
-      { value: '95.3%', label: 'AI Agent 準確率 · 300 題' },
-    ],
   },
   sections: {
     certs: {
@@ -713,11 +702,6 @@ const zhHans: CVData = {
       { k: 'EXPERIENCE', v: '约 3 年企业级全栈与 ML 经验' },
       { k: 'TOTAL EXPERIENCE', v: '约 4.5 年（含硕士研究）' },
       { k: 'EDUCATION', v: '国立嘉义大学信息工程学系硕士' },
-    ],
-    metrics: [
-      { value: '1M', label: 'tokens · 单张 H100 可用上下文' },
-      { value: '0', label: '漏洞 · 6 个硬化镜像' },
-      { value: '95.3%', label: 'AI Agent 准确率 · 300 题' },
     ],
   },
   sections: {
