@@ -1,25 +1,738 @@
 ---
 title: "Modern Web Guidance: Giving Coding Agents the Web Platform They Skip"
-description: "A hands-on look at the open-source Modern Web Guidance skill and CLI for steering coding agents toward modern HTML, CSS, and browser APIs, with local search, Baseline-aware fallbacks, and public evals."
+description: "Live demos of the native dialog, popover, auto-growing field, and exclusive accordion patterns coding agents skip — plus the open-source Modern Web Guidance skill that teaches agents to use them."
 pubDate: 2026-11-22
 category: "Web"
 tags: ["Web Platform", "Baseline", "Coding Agents", "Tooling", "Chrome"]
 featured: false
 author: "Alex.Hsiao"
-readTime: "9 min read"
+readTime: "10 min read"
 ---
 
 # Modern Web Guidance: Giving Coding Agents the Web Platform They Skip
 
-Coding agents can produce code that works. They can also produce the code a developer would have written in 2016: a `<div>` with `role="dialog"`, a document-level Escape listener, a body scroll lock, and a hand-rolled focus trap.
+Coding agents can produce code that works. They can also produce the code a developer would have written in 2016. The gap is often a library's worth of JavaScript versus a few lines of HTML.
 
-That is not laziness. Training data is full of legacy code, and even when a model knows a newer API, it often lacks the production patterns that make the API usable. Agents also copy the conventions of the repository around them.
+Here is the same modal in both styles.
 
-[Modern Web Guidance](https://developer.chrome.com/docs/modern-web-guidance) puts an expert-written guide into the agent's context at the moment it builds something. It is a set of skills plus a local CLI, stewarded by the Google Chrome, Microsoft Edge, Mozilla Firefox, and MDN teams. Version 1.0 shipped on [November 10, 2026](https://developer.chrome.com/blog/modern-web-guidance-v1).
+**The legacy shape**
 
-## A skill, not a model
+```html
+<div id="confirm" role="dialog" aria-modal="true" hidden>
+  <h2>Delete this item?</h2>
+  <button>Cancel</button>
+  <button>Delete</button>
+</div>
+<script>
+  // open/close, focus trap, Escape, inert background, scroll lock
+</script>
+```
 
-Modern Web Guidance does not generate code and it does not replace your agent. It gives the agent a lookup tool.
+**The modern shape**
+
+```html
+<button commandfor="confirm" command="show-modal">Delete</button>
+
+<dialog id="confirm" aria-labelledby="confirm-title">
+  <h2 id="confirm-title">Delete this item?</h2>
+  <form method="dialog">
+    <button value="cancel" autofocus>Cancel</button>
+    <button value="delete">Delete</button>
+  </form>
+</dialog>
+```
+
+The scroll lock is two CSS rules:
+
+```css
+dialog:modal {
+  overscroll-behavior: contain;
+}
+
+dialog::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+```
+
+Nine lines, no JavaScript. The browser supplies the backdrop, focus containment, Escape, the mobile back gesture, and focus return.
+
+Here is the same markup, running on this page. Open it, tab through it, press Escape, then reopen it and pick a button.
+
+<style>
+  .prose-inner .mwg-demo {
+    margin: 22px 0;
+  }
+
+  .prose-inner .mwg-demo .chamfer-card-content {
+    padding: 20px 18px 16px;
+  }
+
+  .prose-inner .mwg-demo-head {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 12px;
+  }
+
+  .prose-inner .mwg-demo-head .card-tag {
+    margin: 0;
+  }
+
+  .prose-inner .mwg-demo-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--mono-ink);
+  }
+
+  .prose-inner .mwg-demo-sub {
+    margin: 0;
+    font-size: 11.5px;
+    line-height: 1.55;
+    color: var(--mono-muted);
+  }
+
+  .prose-inner .mwg-demo pre {
+    margin: 0 0 14px;
+    padding: 12px 14px;
+    background: var(--mono-paper);
+    color: var(--mono-ink);
+    border: 0.7px solid var(--mono-grid);
+    border-radius: 0;
+    font-size: 11.5px;
+    line-height: 1.65;
+    overflow-x: auto;
+  }
+
+  .prose-inner .mwg-demo pre code {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font-size: inherit;
+  }
+
+  .prose-inner .mwg-stage {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding-top: 14px;
+    border-top: 0.7px dashed var(--mono-grid);
+  }
+
+  .prose-inner .mwg-src {
+    margin-top: 14px;
+    padding-top: 8px;
+    border-top: 0.7px solid var(--mono-grid);
+    font-family: var(--mono-font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mono-faint);
+  }
+
+  .prose-inner .mwg-out {
+    font-family: var(--mono-font-mono);
+    font-size: 10px;
+    color: var(--mono-muted);
+  }
+
+  .prose-inner .mwg-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--mono-paper);
+    color: var(--mono-ink);
+    border: 0.7px solid var(--mono-grid);
+    font-family: var(--mono-font);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+  }
+
+  .prose-inner .mwg-btn:hover {
+    border-color: var(--mono-ink);
+  }
+
+  .prose-inner .mwg-btn--ink {
+    background: var(--mono-ink);
+    border-color: var(--mono-ink);
+    color: var(--mono-paper);
+  }
+
+  .prose-inner .mwg-btn:focus-visible,
+  .prose-inner .mwg-field:focus-visible,
+  .prose-inner .mwg-accordion summary:focus-visible {
+    outline: 0.8px solid var(--mono-ink);
+    outline-offset: 2px;
+  }
+
+  .prose-inner .mwg-demo dialog {
+    width: min(420px, calc(100vw - 32px));
+    margin: auto;
+    padding: 22px;
+    border: 0.7px solid var(--mono-grid);
+    background: var(--mono-paper);
+    color: var(--mono-ink);
+  }
+
+  .prose-inner .mwg-demo dialog:modal {
+    overscroll-behavior: contain;
+  }
+
+  .prose-inner .mwg-demo dialog::backdrop {
+    overflow: hidden;
+    overscroll-behavior: contain;
+    background: color-mix(in srgb, var(--mono-ink) 55%, transparent);
+  }
+
+  .prose-inner .mwg-demo dialog h2 {
+    margin: 0 0 6px;
+    padding: 0;
+    border: 0;
+    font-size: 1.15rem;
+    line-height: 1.3;
+  }
+
+  .prose-inner .mwg-demo dialog p {
+    margin: 0;
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--mono-l2);
+  }
+
+  .prose-inner .mwg-demo dialog form {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .prose-inner .mwg-demo dialog .mwg-out {
+    display: block;
+    margin-top: 12px;
+  }
+
+  .prose-inner .mwg-popover-wrap {
+    display: inline-flex;
+  }
+
+  .prose-inner .mwg-demo [popover] {
+    inset: auto;
+    top: 50%;
+    left: 50%;
+    width: 220px;
+    margin: 0;
+    padding: 6px;
+    border: 0.7px solid var(--mono-grid);
+    background: var(--mono-paper);
+    color: var(--mono-ink);
+    transform: translate(-50%, -50%);
+  }
+
+  .prose-inner .mwg-demo [popover]::backdrop {
+    background: transparent;
+  }
+
+  @supports (anchor-name: --mwg-menu-btn) {
+    .prose-inner .mwg-demo #menu-btn {
+      anchor-name: --mwg-menu-btn;
+    }
+
+    .prose-inner .mwg-demo #menu {
+      position-anchor: --mwg-menu-btn;
+      top: anchor(bottom);
+      left: anchor(left);
+      transform: none;
+      margin-top: 6px;
+    }
+  }
+
+  .prose-inner .mwg-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .prose-inner .mwg-menu li {
+    margin: 0;
+  }
+
+  .prose-inner .mwg-menu button {
+    display: block;
+    width: 100%;
+    padding: 8px 10px;
+    border: 0;
+    background: transparent;
+    color: var(--mono-ink);
+    font-family: var(--mono-font);
+    font-size: 12px;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .prose-inner .mwg-menu button:hover {
+    background: var(--mono-bg-subtle);
+  }
+
+  .prose-inner .mwg-field {
+    width: 100%;
+    min-height: 4.5em;
+    max-height: 14em;
+    padding: 10px 12px;
+    border: 0.7px solid var(--mono-grid);
+    background: var(--mono-paper);
+    color: var(--mono-ink);
+    font-family: var(--mono-font);
+    font-size: 12.5px;
+    line-height: 1.55;
+    resize: none;
+    field-sizing: content;
+  }
+
+  .prose-inner .mwg-accordion {
+    width: 100%;
+  }
+
+  .prose-inner .mwg-accordion details {
+    padding: 9px 0;
+    border-top: 0.7px solid var(--mono-grid);
+  }
+
+  .prose-inner .mwg-accordion details:last-child {
+    border-bottom: 0.7px solid var(--mono-grid);
+  }
+
+  .prose-inner .mwg-accordion summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    list-style: none;
+    cursor: pointer;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--mono-ink);
+  }
+
+  .prose-inner .mwg-accordion summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .prose-inner .mwg-accordion summary::after {
+    content: '+';
+    font-family: var(--mono-font-mono);
+    font-size: 11px;
+    color: var(--mono-muted);
+  }
+
+  .prose-inner .mwg-accordion details[open] summary::after {
+    content: '−';
+  }
+
+  .prose-inner .mwg-accordion p {
+    margin: 7px 0 0;
+    font-size: 11.5px;
+    line-height: 1.6;
+    color: var(--mono-l2);
+  }
+
+  .prose-inner .mwg-chart {
+    margin: 28px 0;
+    padding: 22px 20px 18px;
+    border: 0.7px solid var(--mono-grid);
+    background: var(--mono-paper);
+  }
+
+  .prose-inner .mwg-chart figcaption {
+    margin-bottom: 12px;
+  }
+
+  .prose-inner .mwg-chart-title {
+    margin: 4px 0 3px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--mono-ink);
+  }
+
+  .prose-inner .mwg-chart-sub {
+    margin: 0;
+    font-size: 11.5px;
+    line-height: 1.55;
+    color: var(--mono-muted);
+  }
+
+  .prose-inner .mwg-chart-legend {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 8px;
+    font-family: var(--mono-font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--mono-muted);
+  }
+
+  .prose-inner .mwg-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .prose-inner .mwg-swatch {
+    display: inline-block;
+    width: 14px;
+    height: 6px;
+  }
+
+  .prose-inner .mwg-swatch--unguided {
+    background: var(--mono-l5);
+  }
+
+  .prose-inner .mwg-swatch--guided {
+    background: var(--mono-ink);
+  }
+
+  .prose-inner .mwg-chart-scale {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 14px;
+    align-items: end;
+  }
+
+  .prose-inner .mwg-scale {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-right: 36px;
+    padding-bottom: 4px;
+    border-bottom: 0.7px solid var(--mono-grid);
+    font-family: var(--mono-font-mono);
+    font-size: 8.5px;
+    color: var(--mono-faint);
+  }
+
+  .prose-inner .mwg-scale span:nth-child(2) {
+    text-align: center;
+  }
+
+  .prose-inner .mwg-scale span:last-child {
+    text-align: right;
+  }
+
+  .prose-inner .mwg-chart-row {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 14px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 0.7px dashed var(--mono-grid);
+  }
+
+  .prose-inner .mwg-chart-row:last-child {
+    border-bottom: 0;
+  }
+
+  .prose-inner .mwg-chart-model {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .prose-inner .mwg-chart-model b {
+    font-size: 11.5px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--mono-ink);
+  }
+
+  .prose-inner .mwg-chart-model span {
+    font-family: var(--mono-font-mono);
+    font-size: 8.5px;
+    color: var(--mono-muted);
+  }
+
+  .prose-inner .mwg-bar-pair {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .prose-inner .mwg-bar-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .prose-inner .mwg-bar-track {
+    flex: 1;
+    height: 7px;
+    background: var(--mono-bg-subtle);
+    border-radius: 0 99px 99px 0;
+    overflow: hidden;
+  }
+
+  .prose-inner .mwg-bar {
+    display: block;
+    height: 100%;
+    border-radius: 0 99px 99px 0;
+  }
+
+  .prose-inner .mwg-bar--unguided {
+    background: var(--mono-l5);
+  }
+
+  .prose-inner .mwg-bar--guided {
+    background: var(--mono-ink);
+  }
+
+  .prose-inner .mwg-bar-val {
+    flex: none;
+    width: 28px;
+    font-family: var(--mono-font-mono);
+    font-size: 9px;
+    font-weight: 800;
+    color: var(--mono-ink);
+    text-align: right;
+  }
+
+  .prose-inner .mwg-chart-src {
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 0.7px solid var(--mono-grid);
+    font-family: var(--mono-font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--mono-faint);
+  }
+
+  @media (max-width: 620px) {
+    .prose-inner .mwg-chart {
+      padding: 18px 14px 14px;
+    }
+
+    .prose-inner .mwg-chart-scale {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .prose-inner .mwg-chart-scale > span:first-child {
+      display: none;
+    }
+
+    .prose-inner .mwg-chart-row {
+      grid-template-columns: 1fr;
+      gap: 6px;
+      padding: 12px 0;
+    }
+
+    .prose-inner .mwg-chart-model {
+      flex-direction: row;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+    }
+  }
+</style>
+
+<div class="chamfer-card-wrapper mwg-demo">
+  <div class="chamfer-card-content">
+    <div class="mwg-demo-head">
+      <span class="card-tag">LIVE // 01</span>
+      <h3 class="mwg-demo-title">The same nine lines, running</h3>
+      <p class="mwg-demo-sub">Open the dialog, tab through it, press Escape, then reopen it and pick a button.</p>
+    </div>
+    <div class="mwg-stage">
+      <button class="mwg-btn" commandfor="confirm" command="show-modal" data-mwg-open>Delete</button>
+      <span class="mwg-out" id="mwg-result">Waiting for a choice…</span>
+    </div>
+    <dialog id="confirm" aria-labelledby="confirm-title">
+      <h2 id="confirm-title">Delete this item?</h2>
+      <p>This is a native modal. The page behind it is inert, and Escape closes it.</p>
+      <form method="dialog">
+        <button class="mwg-btn" value="cancel" autofocus>Cancel</button>
+        <button class="mwg-btn mwg-btn--ink" value="delete">Delete</button>
+      </form>
+    </dialog>
+    <div class="mwg-src">DIALOG · INVOKER COMMANDS · HTML + CSS</div>
+  </div>
+</div>
+
+The guide behind this demo is opinionated: do not add `role="dialog"`, `aria-modal`, a focus trap, an `inert` toggle, or an Escape handler to a native modal. Duplicating browser behavior can make the dialog worse.
+
+It also replaces the old `overflow: hidden` on `body` with `overscroll-behavior: contain` on `dialog:modal` and `dialog::backdrop`. Safari does not enforce `overscroll-behavior` yet, but the modal still contains its own scroll and the page is still inert.
+
+Invoker Commands became Baseline newly available on December 12, 2025. If your target is older, keep the same markup and load [`invokers-polyfill`](https://github.com/keithamus/invokers-polyfill) only when `commandForElement` is missing from `HTMLButtonElement.prototype`.
+
+## Three more patterns worth stealing
+
+### A popover is an attribute
+
+A custom menu usually brings a click listener, an outside-click handler, careful `aria-expanded` updates, and a z-index decision. The Popover API folds most of that into markup.
+
+```html
+<button popovertarget="menu">Actions</button>
+
+<ul id="menu" popover>
+  <li><button popovertarget="menu" popovertargetaction="hide">Rename</button></li>
+  <li><button popovertarget="menu" popovertargetaction="hide">Duplicate</button></li>
+  <li><button popovertarget="menu" popovertargetaction="hide">Archive</button></li>
+</ul>
+```
+
+The trigger opens the popover. The menu items close it with `popovertargetaction="hide"`. In the basic case, there is no JavaScript to write.
+
+<div class="chamfer-card-wrapper mwg-demo">
+  <div class="chamfer-card-content">
+    <div class="mwg-demo-head">
+      <span class="card-tag">LIVE // 02</span>
+      <h3 class="mwg-demo-title">No click listener required</h3>
+      <p class="mwg-demo-sub">The trigger and the close actions are attributes, not JavaScript.</p>
+    </div>
+    <div class="mwg-stage">
+      <div class="mwg-popover-wrap">
+        <button id="menu-btn" class="mwg-btn" popovertarget="menu">Actions</button>
+        <ul id="menu" class="mwg-menu" popover>
+          <li><button popovertarget="menu" popovertargetaction="hide">Rename</button></li>
+          <li><button popovertarget="menu" popovertargetaction="hide">Duplicate</button></li>
+          <li><button popovertarget="menu" popovertargetaction="hide">Archive</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mwg-src">POPOVER API · DECLARATIVE CONTROL · HTML</div>
+  </div>
+</div>
+
+The Popover API is Baseline newly available since January 27, 2025. Fallbacks are progressive: if the attribute is missing, the trigger simply does nothing, so keep a normal link or button path when the action is critical.
+
+### A textarea that grows with one CSS line
+
+The old pattern is a `scrollHeight` loop on every input event. The modern pattern is one declaration:
+
+```css
+textarea {
+  field-sizing: content;
+}
+```
+
+That is the whole implementation. The field starts at its natural height and grows as the user types, without a JavaScript listener or a framework render cycle.
+
+<div class="chamfer-card-wrapper mwg-demo">
+  <div class="chamfer-card-content">
+    <div class="mwg-demo-head">
+      <span class="card-tag">LIVE // 03</span>
+      <h3 class="mwg-demo-title">Type, and the box grows</h3>
+      <p class="mwg-demo-sub">One CSS declaration replaces the old <code>scrollHeight</code> loop. The fallback only runs when the property is missing.</p>
+    </div>
+    <div class="mwg-stage">
+      <textarea class="mwg-field" id="mwg-field" rows="2" placeholder="Type a few lines here. The field grows with the content."></textarea>
+    </div>
+    <div class="mwg-src">FIELD-SIZING · CSS ONLY · PROGRESSIVE ENHANCEMENT</div>
+  </div>
+</div>
+
+`field-sizing: content` is the modern replacement for the old resize loop. It is CSS-only, so it does not fight the framework's render cycle or add an input listener to every field. Where it is missing, the fallback is still small.
+
+### An exclusive accordion without a library
+
+An accordion package usually manages open state, hides panels, and updates ARIA attributes. The `name` attribute on `details` does the exclusive part natively:
+
+```html
+<details name="faq">
+  <summary>What is Baseline?</summary>
+  <p>Baseline tells you when a feature is interoperable across the major engines.</p>
+</details>
+
+<details name="faq">
+  <summary>Why does the browser do it better?</summary>
+  <p>Native controls already contain the focus and keyboard behavior.</p>
+</details>
+```
+
+Opening one closes the other. That is the whole state machine.
+
+<div class="chamfer-card-wrapper mwg-demo">
+  <div class="chamfer-card-content">
+    <div class="mwg-demo-head">
+      <span class="card-tag">LIVE // 04</span>
+      <h3 class="mwg-demo-title">One open at a time</h3>
+      <p class="mwg-demo-sub">The <code>name</code> attribute makes these details exclusive. Opening one closes the other.</p>
+    </div>
+    <div class="mwg-stage">
+      <div class="mwg-accordion">
+        <details name="faq" open>
+          <summary>What is Baseline?</summary>
+          <p>Baseline tells you when a feature is interoperable across the major engines. It is a signal, not a guarantee that every user has it.</p>
+        </details>
+        <details name="faq">
+          <summary>Why does the browser do it better?</summary>
+          <p>Native controls already contain the focus, keyboard, and accessibility behavior that custom widgets rebuild by hand.</p>
+        </details>
+        <details name="faq">
+          <summary>What about older browsers?</summary>
+          <p>Use the feature as progressive enhancement, and load a small polyfill only when the API is missing.</p>
+        </details>
+      </div>
+    </div>
+    <div class="mwg-src">DETAILS · NAME ATTRIBUTE · HTML</div>
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    const dialog = document.getElementById('confirm');
+    const open = document.querySelector('[data-mwg-open]');
+    const result = document.getElementById('mwg-result');
+
+    if (dialog && open) {
+      open.addEventListener('click', () => {
+        dialog.returnValue = '';
+      }, true);
+
+      if (!('commandForElement' in HTMLButtonElement.prototype)) {
+        open.addEventListener('click', () => dialog.showModal());
+      }
+    }
+
+    if (dialog && result) {
+      dialog.addEventListener('close', () => {
+        result.textContent = dialog.returnValue
+          ? 'returnValue = "' + dialog.returnValue + '"'
+          : 'Dismissed with Escape.';
+      });
+    }
+
+    const field = document.getElementById('mwg-field');
+    if (field && !CSS.supports('field-sizing', 'content')) {
+      const grow = () => {
+        field.style.height = 'auto';
+        field.style.height = field.scrollHeight + 'px';
+      };
+      field.addEventListener('input', grow);
+      grow();
+    }
+  })();
+</script>
+
+## Where these patterns come from
+
+These patterns are the visible part. The harder question is how an agent finds them at the right moment, before it writes the legacy version.
+
+[Modern Web Guidance](https://developer.chrome.com/docs/modern-web-guidance) puts an expert-written guide into the agent's context when it builds something. It is a set of skills plus a local CLI, stewarded by the Google Chrome, Microsoft Edge, Mozilla Firefox, and MDN teams. Version 1.0 shipped on [November 10, 2026](https://developer.chrome.com/blog/modern-web-guidance-v1).
 
 The [source repository](https://github.com/GoogleChrome/modern-web-guidance-src) contains the guides, CLI, eval harness, and calibration code. The installable skill lives in the sibling [`modern-web-guidance`](https://github.com/GoogleChrome/modern-web-guidance) repository, which matters if you want to contribute or inspect a claim.
 
@@ -56,40 +769,9 @@ npx modern-web-guidance@latest retrieve dialog
 npx modern-web-guidance@latest legacy-scan .
 ```
 
-`search` returns JSON. A trimmed result:
+`search` returns JSON ranked by relevance. `retrieve` prints one guide and accepts a comma-separated list.
 
-```json
-[
-  {
-    "id": "animate-to-from-top-layer",
-    "description": "Animate elements such as dialogs, popovers, and tooltips as they're entering/exiting the top layer."
-  },
-  {
-    "id": "dialog",
-    "description": "Build a modal or non-modal dialog component that is accessible, manages focus appropriately, and can be dismissed the way users expect on each platform."
-  }
-]
-```
-
-The real command returns ten. `retrieve` prints one guide and accepts a comma-separated list.
-
-`legacy-scan` parses HTML, CSS, JavaScript, TypeScript, framework components, and `package.json`. On a small demo:
-
-```text
-Modern Web Guidance Analyzer — .
-Found 2 modernization opportunities across 2 guides (scanned 38 guides with deterministic rules; ~20% of the guidance corpus)
-Note: Static analysis results are provisional — verify against the Keep/Drop criteria below.
-
-* declarative-dialog-popover-control (1 finding)
-  - legacy.html:4
-    openBtn.addEventListener('click', () => menu.showPopover());
-
-* form-fields-automatically-fit-contents (1 finding)
-  - legacy.html:7
-    textarea.style.height = `${textarea.scrollHeight}px`;
-```
-
-That is a pre-screen, not a fixer. The CLI has no `--fix` flag on purpose. Every finding includes `keepWhen` and `dropWhen` criteria, and the agent must inspect the surrounding code.
+`legacy-scan` parses HTML, CSS, JavaScript, TypeScript, framework components, and `package.json`. It is a pre-screen, not a fixer: the CLI has no `--fix` flag on purpose, and every finding includes `keepWhen` and `dropWhen` criteria. The agent must inspect the surrounding code.
 
 ## How the retrieval loop works
 
@@ -104,88 +786,9 @@ The package is self-contained, has no runtime dependencies, and works with `npx 
 
 The guides are token-efficient. The project prunes advice models already follow, so the retrieved file spends tokens on gaps rather than a general CSS tutorial.
 
-## The modal test: a custom overlay, or nine lines of HTML
-
-The [`dialog` guide](https://github.com/GoogleChrome/modern-web-guidance/blob/main/skills/modern-web-guidance/guides/ui-components/dialog.md) is a good test: almost every app has a modal, and almost every custom modal gets the same details wrong. The legacy shape below has open and close functions, restores focus, and locks the page. It still needs Escape handling, a focus trap, a backdrop, and background inerting.
-
-```html
-<div id="confirm" class="modal" role="dialog" aria-modal="true"
-     aria-labelledby="confirm-title" hidden>
-  <h2 id="confirm-title">Delete this item?</h2>
-  <button id="cancel">Cancel</button>
-  <button id="delete">Delete</button>
-</div>
-
-<script>
-  const modal = document.querySelector('#confirm');
-  let lastFocused;
-
-  function openModal() {
-    lastFocused = document.activeElement;
-    modal.hidden = false;
-    document.body.style.overflow = 'hidden';
-    modal.querySelector('button').focus();
-  }
-
-  function closeModal() {
-    modal.hidden = true;
-    document.body.style.overflow = '';
-    lastFocused?.focus();
-  }
-
-  // Wiring omitted. Still missing: Escape, focus trap, inert background, backdrop.
-</script>
-```
-
-The modern version:
-
-```html
-<button type="button" commandfor="confirm" command="show-modal">Delete</button>
-
-<dialog id="confirm" aria-labelledby="confirm-title">
-  <h2 id="confirm-title">Delete this item?</h2>
-  <form method="dialog">
-    <button value="cancel" autofocus>Cancel</button>
-    <button value="delete">Delete</button>
-  </form>
-</dialog>
-```
-
-On a browser with Invoker Commands support, that is the entire implementation: no JavaScript, no manual focus restore, no z-index or backdrop code. Two CSS rules finish the scroll lock:
-
-```css
-dialog:modal {
-  overscroll-behavior: contain;
-}
-
-dialog::backdrop {
-  overflow: hidden;
-  overscroll-behavior: contain;
-}
-```
-
-The browser handles what custom modals usually get wrong:
-
-- The page behind it becomes inert.
-- Focus stays inside and returns to the invoker on close.
-- It renders in the top layer with a real `::backdrop`.
-- Escape, the mobile back gesture, and dialog semantics come from the browser.
-
-The guide is opinionated here: do not add `role="dialog"`, `aria-modal`, a focus trap, an `inert` toggle, or an Escape handler to a native modal. Duplicating browser behavior can make the dialog worse.
-
-It also catches a subtler gotcha. The old advice was `overflow: hidden` on `body`, which removes the root scrollbar and shifts the layout. The guide replaces it with the two rules above. Safari does not enforce `overscroll-behavior` yet, but the modal still contains its own scroll and the page is still inert.
-
-Invoker Commands became Baseline newly available on December 12, 2025. If your target is older, keep the same markup and load [`invokers-polyfill`](https://github.com/keithamus/invokers-polyfill) only when `commandForElement` is missing from `HTMLButtonElement.prototype`.
-
-That is the difference between a fact and a guide: the fallback, the accessibility rule, and the scroll bug.
-
 ## What is inside
 
 As of November 2026, the README lists **262 modern web features** and **204 use cases**. The six core disciplines are user experience, CSS layout, performance, forms and UI, accessibility, and built-in AI. The catalog also reaches security, privacy, passkeys, web components, PWAs, and WebMCP.
-
-The use cases are concrete: animate a dialog into the top layer, build a card that responds to its own width, validate a field only after interaction, or add passkey sign-in. Each guide is Markdown with runnable snippets and constraints.
-
-The scanner is narrower. When I ran CLI 1.0.1 in November 2026, it reported **38 guides** with deterministic rules, about 20% of the corpus. A scanner that flags everything gets ignored, so rules must clear precision thresholds on unseen repositories.
 
 [The modernization docs](https://developer.chrome.com/docs/modern-web-guidance/modernization-workflow) show the range:
 
@@ -230,13 +833,65 @@ The project publishes an [evaluation dashboard](https://googlechrome.github.io/m
 
 Here is the latest nightly job per model on the dashboard, dated **November 20, 2026**:
 
-| Agent and model | Paired tasks / checks | Unguided to guided | Uplift | Automated a11y checks |
-| :--- | :---: | :---: | :---: | :---: |
-| Antigravity CLI, Gemini 4 Argon | 228 / 1,955 | 56% to 97% | +41 pp | 54% to 95% |
-| Claude Code, Claude Opus 5.5 | 229 / 1,961 | 54% to 94% | +40 pp | 60% to 96% |
-| Codex CLI, GPT-6.1 Sol | 229 / 1,961 | 49% to 85% | +36 pp | 60% to 92% |
+<figure class="mwg-chart" aria-label="Bar chart: share of checks passed by three coding agents, with and without Modern Web Guidance">
+  <figcaption>
+    <span class="card-tag">EVALS // NIGHTLY</span>
+    <h3 class="mwg-chart-title">Guided agents pass far more checks</h3>
+    <p class="mwg-chart-sub">Share of checks passed, with and without the skill. Higher is better.</p>
+  </figcaption>
+  <div class="mwg-chart-legend" aria-hidden="true">
+    <span class="mwg-legend-item"><span class="mwg-swatch mwg-swatch--unguided"></span>Unguided</span>
+    <span class="mwg-legend-item"><span class="mwg-swatch mwg-swatch--guided"></span>Guided</span>
+  </div>
+  <div class="mwg-chart-scale" aria-hidden="true">
+    <span></span>
+    <div class="mwg-scale"><span>0%</span><span>50%</span><span>100%</span></div>
+  </div>
+  <div class="mwg-chart-rows">
+    <div class="mwg-chart-row">
+      <div class="mwg-chart-model"><b>Antigravity CLI</b><span>Gemini 4 Argon</span></div>
+      <div class="mwg-bar-pair">
+        <div class="mwg-bar-line" role="img" aria-label="Unguided: 56 percent">
+          <div class="mwg-bar-track" aria-hidden="true"><span class="mwg-bar mwg-bar--unguided" style="width: 56%"></span></div>
+          <span class="mwg-bar-val" aria-hidden="true">56%</span>
+        </div>
+        <div class="mwg-bar-line" role="img" aria-label="Guided: 97 percent">
+          <div class="mwg-bar-track" aria-hidden="true"><span class="mwg-bar mwg-bar--guided" style="width: 97%"></span></div>
+          <span class="mwg-bar-val" aria-hidden="true">97%</span>
+        </div>
+      </div>
+    </div>
+    <div class="mwg-chart-row">
+      <div class="mwg-chart-model"><b>Claude Code</b><span>Claude Opus 5.5</span></div>
+      <div class="mwg-bar-pair">
+        <div class="mwg-bar-line" role="img" aria-label="Unguided: 54 percent">
+          <div class="mwg-bar-track" aria-hidden="true"><span class="mwg-bar mwg-bar--unguided" style="width: 54%"></span></div>
+          <span class="mwg-bar-val" aria-hidden="true">54%</span>
+        </div>
+        <div class="mwg-bar-line" role="img" aria-label="Guided: 94 percent">
+          <div class="mwg-bar-track" aria-hidden="true"><span class="mwg-bar mwg-bar--guided" style="width: 94%"></span></div>
+          <span class="mwg-bar-val" aria-hidden="true">94%</span>
+        </div>
+      </div>
+    </div>
+    <div class="mwg-chart-row">
+      <div class="mwg-chart-model"><b>Codex CLI</b><span>GPT-6.1 Sol</span></div>
+      <div class="mwg-bar-pair">
+        <div class="mwg-bar-line" role="img" aria-label="Unguided: 49 percent">
+          <div class="mwg-bar-track" aria-hidden="true"><span class="mwg-bar mwg-bar--unguided" style="width: 49%"></span></div>
+          <span class="mwg-bar-val" aria-hidden="true">49%</span>
+        </div>
+        <div class="mwg-bar-line" role="img" aria-label="Guided: 85 percent">
+          <div class="mwg-bar-track" aria-hidden="true"><span class="mwg-bar mwg-bar--guided" style="width: 85%"></span></div>
+          <span class="mwg-bar-val" aria-hidden="true">85%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mwg-chart-src">NIGHTLY EVAL · 2026-11-20 · SHARE OF CHECKS PASSED · EVAL DASHBOARD</div>
+</figure>
 
-Unguided agents pass roughly half the checks; guided agents pass most of them. The accessibility column moves from 54–60% to 92–96%.
+Each row is a paired run of 228–229 tasks and 1,955–1,961 checks. Unguided agents pass roughly half the checks; guided agents pass most of them. The gaps are +41, +40, and +36 percentage points. The automated accessibility subset moves from 54–60% to 92–96%.
 
 A few caveats:
 

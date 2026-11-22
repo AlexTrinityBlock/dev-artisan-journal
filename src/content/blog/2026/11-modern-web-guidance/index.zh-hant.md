@@ -1,25 +1,738 @@
 ---
 title: "Modern Web Guidance：讓編碼代理不再錯過現代網頁平台"
-description: "實測開源的 Modern Web Guidance 技能與 CLI：用本地搜尋、Baseline 感知的回退方案與公開評測，引導編碼代理採用現代 HTML、CSS 與瀏覽器 API。"
+description: "原生 dialog、popover、自動長高的欄位與互斥手風琴等編碼代理常跳過的模式，全部即時示範；再加上教會代理使用它們的開源 Modern Web Guidance 技能。"
 pubDate: 2026-11-22
 category: "Web"
 tags: ["網頁平台", "Baseline", "編碼代理", "工具鏈", "Chrome"]
 featured: false
 author: "Alex.Hsiao"
-readTime: "9 分鐘"
+readTime: "11 分鐘"
 ---
 
 # Modern Web Guidance：讓編碼代理不再錯過現代網頁平台
 
-編碼代理能寫出可運作的程式碼，也能寫出開發者在 2016 年才會寫的程式碼：一個帶有 `role="dialog"` 的 `<div>`、一個掛在 document 上的 Escape 監聽器、一段鎖住頁面捲動的程式，還有一個手工打造的焦點陷阱。
+編碼代理能寫出可運作的程式碼，也能寫出開發者在 2016 年才會寫的程式碼。兩者的差距，往往是一整套函式庫份量的 JavaScript，對上幾行 HTML。
 
-這不是偷懶。訓練資料裡充滿舊有程式碼；即使模型知道較新的 API，也往往缺乏讓 API 真正可用的生產環境模式。代理還會複製周遭儲存庫的慣例。
+同一個 modal，兩種寫法。
 
-[Modern Web Guidance](https://developer.chrome.com/docs/modern-web-guidance) 會在代理動手建構的那一刻，把專家撰寫的指南放進它的上下文。它是一組技能加上一個本地 CLI，由 Google Chrome、Microsoft Edge、Mozilla Firefox 與 MDN 團隊共同維護。1.0 版於 [2026 年 11 月 10 日](https://developer.chrome.com/blog/modern-web-guidance-v1) 發布。
+**舊有寫法**
 
-## 是技能，不是模型
+```html
+<div id="confirm" role="dialog" aria-modal="true" hidden>
+  <h2>Delete this item?</h2>
+  <button>Cancel</button>
+  <button>Delete</button>
+</div>
+<script>
+  // open/close, focus trap, Escape, inert background, scroll lock
+</script>
+```
 
-Modern Web Guidance 不生成程式碼，也不取代你的代理。它給代理一個查詢工具。
+**現代寫法**
+
+```html
+<button commandfor="confirm" command="show-modal">Delete</button>
+
+<dialog id="confirm" aria-labelledby="confirm-title">
+  <h2 id="confirm-title">Delete this item?</h2>
+  <form method="dialog">
+    <button value="cancel" autofocus>Cancel</button>
+    <button value="delete">Delete</button>
+  </form>
+</dialog>
+```
+
+捲動鎖定靠兩條 CSS 規則：
+
+```css
+dialog:modal {
+  overscroll-behavior: contain;
+}
+
+dialog::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+```
+
+九行，沒有 JavaScript。背景遮罩、焦點留在對話框內、Escape、行動裝置返回手勢與焦點歸還，全都由瀏覽器提供。
+
+下面就是同樣的標記，正在這篇文章裡運作。打開它，用 Tab 走一遍，按 Escape，再重新開啟並選一個按鈕。
+
+<style>
+  .prose-inner .mwg-demo {
+    margin: 22px 0;
+  }
+
+  .prose-inner .mwg-demo .chamfer-card-content {
+    padding: 20px 18px 16px;
+  }
+
+  .prose-inner .mwg-demo-head {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 12px;
+  }
+
+  .prose-inner .mwg-demo-head .card-tag {
+    margin: 0;
+  }
+
+  .prose-inner .mwg-demo-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--mono-ink);
+  }
+
+  .prose-inner .mwg-demo-sub {
+    margin: 0;
+    font-size: 11.5px;
+    line-height: 1.55;
+    color: var(--mono-muted);
+  }
+
+  .prose-inner .mwg-demo pre {
+    margin: 0 0 14px;
+    padding: 12px 14px;
+    background: var(--mono-paper);
+    color: var(--mono-ink);
+    border: 0.7px solid var(--mono-grid);
+    border-radius: 0;
+    font-size: 11.5px;
+    line-height: 1.65;
+    overflow-x: auto;
+  }
+
+  .prose-inner .mwg-demo pre code {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font-size: inherit;
+  }
+
+  .prose-inner .mwg-stage {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding-top: 14px;
+    border-top: 0.7px dashed var(--mono-grid);
+  }
+
+  .prose-inner .mwg-src {
+    margin-top: 14px;
+    padding-top: 8px;
+    border-top: 0.7px solid var(--mono-grid);
+    font-family: var(--mono-font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mono-faint);
+  }
+
+  .prose-inner .mwg-out {
+    font-family: var(--mono-font-mono);
+    font-size: 10px;
+    color: var(--mono-muted);
+  }
+
+  .prose-inner .mwg-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--mono-paper);
+    color: var(--mono-ink);
+    border: 0.7px solid var(--mono-grid);
+    font-family: var(--mono-font);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+  }
+
+  .prose-inner .mwg-btn:hover {
+    border-color: var(--mono-ink);
+  }
+
+  .prose-inner .mwg-btn--ink {
+    background: var(--mono-ink);
+    border-color: var(--mono-ink);
+    color: var(--mono-paper);
+  }
+
+  .prose-inner .mwg-btn:focus-visible,
+  .prose-inner .mwg-field:focus-visible,
+  .prose-inner .mwg-accordion summary:focus-visible {
+    outline: 0.8px solid var(--mono-ink);
+    outline-offset: 2px;
+  }
+
+  .prose-inner .mwg-demo dialog {
+    width: min(420px, calc(100vw - 32px));
+    margin: auto;
+    padding: 22px;
+    border: 0.7px solid var(--mono-grid);
+    background: var(--mono-paper);
+    color: var(--mono-ink);
+  }
+
+  .prose-inner .mwg-demo dialog:modal {
+    overscroll-behavior: contain;
+  }
+
+  .prose-inner .mwg-demo dialog::backdrop {
+    overflow: hidden;
+    overscroll-behavior: contain;
+    background: color-mix(in srgb, var(--mono-ink) 55%, transparent);
+  }
+
+  .prose-inner .mwg-demo dialog h2 {
+    margin: 0 0 6px;
+    padding: 0;
+    border: 0;
+    font-size: 1.15rem;
+    line-height: 1.3;
+  }
+
+  .prose-inner .mwg-demo dialog p {
+    margin: 0;
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--mono-l2);
+  }
+
+  .prose-inner .mwg-demo dialog form {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .prose-inner .mwg-demo dialog .mwg-out {
+    display: block;
+    margin-top: 12px;
+  }
+
+  .prose-inner .mwg-popover-wrap {
+    display: inline-flex;
+  }
+
+  .prose-inner .mwg-demo [popover] {
+    inset: auto;
+    top: 50%;
+    left: 50%;
+    width: 220px;
+    margin: 0;
+    padding: 6px;
+    border: 0.7px solid var(--mono-grid);
+    background: var(--mono-paper);
+    color: var(--mono-ink);
+    transform: translate(-50%, -50%);
+  }
+
+  .prose-inner .mwg-demo [popover]::backdrop {
+    background: transparent;
+  }
+
+  @supports (anchor-name: --mwg-menu-btn) {
+    .prose-inner .mwg-demo #menu-btn {
+      anchor-name: --mwg-menu-btn;
+    }
+
+    .prose-inner .mwg-demo #menu {
+      position-anchor: --mwg-menu-btn;
+      top: anchor(bottom);
+      left: anchor(left);
+      transform: none;
+      margin-top: 6px;
+    }
+  }
+
+  .prose-inner .mwg-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .prose-inner .mwg-menu li {
+    margin: 0;
+  }
+
+  .prose-inner .mwg-menu button {
+    display: block;
+    width: 100%;
+    padding: 8px 10px;
+    border: 0;
+    background: transparent;
+    color: var(--mono-ink);
+    font-family: var(--mono-font);
+    font-size: 12px;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .prose-inner .mwg-menu button:hover {
+    background: var(--mono-bg-subtle);
+  }
+
+  .prose-inner .mwg-field {
+    width: 100%;
+    min-height: 4.5em;
+    max-height: 14em;
+    padding: 10px 12px;
+    border: 0.7px solid var(--mono-grid);
+    background: var(--mono-paper);
+    color: var(--mono-ink);
+    font-family: var(--mono-font);
+    font-size: 12.5px;
+    line-height: 1.55;
+    resize: none;
+    field-sizing: content;
+  }
+
+  .prose-inner .mwg-accordion {
+    width: 100%;
+  }
+
+  .prose-inner .mwg-accordion details {
+    padding: 9px 0;
+    border-top: 0.7px solid var(--mono-grid);
+  }
+
+  .prose-inner .mwg-accordion details:last-child {
+    border-bottom: 0.7px solid var(--mono-grid);
+  }
+
+  .prose-inner .mwg-accordion summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    list-style: none;
+    cursor: pointer;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--mono-ink);
+  }
+
+  .prose-inner .mwg-accordion summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .prose-inner .mwg-accordion summary::after {
+    content: '+';
+    font-family: var(--mono-font-mono);
+    font-size: 11px;
+    color: var(--mono-muted);
+  }
+
+  .prose-inner .mwg-accordion details[open] summary::after {
+    content: '−';
+  }
+
+  .prose-inner .mwg-accordion p {
+    margin: 7px 0 0;
+    font-size: 11.5px;
+    line-height: 1.6;
+    color: var(--mono-l2);
+  }
+
+  .prose-inner .mwg-chart {
+    margin: 28px 0;
+    padding: 22px 20px 18px;
+    border: 0.7px solid var(--mono-grid);
+    background: var(--mono-paper);
+  }
+
+  .prose-inner .mwg-chart figcaption {
+    margin-bottom: 12px;
+  }
+
+  .prose-inner .mwg-chart-title {
+    margin: 4px 0 3px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--mono-ink);
+  }
+
+  .prose-inner .mwg-chart-sub {
+    margin: 0;
+    font-size: 11.5px;
+    line-height: 1.55;
+    color: var(--mono-muted);
+  }
+
+  .prose-inner .mwg-chart-legend {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 8px;
+    font-family: var(--mono-font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--mono-muted);
+  }
+
+  .prose-inner .mwg-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .prose-inner .mwg-swatch {
+    display: inline-block;
+    width: 14px;
+    height: 6px;
+  }
+
+  .prose-inner .mwg-swatch--unguided {
+    background: var(--mono-l5);
+  }
+
+  .prose-inner .mwg-swatch--guided {
+    background: var(--mono-ink);
+  }
+
+  .prose-inner .mwg-chart-scale {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 14px;
+    align-items: end;
+  }
+
+  .prose-inner .mwg-scale {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-right: 36px;
+    padding-bottom: 4px;
+    border-bottom: 0.7px solid var(--mono-grid);
+    font-family: var(--mono-font-mono);
+    font-size: 8.5px;
+    color: var(--mono-faint);
+  }
+
+  .prose-inner .mwg-scale span:nth-child(2) {
+    text-align: center;
+  }
+
+  .prose-inner .mwg-scale span:last-child {
+    text-align: right;
+  }
+
+  .prose-inner .mwg-chart-row {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 14px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 0.7px dashed var(--mono-grid);
+  }
+
+  .prose-inner .mwg-chart-row:last-child {
+    border-bottom: 0;
+  }
+
+  .prose-inner .mwg-chart-model {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .prose-inner .mwg-chart-model b {
+    font-size: 11.5px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--mono-ink);
+  }
+
+  .prose-inner .mwg-chart-model span {
+    font-family: var(--mono-font-mono);
+    font-size: 8.5px;
+    color: var(--mono-muted);
+  }
+
+  .prose-inner .mwg-bar-pair {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .prose-inner .mwg-bar-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .prose-inner .mwg-bar-track {
+    flex: 1;
+    height: 7px;
+    background: var(--mono-bg-subtle);
+    border-radius: 0 99px 99px 0;
+    overflow: hidden;
+  }
+
+  .prose-inner .mwg-bar {
+    display: block;
+    height: 100%;
+    border-radius: 0 99px 99px 0;
+  }
+
+  .prose-inner .mwg-bar--unguided {
+    background: var(--mono-l5);
+  }
+
+  .prose-inner .mwg-bar--guided {
+    background: var(--mono-ink);
+  }
+
+  .prose-inner .mwg-bar-val {
+    flex: none;
+    width: 28px;
+    font-family: var(--mono-font-mono);
+    font-size: 9px;
+    font-weight: 800;
+    color: var(--mono-ink);
+    text-align: right;
+  }
+
+  .prose-inner .mwg-chart-src {
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 0.7px solid var(--mono-grid);
+    font-family: var(--mono-font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--mono-faint);
+  }
+
+  @media (max-width: 620px) {
+    .prose-inner .mwg-chart {
+      padding: 18px 14px 14px;
+    }
+
+    .prose-inner .mwg-chart-scale {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .prose-inner .mwg-chart-scale > span:first-child {
+      display: none;
+    }
+
+    .prose-inner .mwg-chart-row {
+      grid-template-columns: 1fr;
+      gap: 6px;
+      padding: 12px 0;
+    }
+
+    .prose-inner .mwg-chart-model {
+      flex-direction: row;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+    }
+  }
+</style>
+
+<div class="chamfer-card-wrapper mwg-demo">
+  <div class="chamfer-card-content">
+    <div class="mwg-demo-head">
+      <span class="card-tag">LIVE // 01</span>
+      <h3 class="mwg-demo-title">同樣九行，實際運行</h3>
+      <p class="mwg-demo-sub">打開對話框，用 Tab 走一遍，按 Escape，再重新開啟並選一個按鈕。</p>
+    </div>
+    <div class="mwg-stage">
+      <button class="mwg-btn" commandfor="confirm" command="show-modal" data-mwg-open>刪除</button>
+      <span class="mwg-out" id="mwg-result">等待你的選擇…</span>
+    </div>
+    <dialog id="confirm" aria-labelledby="confirm-title">
+      <h2 id="confirm-title">要刪除這個項目嗎？</h2>
+      <p>這是原生 modal。背後的頁面會變成 inert，按 Escape 就能關閉。</p>
+      <form method="dialog">
+        <button class="mwg-btn" value="cancel" autofocus>取消</button>
+        <button class="mwg-btn mwg-btn--ink" value="delete">刪除</button>
+      </form>
+    </dialog>
+    <div class="mwg-src">DIALOG · INVOKER COMMANDS · HTML + CSS</div>
+  </div>
+</div>
+
+這個示範背後的指南立場很清楚：不要對原生 modal 加上 `role="dialog"`、`aria-modal`、焦點陷阱、`inert` 切換或 Escape 處理器。重複實作瀏覽器行為，反而可能讓對話框更糟。
+
+它也把 `body` 上舊有的 `overflow: hidden`，換成 `dialog:modal` 與 `dialog::backdrop` 上的 `overscroll-behavior: contain`。Safari 目前尚未強制執行 `overscroll-behavior`，但 modal 仍會困住自己的捲動，頁面也仍然是 inert。
+
+Invoker Commands 於 2025 年 12 月 12 日成為 Baseline 新近可用。如果你的目標瀏覽器更舊，請保留相同標記，並只在 `HTMLButtonElement.prototype` 缺少 `commandForElement` 時載入 [`invokers-polyfill`](https://github.com/keithamus/invokers-polyfill)。
+
+## 另外三個值得借用的模式
+
+### popover 就是一個屬性
+
+自製選單通常會附帶一個點擊監聽器、一個外部點擊處理器、還得小心維護 `aria-expanded`，另外還要決定 z-index。Popover API 把其中大部分收進標記裡。
+
+```html
+<button popovertarget="menu">Actions</button>
+
+<ul id="menu" popover>
+  <li><button popovertarget="menu" popovertargetaction="hide">Rename</button></li>
+  <li><button popovertarget="menu" popovertargetaction="hide">Duplicate</button></li>
+  <li><button popovertarget="menu" popovertargetaction="hide">Archive</button></li>
+</ul>
+```
+
+觸發按鈕負責開啟 popover，選單項目則用 `popovertargetaction="hide"` 將它關閉。基本的用法裡，一行 JavaScript 都不用寫。
+
+<div class="chamfer-card-wrapper mwg-demo">
+  <div class="chamfer-card-content">
+    <div class="mwg-demo-head">
+      <span class="card-tag">LIVE // 02</span>
+      <h3 class="mwg-demo-title">不需要點擊監聽器</h3>
+      <p class="mwg-demo-sub">開啟與關閉都是屬性，不是 JavaScript。</p>
+    </div>
+    <div class="mwg-stage">
+      <div class="mwg-popover-wrap">
+        <button id="menu-btn" class="mwg-btn" popovertarget="menu">操作</button>
+        <ul id="menu" class="mwg-menu" popover>
+          <li><button popovertarget="menu" popovertargetaction="hide">重新命名</button></li>
+          <li><button popovertarget="menu" popovertargetaction="hide">建立副本</button></li>
+          <li><button popovertarget="menu" popovertargetaction="hide">封存</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mwg-src">POPOVER API · 宣告式控制 · HTML</div>
+  </div>
+</div>
+
+Popover API 自 2025 年 1 月 27 日起成為 Baseline 新近可用。回退是漸進式的：如果瀏覽器不認得這個屬性，觸發按鈕就什麼都不做，所以當某個操作很關鍵時，請保留一般的連結或按鈕路徑。
+
+### 一行 CSS 就會長高的 textarea
+
+舊模式是在每個 input 事件上跑一次 `scrollHeight` 迴圈。現代模式只有一行宣告：
+
+```css
+textarea {
+  field-sizing: content;
+}
+```
+
+這就是全部實作。欄位從自然高度開始，隨著使用者輸入長高，不需要 JavaScript 監聽器，也不會牽動框架的渲染週期。
+
+<div class="chamfer-card-wrapper mwg-demo">
+  <div class="chamfer-card-content">
+    <div class="mwg-demo-head">
+      <span class="card-tag">LIVE // 03</span>
+      <h3 class="mwg-demo-title">開始輸入，方框就長高</h3>
+      <p class="mwg-demo-sub">一行 CSS 宣告取代舊的 <code>scrollHeight</code> 迴圈。只有瀏覽器不支援這個屬性時，才會執行回退方案。</p>
+    </div>
+    <div class="mwg-stage">
+      <textarea class="mwg-field" id="mwg-field" rows="2" placeholder="在這裡輸入幾行字，欄位會隨著內容長高。"></textarea>
+    </div>
+    <div class="mwg-src">FIELD-SIZING · 純 CSS · 漸進增強</div>
+  </div>
+</div>
+
+`field-sizing: content` 是舊有 resize 迴圈的現代替代方案。它純粹是 CSS，不會和框架的渲染週期打架，也不必為每個欄位加上 input 監聽器。在尚未支援的地方，回退方案依然很小。
+
+### 不用函式庫的互斥手風琴
+
+手風琴套件通常要管理開啟狀態、隱藏面板，還要更新 ARIA 屬性。`details` 上的 `name` 屬性，原生就處理了互斥這一部分：
+
+```html
+<details name="faq">
+  <summary>What is Baseline?</summary>
+  <p>Baseline tells you when a feature is interoperable across the major engines.</p>
+</details>
+
+<details name="faq">
+  <summary>Why does the browser do it better?</summary>
+  <p>Native controls already contain the focus and keyboard behavior.</p>
+</details>
+```
+
+打開一個，另一個就會關閉。整個狀態機就這樣。
+
+<div class="chamfer-card-wrapper mwg-demo">
+  <div class="chamfer-card-content">
+    <div class="mwg-demo-head">
+      <span class="card-tag">LIVE // 04</span>
+      <h3 class="mwg-demo-title">一次只開一個</h3>
+      <p class="mwg-demo-sub"><code>name</code> 屬性讓這些 details 互斥。打開一個，另一個就會關閉。</p>
+    </div>
+    <div class="mwg-stage">
+      <div class="mwg-accordion">
+        <details name="faq" open>
+          <summary>什麼是 Baseline？</summary>
+          <p>Baseline 告訴你某項功能何時在主要引擎之間達成互通。它是一個訊號，不保證每位使用者都已經能用。</p>
+        </details>
+        <details name="faq">
+          <summary>為什麼瀏覽器做得更好？</summary>
+          <p>原生控制項本身就包含焦點、鍵盤與無障礙行為，而自製元件往往得手工重建這些東西。</p>
+        </details>
+        <details name="faq">
+          <summary>較舊的瀏覽器怎麼辦？</summary>
+          <p>把這項功能當作漸進增強使用，只在 API 不存在時載入一個小型 polyfill。</p>
+        </details>
+      </div>
+    </div>
+    <div class="mwg-src">DETAILS · NAME 屬性 · HTML</div>
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    const dialog = document.getElementById('confirm');
+    const open = document.querySelector('[data-mwg-open]');
+    const result = document.getElementById('mwg-result');
+
+    if (dialog && open) {
+      open.addEventListener('click', () => {
+        dialog.returnValue = '';
+      }, true);
+
+      if (!('commandForElement' in HTMLButtonElement.prototype)) {
+        open.addEventListener('click', () => dialog.showModal());
+      }
+    }
+
+    if (dialog && result) {
+      dialog.addEventListener('close', () => {
+        result.textContent = dialog.returnValue
+          ? 'returnValue = "' + dialog.returnValue + '"'
+          : '已按 Escape 關閉。';
+      });
+    }
+
+    const field = document.getElementById('mwg-field');
+    if (field && !CSS.supports('field-sizing', 'content')) {
+      const grow = () => {
+        field.style.height = 'auto';
+        field.style.height = field.scrollHeight + 'px';
+      };
+      field.addEventListener('input', grow);
+      grow();
+    }
+  })();
+</script>
+
+## 這些模式從哪裡來
+
+這些模式是可見的部分。更難的問題是：代理怎麼在寫下舊有版本之前，就在正確的時機找到它們？
+
+[Modern Web Guidance](https://developer.chrome.com/docs/modern-web-guidance) 會在代理動手建構的那一刻，把專家撰寫的指南放進它的上下文。它是一組技能加一個本地 CLI，由 Google Chrome、Microsoft Edge、Mozilla Firefox 與 MDN 團隊共同維護。1.0 版於 [2026 年 11 月 10 日](https://developer.chrome.com/blog/modern-web-guidance-v1) 發布。
 
 [原始碼儲存庫](https://github.com/GoogleChrome/modern-web-guidance-src) 包含指南、CLI、評測框架與校準程式碼。可安裝的技能則放在隔壁的 [`modern-web-guidance`](https://github.com/GoogleChrome/modern-web-guidance) 儲存庫；如果你想貢獻或查證某個說法，這個區別很重要。
 
@@ -56,40 +769,9 @@ npx modern-web-guidance@latest retrieve dialog
 npx modern-web-guidance@latest legacy-scan .
 ```
 
-`search` 會回傳 JSON。以下是精簡後的結果：
+`search` 會回傳依相關性排序的 JSON。`retrieve` 會印出一份指南，並接受以逗號分隔的清單。
 
-```json
-[
-  {
-    "id": "animate-to-from-top-layer",
-    "description": "Animate elements such as dialogs, popovers, and tooltips as they're entering/exiting the top layer."
-  },
-  {
-    "id": "dialog",
-    "description": "Build a modal or non-modal dialog component that is accessible, manages focus appropriately, and can be dismissed the way users expect on each platform."
-  }
-]
-```
-
-實際指令會回傳十筆。`retrieve` 會印出一份指南，並接受以逗號分隔的清單。
-
-`legacy-scan` 會解析 HTML、CSS、JavaScript、TypeScript、框架元件與 `package.json`。以下是一個小型示範：
-
-```text
-Modern Web Guidance Analyzer — .
-Found 2 modernization opportunities across 2 guides (scanned 38 guides with deterministic rules; ~20% of the guidance corpus)
-Note: Static analysis results are provisional — verify against the Keep/Drop criteria below.
-
-* declarative-dialog-popover-control (1 finding)
-  - legacy.html:4
-    openBtn.addEventListener('click', () => menu.showPopover());
-
-* form-fields-automatically-fit-contents (1 finding)
-  - legacy.html:7
-    textarea.style.height = `${textarea.scrollHeight}px`;
-```
-
-這是預篩，不是自動修復器。CLI 刻意沒有 `--fix` 旗標。每個發現都附有 `keepWhen` 與 `dropWhen` 準則，代理必須檢查周遭程式碼。
+`legacy-scan` 會解析 HTML、CSS、JavaScript、TypeScript、框架元件與 `package.json`。這是預篩，不是修復器：CLI 刻意不提供 `--fix` 旗標，而且每個發現都附有 `keepWhen` 與 `dropWhen` 準則。代理必須自行檢查周遭程式碼。
 
 ## 檢索迴圈怎麼運作
 
@@ -104,88 +786,9 @@ Note: Static analysis results are provisional — verify against the Keep/Drop c
 
 指南也顧及 token 效率。專案會刪掉模型已經會遵循的建議，讓取回的檔案把 token 花在真正的落差上，而不是一份通用 CSS 教學。
 
-## Modal 實測：自製覆蓋層，還是九行 HTML？
-
-[`dialog` 指南](https://github.com/GoogleChrome/modern-web-guidance/blob/main/skills/modern-web-guidance/guides/ui-components/dialog.md) 是個好測試：幾乎每個應用都有 modal，而幾乎每個自製 modal 都漏掉同樣的細節。下面的舊有版本有開啟與關閉函式、會還原焦點，也會鎖住頁面。它仍然需要 Escape 處理、焦點陷阱、背景遮罩，以及讓背景 inert。
-
-```html
-<div id="confirm" class="modal" role="dialog" aria-modal="true"
-     aria-labelledby="confirm-title" hidden>
-  <h2 id="confirm-title">Delete this item?</h2>
-  <button id="cancel">Cancel</button>
-  <button id="delete">Delete</button>
-</div>
-
-<script>
-  const modal = document.querySelector('#confirm');
-  let lastFocused;
-
-  function openModal() {
-    lastFocused = document.activeElement;
-    modal.hidden = false;
-    document.body.style.overflow = 'hidden';
-    modal.querySelector('button').focus();
-  }
-
-  function closeModal() {
-    modal.hidden = true;
-    document.body.style.overflow = '';
-    lastFocused?.focus();
-  }
-
-  // Wiring omitted. Still missing: Escape, focus trap, inert background, backdrop.
-</script>
-```
-
-現代版本：
-
-```html
-<button type="button" commandfor="confirm" command="show-modal">Delete</button>
-
-<dialog id="confirm" aria-labelledby="confirm-title">
-  <h2 id="confirm-title">Delete this item?</h2>
-  <form method="dialog">
-    <button value="cancel" autofocus>Cancel</button>
-    <button value="delete">Delete</button>
-  </form>
-</dialog>
-```
-
-在支援 Invoker Commands 的瀏覽器上，這樣就是完整實作：沒有 JavaScript、不用手動還原焦點，也沒有 z-index 或背景遮罩程式碼。再用兩條 CSS 規則完成捲動鎖定：
-
-```css
-dialog:modal {
-  overscroll-behavior: contain;
-}
-
-dialog::backdrop {
-  overflow: hidden;
-  overscroll-behavior: contain;
-}
-```
-
-瀏覽器會處理自製 modal 常做錯的事：
-
-- 背後的頁面會變成 inert。
-- 焦點會留在裡面，並在關閉時回到觸發元素。
-- 它會渲染在頂層，並帶有真正的 `::backdrop`。
-- Escape、行動裝置返回手勢與對話框語意都由瀏覽器提供。
-
-指南在這裡很明確：不要對原生 modal 加上 `role="dialog"`、`aria-modal`、焦點陷阱、`inert` 切換或 Escape 處理器。重複實作瀏覽器行為，反而可能讓對話框更糟。
-
-它還抓到一個更細微的坑。舊建議是在 `body` 上設 `overflow: hidden`，這會移除根捲軸並造成版面位移。指南用上面兩條規則取代它。Safari 目前尚未強制執行 `overscroll-behavior`，但 modal 仍會困住自己的捲動，頁面也仍然是 inert。
-
-Invoker Commands 於 2025 年 12 月 12 日成為 Baseline 新近可用。如果你的目標瀏覽器更舊，請保留相同標記，並只在 `HTMLButtonElement.prototype` 缺少 `commandForElement` 時載入 [`invokers-polyfill`](https://github.com/keithamus/invokers-polyfill)。
-
-這就是「事實」與「指南」的差別：回退方案、無障礙規則，以及那個捲動 bug。
-
 ## 裡面有什麼
 
 截至 2026 年 11 月，README 列出 **262 項現代網頁功能** 與 **204 個使用案例**。六大核心領域是使用者體驗、CSS 版面、效能、表單與 UI、無障礙，以及內建 AI。目錄也涵蓋安全、隱私、passkey、web component、PWA 與 WebMCP。
-
-使用案例很具體：把 dialog 動畫送進頂層、做一張會回應自身寬度的卡片、只在使用者互動後驗證欄位，或加入 passkey 登入。每份指南都是 Markdown，附有可執行片段與限制條件。
-
-掃描器的範圍較窄。我在 2026 年 11 月執行 CLI 1.0.1 時，它回報 **38 份指南** 具有確定性規則，約占整個語料的 20%。一個什麼都標記的掃描器會被忽略，所以規則必須在未見過的儲存庫上通過精確度門檻。
 
 [現代化文件](https://developer.chrome.com/docs/modern-web-guidance/modernization-workflow) 展示了涵蓋範圍：
 
@@ -204,7 +807,7 @@ Modern Web Guidance 具備 Baseline 感知，但 Baseline 不是「到處都能�
 
 - **設定目標。** 如果 `AGENTS.md` 或 `CLAUDE.md` 沒有指定，工具會預設為 Baseline Widely available。宣告目標會改變代理收到的建議。
 - **區分增強與關鍵行為。** 推測性預載可以無聲失敗；對話框控制不行。只有在行為不可或缺時才需要寫回退方案。
-- **偏好小型回退。** 少於 50 行、針對個案的回退，或條件式載入的 polyfill，勝過肥大的打包檔。
+- **優先選擇小型回退。** 少於 50 行、針對個案的回退，或條件式載入的 polyfill，勝過肥大的打包檔。
 - **管制不穩定功能。** Origin Trial 與 volatile 指南仍可搜尋，但在你選擇加入之前，`retrieve` 會被擋下。
 
 選擇加入的設定放在專案根目錄的選用檔案 `.mwgrc`，或以 `~/.mwgrc` 作為使用者層級的備援。例如，只允許 Origin Trial 指南：
@@ -230,20 +833,72 @@ CLI 會寫入一個小到可以提交進版本控制的 JSON 檔：
 
 以下是儀表板上每個模型最新的每晚測試結果，日期為 **2026 年 11 月 20 日**：
 
-| 代理與模型 | 配對任務／檢查 | 未引導 → 有引導 | 提升 | 自動無障礙檢查 |
-| :--- | :---: | :---: | :---: | :---: |
-| Antigravity CLI, Gemini 4 Argon | 228 / 1,955 | 56% → 97% | +41 pp | 54% → 95% |
-| Claude Code, Claude Opus 5.5 | 229 / 1,961 | 54% → 94% | +40 pp | 60% → 96% |
-| Codex CLI, GPT-6.1 Sol | 229 / 1,961 | 49% → 85% | +36 pp | 60% → 92% |
+<figure class="mwg-chart" aria-label="長條圖：三個編碼代理在啟用與未啟用 Modern Web Guidance 時的檢查通過率">
+  <figcaption>
+    <span class="card-tag">EVALS // NIGHTLY</span>
+    <h3 class="mwg-chart-title">有引導的代理通過明顯更多檢查</h3>
+    <p class="mwg-chart-sub">啟用與未啟用技能時的檢查通過率。愈高愈好。</p>
+  </figcaption>
+  <div class="mwg-chart-legend" aria-hidden="true">
+    <span class="mwg-legend-item"><span class="mwg-swatch mwg-swatch--unguided"></span>未引導</span>
+    <span class="mwg-legend-item"><span class="mwg-swatch mwg-swatch--guided"></span>有引導</span>
+  </div>
+  <div class="mwg-chart-scale" aria-hidden="true">
+    <span></span>
+    <div class="mwg-scale"><span>0%</span><span>50%</span><span>100%</span></div>
+  </div>
+  <div class="mwg-chart-rows">
+    <div class="mwg-chart-row">
+      <div class="mwg-chart-model"><b>Antigravity CLI</b><span>Gemini 4 Argon</span></div>
+      <div class="mwg-bar-pair">
+        <div class="mwg-bar-line" role="img" aria-label="未引導：56%">
+          <div class="mwg-bar-track" aria-hidden="true"><span class="mwg-bar mwg-bar--unguided" style="width: 56%"></span></div>
+          <span class="mwg-bar-val" aria-hidden="true">56%</span>
+        </div>
+        <div class="mwg-bar-line" role="img" aria-label="有引導：97%">
+          <div class="mwg-bar-track" aria-hidden="true"><span class="mwg-bar mwg-bar--guided" style="width: 97%"></span></div>
+          <span class="mwg-bar-val" aria-hidden="true">97%</span>
+        </div>
+      </div>
+    </div>
+    <div class="mwg-chart-row">
+      <div class="mwg-chart-model"><b>Claude Code</b><span>Claude Opus 5.5</span></div>
+      <div class="mwg-bar-pair">
+        <div class="mwg-bar-line" role="img" aria-label="未引導：54%">
+          <div class="mwg-bar-track" aria-hidden="true"><span class="mwg-bar mwg-bar--unguided" style="width: 54%"></span></div>
+          <span class="mwg-bar-val" aria-hidden="true">54%</span>
+        </div>
+        <div class="mwg-bar-line" role="img" aria-label="有引導：94%">
+          <div class="mwg-bar-track" aria-hidden="true"><span class="mwg-bar mwg-bar--guided" style="width: 94%"></span></div>
+          <span class="mwg-bar-val" aria-hidden="true">94%</span>
+        </div>
+      </div>
+    </div>
+    <div class="mwg-chart-row">
+      <div class="mwg-chart-model"><b>Codex CLI</b><span>GPT-6.1 Sol</span></div>
+      <div class="mwg-bar-pair">
+        <div class="mwg-bar-line" role="img" aria-label="未引導：49%">
+          <div class="mwg-bar-track" aria-hidden="true"><span class="mwg-bar mwg-bar--unguided" style="width: 49%"></span></div>
+          <span class="mwg-bar-val" aria-hidden="true">49%</span>
+        </div>
+        <div class="mwg-bar-line" role="img" aria-label="有引導：85%">
+          <div class="mwg-bar-track" aria-hidden="true"><span class="mwg-bar mwg-bar--guided" style="width: 85%"></span></div>
+          <span class="mwg-bar-val" aria-hidden="true">85%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mwg-chart-src">每晚評測 · 2026-11-20 · 檢查通過率 · 評測儀表板</div>
+</figure>
 
-未引導的代理大約通過一半檢查；有引導的代理通過大多數檢查。無障礙欄位從 54–60% 提升到 92–96%。
+每一列代表一個模型的配對執行，包含 228–229 個任務與 1,955–1,961 項檢查。未引導的代理大約通過一半檢查；有引導的代理通過大多數檢查。差距分別是 +41、+40 與 +36 個百分點。自動無障礙檢查這一部分則從 54–60% 提升到 92–96%。
 
 幾點提醒：
 
 - 這個基準由專案團隊設計並執行。任務與評分器是開源的，但這是團隊自行執行的評測，不是獨立稽核。
 - 提示從來沒有提到 Modern Web Guidance。代理必須自己發現技能適用，所以有引導的一側不是 100%。
 - 未引導的基準是 49–56%，所以改善空間很大。你的程式碼庫缺口可能不同。
-- 無障礙欄位涵蓋鍵盤、焦點與 `inert`、動態效果與對比、ARIA，以及表單標籤的自動檢查。它不是 WCAG 稽核。
+- 自動無障礙檢查涵蓋鍵盤、焦點與 `inert`、動態效果與對比、ARIA，以及表單標籤。它不是 WCAG 稽核。
 
 在一個精選的基準上提升 36 到 41 個百分點，說明指南補上了真實缺口。它不保證你下一個 PR 也會進步 40 分。
 
@@ -273,7 +928,7 @@ CLI 快取後仍可離線運作，所以封閉環境可以在第一次安裝後�
 
 ## 這帶來的改變
 
-真正的轉變不是代理會寫 modal，而是平台知識變成一個可以檢查、版本控制、按需取用的檔案；這比微調或把整個文件網站貼進提示，是更小的介入。
+真正的轉變不是代理會寫 modal，而是平台知識變成一個可以檢查、納入版本控制、按需取用的檔案；這比微調或把整個文件網站貼進提示，是更小的介入。
 
 對開發者來說，實用流程很短：
 
