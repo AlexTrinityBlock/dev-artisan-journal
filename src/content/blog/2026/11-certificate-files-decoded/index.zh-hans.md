@@ -1,5 +1,5 @@
 ---
-title: "证书文件全解析：PEM、DER、PFX、P7B 与 JKS"
+title: "证书文件全解析：PEM、DER、PFX 与 P7B"
 description: "TLS 证书文件里到底装了什么、可筛选的格式矩阵，以及从检查到在 Linux 自签链的 OpenSSL 实战教程。"
 pubDate: 2026-11-22
 category: "Web"
@@ -9,11 +9,11 @@ author: "Alex.Hsiao"
 readTime: "15 分钟"
 ---
 
-# 证书文件全解析：PEM、DER、PFX、P7B 与 JKS
+# 证书文件全解析：PEM、DER、PFX 与 P7B
 
 证书文件不是一种格式。它是一个盒子，标签是别人贴的。
 
-盒子里最多只有三种内容：**域名证书**（你的域名与公钥，由 CA 签发）、**中间证书链**（你的证书与受信任根证书之间的连接），以及**私钥**（公钥的另一半）。其余的一切——`.pem`、`.crt`、`.pfx`、`.jks`——描述的是这些内容如何编码、如何打包。
+盒子里最多只有三种内容：**域名证书**（你的域名与公钥，由 CA 签发）、**中间证书链**（你的证书与受信任根证书之间的连接），以及**私钥**（公钥的另一半）。其余的一切——`.pem`、`.crt`、`.pfx`——描述的是这些内容如何编码、如何打包。
 
 一旦看懂这三种内容，扩展名就不再是冷知识。你能预测一个文件能装什么、不能装什么，也能直接挑对 `openssl` 命令，不用再猜。
 
@@ -511,7 +511,7 @@ readTime: "15 分钟"
   <div class="crt-scroll">
   <svg class="crt-svg" viewBox="0 0 800 240" role="img" aria-labelledby="crt-f2-title crt-f2-desc">
     <title id="crt-f2-title">文本与二进制证书文件</title>
-    <desc id="crt-f2-desc">以 BEGIN 开头的可读文本是 PEM。二进制字节代表 DER、PKCS#12 或 JKS。</desc>
+    <desc id="crt-f2-desc">以 BEGIN 开头的可读文本是 PEM。二进制字节代表 DER 或 PKCS#12。</desc>
     <text x="24" y="20" class="f" font-size="8" letter-spacing="1.2">转换之前，先打开看看</text>
     <rect x="24" y="36" width="356" height="168" class="box"/>
     <use href="#crt-i-file" x="40" y="52" width="16" height="16" class="ico"/>
@@ -528,12 +528,12 @@ readTime: "15 分钟"
     <rect x="420" y="36" width="356" height="168" class="box"/>
     <use href="#crt-i-binary" x="436" y="52" width="16" height="16" class="ico"/>
     <text x="460" y="64" class="f" font-size="7.5" letter-spacing="1">二进制</text>
-    <text x="436" y="88" class="t" font-size="11" font-weight="700">DER, PKCS#12, JKS</text>
+    <text x="436" y="88" class="t" font-size="11" font-weight="700">DER 与 PKCS#12</text>
     <rect x="436" y="102" width="324" height="44" class="codebox"/>
     <text x="448" y="119" class="f mono" font-size="7.5">$ xxd -l 16 leaf.der</text>
     <text x="448" y="135" class="t mono" font-size="8">30 82 03 65 30 82 02 4d a0 03 02 01 02 02 14 46</text>
-    <text x="436" y="166" class="m" font-size="8.5">格式：.der .cer .pfx .p12 .jks</text>
-    <text x="436" y="182" class="m" font-size="8.5">用 openssl、keytool 或十六进制查看器。</text>
+    <text x="436" y="166" class="m" font-size="8.5">格式：.der .cer .pfx .p12</text>
+    <text x="436" y="182" class="m" font-size="8.5">用 openssl 或十六进制查看器。</text>
     <text x="24" y="228" class="m" font-size="8.5">一个 <tspan class="mono" font-weight="700">.cer</tspan> 可能是其中任一种，<tspan class="mono" font-weight="700">.p7b</tspan> 也是。扩展名不等于格式。</text>
   </svg>
   </div>
@@ -549,11 +549,11 @@ readTime: "15 分钟"
 - `-----BEGIN EC PRIVATE KEY-----` — SEC1 椭圆曲线密钥。
 - `-----BEGIN PKCS7-----` — 证书的 P7B 打包。
 
-如果开头字节是 `30 82`，那是 DER 里的 ASN.1 SEQUENCE。它可能是证书、PKCS#12 文件或 JKS 密钥库；下一条命令会告诉你是哪一种。
+如果开头字节是 `30 82`，那是 DER 里的 ASN.1 SEQUENCE。它可能是证书或 PKCS#12 文件；下一条命令会告诉你是哪一种。
 
 ## 格式矩阵
 
-七个名字、三种内容、两种编码。筛选矩阵，回答你真正想问的问题。
+六个名字、三种内容、两种编码。筛选矩阵，回答你真正想问的问题。
 
 <figure class="crt-matrix">
   <figcaption>
@@ -562,7 +562,7 @@ readTime: "15 分钟"
     <p class="crt-fig-sub">容器可以装哪些内容。只有内含私钥时才需要密码。</p>
   </figcaption>
   <div class="crt-filters" role="group" aria-label="筛选证书格式矩阵">
-    <label class="crt-chip"><input type="radio" name="crt-filter" id="crt-f-all" checked><span>全部 7 种</span></label>
+    <label class="crt-chip"><input type="radio" name="crt-filter" id="crt-f-all" checked><span>全部 6 种</span></label>
     <label class="crt-chip"><input type="radio" name="crt-filter" id="crt-f-key"><span>含私钥</span></label>
     <label class="crt-chip"><input type="radio" name="crt-filter" id="crt-f-pub"><span>只有公开证书</span></label>
     <label class="crt-chip"><input type="radio" name="crt-filter" id="crt-f-pass"><span>需要密码</span></label>
@@ -637,15 +637,6 @@ readTime: "15 分钟"
           <td data-label="密码"><span class="crt-pass">无</span></td>
           <td data-label="常见环境"><span class="crt-home">Windows · Tomcat</span></td>
         </tr>
-        <tr data-key="yes" data-pass="required" data-enc="binary">
-          <td data-label="格式"><b>.jks</b><span>Java 密钥库</span></td>
-          <td data-label="域名证书" class="crt-c"><span class="crt-dot crt-dot--on" aria-hidden="true"></span><span class="crt-vh">可包含</span></td>
-          <td data-label="中间链" class="crt-c"><span class="crt-dot crt-dot--on" aria-hidden="true"></span><span class="crt-vh">可包含</span></td>
-          <td data-label="私钥" class="crt-c"><span class="crt-dot crt-dot--on" aria-hidden="true"></span><span class="crt-vh">可包含</span></td>
-          <td data-label="编码"><b>JKS</b><span>二进制</span></td>
-          <td data-label="密码"><span class="crt-pass crt-pass--req">必须</span></td>
-          <td data-label="常见环境"><span class="crt-home">Tomcat · Spring Boot</span></td>
-        </tr>
       </tbody>
     </table>
   </div>
@@ -654,7 +645,7 @@ readTime: "15 分钟"
     <span><span class="crt-dot crt-dot--opt"></span>有时</span>
     <span><span class="crt-dot crt-dot--off"></span>绝不</span>
   </div>
-  <div class="crt-fig-src">格式矩阵 · 7 种容器 · 内容 / 编码 / 密码</div>
+  <div class="crt-fig-src">格式矩阵 · 6 种容器 · 内容 / 编码 / 密码</div>
 </figure>
 
 筛选器纯 CSS。背后没有 JavaScript：几个 radio input 加 `:has()` 选择器就决定哪些行显示。这和文件本身的道理一样——结构承载行为。
@@ -672,8 +663,6 @@ readTime: "15 分钟"
 **`.pfx` 与 `.p12`** 是同一件事：PKCS#12，一个由密码保护、装着证书与私钥的二进制归档文件。Windows IIS、Azure 与 macOS Keychain 要的就是这个。没有密码的 PFX 不叫 PFX；密码是格式的一部分。
 
 **`.p7b`** 是 PKCS#7。它打包证书——叶证书加中间证书，有时也含根证书——但永远装不了私钥。它的存在是为了在系统之间搬运证书链，在 Windows 与较旧的 Tomcat 部署很常见。
-
-**`.jks`** 是 Java 专有的密钥库。它把证书与密钥锁在密码之后，这点和 PFX 一样，但用的是 Java 专属的二进制布局。从 Java 9 起，默认密钥库类型是 PKCS#12（[JEP 229](https://openjdk.org/jeps/229)）；JKS 在 Tomcat、Jetty 与长期运行的 Spring Boot 安装中仍很常见。
 
 ## 在 Linux 上建一条链
 
@@ -949,22 +938,6 @@ issuer=CN=Lab Root CA
 
 P7B 只带证书，别的什么都没有。如果你需要私钥，它住在别的地方；没有任何 `openssl pkcs7` 命令能把私钥抽出来。
 
-### 把 JKS 交给 keytool
-
-JKS 不是 OpenSSL 的格式，所以转换工具是 `keytool`：
-
-```bash
-# Inspect a keystore
-keytool -list -v -keystore keystore.jks -storepass changeit
-
-# PFX to JKS (legacy systems)
-keytool -importkeystore \
-  -srckeystore bundle.pfx -srcstoretype PKCS12 -srcstorepass demo \
-  -destkeystore keystore.jks -deststoretype JKS -deststorepass changeit
-```
-
-在 Java 9 以后，去掉 `-deststoretype JKS` 就会得到现代默认的 PKCS#12。只有在应用真的读不了 PKCS#12 时才保留它。
-
 ### 让 Nginx 指向正确的两个文件
 
 ```nginx
@@ -1022,8 +995,6 @@ openssl x509 -in cert.der -inform DER -out cert.pem
 openssl pkcs12 -export -out bundle.pfx -inkey key.pem -in cert.pem -certfile chain.pem
 openssl pkcs12 -in bundle.pfx -out bundle.pem -nodes
 openssl crl2pkcs7 -nocrl -certfile fullchain.pem -out chain.p7b
-keytool -importkeystore -srckeystore bundle.pfx -srcstoretype PKCS12 \
-  -destkeystore keystore.jks -deststoretype JKS
 ```
 
 底下贯穿全部的原则：读内容，不要读扩展名。一个含私钥的 `.pem` 是机密；一个少了链的 `.pfx`，就是在等某个移动浏览器来引发故障。
@@ -1035,5 +1006,4 @@ keytool -importkeystore -srckeystore bundle.pfx -srcstoretype PKCS12 \
 - [RFC 7468 — PKIX、PKCS 与 CMS 结构的文本编码](https://www.rfc-editor.org/rfc/rfc7468)
 - [RFC 7292 — PKCS #12：个人信息交换语法](https://www.rfc-editor.org/rfc/rfc7292)
 - [RFC 2315 — PKCS #7：密码消息语法](https://www.rfc-editor.org/rfc/rfc2315)
-- [JEP 229 — 默认创建 PKCS12 密钥库](https://openjdk.org/jeps/229)
 - [OpenSSL 3 文档](https://docs.openssl.org/3.5/)

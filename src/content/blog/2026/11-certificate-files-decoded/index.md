@@ -1,5 +1,5 @@
 ---
-title: "Certificate Files, Decoded: PEM, DER, PFX, P7B, and JKS"
+title: "Certificate Files, Decoded: PEM, DER, PFX, and P7B"
 description: "What is really inside a TLS certificate file, a filterable format matrix, and a hands-on OpenSSL tutorial that builds and verifies a self-signed chain on Linux."
 pubDate: 2026-11-22
 category: "Web"
@@ -9,11 +9,11 @@ author: "Alex.Hsiao"
 readTime: "15 min read"
 ---
 
-# Certificate Files, Decoded: PEM, DER, PFX, P7B, and JKS
+# Certificate Files, Decoded: PEM, DER, PFX, and P7B
 
 A certificate file is not a format. It is a box with a label someone chose.
 
-Inside the box there are at most three payloads: the **domain certificate** (your name and public key, signed by a CA), the **intermediate chain** (the links between your certificate and a trusted root), and the **private key** (the other half of the public key). Everything else — `.pem`, `.crt`, `.pfx`, `.jks` — describes how those payloads are encoded and packed.
+Inside the box there are at most three payloads: the **domain certificate** (your name and public key, signed by a CA), the **intermediate chain** (the links between your certificate and a trusted root), and the **private key** (the other half of the public key). Everything else — `.pem`, `.crt`, `.pfx` — describes how those payloads are encoded and packed.
 
 Once you see the three payloads, the extensions stop being trivia. You can predict what a file can and cannot contain, and you can pick the right `openssl` command instead of guessing.
 
@@ -511,7 +511,7 @@ Before installing anything, look at the first line. PEM is Base64 wrapped in ASC
   <div class="crt-scroll">
   <svg class="crt-svg" viewBox="0 0 800 240" role="img" aria-labelledby="crt-f2-title crt-f2-desc">
     <title id="crt-f2-title">Text versus binary certificate files</title>
-    <desc id="crt-f2-desc">Readable text starting with BEGIN is PEM. Binary bytes mean DER, PKCS#12, or JKS.</desc>
+    <desc id="crt-f2-desc">Readable text starting with BEGIN is PEM. Binary bytes mean DER or PKCS#12.</desc>
     <text x="24" y="20" class="f" font-size="8" letter-spacing="1.2">OPEN IT BEFORE YOU CONVERT IT</text>
     <rect x="24" y="36" width="356" height="168" class="box"/>
     <use href="#crt-i-file" x="40" y="52" width="16" height="16" class="ico"/>
@@ -528,12 +528,12 @@ Before installing anything, look at the first line. PEM is Base64 wrapped in ASC
     <rect x="420" y="36" width="356" height="168" class="box"/>
     <use href="#crt-i-binary" x="436" y="52" width="16" height="16" class="ico"/>
     <text x="460" y="64" class="f" font-size="7.5" letter-spacing="1">BINARY</text>
-    <text x="436" y="88" class="t" font-size="11" font-weight="700">DER, PKCS#12, JKS</text>
+    <text x="436" y="88" class="t" font-size="11" font-weight="700">DER and PKCS#12</text>
     <rect x="436" y="102" width="324" height="44" class="codebox"/>
     <text x="448" y="119" class="f mono" font-size="7.5">$ xxd -l 16 leaf.der</text>
     <text x="448" y="135" class="t mono" font-size="8">30 82 03 65 30 82 02 4d a0 03 02 01 02 02 14 46</text>
-    <text x="436" y="166" class="m" font-size="8.5">Formats: .der .cer .pfx .p12 .jks</text>
-    <text x="436" y="182" class="m" font-size="8.5">Use openssl, keytool, or a hex viewer.</text>
+    <text x="436" y="166" class="m" font-size="8.5">Formats: .der .cer .pfx .p12</text>
+    <text x="436" y="182" class="m" font-size="8.5">Use openssl or a hex viewer.</text>
     <text x="24" y="228" class="m" font-size="8.5">A <tspan class="mono" font-weight="700">.cer</tspan> can be either one. So can a <tspan class="mono" font-weight="700">.p7b</tspan>. The extension is not the format.</text>
   </svg>
   </div>
@@ -549,11 +549,11 @@ The `BEGIN` line also names the payload:
 - `-----BEGIN EC PRIVATE KEY-----` — a SEC1 elliptic-curve key.
 - `-----BEGIN PKCS7-----` — a P7B bundle of certificates.
 
-If the first bytes are `30 82`, that is an ASN.1 SEQUENCE in DER. It could be a certificate, a PKCS#12 file, or a JKS keystore; the next command tells you which.
+If the first bytes are `30 82`, that is an ASN.1 SEQUENCE in DER. It could be a certificate or a PKCS#12 file; the next command tells you which.
 
 ## The format matrix
 
-Seven names, three payloads, two encodings. Filter the matrix to answer the question you actually have.
+Six names, three payloads, two encodings. Filter the matrix to answer the question you actually have.
 
 <figure class="crt-matrix">
   <figcaption>
@@ -562,7 +562,7 @@ Seven names, three payloads, two encodings. Filter the matrix to answer the ques
     <p class="crt-fig-sub">Payloads a container can hold. A password is required only when a private key is inside.</p>
   </figcaption>
   <div class="crt-filters" role="group" aria-label="Filter the certificate format matrix">
-    <label class="crt-chip"><input type="radio" name="crt-filter" id="crt-f-all" checked><span>All 7</span></label>
+    <label class="crt-chip"><input type="radio" name="crt-filter" id="crt-f-all" checked><span>All 6</span></label>
     <label class="crt-chip"><input type="radio" name="crt-filter" id="crt-f-key"><span>Contains a key</span></label>
     <label class="crt-chip"><input type="radio" name="crt-filter" id="crt-f-pub"><span>Public only</span></label>
     <label class="crt-chip"><input type="radio" name="crt-filter" id="crt-f-pass"><span>Needs password</span></label>
@@ -637,15 +637,6 @@ Seven names, three payloads, two encodings. Filter the matrix to answer the ques
           <td data-label="Password"><span class="crt-pass">none</span></td>
           <td data-label="Typical home"><span class="crt-home">Windows · Tomcat</span></td>
         </tr>
-        <tr data-key="yes" data-pass="required" data-enc="binary">
-          <td data-label="Format"><b>.jks</b><span>Java KeyStore</span></td>
-          <td data-label="Cert" class="crt-c"><span class="crt-dot crt-dot--on" aria-hidden="true"></span><span class="crt-vh">Can include</span></td>
-          <td data-label="Chain" class="crt-c"><span class="crt-dot crt-dot--on" aria-hidden="true"></span><span class="crt-vh">Can include</span></td>
-          <td data-label="Key" class="crt-c"><span class="crt-dot crt-dot--on" aria-hidden="true"></span><span class="crt-vh">Can include</span></td>
-          <td data-label="Encoding"><b>JKS</b><span>binary</span></td>
-          <td data-label="Password"><span class="crt-pass crt-pass--req">required</span></td>
-          <td data-label="Typical home"><span class="crt-home">Tomcat · Spring Boot</span></td>
-        </tr>
       </tbody>
     </table>
   </div>
@@ -654,7 +645,7 @@ Seven names, three payloads, two encodings. Filter the matrix to answer the ques
     <span><span class="crt-dot crt-dot--opt"></span>sometimes</span>
     <span><span class="crt-dot crt-dot--off"></span>never</span>
   </div>
-  <div class="crt-fig-src">FORMAT MATRIX · 7 CONTAINERS · PAYLOAD / ENCODING / PASSWORD</div>
+  <div class="crt-fig-src">FORMAT MATRIX · 6 CONTAINERS · PAYLOAD / ENCODING / PASSWORD</div>
 </figure>
 
 The filters are CSS-only. There is no JavaScript behind them: a few radio inputs and `:has()` selectors decide which rows render. That is the same principle as the files themselves — the structure carries the behavior.
@@ -672,8 +663,6 @@ The filters are CSS-only. There is no JavaScript behind them: a few radio inputs
 **`.pfx` and `.p12`** are the same thing: PKCS#12, a binary archive of certificates and a private key, protected by a password. This is what Windows IIS, Azure, and macOS Keychain expect. A PFX without a password is not a PFX; the password is part of the format.
 
 **`.p7b`** is PKCS#7. It bundles certificates — leaf plus intermediates, and sometimes the root — but it can never hold a private key. It exists to move a chain between systems, and it is common on Windows and older Tomcat deployments.
-
-**`.jks`** is Java's proprietary keystore. It holds certificates and keys behind a password, like PFX, but in a Java-specific binary layout. Since Java 9, the default keystore type is PKCS#12 ([JEP 229](https://openjdk.org/jeps/229)); JKS remains common in Tomcat, Jetty, and long-lived Spring Boot installations.
 
 ## Build a chain on Linux
 
@@ -949,22 +938,6 @@ issuer=CN=Lab Root CA
 
 A P7B carries certificates and nothing else. If you need the private key, it lives somewhere else; no `openssl pkcs7` command will extract one.
 
-### Hand JKS to keytool
-
-JKS is not an OpenSSL format, so the conversion tool is `keytool`:
-
-```bash
-# Inspect a keystore
-keytool -list -v -keystore keystore.jks -storepass changeit
-
-# PFX to JKS (legacy systems)
-keytool -importkeystore \
-  -srckeystore bundle.pfx -srcstoretype PKCS12 -srcstorepass demo \
-  -destkeystore keystore.jks -deststoretype JKS -deststorepass changeit
-```
-
-On Java 9 and later, drop `-deststoretype JKS` to get the modern PKCS#12 default. Keep it only when the application genuinely cannot read PKCS#12.
-
 ### Point Nginx at the right two files
 
 ```nginx
@@ -1022,8 +995,6 @@ openssl x509 -in cert.der -inform DER -out cert.pem
 openssl pkcs12 -export -out bundle.pfx -inkey key.pem -in cert.pem -certfile chain.pem
 openssl pkcs12 -in bundle.pfx -out bundle.pem -nodes
 openssl crl2pkcs7 -nocrl -certfile fullchain.pem -out chain.p7b
-keytool -importkeystore -srckeystore bundle.pfx -srcstoretype PKCS12 \
-  -destkeystore keystore.jks -deststoretype JKS
 ```
 
 The rule underneath all of it: read the payload, not the extension. A `.pem` that contains a private key is a secret; a `.pfx` without its chain is an outage waiting for a mobile browser.
@@ -1035,5 +1006,4 @@ If you remember one command from this article, make it `openssl verify -CAfile r
 - [RFC 7468 — Textual Encodings of PKIX, PKCS, and CMS Structures](https://www.rfc-editor.org/rfc/rfc7468)
 - [RFC 7292 — PKCS #12: Personal Information Exchange Syntax](https://www.rfc-editor.org/rfc/rfc7292)
 - [RFC 2315 — PKCS #7: Cryptographic Message Syntax](https://www.rfc-editor.org/rfc/rfc2315)
-- [JEP 229 — Create PKCS12 Keystores by Default](https://openjdk.org/jeps/229)
 - [OpenSSL 3 documentation](https://docs.openssl.org/3.5/)
