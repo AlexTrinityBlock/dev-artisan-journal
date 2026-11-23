@@ -1,4 +1,0 @@
-# Python helpers in this repository (CV font/PDF/thumbnail builds).
-# Audit with: uvx pip-audit -r scripts/requirements.txt
-Pillow>=10.0
-fonttools>=4.50

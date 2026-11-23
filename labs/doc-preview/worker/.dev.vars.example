@@ -1,3 +1,0 @@
-# Optional. When set, POST and DELETE require:
-#   Authorization: Bearer <token>
-UPLOAD_TOKEN=replace-me
