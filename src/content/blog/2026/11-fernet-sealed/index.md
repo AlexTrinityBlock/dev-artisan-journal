@@ -450,7 +450,7 @@ key = base64.urlsafe_b64encode(kdf.derive(password))
 f = Fernet(key)
 ```
 
-Store the salt next to the ciphertext, never the password or the derived key in logs. The parameters above follow the RFC 9106 guidance quoted in the docs. If your `cryptography` release predates the Argon2id API, upgrade it or use `Scrypt` with explicit parameters — not a raw SHA-256 of the password.
+Store the salt next to the ciphertext. Never log the password or the derived key. The parameters above follow the RFC 9106 guidance quoted in the docs. If your `cryptography` release predates the Argon2id API, upgrade it or use `Scrypt` with explicit parameters — not a raw SHA-256 of the password.
 
 ### Treat the token as a credential
 
