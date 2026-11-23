@@ -1,6 +1,6 @@
 ---
 title: "Search, Then Get: The Two Modules of Agent Memory"
-description: "A close reading of 'Is Grep All You Need?' through a simpler lens: agent memory is two operations, not one. Search turns a cue into handles; Get turns a handle into exact bytes — and the paper's harness effects follow from which of the two the interface preserves."
+description: "A close reading of 'Is Grep All You Need?' after one small realization: agent memory is two moves. Search is a search box; Get is the link you open. Together they give an agent something like an external brain."
 pubDate: 2026-11-23
 category: "AI"
 tags: ["Agents", "Memory", "RAG", "Retrieval", "PaperNotes"]
@@ -11,15 +11,99 @@ readTime: "18 min read"
 
 # Search, Then Get: The Two Modules of Agent Memory
 
-The most useful result in “Is Grep All You Need?” is not that grep wins. It is that the harness can erase the win without touching the corpus.
+## The short version: two moves
+
+<section class="mem-lead">
+  <div class="mem-lead-head">
+    <span class="card-tag">THE TWO MODULES // 00</span>
+    <p class="mem-lead-kicker">After reading the paper, the part I kept using was not the grep-versus-vector result. It was a smaller classification.</p>
+    <h3 class="mem-lead-title">Agent memory has two moves.</h3>
+    <p class="mem-lead-sub">Find, then read. Search is a search box; Get is the link you open.</p>
+  </div>
+  <div class="mem-lead-grid">
+    <div class="mem-lead-card">
+      <div class="mem-lead-icon"><svg class="mem-lead-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>
+      <div class="mem-lead-tag">SEARCH // FIND</div>
+      <h4>Type keywords, find some entries</h4>
+      <p>Like typing into a search box. It returns a short list of entries. Maybe three. Maybe none.</p>
+      <div class="mem-lead-meta">KEYWORDS → N ENTRIES</div>
+    </div>
+    <div class="mem-lead-plus" aria-hidden="true">+</div>
+    <div class="mem-lead-card">
+      <div class="mem-lead-icon"><svg class="mem-lead-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10 9H8m8 4H8m8 4H8"/></svg></div>
+      <div class="mem-lead-tag">GET // READ</div>
+      <h4>Open a link, read the full text</h4>
+      <p>Like opening one of those results. It returns the complete page. No guessing, no ranking.</p>
+      <div class="mem-lead-meta">LINK → FULL TEXT</div>
+    </div>
+  </div>
+  <div class="mem-lead-flow mem-scroll">
+  <svg class="mem-svg" viewBox="0 0 840 170" role="img" aria-labelledby="mem-f0-title mem-f0-desc">
+    <title id="mem-f0-title">A simple Search then Get flow</title>
+    <desc id="mem-f0-desc">A few keywords go to Search, which returns three entries. One entry is selected and passed to Get, which returns the full text of that page. A dashed arrow returns new keywords to Search.</desc>
+    <defs>
+      <marker id="mem-lead-arrow" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-ink)"/></marker>
+      <marker id="mem-lead-arrow-muted" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-l5)"/></marker>
+    </defs>
+    <text x="24" y="18" class="f" font-size="7.5" letter-spacing="1.2">SIMPLE FLOW // ONE SEARCH, ONE GET</text>
+    <text x="816" y="18" class="f" font-size="7.5" text-anchor="end" letter-spacing="1">ONE SEARCH · MANY ENTRIES · ONE PAGE</text>
+    <line x1="24" y1="26" x2="816" y2="26" class="rule"/>
+    <rect x="24" y="44" width="112" height="72" class="term"/>
+    <text x="36" y="60" class="f" font-size="6.8" letter-spacing="0.8">KEYWORDS</text>
+    <text x="36" y="76" class="t mono" font-size="7.8">a few words</text>
+    <text x="36" y="94" class="m" font-size="6.8">one search</text>
+    <line x1="136" y1="80" x2="152" y2="80" class="arrow" marker-end="url(#mem-lead-arrow)"/>
+    <rect x="156" y="44" width="170" height="72" class="box"/>
+    <svg x="168" y="56" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--mono-ink)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    <text x="192" y="68" class="t" font-size="10.5" font-weight="800" letter-spacing="-0.01em">SEARCH</text>
+    <text x="192" y="80" class="m" font-size="7">find entries</text>
+    <text x="168" y="104" class="f" font-size="6.8">grep · BM25 · vector</text>
+    <line x1="326" y1="80" x2="342" y2="80" class="arrow" marker-end="url(#mem-lead-arrow)"/>
+    <text x="358" y="58" class="f" font-size="6.8" letter-spacing="0.6">3 ENTRIES · OPEN ONE</text>
+    <rect x="358" y="64" width="164" height="14" class="box"/>
+    <text x="366" y="74" class="m mono" font-size="6.2">01</text>
+    <text x="382" y="74" class="t mono" font-size="6.7">entry A</text>
+    <rect x="358" y="82" width="164" height="14" fill="var(--mono-l1)"/>
+    <text x="366" y="92" fill="var(--mono-paper)" class="mono" font-size="6.2">02</text>
+    <text x="382" y="92" fill="var(--mono-paper)" class="mono" font-size="6.7">entry B</text>
+    <rect x="358" y="100" width="164" height="14" class="box"/>
+    <text x="366" y="110" class="m mono" font-size="6.2">03</text>
+    <text x="382" y="110" class="t mono" font-size="6.7">entry C</text>
+    <line x1="522" y1="89" x2="540" y2="89" class="arrow" marker-end="url(#mem-lead-arrow)"/>
+    <rect x="544" y="44" width="170" height="72" class="box"/>
+    <svg x="556" y="56" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--mono-ink)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10 9H8m8 4H8m8 4H8"/></svg>
+    <text x="580" y="68" class="t" font-size="10.5" font-weight="800" letter-spacing="-0.01em">GET</text>
+    <text x="580" y="80" class="m" font-size="7">open one</text>
+    <text x="556" y="104" class="f" font-size="6.8">exact bytes</text>
+    <line x1="714" y1="80" x2="730" y2="80" class="arrow" marker-end="url(#mem-lead-arrow)"/>
+    <rect x="734" y="44" width="82" height="72" class="codebox"/>
+    <text x="744" y="58" class="f" font-size="6.6" letter-spacing="0.6">FULL TEXT</text>
+    <line x1="744" y1="70" x2="806" y2="70" stroke="var(--mono-l5)" stroke-width="1"/>
+    <line x1="744" y1="80" x2="794" y2="80" stroke="var(--mono-ink)" stroke-width="1"/>
+    <line x1="744" y1="90" x2="806" y2="90" stroke="var(--mono-l5)" stroke-width="1"/>
+    <line x1="744" y1="100" x2="786" y2="100" stroke="var(--mono-l5)" stroke-width="1"/>
+    <text x="744" y="112" class="m" font-size="6.4">one page</text>
+    <path d="M775 120 V140 H80 V118" class="dash" fill="none" marker-end="url(#mem-lead-arrow-muted)"/>
+    <text x="427" y="154" class="f" font-size="6.9" text-anchor="middle" letter-spacing="0.6">NEW KEYWORDS → SEARCH AGAIN</text>
+  </svg>
+  </div>
+  <p class="mem-lead-note"><b>Search</b> finds the entries. <b>Get</b> opens the page. Together they give the agent an external brain — a place where many things can be remembered.</p>
+</section>
+
+<p class="mem-lead-bridge">That is the whole classification. The rest of this article slows it down: why the paper’s numbers follow from it, what a handle must guarantee, and how to keep the loop honest.</p>
+
+## The result behind it
+
+
+The paper’s headline is that grep wins. The stranger result is that the harness can erase the win without touching the corpus.
 
 The paper runs 116 long-memory questions across five models, four harnesses, two retrieval modes, and two delivery paths. Inline, grep beats vector in all ten harness-model pairs. Move the same results into files and the advantage disappears: the ten-pair average becomes a tie, and vector wins five of ten. One model moves 16.4 points when only the harness changes — more than the 1.7-point gap between grep and vector in that same row.
 
 Read as a retriever contest, those numbers are confusing. Read as an interface problem, they are almost mechanical.
 
-The interface has two verbs. **Search** takes a partial cue and returns a bounded list of candidate addresses. **Get** takes one address and returns the exact bytes stored there. Search is how an agent discovers that something exists. Get is how it reads what exists.
+Search is what you do when you type keywords into a search box and get back a list of entries. Get is what you do when you click one of those links and read the full page. Together they give an agent something like an external brain: a place where a lot of things can be remembered, and found again.
 
-`grep -n` is Search, and its output is a list of `path:line` handles. `sed -n '40,60p' file` is Get. They compose because the first emits exactly what the second consumes. Vector retrieval is often shipped as Search alone: top-k chunks arrive inline, with no address to revisit and nothing further to open.
+Once the two moves are separate, the paper’s interface becomes legible. `grep -n` is Search, and its output is a list of `path:line` handles. `sed -n '40,60p' file` is Get. They compose because the first emits exactly what the second consumes. Vector retrieval is often shipped as Search alone: top-k chunks arrive inline, with no address to revisit and nothing further to open.
 
 Grep is not all you need. Grep is two things you need, wearing one name.
 
@@ -797,6 +881,18 @@ Search finds the address. Get reads the shelf. The loop is what makes it memory.
   }
 
   @media (max-width: 700px) {
+    .prose-inner .mem-lead-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .prose-inner .mem-lead-plus {
+      height: 24px;
+    }
+
+    .prose-inner .mem-lead-title {
+      font-size: 18px;
+    }
+
     .prose-inner .mem-svg {
       min-width: 680px;
     }
@@ -817,6 +913,156 @@ Search finds the address. Get reads the shelf. The loop is what makes it memory.
   @media (prefers-reduced-motion: reduce) {
     .prose-inner .mem-hit {
       transition: none;
+    }
+  }
+
+  .prose-inner .mem-lead {
+    margin: 26px 0;
+    padding: 20px 18px 16px;
+    border: 0.7px solid var(--mono-grid);
+    background: var(--mono-paper);
+  }
+
+  .prose-inner .mem-lead-head {
+    margin-bottom: 14px;
+  }
+
+  .prose-inner .mem-lead-kicker {
+    margin: 0 0 6px;
+    font-size: 11.5px;
+    line-height: 1.55;
+    color: var(--mono-muted);
+  }
+
+  .prose-inner .mem-lead-title {
+    margin: 0 0 4px;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    color: var(--mono-ink);
+  }
+
+  .prose-inner .mem-lead-sub {
+    margin: 0 0 14px;
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--mono-l2);
+  }
+
+  .prose-inner .mem-lead-grid {
+    display: grid;
+    grid-template-columns: 1fr 30px 1fr;
+    align-items: stretch;
+    margin-bottom: 14px;
+  }
+
+  .prose-inner .mem-lead-card {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 14px 12px;
+    border: 0.7px solid var(--mono-grid);
+    background: var(--mono-paper);
+  }
+
+  .prose-inner .mem-lead-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    margin-bottom: 12px;
+    border: 0.7px solid var(--mono-grid);
+    background: var(--mono-bg-subtle);
+    color: var(--mono-ink);
+  }
+
+  .prose-inner .mem-lead-ico {
+    display: block;
+    width: 24px;
+    height: 24px;
+  }
+
+  .prose-inner .mem-lead-tag {
+    margin-bottom: 5px;
+    font-family: var(--mono-font-mono);
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--mono-muted);
+  }
+
+  .prose-inner .mem-lead-card h4 {
+    margin: 0 0 5px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+    color: var(--mono-ink);
+  }
+
+  .prose-inner .mem-lead-card p {
+    margin: 0 0 12px;
+    font-size: 11.5px;
+    line-height: 1.55;
+    color: var(--mono-l2);
+  }
+
+  .prose-inner .mem-lead-meta {
+    margin-top: auto;
+    padding-top: 8px;
+    border-top: 0.7px solid var(--mono-grid);
+    font-family: var(--mono-font-mono);
+    font-size: 7.5px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--mono-faint);
+  }
+
+  .prose-inner .mem-lead-plus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono-font-mono);
+    font-size: 12px;
+    color: var(--mono-faint);
+  }
+
+  .prose-inner .mem-lead-flow {
+    margin-bottom: 12px;
+  }
+
+  .prose-inner .mem-lead-note {
+    margin: 0;
+    padding-top: 10px;
+    border-top: 0.7px solid var(--mono-grid);
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--mono-l2);
+  }
+
+  .prose-inner .mem-lead-note b {
+    color: var(--mono-ink);
+  }
+
+  .prose-inner .mem-lead-bridge {
+    margin: 0 0 6px;
+    font-size: 11.5px;
+    line-height: 1.55;
+    color: var(--mono-muted);
+  }
+
+  @media (max-width: 700px) {
+    .prose-inner .mem-lead-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .prose-inner .mem-lead-plus {
+      height: 24px;
+    }
+
+    .prose-inner .mem-lead-title {
+      font-size: 18px;
     }
   }
 </style>

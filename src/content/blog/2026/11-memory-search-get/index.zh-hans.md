@@ -1,6 +1,6 @@
 ---
 title: "先 Search，再 Get：代理记忆的两个模块"
-description: "细读《Is Grep All You Need?》，换一个更简单的视角：代理记忆不是一个操作，而是两个。Search 把线索变成 handle，Get 把 handle 变成确切字节；论文里的 harness 效应，取决于接口保住了哪一个。"
+description: "细读《Is Grep All You Need?》后留下的一个小分类：代理记忆只有两个动作。Search 像搜索框，Get 像点开链接；两者搭配，Agent 就像有了外置大脑。"
 pubDate: 2026-11-23
 category: "AI"
 tags: ["代理", "记忆", "RAG", "检索", "论文笔记"]
@@ -11,13 +11,97 @@ readTime: "18 分钟"
 
 # 先 Search，再 Get：代理记忆的两个模块
 
-《Is Grep All You Need?》最有用的一个结果，不是 grep 赢了。而是 harness 可以在完全不动语料库的情况下，把这个胜利抹掉。
+## 简单版：两个动作
+
+<section class="mem-lead">
+  <div class="mem-lead-head">
+    <span class="card-tag">THE TWO MODULES // 00</span>
+    <p class="mem-lead-kicker">读完论文后，我留下来的不是“grep 还是 vector”，而是一个更小的分类。</p>
+    <h3 class="mem-lead-title">代理的记忆，只有两个动作。</h3>
+    <p class="mem-lead-sub">先找，再读。Search 像搜索框，Get 像点开链接。</p>
+  </div>
+  <div class="mem-lead-grid">
+    <div class="mem-lead-card">
+      <div class="mem-lead-icon"><svg class="mem-lead-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>
+      <div class="mem-lead-tag">SEARCH // 找</div>
+      <h4>输入关键词，找到一些条目</h4>
+      <p>就像在搜索框里打字。它返回一份条目列表，可能三个，也可能一个都没有。</p>
+      <div class="mem-lead-meta">关键词 → N 个条目</div>
+    </div>
+    <div class="mem-lead-plus" aria-hidden="true">+</div>
+    <div class="mem-lead-card">
+      <div class="mem-lead-icon"><svg class="mem-lead-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10 9H8m8 4H8m8 4H8"/></svg></div>
+      <div class="mem-lead-tag">GET // 读</div>
+      <h4>点开链接，看到全文</h4>
+      <p>就像点开其中一个结果。它返回那一页的完整内容，不猜、不排序。</p>
+      <div class="mem-lead-meta">链接 → 全文</div>
+    </div>
+  </div>
+  <div class="mem-lead-flow mem-scroll">
+  <svg class="mem-svg" viewBox="0 0 840 170" role="img" aria-labelledby="mem-f0-title mem-f0-desc">
+    <title id="mem-f0-title">一个简单的 Search → Get 流程</title>
+    <desc id="mem-f0-desc">几个关键词进入 Search，返回三个条目。选其中一个，交给 Get，Get 返回那一页的全文。虚线箭头把新关键词带回 Search。</desc>
+    <defs>
+      <marker id="mem-lead-arrow" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-ink)"/></marker>
+      <marker id="mem-lead-arrow-muted" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-l5)"/></marker>
+    </defs>
+    <text x="24" y="18" class="f" font-size="7.5" letter-spacing="1.2">简单流程 // 一次 SEARCH，一次 GET</text>
+    <text x="816" y="18" class="f" font-size="7.5" text-anchor="end" letter-spacing="1">一次搜索 · 多个条目 · 一个页面</text>
+    <line x1="24" y1="26" x2="816" y2="26" class="rule"/>
+    <rect x="24" y="44" width="112" height="72" class="term"/>
+    <text x="36" y="60" class="f" font-size="6.8" letter-spacing="0.8">关键词</text>
+    <text x="36" y="76" class="t mono" font-size="7.8">几个关键词</text>
+    <text x="36" y="94" class="m" font-size="6.8">一次搜索</text>
+    <line x1="136" y1="80" x2="152" y2="80" class="arrow" marker-end="url(#mem-lead-arrow)"/>
+    <rect x="156" y="44" width="170" height="72" class="box"/>
+    <svg x="168" y="56" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--mono-ink)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    <text x="192" y="68" class="t" font-size="10.5" font-weight="800" letter-spacing="-0.01em">SEARCH</text>
+    <text x="192" y="80" class="m" font-size="7">找到条目</text>
+    <text x="168" y="104" class="f" font-size="6.8">grep · BM25 · vector</text>
+    <line x1="326" y1="80" x2="342" y2="80" class="arrow" marker-end="url(#mem-lead-arrow)"/>
+    <text x="358" y="58" class="f" font-size="6.8" letter-spacing="0.6">3 个条目 · 点开一个</text>
+    <rect x="358" y="64" width="164" height="14" class="box"/>
+    <text x="366" y="74" class="m mono" font-size="6.2">01</text>
+    <text x="382" y="74" class="t mono" font-size="6.7">条目 A</text>
+    <rect x="358" y="82" width="164" height="14" fill="var(--mono-l1)"/>
+    <text x="366" y="92" fill="var(--mono-paper)" class="mono" font-size="6.2">02</text>
+    <text x="382" y="92" fill="var(--mono-paper)" class="mono" font-size="6.7">条目 B</text>
+    <rect x="358" y="100" width="164" height="14" class="box"/>
+    <text x="366" y="110" class="m mono" font-size="6.2">03</text>
+    <text x="382" y="110" class="t mono" font-size="6.7">条目 C</text>
+    <line x1="522" y1="89" x2="540" y2="89" class="arrow" marker-end="url(#mem-lead-arrow)"/>
+    <rect x="544" y="44" width="170" height="72" class="box"/>
+    <svg x="556" y="56" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--mono-ink)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10 9H8m8 4H8m8 4H8"/></svg>
+    <text x="580" y="68" class="t" font-size="10.5" font-weight="800" letter-spacing="-0.01em">GET</text>
+    <text x="580" y="80" class="m" font-size="7">点开一条</text>
+    <text x="556" y="104" class="f" font-size="6.8">确切字节</text>
+    <line x1="714" y1="80" x2="730" y2="80" class="arrow" marker-end="url(#mem-lead-arrow)"/>
+    <rect x="734" y="44" width="82" height="72" class="codebox"/>
+    <text x="744" y="58" class="f" font-size="6.6" letter-spacing="0.6">全文</text>
+    <line x1="744" y1="70" x2="806" y2="70" stroke="var(--mono-l5)" stroke-width="1"/>
+    <line x1="744" y1="80" x2="794" y2="80" stroke="var(--mono-ink)" stroke-width="1"/>
+    <line x1="744" y1="90" x2="806" y2="90" stroke="var(--mono-l5)" stroke-width="1"/>
+    <line x1="744" y1="100" x2="786" y2="100" stroke="var(--mono-l5)" stroke-width="1"/>
+    <text x="744" y="112" class="m" font-size="6.4">一个页面</text>
+    <path d="M775 120 V140 H80 V118" class="dash" fill="none" marker-end="url(#mem-lead-arrow-muted)"/>
+    <text x="427" y="154" class="f" font-size="6.9" text-anchor="middle" letter-spacing="0.6">新关键词 → 再次 SEARCH</text>
+  </svg>
+  </div>
+  <p class="mem-lead-note"><b>Search</b> 找到条目，<b>Get</b> 点开全文。两者搭配，Agent 就像有了外置大脑，可以记得许多事物。</p>
+</section>
+
+<p class="mem-lead-bridge">分类就只有这样。接下来，文章把速度放慢：为什么论文里的数字能从这个分类推出来、一个 handle 必须保证什么，以及如何让循环保持诚实。</p>
+
+## 分类背后的结果
+
+
+论文的标题结果是 grep 赢了。更奇怪的结果是，harness 可以在完全不动语料库的情况下，把这个胜利抹掉。
 
 论文用 116 个长期记忆问题，横跨五个模型、四种 harness、两种检索模式与两种投递路径。在内嵌模式下，grep 在十个 harness–model 组合中全部赢过 vector。把同样的结果搬进文件，优势就消失了：十组平均变成平手，vector 在十组中赢了五组。只换 harness，同一个模型就移动 16.4 个百分点——比同一行里 grep 与 vector 的 1.7 个百分点差距还大。
 
 把这些数字当成检索引擎比赛，会让人困惑。把它们当成接口问题，几乎就变得机械而必然。
 
-这个接口有两个动词。**Search** 接受一个不完整的线索，返回一份有界的候选地址列表。**Get** 接受一个地址，返回存在那里的确切字节。Search 让代理发现“有这个东西”；Get 让代理读到“这个东西是什么”。
+Search 就像在搜索框里输入关键词，得到一些条目。Get 就像点开其中一个链接，看到全文。两者搭配，Agent 就像有了外置大脑，可以记得许多事物，也能把它们找回来。
 
 `grep -n` 是 Search，它的输出是一串 `path:line` 形式的 handle。`sed -n '40,60p' file` 是 Get。两者能组合，是因为前者吐出的东西，正好是后者吃的东西。Vector 检索常常只以 Search 的形式出现：top-k 区块直接内嵌进上下文，没有地址可以回头，也没有更多东西可以打开。
 
@@ -797,6 +881,18 @@ Search 找到地址。Get 读到书架。循环让它成为记忆。
   }
 
   @media (max-width: 700px) {
+    .prose-inner .mem-lead-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .prose-inner .mem-lead-plus {
+      height: 24px;
+    }
+
+    .prose-inner .mem-lead-title {
+      font-size: 18px;
+    }
+
     .prose-inner .mem-svg {
       min-width: 680px;
     }
@@ -817,6 +913,156 @@ Search 找到地址。Get 读到书架。循环让它成为记忆。
   @media (prefers-reduced-motion: reduce) {
     .prose-inner .mem-hit {
       transition: none;
+    }
+  }
+
+  .prose-inner .mem-lead {
+    margin: 26px 0;
+    padding: 20px 18px 16px;
+    border: 0.7px solid var(--mono-grid);
+    background: var(--mono-paper);
+  }
+
+  .prose-inner .mem-lead-head {
+    margin-bottom: 14px;
+  }
+
+  .prose-inner .mem-lead-kicker {
+    margin: 0 0 6px;
+    font-size: 11.5px;
+    line-height: 1.55;
+    color: var(--mono-muted);
+  }
+
+  .prose-inner .mem-lead-title {
+    margin: 0 0 4px;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    color: var(--mono-ink);
+  }
+
+  .prose-inner .mem-lead-sub {
+    margin: 0 0 14px;
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--mono-l2);
+  }
+
+  .prose-inner .mem-lead-grid {
+    display: grid;
+    grid-template-columns: 1fr 30px 1fr;
+    align-items: stretch;
+    margin-bottom: 14px;
+  }
+
+  .prose-inner .mem-lead-card {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 14px 12px;
+    border: 0.7px solid var(--mono-grid);
+    background: var(--mono-paper);
+  }
+
+  .prose-inner .mem-lead-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    margin-bottom: 12px;
+    border: 0.7px solid var(--mono-grid);
+    background: var(--mono-bg-subtle);
+    color: var(--mono-ink);
+  }
+
+  .prose-inner .mem-lead-ico {
+    display: block;
+    width: 24px;
+    height: 24px;
+  }
+
+  .prose-inner .mem-lead-tag {
+    margin-bottom: 5px;
+    font-family: var(--mono-font-mono);
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--mono-muted);
+  }
+
+  .prose-inner .mem-lead-card h4 {
+    margin: 0 0 5px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+    color: var(--mono-ink);
+  }
+
+  .prose-inner .mem-lead-card p {
+    margin: 0 0 12px;
+    font-size: 11.5px;
+    line-height: 1.55;
+    color: var(--mono-l2);
+  }
+
+  .prose-inner .mem-lead-meta {
+    margin-top: auto;
+    padding-top: 8px;
+    border-top: 0.7px solid var(--mono-grid);
+    font-family: var(--mono-font-mono);
+    font-size: 7.5px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--mono-faint);
+  }
+
+  .prose-inner .mem-lead-plus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono-font-mono);
+    font-size: 12px;
+    color: var(--mono-faint);
+  }
+
+  .prose-inner .mem-lead-flow {
+    margin-bottom: 12px;
+  }
+
+  .prose-inner .mem-lead-note {
+    margin: 0;
+    padding-top: 10px;
+    border-top: 0.7px solid var(--mono-grid);
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--mono-l2);
+  }
+
+  .prose-inner .mem-lead-note b {
+    color: var(--mono-ink);
+  }
+
+  .prose-inner .mem-lead-bridge {
+    margin: 0 0 6px;
+    font-size: 11.5px;
+    line-height: 1.55;
+    color: var(--mono-muted);
+  }
+
+  @media (max-width: 700px) {
+    .prose-inner .mem-lead-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .prose-inner .mem-lead-plus {
+      height: 24px;
+    }
+
+    .prose-inner .mem-lead-title {
+      font-size: 18px;
     }
   }
 </style>
