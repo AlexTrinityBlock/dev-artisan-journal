@@ -1,0 +1,12 @@
+name = "doc-preview-api"
+main = "src/index.ts"
+compatibility_date = "2026-11-22"
+workers_dev = true
+
+[[r2_buckets]]
+binding = "DOCS"
+bucket_name = "doc-preview-documents"
+
+[vars]
+ALLOWED_ORIGINS = "http://localhost:5173,http://127.0.0.1:5173,https://blog.alextrinitywolf.com"
+MAX_UPLOAD_BYTES = "20971520"
