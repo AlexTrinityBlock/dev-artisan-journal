@@ -1,5 +1,5 @@
 ---
-title: "可以直接打字編輯的網址"
+title: "可以直接打字編輯的網頁"
 description: "一個純前端的標題與內文示範：點一下就能直接打字。文章也說明 plaintext-only 的瀏覽器支援、React 陷阱，以及讓快速編輯不會撞到自己版本的逐區塊儲存佇列。"
 pubDate: 2026-11-25
 category: "Web"
@@ -9,7 +9,7 @@ author: "Alex.Hsiao"
 readTime: "12 分鐘"
 ---
 
-# 可以直接打字編輯的網址
+# 可以直接打字編輯的網頁
 
 先試再讀。點一下標題或內文，直接打字。這是一個純前端組件：沒有儲存請求、沒有資料庫、沒有框架。
 
@@ -19,7 +19,7 @@ readTime: "12 分鐘"
     <span class="ce-demo-hint">點一下就能改 · 只在本地</span>
   </div>
   <div class="ce-demo-page">
-    <div class="ce-demo-title" contenteditable="plaintext-only" data-ce-demo="title" spellcheck="false" role="textbox" aria-multiline="false" aria-label="示範文章標題">可以直接打字編輯的網址</div>
+    <div class="ce-demo-title" contenteditable="plaintext-only" data-ce-demo="title" spellcheck="false" role="textbox" aria-multiline="false" aria-label="示範文章標題">可以直接打字編輯的網頁</div>
     <div class="ce-demo-body" contenteditable="plaintext-only" data-ce-demo="body" spellcheck="false" role="textbox" aria-multiline="true" aria-label="示範文章內文"><p>這是內文。把游標放進來，直接修改。貼上時只保留純文字，不會帶進 Word 或 Google Docs 的樣式。</p><p>沒有儲存按鈕。重新整理頁面就會還原。</p></div>
     <div class="ce-demo-status">CONTENTEDITABLE="PLAINTEXT-ONLY" · 不儲存 · 沒有後端</div>
   </div>

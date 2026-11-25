@@ -1,5 +1,5 @@
 ---
-title: "可以直接打字编辑的网址"
+title: "可以直接打字编辑的网页"
 description: "一个纯前端的标题与正文示例：点一下就能直接打字。文章也说明 plaintext-only 的浏览器支持、React 陷阱，以及让快速编辑不会撞到自己版本的逐区块保存队列。"
 pubDate: 2026-11-25
 category: "Web"
@@ -9,7 +9,7 @@ author: "Alex.Hsiao"
 readTime: "12 分钟"
 ---
 
-# 可以直接打字编辑的网址
+# 可以直接打字编辑的网页
 
 先试再读。点一下标题或正文，直接打字。这是一个纯前端组件：没有保存请求、没有数据库、没有框架。
 
@@ -19,7 +19,7 @@ readTime: "12 分钟"
     <span class="ce-demo-hint">点一下就能改 · 只在本地</span>
   </div>
   <div class="ce-demo-page">
-    <div class="ce-demo-title" contenteditable="plaintext-only" data-ce-demo="title" spellcheck="false" role="textbox" aria-multiline="false" aria-label="示例文章标题">可以直接打字编辑的网址</div>
+    <div class="ce-demo-title" contenteditable="plaintext-only" data-ce-demo="title" spellcheck="false" role="textbox" aria-multiline="false" aria-label="示例文章标题">可以直接打字编辑的网页</div>
     <div class="ce-demo-body" contenteditable="plaintext-only" data-ce-demo="body" spellcheck="false" role="textbox" aria-multiline="true" aria-label="示例文章正文"><p>这是正文。把光标放进来，直接修改。粘贴时只保留纯文本，不会带进 Word 或 Google Docs 的样式。</p><p>没有保存按钮。刷新页面就会还原。</p></div>
     <div class="ce-demo-status">CONTENTEDITABLE="PLAINTEXT-ONLY" · 不保存 · 没有后端</div>
   </div>
