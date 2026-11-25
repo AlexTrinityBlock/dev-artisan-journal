@@ -216,6 +216,7 @@ const en: CVData = {
       tag: 'SYSTEM // BACKEND & AMQP',
       title: 'FullStack & Distributed Systems',
       skills: [
+        { name: 'Spring Boot / Java', level: 'Production' },
         { name: 'FastAPI / Python', level: '~3 Years' },
         { name: 'Node.js (Async Runtimes)', level: '~3 Years' },
         { name: 'RabbitMQ (AMQP Broker)', level: 'Production' },
@@ -223,8 +224,8 @@ const en: CVData = {
         { name: 'PHP / Laravel', level: '~1 Year' },
       ],
       synopsis:
-        'Engineering high-throughput, non-blocking asynchronous microservices and reactive interfaces using FastAPI, modern Node.js, and React. Implementing enterprise AMQP message broker topologies with RabbitMQ to decouple critical distributed workloads and ensure reliable, fault-tolerant asynchronous task execution.',
-      stack: 'FastAPI · Python · React.js · Node.js · RabbitMQ · RESTful / WebSockets',
+        'Engineering high-throughput, non-blocking asynchronous microservices and reactive interfaces using Spring Boot, FastAPI, modern Node.js, and React. Implementing enterprise AMQP message broker topologies with RabbitMQ to decouple critical distributed workloads and ensure reliable, fault-tolerant asynchronous task execution.',
+      stack: 'Spring Boot · Java · FastAPI · Python · React.js · Node.js · RabbitMQ · RESTful / WebSockets',
     },
     {
       tag: 'SYSTEM // K8S & CLOUD',
@@ -273,7 +274,7 @@ const en: CVData = {
         'Built <strong>WAF (CrowdSec)</strong> and <strong>Vault (OpenBao)</strong> for the property-leasing system, establishing reliable and secure containerized infrastructure.',
         'Designed the property-leasing system’s dual messaging layer: RabbitMQ for long-running AI extraction jobs and Valkey Stream for inter-Agent communication and chat state, with task cancellation handled directly by the backend API.',
         'Contributed to an agent-based business card automation system, and engineered custom QR code applications with high-throughput asynchronous message queues.',
-        'Built a contract-work marketing site with the work group — including its latest-articles section — and shipped an MCP server that lets AI clients create and update articles under admin-issued API keys, with time-limited pre-signed image uploads to S3-compatible RustFS.',
+        'Built a Spring Boot contract-work marketing site with the work group — including its latest-articles section — and shipped an MCP server that lets AI clients create and update articles under admin-issued API keys, with time-limited pre-signed image uploads to S3-compatible RustFS.',
       ],
       stack:
         'React.js, FastAPI, LangGraph, vLLM, llama.cpp, Azure OpenAI, PGroonga, Valkey, RabbitMQ, PostgreSQL, Kubernetes, Kubespray, Helm, NVIDIA GPU Operator, HAMi, Longhorn, CrowdSec, OpenBao',
@@ -520,6 +521,7 @@ const zhHant: CVData = {
       tag: 'SYSTEM // BACKEND & AMQP',
       title: '全端與分散式系統',
       skills: [
+        { name: 'Spring Boot / Java', level: '生產環境' },
         { name: 'FastAPI / Python', level: '約 3 年' },
         { name: 'Node.js（非同步執行環境）', level: '約 3 年' },
         { name: 'RabbitMQ（AMQP 訊息中介）', level: '生產環境' },
@@ -527,8 +529,8 @@ const zhHant: CVData = {
         { name: 'PHP / Laravel', level: '約 1 年' },
       ],
       synopsis:
-        '以 FastAPI、現代 Node.js 與 React 打造高吞吐、非阻塞的非同步微服務與反應式介面。以 RabbitMQ 實作企業級 AMQP 訊息中介拓撲，解耦關鍵分散式工作負載，確保可靠且容錯的非同步任務執行。',
-      stack: 'FastAPI · Python · React.js · Node.js · RabbitMQ · RESTful / WebSockets',
+        '以 Spring Boot、FastAPI、現代 Node.js 與 React 打造高吞吐、非阻塞的非同步微服務與反應式介面。以 RabbitMQ 實作企業級 AMQP 訊息中介拓撲，解耦關鍵分散式工作負載，確保可靠且容錯的非同步任務執行。',
+      stack: 'Spring Boot · Java · FastAPI · Python · React.js · Node.js · RabbitMQ · RESTful / WebSockets',
     },
     {
       tag: 'SYSTEM // K8S & CLOUD',
@@ -577,7 +579,7 @@ const zhHant: CVData = {
         '為該房地產租賃管理系統建置 <strong>WAF（CrowdSec）</strong>與 <strong>Vault（OpenBao）</strong>，打造可靠且安全的容器化基礎設施。',
         '設計該房地產租賃管理系統的雙訊息架構：以 RabbitMQ 處理長時間的 AI 文件提取任務，以 Valkey Stream 處理 Agent 之間的溝通與對話狀態，任務取消由後端 API 直接處理。',
         '參與基於 Agent 的名片自動化系統建置，並開發自訂 QR Code 應用與高吞吐非同步訊息佇列。',
-        '與工作小組共同建置接案宣傳網站（含最新文章專區），並提供 MCP 伺服器讓 AI 用戶端以管理員核發的 API 金鑰新增與更新文章：圖片透過限時預簽 URL 上傳至 S3 相容的 RustFS。',
+        '與工作小組共同建置以 Spring Boot 打造的接案宣傳網站（含最新文章專區），並提供 MCP 伺服器讓 AI 用戶端以管理員核發的 API 金鑰新增與更新文章：圖片透過限時預簽 URL 上傳至 S3 相容的 RustFS。',
       ],
       stack:
         'React.js、FastAPI、LangGraph、vLLM、llama.cpp、Azure OpenAI、PGroonga、Valkey、RabbitMQ、PostgreSQL、Kubernetes、Kubespray、Helm、NVIDIA GPU Operator、HAMi、Longhorn、CrowdSec、OpenBao',
@@ -824,6 +826,7 @@ const zhHans: CVData = {
       tag: 'SYSTEM // BACKEND & AMQP',
       title: '全栈与分布式系统',
       skills: [
+        { name: 'Spring Boot / Java', level: '生产环境' },
         { name: 'FastAPI / Python', level: '约 3 年' },
         { name: 'Node.js（异步运行时）', level: '约 3 年' },
         { name: 'RabbitMQ（AMQP 消息中间件）', level: '生产环境' },
@@ -831,8 +834,8 @@ const zhHans: CVData = {
         { name: 'PHP / Laravel', level: '约 1 年' },
       ],
       synopsis:
-        '以 FastAPI、现代 Node.js 与 React 打造高吞吐、非阻塞的异步微服务与响应式界面。以 RabbitMQ 实现企业级 AMQP 消息中间件拓扑，解耦关键分布式工作负载，确保可靠且容错的异步任务执行。',
-      stack: 'FastAPI · Python · React.js · Node.js · RabbitMQ · RESTful / WebSockets',
+        '以 Spring Boot、FastAPI、现代 Node.js 与 React 打造高吞吐、非阻塞的异步微服务与响应式界面。以 RabbitMQ 实现企业级 AMQP 消息中间件拓扑，解耦关键分布式工作负载，确保可靠且容错的异步任务执行。',
+      stack: 'Spring Boot · Java · FastAPI · Python · React.js · Node.js · RabbitMQ · RESTful / WebSockets',
     },
     {
       tag: 'SYSTEM // K8S & CLOUD',
@@ -881,7 +884,7 @@ const zhHans: CVData = {
         '为该房地产租赁管理系统搭建 <strong>WAF（CrowdSec）</strong>与 <strong>Vault（OpenBao）</strong>，打造可靠且安全的容器化基础设施。',
         '设计该房地产租赁管理系统的双消息架构：以 RabbitMQ 处理长时间的 AI 文档提取任务，以 Valkey Stream 处理 Agent 之间的通信与对话状态，任务取消由后端 API 直接处理。',
         '参与基于 Agent 的名片自动化系统搭建，并开发自定义 QR Code 应用与高吞吐异步消息队列。',
-        '与工作小组共同搭建接案宣传网站（含最新文章专区），并提供 MCP 服务器让 AI 客户端以管理员签发的 API 密钥新增与更新文章：图片通过限时预签名 URL 上传至 S3 兼容的 RustFS。',
+        '与工作小组共同搭建以 Spring Boot 打造的接案宣传网站（含最新文章专区），并提供 MCP 服务器让 AI 客户端以管理员签发的 API 密钥新增与更新文章：图片通过限时预签名 URL 上传至 S3 兼容的 RustFS。',
       ],
       stack:
         'React.js、FastAPI、LangGraph、vLLM、llama.cpp、Azure OpenAI、PGroonga、Valkey、RabbitMQ、PostgreSQL、Kubernetes、Kubespray、Helm、NVIDIA GPU Operator、HAMi、Longhorn、CrowdSec、OpenBao',
