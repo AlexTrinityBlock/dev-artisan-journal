@@ -250,10 +250,12 @@ const en: CVData = {
         { name: 'MongoDB & MySQL', level: '~3 Years' },
         { name: 'Longhorn HA Block Storage', level: 'Enterprise' },
         { name: 'MinIO / S3 Parquet', level: 'Production' },
+        { name: 'SeaweedFS (S3-compatible)', level: 'Production' },
+        { name: 'RustFS (S3-compatible)', level: 'Production' },
       ],
       synopsis:
-        'Structuring highly resilient, low-latency relational and document database layers across PostgreSQL, Microsoft SQL Server, and MongoDB. Deploying cloud-native distributed persistent block storage with Longhorn replication in Kubernetes alongside MinIO S3 object storage for analytical Parquet storage.',
-      stack: 'PostgreSQL · SQL Server · MongoDB · Longhorn · MinIO / S3 · Redis',
+        'Structuring highly resilient, low-latency relational and document database layers across PostgreSQL, Microsoft SQL Server, and MongoDB. Deploying cloud-native distributed persistent block storage with Longhorn replication in Kubernetes alongside S3-compatible object storage — MinIO, SeaweedFS, and RustFS — for analytical Parquet data and site media.',
+      stack: 'PostgreSQL · SQL Server · MongoDB · Longhorn · MinIO · SeaweedFS · RustFS · S3 · Redis',
     },
   ],
   timeline: [
@@ -555,10 +557,12 @@ const zhHant: CVData = {
         { name: 'MongoDB 與 MySQL', level: '約 3 年' },
         { name: 'Longhorn 高可用區塊儲存', level: '企業級' },
         { name: 'MinIO / S3 Parquet', level: '生產環境' },
+        { name: 'SeaweedFS（S3 相容儲存）', level: '生產環境' },
+        { name: 'RustFS（S3 相容儲存）', level: '生產環境' },
       ],
       synopsis:
-        '在 PostgreSQL、Microsoft SQL Server 與 MongoDB 上建構高韌性、低延遲的關聯式與文件資料庫層。於 Kubernetes 中部署具 Longhorn 複寫的雲原生分散式持久區塊儲存，並以 MinIO S3 物件儲存支援分析用 Parquet 資料。',
-      stack: 'PostgreSQL · SQL Server · MongoDB · Longhorn · MinIO / S3 · Redis',
+        '在 PostgreSQL、Microsoft SQL Server 與 MongoDB 上建構高韌性、低延遲的關聯式與文件資料庫層。於 Kubernetes 中部署具 Longhorn 複寫的雲原生分散式持久區塊儲存，並以 MinIO、SeaweedFS 與 RustFS 等 S3 相容物件儲存，支援分析用 Parquet 資料與網站媒體。',
+      stack: 'PostgreSQL · SQL Server · MongoDB · Longhorn · MinIO · SeaweedFS · RustFS · S3 · Redis',
     },
   ],
   timeline: [
@@ -860,10 +864,12 @@ const zhHans: CVData = {
         { name: 'MongoDB 与 MySQL', level: '约 3 年' },
         { name: 'Longhorn 高可用块存储', level: '企业级' },
         { name: 'MinIO / S3 Parquet', level: '生产环境' },
+        { name: 'SeaweedFS（S3 兼容存储）', level: '生产环境' },
+        { name: 'RustFS（S3 兼容存储）', level: '生产环境' },
       ],
       synopsis:
-        '在 PostgreSQL、Microsoft SQL Server 与 MongoDB 上构建高韧性、低延迟的关系型与文档数据库层。在 Kubernetes 中部署具备 Longhorn 复制的云原生分布式持久块存储，并以 MinIO S3 对象存储支撑分析用 Parquet 数据。',
-      stack: 'PostgreSQL · SQL Server · MongoDB · Longhorn · MinIO / S3 · Redis',
+        '在 PostgreSQL、Microsoft SQL Server 与 MongoDB 上构建高韧性、低延迟的关系型与文档数据库层。在 Kubernetes 中部署具备 Longhorn 复制的云原生分布式持久块存储，并以 MinIO、SeaweedFS 与 RustFS 等 S3 兼容对象存储，支持分析用 Parquet 数据与网站媒体。',
+      stack: 'PostgreSQL · SQL Server · MongoDB · Longhorn · MinIO · SeaweedFS · RustFS · S3 · Redis',
     },
   ],
   timeline: [
