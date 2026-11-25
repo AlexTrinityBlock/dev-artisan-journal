@@ -46,9 +46,9 @@ readTime: "7 分鐘"
     <div class="mfig-card">
       <div class="mfig-icon"><svg class="mfig-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg></div>
       <div class="mfig-tag">文章 // 引用</div>
-      <h4>存連結，不存位元組</h4>
-      <p>文章保留文字與物件引用；頁面從儲存讀取圖片。</p>
-      <div class="mfig-meta">文字 · URL · CDN</div>
+      <h4>文章放資料庫，圖片放 RustFS</h4>
+      <p>文章留在資料庫，圖片留在 RustFS；公開頁面把兩者一起呈現。</p>
+      <div class="mfig-meta">資料庫 · RUSTFS · 公開</div>
     </div>
   </div>
   <div class="mfig-lead-flow mfig-scroll">
@@ -63,7 +63,7 @@ readTime: "7 分鐘"
     <line x1="24" y1="24" x2="816" y2="24" class="rule"/>
     <rect x="24" y="38" width="118" height="50" class="term"/>
     <text x="42" y="58" class="f" font-size="6.2" letter-spacing="0.6">用戶端</text>
-    <text x="42" y="74" class="t" font-size="9.2" font-weight="800">AI</text>
+    <text x="42" y="74" class="t" font-size="9.2" font-weight="800">AI AGENT</text>
     <line x1="142" y1="63" x2="160" y2="63" class="arrow" marker-end="url(#pub-lead-arrow)"/>
     <rect x="162" y="38" width="118" height="50" class="box"/>
     <text x="180" y="58" class="f" font-size="6.2" letter-spacing="0.6">內容</text>
@@ -91,7 +91,7 @@ readTime: "7 分鐘"
   <p class="mfig-lead-note"><b>圖片和文章是兩件事。</b>這個分離讓模型不必碰儲存憑證。</p>
 </section>
 
-<p class="mfig-bridge">接下來是一張圖、五個步驟，以及一段明確標成示意的請求範例。</p>
+<p class="mfig-bridge">接下來是一張圖、四個步驟，以及一段明確標成示意的請求範例。</p>
 
 ## RustFS 提供什麼
 
@@ -107,72 +107,74 @@ RustFS 是一套分散式、S3 相容的物件儲存，以 Rust 撰寫。官方�
 
 ## 簡單架構
 
-這張圖刻意很小。用戶端連到 MCP 伺服器。MCP 伺服器更新文章儲存、簽一個上傳 URL。用戶端直接上傳到 RustFS。公開網站透過 CDN 讀取已發佈的物件。
+這張圖刻意很小。AI Agent 連到 MCP 伺服器。MCP 伺服器把文章直接寫進資料庫，並簽一個上傳 URL。AI Agent 直接上傳圖片到 RustFS。公開頁面從資料庫讀文章、從 RustFS 讀圖片。
 
 <figure class="mfig-fig">
   <figcaption>
     <span class="card-tag">形狀 // 01</span>
     <h3 class="mfig-fig-title">內容走 MCP，位元組走儲存</h3>
-    <p class="mfig-fig-sub">MCP 伺服器不代理圖片。它驗證用戶端、記錄文章變更，並為單一物件簽一個短效 URL。</p>
+    <p class="mfig-fig-sub">MCP 伺服器不代理圖片。它驗證代理、把文章寫進資料庫，並為單一物件簽一個短效 URL。</p>
   </figcaption>
   <div class="mfig-scroll">
-  <svg class="mfig-svg" viewBox="0 0 840 320" role="img" aria-labelledby="pub-f1-title pub-f1-desc">
+  <svg class="mfig-svg" viewBox="0 0 840 340" role="img" aria-labelledby="pub-f1-title pub-f1-desc">
     <title id="pub-f1-title">MCP 發佈文章的簡單架構</title>
-    <desc id="pub-f1-desc">管理員或 AI 用戶端呼叫 Spring Boot MCP 伺服器。伺服器更新文章儲存，並為 RustFS 簽一個上傳 URL。用戶端直接把位元組上傳到 RustFS。CDN 或反向代理把已發佈的物件提供給公開網站。</desc>
+    <desc id="pub-f1-desc">AI Agent 呼叫 Spring Boot MCP 伺服器。伺服器把文章寫進資料庫，並回傳一個 RustFS 的上傳 URL。AI Agent 直接把圖片上傳到 RustFS。公開使用者從資料庫讀文章、從 RustFS 讀圖片，通常透過 CDN 或反向代理。</desc>
     <defs>
       <marker id="pub-f1-arrow" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-ink)"/></marker>
       <marker id="pub-f1-arrow-muted" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-l5)"/></marker>
     </defs>
-    <text x="24" y="18" class="f" font-size="7.5" letter-spacing="1.2">一個 MCP 端點 // 一個簽章 URL // 一個物件儲存</text>
+    <text x="24" y="18" class="f" font-size="7.5" letter-spacing="1.2">一個 MCP 端點 // 一個預簽 URL // 一個公開頁面</text>
     <text x="816" y="18" class="f" font-size="7.5" text-anchor="end" letter-spacing="1">可行性草圖</text>
     <line x1="24" y1="26" x2="816" y2="26" class="rule"/>
     <rect x="24" y="48" width="160" height="64" class="term"/>
     <text x="36" y="66" class="f" font-size="6.4" letter-spacing="0.7">用戶端</text>
-    <text x="36" y="86" class="t" font-size="9.4" font-weight="800">管理員 / AI</text>
-    <text x="36" y="100" class="m" font-size="6.4">session 或 MCP 金鑰</text>
+    <text x="36" y="86" class="t" font-size="9.4" font-weight="800">AI AGENT</text>
+    <text x="36" y="100" class="m" font-size="6.4">MCP 用戶端</text>
     <rect x="250" y="48" width="180" height="64" class="box"/>
     <text x="262" y="66" class="f" font-size="6.4" letter-spacing="0.7">內容平面</text>
     <text x="262" y="86" class="t" font-size="9.4" font-weight="800">MCP 伺服器</text>
     <text x="262" y="100" class="m" font-size="6.4">Spring Boot · 驗證 · 簽章</text>
     <rect x="500" y="48" width="170" height="64" class="term"/>
-    <text x="512" y="66" class="f" font-size="6.4" letter-spacing="0.7">文字 + 中介資料</text>
-    <text x="512" y="86" class="t" font-size="9.4" font-weight="800">文章儲存</text>
-    <text x="512" y="100" class="m" font-size="6.4">標題 · 內文 · 物件引用</text>
+    <text x="512" y="66" class="f" font-size="6.4" letter-spacing="0.7">儲存</text>
+    <text x="512" y="86" class="t" font-size="9.4" font-weight="800">資料庫</text>
+    <text x="512" y="100" class="m" font-size="6.4">文章內容</text>
     <line x1="184" y1="80" x2="246" y2="80" class="arrow" marker-end="url(#pub-f1-arrow)"/>
-    <text x="190" y="72" class="f" font-size="6">更新／請求</text>
+    <text x="190" y="72" class="f" font-size="6">文章</text>
     <line x1="430" y1="80" x2="496" y2="80" class="arrow" marker-end="url(#pub-f1-arrow)"/>
-    <text x="436" y="72" class="f" font-size="6">儲存</text>
-    <rect x="250" y="200" width="180" height="64" class="codebox"/>
-    <text x="262" y="218" class="f" font-size="6.4" letter-spacing="0.7">物件儲存</text>
-    <text x="262" y="238" class="t" font-size="9.4" font-weight="800">RUSTFS</text>
-    <text x="262" y="252" class="m" font-size="6.4">私有上傳桶</text>
-    <line x1="340" y1="112" x2="340" y2="196" class="dash" marker-end="url(#pub-f1-arrow-muted)"/>
-    <text x="348" y="154" class="f" font-size="6">簽一個 URL</text>
-    <path d="M104 112 V232 H246" class="dash" fill="none" marker-end="url(#pub-f1-arrow-muted)"/>
-    <text x="112" y="180" class="f" font-size="6">直接 PUT</text>
-    <text x="112" y="192" class="f" font-size="6">位元組</text>
-    <rect x="500" y="200" width="170" height="64" class="box"/>
-    <text x="512" y="218" class="f" font-size="6.4" letter-spacing="0.7">讀取路徑</text>
-    <text x="512" y="238" class="t" font-size="9.4" font-weight="800">CDN / 公開網站</text>
-    <text x="512" y="252" class="m" font-size="6.4">公開唯讀</text>
-    <line x1="430" y1="232" x2="496" y2="232" class="arrow" marker-end="url(#pub-f1-arrow)"/>
-    <text x="436" y="224" class="f" font-size="6">公開</text>
-    <text x="24" y="294" class="f" font-size="6.4" letter-spacing="0.5">MCP 伺服器驗證呼叫者並簽 URL · 它不儲存圖片</text>
-    <text x="24" y="308" class="f" font-size="6.2">RUSTFS 保存位元組 · 文章保存引用 · CDN 提供公開副本</text>
+    <text x="436" y="72" class="f" font-size="6">寫入</text>
+    <path d="M250 96 H220 V160 H140 V112" class="dash" marker-end="url(#pub-f1-arrow-muted)"/>
+    <text x="146" y="154" class="f" font-size="6">預簽 URL</text>
+    <rect x="250" y="210" width="180" height="64" class="codebox"/>
+    <text x="262" y="228" class="f" font-size="6.4" letter-spacing="0.7">物件儲存</text>
+    <text x="262" y="248" class="t" font-size="9.4" font-weight="800">RUSTFS</text>
+    <text x="262" y="262" class="m" font-size="6.4">圖片物件</text>
+    <path d="M80 112 V242 H246" class="dash" fill="none" marker-end="url(#pub-f1-arrow-muted)"/>
+    <text x="88" y="184" class="f" font-size="6">上傳圖片</text>
+    <rect x="500" y="210" width="170" height="64" class="box"/>
+    <text x="512" y="228" class="f" font-size="6.4" letter-spacing="0.7">讀取路徑</text>
+    <text x="512" y="248" class="t" font-size="9.4" font-weight="800">公開使用者</text>
+    <text x="512" y="262" class="m" font-size="6.4">文章 + 圖片</text>
+    <line x1="585" y1="112" x2="585" y2="206" class="arrow" marker-end="url(#pub-f1-arrow)"/>
+    <text x="593" y="160" class="f" font-size="6">文章</text>
+    <line x1="430" y1="242" x2="496" y2="242" class="arrow" marker-end="url(#pub-f1-arrow)"/>
+    <text x="436" y="234" class="f" font-size="6">圖片</text>
+    <text x="24" y="310" class="f" font-size="6.4" letter-spacing="0.5">MCP 寫入文章並回傳一個預簽 URL · 它從不代理圖片</text>
+    <text x="24" y="324" class="f" font-size="6.2">資料庫 = 文章 · RUSTFS = 圖片 · 公開頁面讀取兩者</text>
   </svg>
   </div>
-  <p class="mfig-fig-src">MCP · 文章儲存 · RUSTFS · CDN</p>
+  <p class="mfig-fig-src">AI AGENT · MCP · 資料庫 · RUSTFS · 公開使用者</p>
 </figure>
 
-## 五個步驟
+## 四個步驟（外加一把金鑰）
 
-1. **發金鑰。** 管理員為 AI 用戶端建立金鑰。金鑰代表用戶端，不是資料庫密碼。範圍盡量窄，而且要能撤銷。
-2. **呼叫 MCP 伺服器。** AI 要求更新文章，或要求保留一個上傳位置。伺服器驗證請求、檢查金鑰，決定這個動作是否允許。
-3. **簽一個 URL。** 伺服器選定物件鍵、內容類型與到期時間，然後為那一個物件簽 URL。AI 不能選儲存桶或路徑。
-4. **直接上傳。** AI 用簽章 URL 對 RustFS 發出 `PUT`。應用伺服器看到的是請求中介資料，不是圖片位元組。
-5. **保存引用。** 文章保存文字與上傳物件的引用。公開頁面再透過 CDN 解析這個引用。
+第一步之前，管理員先給 AI Agent 一把金鑰。金鑰代表代理，不是資料庫密碼。範圍盡量窄，而且要能撤銷。
 
-任何一步都可能失敗。URL 過期就換一張新的票。檔案與宣告類型不符就拒絕。上傳了卻沒被引用，就排程清理。這些是維運細節，不是把儲存桶金鑰交給模型的理由。
+1. **文章直接進資料庫。** AI Agent 把文章交給 MCP 伺服器。伺服器驗證請求，直接把文章寫進資料庫。
+2. **上傳 URL 由 MCP 取得。** 需要圖片時，AI Agent 向 MCP 伺服器要求一個上傳位置。伺服器回傳一個單一物件的短效 URL。
+3. **圖片進 RustFS。** AI Agent 用這個 URL 把圖片位元組 `PUT` 到 RustFS。MCP 伺服器不代理圖片。
+4. **文章與圖片一起公開。** 公開頁面從資料庫讀文章、從 RustFS 讀圖片，通常透過 CDN 或反向代理。兩者一起呈現給使用者。
+
+任何一步都可能失敗。URL 過期就重新申請一個。檔案與宣告類型不符就拒絕。上傳了卻沒被引用，就排程清理。這些是維運細節，不是把儲存桶金鑰交給模型的理由。
 
 ## MCP HTTP 請求，示意用
 

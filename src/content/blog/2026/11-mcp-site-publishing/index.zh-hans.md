@@ -46,9 +46,9 @@ readTime: "7 分钟"
     <div class="mfig-card">
       <div class="mfig-icon"><svg class="mfig-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg></div>
       <div class="mfig-tag">文章 // 引用</div>
-      <h4>存连结，不存字节</h4>
-      <p>文章保留文字与对象引用；页面从存储读取图片。</p>
-      <div class="mfig-meta">文字 · URL · CDN</div>
+      <h4>文章放数据库，图片放 RustFS</h4>
+      <p>文章留在数据库，图片留在 RustFS；公开页面把两者一起呈现。</p>
+      <div class="mfig-meta">数据库 · RUSTFS · 公开</div>
     </div>
   </div>
   <div class="mfig-lead-flow mfig-scroll">
@@ -63,7 +63,7 @@ readTime: "7 分钟"
     <line x1="24" y1="24" x2="816" y2="24" class="rule"/>
     <rect x="24" y="38" width="118" height="50" class="term"/>
     <text x="42" y="58" class="f" font-size="6.2" letter-spacing="0.6">客户端</text>
-    <text x="42" y="74" class="t" font-size="9.2" font-weight="800">AI</text>
+    <text x="42" y="74" class="t" font-size="9.2" font-weight="800">AI AGENT</text>
     <line x1="142" y1="63" x2="160" y2="63" class="arrow" marker-end="url(#pub-lead-arrow)"/>
     <rect x="162" y="38" width="118" height="50" class="box"/>
     <text x="180" y="58" class="f" font-size="6.2" letter-spacing="0.6">内容</text>
@@ -91,7 +91,7 @@ readTime: "7 分钟"
   <p class="mfig-lead-note"><b>图片和文章是两件事。</b>这个分离让模型不必碰存储凭证。</p>
 </section>
 
-<p class="mfig-bridge">接下来是一张图、五个步骤，以及一段明确标成示意的请求示例。</p>
+<p class="mfig-bridge">接下来是一张图、四个步骤，以及一段明确标成示意的请求示例。</p>
 
 ## RustFS 提供什么
 
@@ -107,72 +107,74 @@ RustFS 是一套分布式、S3 兼容的对象存储，以 Rust 编写。官方�
 
 ## 简单架构
 
-这张图刻意很小。客户端连到 MCP 服务器。MCP 服务器更新文章存储、签发一个上传 URL。客户端直接上传到 RustFS。公开网站通过 CDN 读取已发布的对象。
+这张图刻意很小。AI Agent 连到 MCP 服务器。MCP 服务器把文章直接写进数据库，并签一个上传 URL。AI Agent 直接把图片上传到 RustFS。公开页面从数据库读文章、从 RustFS 读图片。
 
 <figure class="mfig-fig">
   <figcaption>
     <span class="card-tag">形状 // 01</span>
     <h3 class="mfig-fig-title">内容走 MCP，字节走存储</h3>
-    <p class="mfig-fig-sub">MCP 服务器不代理图片。它验证客户端、记录文章变更，并为单一对象签发一个短期有效 URL。</p>
+    <p class="mfig-fig-sub">MCP 服务器不代理图片。它验证代理、把文章写进数据库，并为单个对象签发一个短期有效 URL。</p>
   </figcaption>
   <div class="mfig-scroll">
-  <svg class="mfig-svg" viewBox="0 0 840 320" role="img" aria-labelledby="pub-f1-title pub-f1-desc">
+  <svg class="mfig-svg" viewBox="0 0 840 340" role="img" aria-labelledby="pub-f1-title pub-f1-desc">
     <title id="pub-f1-title">MCP 发布文章的简单架构</title>
-    <desc id="pub-f1-desc">管理员或 AI 客户端调用 Spring Boot MCP 服务器。服务器更新文章存储，并为 RustFS 签发一个上传 URL。客户端直接把字节上传到 RustFS。CDN 或反向代理把已发布的对象提供给公开网站。</desc>
+    <desc id="pub-f1-desc">AI Agent 调用 Spring Boot MCP 服务器。服务器把文章写进数据库，并返回一个 RustFS 的上传 URL。AI Agent 直接把图片上传到 RustFS。公开用户从数据库读文章、从 RustFS 读图片，通常通过 CDN 或反向代理。</desc>
     <defs>
       <marker id="pub-f1-arrow" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-ink)"/></marker>
       <marker id="pub-f1-arrow-muted" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-l5)"/></marker>
     </defs>
-    <text x="24" y="18" class="f" font-size="7.5" letter-spacing="1.2">一个 MCP 端点 // 一个签名 URL // 一个对象存储</text>
+    <text x="24" y="18" class="f" font-size="7.5" letter-spacing="1.2">一个 MCP 端点 // 一个预签名 URL // 一个公开页面</text>
     <text x="816" y="18" class="f" font-size="7.5" text-anchor="end" letter-spacing="1">可行性草图</text>
     <line x1="24" y1="26" x2="816" y2="26" class="rule"/>
     <rect x="24" y="48" width="160" height="64" class="term"/>
     <text x="36" y="66" class="f" font-size="6.4" letter-spacing="0.7">客户端</text>
-    <text x="36" y="86" class="t" font-size="9.4" font-weight="800">管理员 / AI</text>
-    <text x="36" y="100" class="m" font-size="6.4">session 或 MCP 密钥</text>
+    <text x="36" y="86" class="t" font-size="9.4" font-weight="800">AI AGENT</text>
+    <text x="36" y="100" class="m" font-size="6.4">MCP 客户端</text>
     <rect x="250" y="48" width="180" height="64" class="box"/>
     <text x="262" y="66" class="f" font-size="6.4" letter-spacing="0.7">内容平面</text>
     <text x="262" y="86" class="t" font-size="9.4" font-weight="800">MCP 服务器</text>
     <text x="262" y="100" class="m" font-size="6.4">Spring Boot · 验证 · 签名</text>
     <rect x="500" y="48" width="170" height="64" class="term"/>
-    <text x="512" y="66" class="f" font-size="6.4" letter-spacing="0.7">文字 + 元数据</text>
-    <text x="512" y="86" class="t" font-size="9.4" font-weight="800">文章存储</text>
-    <text x="512" y="100" class="m" font-size="6.4">标题 · 内文 · 对象引用</text>
+    <text x="512" y="66" class="f" font-size="6.4" letter-spacing="0.7">存储</text>
+    <text x="512" y="86" class="t" font-size="9.4" font-weight="800">数据库</text>
+    <text x="512" y="100" class="m" font-size="6.4">文章内容</text>
     <line x1="184" y1="80" x2="246" y2="80" class="arrow" marker-end="url(#pub-f1-arrow)"/>
-    <text x="190" y="72" class="f" font-size="6">更新／请求</text>
+    <text x="190" y="72" class="f" font-size="6">文章</text>
     <line x1="430" y1="80" x2="496" y2="80" class="arrow" marker-end="url(#pub-f1-arrow)"/>
-    <text x="436" y="72" class="f" font-size="6">存储</text>
-    <rect x="250" y="200" width="180" height="64" class="codebox"/>
-    <text x="262" y="218" class="f" font-size="6.4" letter-spacing="0.7">对象存储</text>
-    <text x="262" y="238" class="t" font-size="9.4" font-weight="800">RUSTFS</text>
-    <text x="262" y="252" class="m" font-size="6.4">私有上传桶</text>
-    <line x1="340" y1="112" x2="340" y2="196" class="dash" marker-end="url(#pub-f1-arrow-muted)"/>
-    <text x="348" y="154" class="f" font-size="6">签发一个 URL</text>
-    <path d="M104 112 V232 H246" class="dash" fill="none" marker-end="url(#pub-f1-arrow-muted)"/>
-    <text x="112" y="180" class="f" font-size="6">直接 PUT</text>
-    <text x="112" y="192" class="f" font-size="6">字节</text>
-    <rect x="500" y="200" width="170" height="64" class="box"/>
-    <text x="512" y="218" class="f" font-size="6.4" letter-spacing="0.7">读取路径</text>
-    <text x="512" y="238" class="t" font-size="9.4" font-weight="800">CDN / 公开网站</text>
-    <text x="512" y="252" class="m" font-size="6.4">公开唯读</text>
-    <line x1="430" y1="232" x2="496" y2="232" class="arrow" marker-end="url(#pub-f1-arrow)"/>
-    <text x="436" y="224" class="f" font-size="6">公开</text>
-    <text x="24" y="294" class="f" font-size="6.4" letter-spacing="0.5">MCP 服务器验证调用者并签 URL · 它不存储图片</text>
-    <text x="24" y="308" class="f" font-size="6.2">RUSTFS 保存字节 · 文章保存引用 · CDN 提供公开副本</text>
+    <text x="436" y="72" class="f" font-size="6">写入</text>
+    <path d="M250 96 H220 V160 H140 V112" class="dash" marker-end="url(#pub-f1-arrow-muted)"/>
+    <text x="146" y="154" class="f" font-size="6">预签名 URL</text>
+    <rect x="250" y="210" width="180" height="64" class="codebox"/>
+    <text x="262" y="228" class="f" font-size="6.4" letter-spacing="0.7">对象存储</text>
+    <text x="262" y="248" class="t" font-size="9.4" font-weight="800">RUSTFS</text>
+    <text x="262" y="262" class="m" font-size="6.4">图片对象</text>
+    <path d="M80 112 V242 H246" class="dash" fill="none" marker-end="url(#pub-f1-arrow-muted)"/>
+    <text x="88" y="184" class="f" font-size="6">上传图片</text>
+    <rect x="500" y="210" width="170" height="64" class="box"/>
+    <text x="512" y="228" class="f" font-size="6.4" letter-spacing="0.7">读取路径</text>
+    <text x="512" y="248" class="t" font-size="9.4" font-weight="800">公开用户</text>
+    <text x="512" y="262" class="m" font-size="6.4">文章 + 图片</text>
+    <line x1="585" y1="112" x2="585" y2="206" class="arrow" marker-end="url(#pub-f1-arrow)"/>
+    <text x="593" y="160" class="f" font-size="6">文章</text>
+    <line x1="430" y1="242" x2="496" y2="242" class="arrow" marker-end="url(#pub-f1-arrow)"/>
+    <text x="436" y="234" class="f" font-size="6">图片</text>
+    <text x="24" y="310" class="f" font-size="6.4" letter-spacing="0.5">MCP 写入文章并返回一个预签名 URL · 它从不代理图片</text>
+    <text x="24" y="324" class="f" font-size="6.2">数据库 = 文章 · RUSTFS = 图片 · 公开页面读取两者</text>
   </svg>
   </div>
-  <p class="mfig-fig-src">MCP · 文章存储 · RUSTFS · CDN</p>
+  <p class="mfig-fig-src">AI AGENT · MCP · 数据库 · RUSTFS · 公开用户</p>
 </figure>
 
-## 五个步骤
+## 四个步骤（外加一把密钥）
 
-1. **发密钥。** 管理员为 AI 客户端建立密钥。密钥代表客户端，不是数据库密码。范围尽量窄，而且要能撤销。
-2. **调用 MCP 服务器。** AI 要求更新文章，或要求保留一个上传位置。服务器验证请求、检查密钥，决定这个动作是否允许。
-3. **签发一个 URL。** 服务器选定对象键、内容类型与到期时间，然后为那一个对象签 URL。AI 不能选存储桶或路径。
-4. **直接上传。** AI 用签名 URL 对 RustFS 发出 `PUT`。应用服务器看到的是请求元数据，不是图片字节。
-5. **保存引用。** 文章保存文字与上传对象的引用。公开页面再通过 CDN 解析这个引用。
+第一步之前，管理员先给 AI Agent 一把密钥。密钥代表代理，不是数据库密码。范围尽量窄，而且要能撤销。
 
-任何一步都可能失败。URL 过期就换一张新的票据。文件与宣告类型不符就拒绝。上传了却没被引用，就定时清理。这些是运维细节，不是把存储桶密钥交给模型的理由。
+1. **文章直接进数据库。** AI Agent 把文章交给 MCP 服务器。服务器验证请求，直接把文章写进数据库。
+2. **上传 URL 由 MCP 取得。** 需要图片时，AI Agent 向 MCP 服务器请求一个上传位置。服务器返回一个单对象的短期有效 URL。
+3. **图片进 RustFS。** AI Agent 用这个 URL 把图片字节 `PUT` 到 RustFS。MCP 服务器不代理图片。
+4. **文章与图片一起公开。** 公开页面从数据库读文章、从 RustFS 读图片，通常通过 CDN 或反向代理。两者一起呈现给用户。
+
+任何一步都可能失败。URL 过期就重新申请一个。文件与声明类型不符就拒绝。上传了却没被引用，就定时清理。这些是运维细节，不是把存储桶密钥交给模型的理由。
 
 ## MCP HTTP 请求，示意用
 

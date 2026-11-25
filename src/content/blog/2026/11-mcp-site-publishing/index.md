@@ -46,9 +46,9 @@ This is a feasibility sketch, not a specification. It deliberately avoids invent
     <div class="mfig-card">
       <div class="mfig-icon"><svg class="mfig-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg></div>
       <div class="mfig-tag">ARTICLE // REFERENCE</div>
-      <h4>Store the link, not the bytes</h4>
-      <p>The article keeps its text and a reference to the object. The page reads the image from storage.</p>
-      <div class="mfig-meta">TEXT · URL · CDN</div>
+      <h4>The article stays in the database</h4>
+      <p>The image stays in RustFS. The public page reads both and presents them together.</p>
+      <div class="mfig-meta">DATABASE · RUSTFS · PUBLIC</div>
     </div>
   </div>
   <div class="mfig-lead-flow mfig-scroll">
@@ -63,7 +63,7 @@ This is a feasibility sketch, not a specification. It deliberately avoids invent
     <line x1="24" y1="24" x2="816" y2="24" class="rule"/>
     <rect x="24" y="38" width="118" height="50" class="term"/>
     <text x="42" y="58" class="f" font-size="6.2" letter-spacing="0.6">CLIENT</text>
-    <text x="42" y="74" class="t" font-size="9.2" font-weight="800">AI</text>
+    <text x="42" y="74" class="t" font-size="9.2" font-weight="800">AI AGENT</text>
     <line x1="142" y1="63" x2="160" y2="63" class="arrow" marker-end="url(#pub-lead-arrow)"/>
     <rect x="162" y="38" width="118" height="50" class="box"/>
     <text x="180" y="58" class="f" font-size="6.2" letter-spacing="0.6">CONTENT</text>
@@ -91,7 +91,7 @@ This is a feasibility sketch, not a specification. It deliberately avoids invent
   <p class="mfig-lead-note"><b>The image is a separate concern from the article.</b> That separation is what keeps the model away from storage credentials.</p>
 </section>
 
-<p class="mfig-bridge">The rest is the idea in one picture, the five steps, and a request example that is explicitly a sketch.</p>
+<p class="mfig-bridge">The rest is the idea in one picture, the four steps, and a request example that is explicitly a sketch.</p>
 
 ## What RustFS gives you
 
@@ -107,72 +107,74 @@ One caveat: S3 compatibility is a target, not an identity. RustFS documents the 
 
 ## The simple architecture
 
-The picture is deliberately small. A client talks to the MCP server. The MCP server talks to the article store and signs one upload URL. The client uploads directly to RustFS. The public site reads the published object through the CDN.
+The picture is deliberately small. An AI Agent talks to the MCP server. The MCP server writes the article straight to the database and signs one upload URL. The agent uploads the image directly to RustFS. The public page reads the article from the database and the image from RustFS.
 
 <figure class="mfig-fig">
   <figcaption>
     <span class="card-tag">THE SHAPE // 01</span>
     <h3 class="mfig-fig-title">Content through MCP, bytes through storage</h3>
-    <p class="mfig-fig-sub">The MCP server never proxies the image. It authenticates the client, records the article change, and signs one short-lived URL for one object.</p>
+    <p class="mfig-fig-sub">The MCP server never proxies the image. It authenticates the agent, writes the article to the database, and signs one short-lived URL for one object.</p>
   </figcaption>
   <div class="mfig-scroll">
-  <svg class="mfig-svg" viewBox="0 0 840 320" role="img" aria-labelledby="pub-f1-title pub-f1-desc">
+  <svg class="mfig-svg" viewBox="0 0 840 340" role="img" aria-labelledby="pub-f1-title pub-f1-desc">
     <title id="pub-f1-title">A simple architecture for MCP article publishing</title>
-    <desc id="pub-f1-desc">An admin or AI client calls a Spring Boot MCP server. The server updates the article store and signs one upload URL for RustFS. The client uploads bytes directly to RustFS. A CDN or reverse proxy serves the published object to the public site.</desc>
+    <desc id="pub-f1-desc">An AI Agent calls a Spring Boot MCP server. The server writes the article to the database and returns a signed upload URL for RustFS. The agent uploads the image directly to RustFS. Public users read the article from the database and the image from RustFS, usually through a CDN or reverse proxy.</desc>
     <defs>
       <marker id="pub-f1-arrow" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-ink)"/></marker>
       <marker id="pub-f1-arrow-muted" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-l5)"/></marker>
     </defs>
-    <text x="24" y="18" class="f" font-size="7.5" letter-spacing="1.2">ONE MCP ENDPOINT // ONE SIGNED URL // ONE OBJECT STORE</text>
+    <text x="24" y="18" class="f" font-size="7.5" letter-spacing="1.2">ONE MCP ENDPOINT // ONE SIGNED URL // ONE PUBLIC PAGE</text>
     <text x="816" y="18" class="f" font-size="7.5" text-anchor="end" letter-spacing="1">A FEASIBILITY SKETCH</text>
     <line x1="24" y1="26" x2="816" y2="26" class="rule"/>
     <rect x="24" y="48" width="160" height="64" class="term"/>
     <text x="36" y="66" class="f" font-size="6.4" letter-spacing="0.7">CLIENT</text>
-    <text x="36" y="86" class="t" font-size="9.4" font-weight="800">ADMIN / AI</text>
-    <text x="36" y="100" class="m" font-size="6.4">session or MCP key</text>
+    <text x="36" y="86" class="t" font-size="9.4" font-weight="800">AI AGENT</text>
+    <text x="36" y="100" class="m" font-size="6.4">MCP client</text>
     <rect x="250" y="48" width="180" height="64" class="box"/>
     <text x="262" y="66" class="f" font-size="6.4" letter-spacing="0.7">CONTENT PLANE</text>
     <text x="262" y="86" class="t" font-size="9.4" font-weight="800">MCP SERVER</text>
     <text x="262" y="100" class="m" font-size="6.4">Spring Boot · auth · sign</text>
     <rect x="500" y="48" width="170" height="64" class="term"/>
-    <text x="512" y="66" class="f" font-size="6.4" letter-spacing="0.7">TEXT + METADATA</text>
-    <text x="512" y="86" class="t" font-size="9.4" font-weight="800">ARTICLE STORE</text>
-    <text x="512" y="100" class="m" font-size="6.4">title · body · object ref</text>
+    <text x="512" y="66" class="f" font-size="6.4" letter-spacing="0.7">STORAGE</text>
+    <text x="512" y="86" class="t" font-size="9.4" font-weight="800">DATABASE</text>
+    <text x="512" y="100" class="m" font-size="6.4">article content</text>
     <line x1="184" y1="80" x2="246" y2="80" class="arrow" marker-end="url(#pub-f1-arrow)"/>
-    <text x="190" y="72" class="f" font-size="6">update / request</text>
+    <text x="190" y="72" class="f" font-size="6">ARTICLE</text>
     <line x1="430" y1="80" x2="496" y2="80" class="arrow" marker-end="url(#pub-f1-arrow)"/>
-    <text x="436" y="72" class="f" font-size="6">save</text>
-    <rect x="250" y="200" width="180" height="64" class="codebox"/>
-    <text x="262" y="218" class="f" font-size="6.4" letter-spacing="0.7">OBJECT STORAGE</text>
-    <text x="262" y="238" class="t" font-size="9.4" font-weight="800">RUSTFS</text>
-    <text x="262" y="252" class="m" font-size="6.4">private upload bucket</text>
-    <line x1="340" y1="112" x2="340" y2="196" class="dash" marker-end="url(#pub-f1-arrow-muted)"/>
-    <text x="348" y="154" class="f" font-size="6">SIGN ONE URL</text>
-    <path d="M104 112 V232 H246" class="dash" fill="none" marker-end="url(#pub-f1-arrow-muted)"/>
-    <text x="112" y="180" class="f" font-size="6">PUT BYTES</text>
-    <text x="112" y="192" class="f" font-size="6">DIRECT</text>
-    <rect x="500" y="200" width="170" height="64" class="box"/>
-    <text x="512" y="218" class="f" font-size="6.4" letter-spacing="0.7">READ PATH</text>
-    <text x="512" y="238" class="t" font-size="9.4" font-weight="800">CDN / PUBLIC SITE</text>
-    <text x="512" y="252" class="m" font-size="6.4">public read only</text>
-    <line x1="430" y1="232" x2="496" y2="232" class="arrow" marker-end="url(#pub-f1-arrow)"/>
-    <text x="436" y="224" class="f" font-size="6">public</text>
-    <text x="24" y="294" class="f" font-size="6.4" letter-spacing="0.5">THE MCP SERVER AUTHENTICATES THE CALLER AND SIGNS THE URL · IT DOES NOT STORE THE IMAGE</text>
-    <text x="24" y="308" class="f" font-size="6.2">RUSTFS KEEPS THE BYTES · THE ARTICLE KEEPS THE REFERENCE · THE CDN SERVES THE PUBLIC COPY</text>
+    <text x="436" y="72" class="f" font-size="6">SAVE</text>
+    <path d="M250 96 H220 V160 H140 V112" class="dash" marker-end="url(#pub-f1-arrow-muted)"/>
+    <text x="146" y="154" class="f" font-size="6">SIGNED URL</text>
+    <rect x="250" y="210" width="180" height="64" class="codebox"/>
+    <text x="262" y="228" class="f" font-size="6.4" letter-spacing="0.7">OBJECT STORAGE</text>
+    <text x="262" y="248" class="t" font-size="9.4" font-weight="800">RUSTFS</text>
+    <text x="262" y="262" class="m" font-size="6.4">image object</text>
+    <path d="M80 112 V242 H246" class="dash" fill="none" marker-end="url(#pub-f1-arrow-muted)"/>
+    <text x="88" y="184" class="f" font-size="6">PUT IMAGE</text>
+    <rect x="500" y="210" width="170" height="64" class="box"/>
+    <text x="512" y="228" class="f" font-size="6.4" letter-spacing="0.7">READ PATH</text>
+    <text x="512" y="248" class="t" font-size="9.4" font-weight="800">PUBLIC USERS</text>
+    <text x="512" y="262" class="m" font-size="6.4">article + image</text>
+    <line x1="585" y1="112" x2="585" y2="206" class="arrow" marker-end="url(#pub-f1-arrow)"/>
+    <text x="593" y="160" class="f" font-size="6">ARTICLE</text>
+    <line x1="430" y1="242" x2="496" y2="242" class="arrow" marker-end="url(#pub-f1-arrow)"/>
+    <text x="436" y="234" class="f" font-size="6">IMAGE</text>
+    <text x="24" y="310" class="f" font-size="6.4" letter-spacing="0.5">MCP WRITES THE ARTICLE AND RETURNS ONE SIGNED URL · IT NEVER PROXIES THE IMAGE</text>
+    <text x="24" y="324" class="f" font-size="6.2">DATABASE = ARTICLE · RUSTFS = IMAGE · THE PUBLIC PAGE READS BOTH</text>
   </svg>
   </div>
-  <p class="mfig-fig-src">MCP · ARTICLE STORE · RUSTFS · CDN</p>
+  <p class="mfig-fig-src">AI AGENT · MCP · DATABASE · RUSTFS · PUBLIC USERS</p>
 </figure>
 
-## Five steps
+## Four steps (and one key)
 
-1. **Issue a key.** An admin creates a key for the AI client. The key identifies the client; it is not a database password. Keep its scope narrow, and make it revocable.
-2. **Call the MCP server.** The AI asks to update an article or to reserve an upload. The server validates the request, checks the key, and decides whether the action is allowed.
-3. **Sign one URL.** The server chooses the object key, content type, and expiry, then signs a URL for that one object. The AI never chooses a bucket or a path.
-4. **Upload directly.** The AI sends a `PUT` to RustFS with the signed URL. The application server sees the request metadata, not the image bytes.
-5. **Store the reference.** The article stores the text and a reference to the uploaded object. The public page resolves that reference through the CDN.
+Before step one, an admin gives the AI Agent a key. The key identifies the agent; it is not a database password. Keep its scope narrow, and make it revocable.
 
-A failure can stop at any step. An expired URL needs a new ticket. A file that does not match its declared type should be rejected. An upload that is never attached should be cleaned up. Those are operational details, not reasons to give the model the bucket key.
+1. **The article goes to the database.** The AI Agent calls the MCP server with the article. The server validates the request and writes the article straight to the database.
+2. **The upload URL comes from MCP.** For an image, the AI Agent asks the MCP server for an upload slot. The server returns a short-lived URL for one object.
+3. **The image goes to RustFS.** The AI Agent sends a `PUT` with the image bytes to RustFS. The MCP server does not proxy the image.
+4. **Article and image go public together.** The public page reads the article from the database and the image from RustFS, usually through a CDN or reverse proxy. The two are presented as one page.
+
+A failure can stop at any step. An expired URL needs a new ticket. A file that does not match its declared type should be rejected. An image that is uploaded but never published should be cleaned up. Those are operational details, not reasons to give the model the bucket key.
 
 ## An MCP HTTP request, for illustration
 
