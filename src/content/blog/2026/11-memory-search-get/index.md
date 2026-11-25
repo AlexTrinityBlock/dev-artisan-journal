@@ -1,12 +1,12 @@
 ---
 title: "Search, Then Get: The Two Modules of Agent Memory"
-description: "A close reading of 'Is Grep All You Need?' after one small realization: agent memory is two moves. Search is a search box; Get is the link you open. Together they give an agent something like an external brain."
+description: "Agent memory is two modules, not one. Search reduces the corpus to ranked handles; Get expands a handle into the full, current record. An architecture essay about the seam between finding and reading."
 pubDate: 2026-11-23
 category: "AI"
-tags: ["Agents", "Memory", "RAG", "Retrieval", "PaperNotes"]
+tags: ["Agents", "Memory", "RAG", "Retrieval", "Architecture"]
 featured: false
 author: "Alex.Hsiao"
-readTime: "18 min read"
+readTime: "13 min read"
 ---
 
 # Search, Then Get: The Two Modules of Agent Memory
@@ -16,102 +16,87 @@ readTime: "18 min read"
 <section class="mem-lead">
   <div class="mem-lead-head">
     <span class="card-tag">THE TWO MODULES // 00</span>
-    <p class="mem-lead-kicker">After reading the paper, the part I kept using was not the grep-versus-vector result. It was a smaller classification.</p>
+    <p class="mem-lead-kicker">Most agent memory systems do not fail at the embedding model. They fail at the seam between finding and reading.</p>
     <h3 class="mem-lead-title">Agent memory has two moves.</h3>
-    <p class="mem-lead-sub">Find, then read. Search is a search box; Get is the link you open.</p>
+    <p class="mem-lead-sub">Find, then read. Search reduces the corpus to candidates; Get expands one candidate into the record.</p>
   </div>
   <div class="mem-lead-grid">
     <div class="mem-lead-card">
       <div class="mem-lead-icon"><svg class="mem-lead-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>
       <div class="mem-lead-tag">SEARCH // FIND</div>
-      <h4>Type keywords, find some entries</h4>
-      <p>Like typing into a search box. It returns a short list of entries. Maybe three. Maybe none.</p>
-      <div class="mem-lead-meta">KEYWORDS → N ENTRIES</div>
+      <h4>Ask a question, get a shortlist</h4>
+      <p>Like typing into a search box. It returns handles with scores and previews. Maybe three. Maybe none.</p>
+      <div class="mem-lead-meta">QUERY → N HANDLES</div>
     </div>
     <div class="mem-lead-plus" aria-hidden="true">+</div>
     <div class="mem-lead-card">
       <div class="mem-lead-icon"><svg class="mem-lead-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10 9H8m8 4H8m8 4H8"/></svg></div>
       <div class="mem-lead-tag">GET // READ</div>
-      <h4>Open a link, read the full text</h4>
-      <p>Like opening one of those results. It returns the complete page. No guessing, no ranking.</p>
-      <div class="mem-lead-meta">LINK → FULL TEXT</div>
+      <h4>Open one handle, read the record</h4>
+      <p>Like opening one result. It returns the full, current record: text, metadata, version. No guessing, no ranking.</p>
+      <div class="mem-lead-meta">HANDLE → FULL RECORD</div>
     </div>
   </div>
   <div class="mem-lead-flow mem-scroll">
   <svg class="mem-svg" viewBox="0 0 840 170" role="img" aria-labelledby="mem-f0-title mem-f0-desc">
     <title id="mem-f0-title">A simple Search then Get flow</title>
-    <desc id="mem-f0-desc">A few keywords go to Search, which returns three entries. One entry is selected and passed to Get, which returns the full text of that page. A dashed arrow returns new keywords to Search.</desc>
+    <desc id="mem-f0-desc">A cue goes to Search, which returns three handles. One handle is selected and passed to Get, which returns the full record. A dashed arrow carries the evidence back as a new cue.</desc>
     <defs>
       <marker id="mem-lead-arrow" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-ink)"/></marker>
       <marker id="mem-lead-arrow-muted" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-l5)"/></marker>
     </defs>
     <text x="24" y="18" class="f" font-size="7.5" letter-spacing="1.2">SIMPLE FLOW // ONE SEARCH, ONE GET</text>
-    <text x="816" y="18" class="f" font-size="7.5" text-anchor="end" letter-spacing="1">ONE SEARCH · MANY ENTRIES · ONE PAGE</text>
+    <text x="816" y="18" class="f" font-size="7.5" text-anchor="end" letter-spacing="1">ONE SEARCH · MANY HANDLES · ONE RECORD</text>
     <line x1="24" y1="26" x2="816" y2="26" class="rule"/>
     <rect x="24" y="44" width="112" height="72" class="term"/>
-    <text x="36" y="60" class="f" font-size="6.8" letter-spacing="0.8">KEYWORDS</text>
-    <text x="36" y="76" class="t mono" font-size="7.8">a few words</text>
-    <text x="36" y="94" class="m" font-size="6.8">one search</text>
+    <text x="36" y="60" class="f" font-size="6.8" letter-spacing="0.8">CUE</text>
+    <text x="36" y="76" class="t mono" font-size="7.8">refund window</text>
+    <text x="36" y="94" class="m" font-size="6.8">query + filters</text>
     <line x1="136" y1="80" x2="152" y2="80" class="arrow" marker-end="url(#mem-lead-arrow)"/>
     <rect x="156" y="44" width="170" height="72" class="box"/>
     <svg x="168" y="56" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--mono-ink)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
     <text x="192" y="68" class="t" font-size="10.5" font-weight="800" letter-spacing="-0.01em">SEARCH</text>
-    <text x="192" y="80" class="m" font-size="7">find entries</text>
-    <text x="168" y="104" class="f" font-size="6.8">grep · BM25 · vector</text>
+    <text x="192" y="80" class="m" font-size="7">rank candidates</text>
+    <text x="168" y="104" class="f" font-size="6.8">grep · BM25 · vector · hybrid</text>
     <line x1="326" y1="80" x2="342" y2="80" class="arrow" marker-end="url(#mem-lead-arrow)"/>
-    <text x="358" y="58" class="f" font-size="6.8" letter-spacing="0.6">3 ENTRIES · OPEN ONE</text>
+    <text x="358" y="58" class="f" font-size="6.8" letter-spacing="0.6">3 HANDLES · OPEN ONE</text>
     <rect x="358" y="64" width="164" height="14" class="box"/>
     <text x="366" y="74" class="m mono" font-size="6.2">01</text>
-    <text x="382" y="74" class="t mono" font-size="6.7">entry A</text>
+    <text x="382" y="74" class="t mono" font-size="6.7">returns-2024:41</text>
     <rect x="358" y="82" width="164" height="14" fill="var(--mono-l1)"/>
     <text x="366" y="92" fill="var(--mono-paper)" class="mono" font-size="6.2">02</text>
-    <text x="382" y="92" fill="var(--mono-paper)" class="mono" font-size="6.7">entry B</text>
+    <text x="382" y="92" fill="var(--mono-paper)" class="mono" font-size="6.7">returns-2026:12</text>
     <rect x="358" y="100" width="164" height="14" class="box"/>
     <text x="366" y="110" class="m mono" font-size="6.2">03</text>
-    <text x="382" y="110" class="t mono" font-size="6.7">entry C</text>
+    <text x="382" y="110" class="t mono" font-size="6.7">ticket-8841:7</text>
     <line x1="522" y1="89" x2="540" y2="89" class="arrow" marker-end="url(#mem-lead-arrow)"/>
     <rect x="544" y="44" width="170" height="72" class="box"/>
     <svg x="556" y="56" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--mono-ink)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10 9H8m8 4H8m8 4H8"/></svg>
     <text x="580" y="68" class="t" font-size="10.5" font-weight="800" letter-spacing="-0.01em">GET</text>
-    <text x="580" y="80" class="m" font-size="7">open one</text>
-    <text x="556" y="104" class="f" font-size="6.8">exact bytes</text>
+    <text x="580" y="80" class="m" font-size="7">resolve one</text>
+    <text x="556" y="104" class="f" font-size="6.8">full record</text>
     <line x1="714" y1="80" x2="730" y2="80" class="arrow" marker-end="url(#mem-lead-arrow)"/>
     <rect x="734" y="44" width="82" height="72" class="codebox"/>
-    <text x="744" y="58" class="f" font-size="6.6" letter-spacing="0.6">FULL TEXT</text>
+    <text x="744" y="58" class="f" font-size="6.6" letter-spacing="0.6">RECORD</text>
     <line x1="744" y1="70" x2="806" y2="70" stroke="var(--mono-l5)" stroke-width="1"/>
     <line x1="744" y1="80" x2="794" y2="80" stroke="var(--mono-ink)" stroke-width="1"/>
     <line x1="744" y1="90" x2="806" y2="90" stroke="var(--mono-l5)" stroke-width="1"/>
     <line x1="744" y1="100" x2="786" y2="100" stroke="var(--mono-l5)" stroke-width="1"/>
-    <text x="744" y="112" class="m" font-size="6.4">one page</text>
+    <text x="744" y="112" class="m" font-size="6.4">one record</text>
     <path d="M775 120 V140 H80 V118" class="dash" fill="none" marker-end="url(#mem-lead-arrow-muted)"/>
-    <text x="427" y="154" class="f" font-size="6.9" text-anchor="middle" letter-spacing="0.6">NEW KEYWORDS → SEARCH AGAIN</text>
+    <text x="427" y="154" class="f" font-size="6.9" text-anchor="middle" letter-spacing="0.6">EVIDENCE → NEXT CUE · SEARCH AGAIN</text>
   </svg>
   </div>
-  <p class="mem-lead-note"><b>Search</b> finds the entries. <b>Get</b> opens the page. Together they give the agent an external brain — a place where many things can be remembered.</p>
+  <p class="mem-lead-note"><b>Search</b> finds the candidates. <b>Get</b> produces the evidence. The engineering lives in the contract between them.</p>
 </section>
 
-<p class="mem-lead-bridge">That is the whole classification. The rest of this article slows it down: why the paper’s numbers follow from it, what a handle must guarantee, and how to keep the loop honest.</p>
-
-## The result behind it
-
-
-The paper’s headline is that grep wins. The stranger result is that the harness can erase the win without touching the corpus.
-
-The paper runs 116 long-memory questions across five models, four harnesses, two retrieval modes, and two delivery paths. Inline, grep beats vector in all ten harness-model pairs. Move the same results into files and the advantage disappears: the ten-pair average becomes a tie, and vector wins five of ten. One model moves 16.4 points when only the harness changes — more than the 1.7-point gap between grep and vector in that same row.
-
-Read as a retriever contest, those numbers are confusing. Read as an interface problem, they are almost mechanical.
-
-Search is what you do when you type keywords into a search box and get back a list of entries. Get is what you do when you click one of those links and read the full page. Together they give an agent something like an external brain: a place where a lot of things can be remembered, and found again.
-
-Once the two moves are separate, the paper’s interface becomes legible. `grep -n` is Search, and its output is a list of `path:line` handles. `sed -n '40,60p' file` is Get. They compose because the first emits exactly what the second consumes. Vector retrieval is often shipped as Search alone: top-k chunks arrive inline, with no address to revisit and nothing further to open.
-
-Grep is not all you need. Grep is two things you need, wearing one name.
+<p class="mem-lead-bridge">The classification is small: one verb is set-valued, the other is singular. Most of the design work follows from keeping them separate — in the index, in the handle, and in the loop.</p>
 
 ## Two verbs, one memory
 
 Search is set-valued. It accepts a cue — a literal, a regex, a natural-language question, a metadata filter — and returns candidates. It is allowed to be approximate, ranked, and bounded. Its job is recall under a budget, not truth.
 
-Get is singular. It accepts one address and returns the bytes at that address, or a definite miss. It is the primary-key lookup of memory: address in, record out. It is not allowed to rank, summarize, or substitute a near neighbor. Its job is resolution.
+Get is singular. It accepts one address and returns the record at that address, or a definite miss. It is the primary-key lookup of memory: address in, record out. It is not allowed to rank, summarize, or substitute a near neighbor. Its job is resolution.
 
 The unit that joins them is the **handle**: a stable name for a stored span. `src/auth/session.ts:42`, `orders/1841#L12`, `4f2c9a1:docs/spec.md`, `chunk_01H8...`, `message 118`. A handle is not the content. It is the promise that the content can be produced again.
 
@@ -119,285 +104,213 @@ A retrieval result that cannot be resolved again is not memory. It is a quotatio
 
 Top-k chunks pasted into a prompt are quotations. They may answer the current question. They cannot be revisited, widened, or checked against a newer version. A grep hit with a file and a line number is a memory: the agent can leave, do something else, and come back to the same bytes.
 
+The pair is asymmetric. Search is a reduction: many records become a few candidates. Get is an expansion: one candidate becomes a full record with its metadata. Search throws information away on purpose, because the context cannot hold the corpus. Get restores the part that matters, because the answer needs the record, not a resemblance to it. If both ends reduce, the agent never sees a whole record. If both ends expand, the context fills with everything the index touched.
+
 The loop is what browsing means: cue → Search → handles → choose → Get → evidence → new cue. A library without a catalog is unusable; a catalog without shelves is a bibliography. An agent needs both halves.
 
+## The architecture: index, handles, records
+
+A memory system that exposes both verbs has three layers, and they have different jobs.
+
+1. **The index** is derived, rebuildable, and lossy. For files, it may be the corpus itself plus a scanner. For BM25, it is an inverted index. For dense retrieval, it is an ANN structure over embeddings. For hybrid search, it is both, fused. The index exists to find candidates quickly. It is allowed to lag, to be partial, and to be approximate.
+
+2. **The handle** is a small, addressable pointer. It names a record or a span inside one, and it carries enough context to resolve that name later: store, ID, span, version, scope. It is cheap to mint and cheap to pass around.
+
+3. **The record store** is authoritative. It holds the full text, the metadata, the version, and the permissions. It is the thing that must still be true tomorrow.
+
+The division of labor is the invariant:
+
+- Search reads the index, never the record store.
+- Get reads the record store, never the index.
+- The index can be rebuilt from the records. The records cannot be rebuilt from the index.
+
+That last line is the test for whether a system has memory or only retrieval. If the only copy of a fact lives in an embedding, it is not memory. It is a rumor with a vector.
+
 <figure class="mem-fig">
   <figcaption>
-    <span class="card-tag">MEMORY MAP // 01</span>
-    <h3 class="mem-fig-title">One memory, two different reductions</h3>
-    <p class="mem-fig-sub">Search reduces the corpus to addresses. Get reduces an address to bytes. The loop composes them.</p>
+    <span class="card-tag">SYSTEM MAP // 01</span>
+    <h3 class="mem-fig-title">The index finds. The record store proves.</h3>
+    <p class="mem-fig-sub">Search ranks handles from a derived index. Get resolves one handle against the authoritative record. Evidence enters context; the next turn starts there.</p>
   </figcaption>
   <div class="mem-scroll">
-  <svg class="mem-svg" viewBox="0 0 840 496" role="img" aria-labelledby="mem-f1-title mem-f1-desc">
-    <title id="mem-f1-title">The two modules of agent memory</title>
-    <desc id="mem-f1-desc">Search takes a cue and returns a ranked list of handles. Get takes one handle and returns the exact bytes at that address. A dashed loop carries evidence back into a new cue.</desc>
+  <svg class="mem-svg" viewBox="0 0 840 360" role="img" aria-labelledby="mem-f1-title mem-f1-desc">
+    <title id="mem-f1-title">The architecture of agent memory</title>
+    <desc id="mem-f1-desc">A planner writes a query into Search. Search probes a derived index of grep, BM25, vector, or hybrid retrieval and returns ranked handles with IDs, scores, and previews. Get resolves one handle against the authoritative record store, which holds full text, metadata, permissions, and version. Evidence enters context and the next turn feeds back to the planner.</desc>
     <defs>
-      <marker id="mem-arrow" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-ink)"/></marker>
-      <marker id="mem-arrow-muted" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-l5)"/></marker>
+      <marker id="mem-arch-arrow" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-ink)"/></marker>
+      <marker id="mem-arch-arrow-muted" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-l5)"/></marker>
     </defs>
-    <text x="24" y="18" class="f" font-size="7.5" letter-spacing="1.2">MEMORY // TWO MODULES</text>
-    <text x="816" y="18" class="f" font-size="7.5" text-anchor="end" letter-spacing="1">CUE → HANDLE → BYTES</text>
+    <text x="24" y="18" class="f" font-size="7.5" letter-spacing="1.2">MEMORY // ARCHITECTURE</text>
+    <text x="816" y="18" class="f" font-size="7.5" text-anchor="end" letter-spacing="1">QUERY → HANDLES → RECORD → CONTEXT</text>
     <line x1="24" y1="26" x2="816" y2="26" class="rule"/>
-    <text x="24" y="46" class="f" font-size="7" letter-spacing="1.1">01 / SEARCH</text>
-    <text x="448" y="46" class="f" font-size="7" letter-spacing="1.1">02 / GET</text>
-    <rect x="24" y="58" width="368" height="332" class="box"/>
-    <text x="40" y="84" class="t" font-size="13" font-weight="800" letter-spacing="-0.01em">SEARCH</text>
-    <text x="40" y="98" class="m" font-size="7.5">cue in · candidates out · one-to-many</text>
-    <text x="376" y="88" class="f" font-size="18" text-anchor="end">01</text>
-    <rect x="40" y="110" width="336" height="50" class="term"/>
-    <text x="50" y="124" class="f" font-size="6.5" letter-spacing="0.8">CUE</text>
-    <text x="50" y="139" class="t mono" font-size="7.2">"refund window"  ·  /retry.*budget/</text>
-    <text x="50" y="151" class="m mono" font-size="7.2">vector(q)  ·  path:src/**  ·  after:2026-01-01</text>
-    <line x1="208" y1="160" x2="208" y2="174" class="arrow" marker-end="url(#mem-arrow)"/>
-    <rect x="40" y="178" width="336" height="84" class="box"/>
-    <text x="50" y="192" class="f" font-size="6.5" letter-spacing="0.8">INSTRUMENTS</text>
-    <rect x="50" y="200" width="102" height="28" class="term"/>
-    <text x="101" y="212" class="t mono" font-size="7.5" font-weight="700" text-anchor="middle">GREP</text>
-    <text x="101" y="222" class="m mono" font-size="6.2" text-anchor="middle">regex · literal</text>
-    <rect x="160" y="200" width="102" height="28" class="term"/>
-    <text x="211" y="212" class="t mono" font-size="7.5" font-weight="700" text-anchor="middle">BM25</text>
-    <text x="211" y="222" class="m mono" font-size="6.2" text-anchor="middle">term frequency</text>
-    <rect x="270" y="200" width="96" height="28" class="term"/>
-    <text x="318" y="212" class="t mono" font-size="7.5" font-weight="700" text-anchor="middle">VECTOR</text>
-    <text x="318" y="222" class="m mono" font-size="6.2" text-anchor="middle">ANN · meaning</text>
-    <text x="50" y="250" class="m" font-size="6.8">filters · dates · paths · globs</text>
-    <line x1="208" y1="262" x2="208" y2="276" class="arrow" marker-end="url(#mem-arrow)"/>
-    <text x="40" y="292" class="f" font-size="6.5" letter-spacing="0.8">HANDLES // N = 3</text>
-    <text x="376" y="292" class="f" font-size="6.5" text-anchor="end" letter-spacing="0.8">RANKED</text>
-    <rect x="40" y="300" width="336" height="20" fill="var(--mono-l1)"/>
-    <text x="50" y="313" fill="var(--mono-paper)" class="mono" font-size="7">01</text>
-    <text x="66" y="313" fill="var(--mono-paper)" class="mono" font-size="7">policies/2026-returns.md:12</text>
-    <text x="366" y="313" fill="var(--mono-paper)" class="mono" font-size="6.5" text-anchor="end">0.94</text>
-    <rect x="40" y="324" width="336" height="20" class="box"/>
-    <text x="50" y="337" class="m mono" font-size="7">02</text>
-    <text x="66" y="337" class="t mono" font-size="7">policies/returns-2024.md:41</text>
-    <text x="366" y="337" class="m mono" font-size="6.5" text-anchor="end">0.89</text>
-    <rect x="40" y="348" width="336" height="20" class="box"/>
-    <text x="50" y="361" class="m mono" font-size="7">03</text>
-    <text x="66" y="361" class="t mono" font-size="7">tickets/8841.json:7</text>
-    <text x="366" y="361" class="m mono" font-size="6.5" text-anchor="end">0.81</text>
-    <text x="40" y="382" class="m" font-size="6.8">set-valued · ranked · budgeted · may return nothing</text>
-    <rect x="448" y="58" width="368" height="332" class="box"/>
-    <text x="464" y="84" class="t" font-size="13" font-weight="800" letter-spacing="-0.01em">GET</text>
-    <text x="464" y="98" class="m" font-size="7.5">one handle in · exact bytes out · one-to-one</text>
-    <text x="800" y="88" class="f" font-size="18" text-anchor="end">02</text>
-    <rect x="464" y="110" width="336" height="50" class="term"/>
-    <text x="474" y="124" class="f" font-size="6.5" letter-spacing="0.8">ONE HANDLE</text>
-    <text x="474" y="139" class="t mono" font-size="7.2">policies/2026-returns.md:12</text>
-    <text x="474" y="151" class="m mono" font-size="6.8">resolved from 3 candidates · no re-search</text>
-    <line x1="632" y1="160" x2="632" y2="174" class="arrow" marker-end="url(#mem-arrow)"/>
-    <rect x="464" y="178" width="336" height="84" class="box"/>
-    <text x="474" y="192" class="f" font-size="6.5" letter-spacing="0.8">RESOLVE → READ → RETURN</text>
-    <rect x="474" y="200" width="100" height="28" class="term"/>
-    <text x="524" y="212" class="t mono" font-size="7.5" font-weight="700" text-anchor="middle">RESOLVE</text>
-    <text x="524" y="222" class="m mono" font-size="6.2" text-anchor="middle">address</text>
-    <rect x="584" y="200" width="100" height="28" class="term"/>
-    <text x="634" y="212" class="t mono" font-size="7.5" font-weight="700" text-anchor="middle">READ</text>
-    <text x="634" y="222" class="m mono" font-size="6.2" text-anchor="middle">range</text>
-    <rect x="694" y="200" width="96" height="28" class="term"/>
-    <text x="742" y="212" class="t mono" font-size="7.5" font-weight="700" text-anchor="middle">RETURN</text>
-    <text x="742" y="222" class="m mono" font-size="6.2" text-anchor="middle">bytes</text>
-    <text x="474" y="250" class="m" font-size="6.8">accepts the handle verbatim · fails closed</text>
-    <text x="464" y="292" class="f" font-size="6.5" letter-spacing="0.8">EXACT BYTES // L12–L15</text>
-    <text x="800" y="292" class="f" font-size="6.5" text-anchor="end" letter-spacing="0.8">ONE RECORD</text>
-    <rect x="464" y="298" width="336" height="62" class="codebox"/>
-    <text x="476" y="314" class="m mono" font-size="7.2">12  ## Returns</text>
-    <text x="476" y="328" class="t mono" font-size="7.2">13  Refunds are accepted within 14 days</text>
-    <text x="476" y="342" class="t mono" font-size="7.2">14  of delivery. Opened software is final sale.</text>
-    <text x="476" y="356" class="m mono" font-size="6.8">15  Effective: 2026-01-01 · Status: current</text>
-    <text x="464" y="382" class="m" font-size="6.8">singular · deterministic · no ranking</text>
-    <path d="M394 310 H420 V135 H440" class="arrow" fill="none" marker-end="url(#mem-arrow)"/>
-    <path d="M632 394 V414 H208 V396" class="dash" fill="none" marker-end="url(#mem-arrow-muted)"/>
-    <text x="420" y="428" class="f" font-size="6.8" text-anchor="middle" letter-spacing="0.6">EVIDENCE → NEW CUE · SEARCH AGAIN</text>
-    <rect x="24" y="442" width="792" height="38" class="codebox"/>
-    <text x="40" y="458" class="t mono" font-size="7.5" font-weight="700">SEARCH = corpus → addresses.   GET = address → exact bytes.</text>
-    <text x="40" y="471" class="m" font-size="7">The loop, not the index, is what makes the memory browsable.</text>
+    <text x="176" y="46" class="f" font-size="7" letter-spacing="1.1">01 / FIND</text>
+    <text x="590" y="46" class="f" font-size="7" letter-spacing="1.1">02 / READ</text>
+    <rect x="24" y="58" width="126" height="92" class="box"/>
+    <text x="36" y="78" class="t" font-size="9.5" font-weight="800" letter-spacing="-0.01em">AGENT / PLANNER</text>
+    <text x="36" y="92" class="m" font-size="6.4">plans the next move</text>
+    <rect x="36" y="102" width="102" height="20" class="term"/>
+    <text x="44" y="116" class="m mono" font-size="6.3">task · turn · budget</text>
+    <text x="36" y="140" class="f" font-size="6.2" letter-spacing="0.6">WRITES THE QUERY</text>
+    <line x1="150" y1="112" x2="172" y2="112" class="arrow" marker-end="url(#mem-arch-arrow)"/>
+    <rect x="176" y="58" width="152" height="92" class="box"/>
+    <text x="188" y="78" class="t" font-size="9.5" font-weight="800" letter-spacing="-0.01em">SEARCH</text>
+    <text x="188" y="92" class="m" font-size="6.4">query + filters</text>
+    <rect x="188" y="102" width="128" height="30" class="term"/>
+    <text x="196" y="114" class="t mono" font-size="6.2">"refund window"</text>
+    <text x="196" y="125" class="m mono" font-size="6.2">after:2026-01-01</text>
+    <text x="188" y="143" class="f" font-size="6.2" letter-spacing="0.6">RETURNS HANDLES</text>
+    <line x1="328" y1="112" x2="350" y2="112" class="arrow" marker-end="url(#mem-arch-arrow)"/>
+    <rect x="354" y="58" width="170" height="92" class="box"/>
+    <text x="366" y="78" class="t" font-size="9.5" font-weight="800" letter-spacing="-0.01em">INDEX</text>
+    <text x="366" y="92" class="m" font-size="6.4">derived · rebuildable</text>
+    <rect x="366" y="100" width="46" height="20" class="term"/>
+    <text x="389" y="113" class="t mono" font-size="6.4" font-weight="700" text-anchor="middle">GREP</text>
+    <rect x="418" y="100" width="46" height="20" class="term"/>
+    <text x="441" y="113" class="t mono" font-size="6.4" font-weight="700" text-anchor="middle">BM25</text>
+    <rect x="470" y="100" width="46" height="20" class="term"/>
+    <text x="493" y="113" class="t mono" font-size="6.4" font-weight="700" text-anchor="middle">VECTOR</text>
+    <rect x="366" y="122" width="150" height="16" class="term"/>
+    <text x="441" y="134" class="m mono" font-size="6.3" text-anchor="middle">HYBRID · fuse + rerank</text>
+    <text x="366" y="147" class="f" font-size="6.1" letter-spacing="0.6">SCAN OR ANN PROBE</text>
+    <line x1="524" y1="112" x2="546" y2="112" class="arrow" marker-end="url(#mem-arch-arrow)"/>
+    <rect x="550" y="58" width="266" height="92" class="box"/>
+    <text x="562" y="76" class="t" font-size="9.5" font-weight="800" letter-spacing="-0.01em">RANKED HANDLES</text>
+    <text x="562" y="88" class="m" font-size="6.4">id · score · preview</text>
+    <rect x="562" y="94" width="242" height="15" fill="var(--mono-l1)"/>
+    <text x="570" y="104" fill="var(--mono-paper)" class="mono" font-size="6.2">01</text>
+    <text x="584" y="104" fill="var(--mono-paper)" class="mono" font-size="6.4">policies/2026-returns.md:12</text>
+    <text x="796" y="104" fill="var(--mono-paper)" class="mono" font-size="6.1" text-anchor="end">0.94</text>
+    <rect x="562" y="111" width="242" height="15" class="box"/>
+    <text x="570" y="121" class="m mono" font-size="6.2">02</text>
+    <text x="584" y="121" class="t mono" font-size="6.4">policies/returns-2024.md:41</text>
+    <text x="796" y="121" class="m mono" font-size="6.1" text-anchor="end">0.89</text>
+    <rect x="562" y="128" width="242" height="15" class="box"/>
+    <text x="570" y="138" class="m mono" font-size="6.2">03</text>
+    <text x="584" y="138" class="t mono" font-size="6.4">tickets/8841.json:7</text>
+    <text x="796" y="138" class="m mono" font-size="6.1" text-anchor="end">0.81</text>
+    <line x1="683" y1="150" x2="683" y2="186" class="arrow" marker-end="url(#mem-arch-arrow)"/>
+    <text x="692" y="172" class="f" font-size="6.2" letter-spacing="0.6">ONE CHOSEN</text>
+    <rect x="590" y="188" width="190" height="88" class="box"/>
+    <text x="602" y="208" class="t" font-size="9.5" font-weight="800" letter-spacing="-0.01em">GET</text>
+    <text x="602" y="221" class="m" font-size="6.4">one handle in</text>
+    <rect x="602" y="229" width="166" height="30" class="term"/>
+    <text x="610" y="241" class="t mono" font-size="6.2">2026-returns.md:12</text>
+    <text x="610" y="252" class="m mono" font-size="6.2">window = 40 lines</text>
+    <text x="602" y="270" class="f" font-size="6.2" letter-spacing="0.6">RECORD OUT · NO RANKING</text>
+    <line x1="590" y1="232" x2="554" y2="232" class="arrow" marker-end="url(#mem-arch-arrow)"/>
+    <rect x="344" y="188" width="208" height="88" class="box"/>
+    <text x="356" y="208" class="t" font-size="9.5" font-weight="800" letter-spacing="-0.01em">RECORD STORE</text>
+    <text x="356" y="221" class="m" font-size="6.4">authoritative · versioned</text>
+    <text x="356" y="237" class="m" font-size="6.2">full text · source type</text>
+    <text x="356" y="248" class="m" font-size="6.2">status · effective date</text>
+    <text x="356" y="259" class="m" font-size="6.2">permissions · owner</text>
+    <text x="356" y="270" class="m" font-size="6.2">version / content hash</text>
+    <line x1="344" y1="232" x2="322" y2="232" class="arrow" marker-end="url(#mem-arch-arrow)"/>
+    <rect x="176" y="188" width="144" height="88" class="box"/>
+    <text x="188" y="208" class="t" font-size="9.5" font-weight="800" letter-spacing="-0.01em">EVIDENCE</text>
+    <text x="188" y="221" class="m" font-size="6.4">resolved bytes</text>
+    <text x="188" y="238" class="m" font-size="6.2">current policy</text>
+    <text x="188" y="250" class="m" font-size="6.2">effective 2026-01-01</text>
+    <text x="188" y="262" class="m" font-size="6.2">cite: L12–L17</text>
+    <line x1="176" y1="232" x2="154" y2="232" class="arrow" marker-end="url(#mem-arch-arrow)"/>
+    <rect x="24" y="188" width="128" height="88" class="box"/>
+    <text x="36" y="208" class="t" font-size="9.5" font-weight="800" letter-spacing="-0.01em">CONTEXT</text>
+    <text x="36" y="221" class="m" font-size="6.4">prompt · turn</text>
+    <text x="36" y="238" class="m" font-size="6.2">evidence in</text>
+    <text x="36" y="250" class="m" font-size="6.2">token budget</text>
+    <text x="36" y="262" class="m" font-size="6.2">next turn →</text>
+    <path d="M88 188 V152" class="dash" fill="none" marker-end="url(#mem-arch-arrow-muted)"/>
+    <text x="96" y="174" class="f" font-size="6.2" letter-spacing="0.6">NEW CUE</text>
+    <rect x="24" y="292" width="792" height="48" class="codebox"/>
+    <text x="40" y="309" class="t mono" font-size="7.2" font-weight="700">SEARCH: corpus → candidates · returns handles, never the record.</text>
+    <text x="40" y="323" class="t mono" font-size="7.2" font-weight="700">GET: handle → record · returns the record, never a ranking.</text>
+    <text x="40" y="337" class="m mono" font-size="6.5">INDEX is derived and disposable. RECORD STORE is authoritative.</text>
   </svg>
   </div>
-  <div class="mem-fig-src">TWO-MODULE MEMORY · SEARCH / GET · HANDLE-CENTRIC LOOP</div>
+  <div class="mem-fig-src">ARCHITECTURE · TWO VERBS · ONE HANDLE TYPE · NO SHARED RANKING</div>
 </figure>
 
-Search reduces the corpus to addresses. Get reduces an address to bytes. The loop composes the two reductions.
+Read the diagram left to right on the top row, then right to left on the bottom. The planner writes a query; Search probes a derived index; the index returns handles; Get resolves one handle against the authoritative store; evidence enters context; the next turn starts there. The feedback arrow is not decoration. The record supplies the next cue.
 
-## What the paper measured
+The same shape covers very different deployments. Files plus `grep` and `sed` are the degenerate case: the index and the record store are the same directory. A vector database plus an object store plus a SQL metadata table is the separated case. A conversation log plus a turn index is a third. In every case, the interface is the same, and the invariant is the same: the thing that ranks is not the thing that is authoritative.
 
-The study varies retrieval mode, harness, and delivery path. The task is the 116-question LongMemEval-S subset: multi-session chat questions spanning knowledge updates, multi-session aggregation, assistant-generated content, user preferences, user facts, and temporal reasoning. Each question comes with oracle sessions and a variable number of distractors. The corpus is fixed. The retrievers are grep over raw text and vector search with reranking. The harnesses are a custom agent (Chronos) and three provider CLIs (Claude Code, Codex, Gemini CLI). The delivery paths are inline tool messages and files the agent must open.
+## Search: reduce the corpus to candidates
 
-In the inline condition, grep is ahead in every one of the ten harness-model pairs. The unweighted mean across those pairs is 83.8 against 72.5, an 11.3-point gap. The largest margin is Gemini 3.1 Flash-Lite on Chronos: 86.2 against 62.9. The smallest is Claude Opus 4.6 on Claude Code: 76.7 against 75.0.
+The interface is small:
 
-<figure class="mem-fig">
-  <figcaption>
-    <span class="card-tag">EXPERIMENT 1 // 02</span>
-    <h3 class="mem-fig-title">All ten inline pairs tilt toward grep</h3>
-    <p class="mem-fig-sub">Each row is one model in one harness. Hollow dots are vector, solid dots are grep. The gap ranges from 1.7 to 23.3 points.</p>
-  </figcaption>
-  <div class="mem-scroll">
-  <svg class="mem-svg" viewBox="0 0 840 470" role="img" aria-labelledby="mem-f2-title mem-f2-desc">
-    <title id="mem-f2-title">Inline grep and vector accuracy by harness and model</title>
-    <desc id="mem-f2-desc">A dumbbell chart of ten harness-model pairs. Grep is higher than vector in every pair, from a 1.7-point gap to a 23.3-point gap. The unweighted means are 83.8 for grep and 72.5 for vector.</desc>
-    <text x="24" y="18" class="f" font-size="7.5" letter-spacing="1.2">EXPERIMENT 1 // INLINE DELIVERY</text>
-    <text x="816" y="18" class="f" font-size="7.5" text-anchor="end" letter-spacing="1">ACCURACY % · LONGMEMEVAL-S 116Q</text>
-    <line x1="24" y1="26" x2="816" y2="26" class="rule"/>
-    <text x="24" y="50" class="t" font-size="12.5" font-weight="800" letter-spacing="-0.01em">Grep leads every inline pair</text>
-    <text x="24" y="66" class="m" font-size="7.5">The line is the gap. The dots are the scores.</text>
-    <g class="f" font-size="6.5">
-      <circle cx="690" cy="62" r="3.2" fill="var(--mono-paper)" stroke="var(--mono-l2)" stroke-width="1"/>
-      <text x="699" y="65" class="m">VECTOR</text>
-      <circle cx="748" cy="62" r="3.7" fill="var(--mono-ink)"/>
-      <text x="757" y="65" class="t">GREP</text>
-    </g>
-    <g class="f" font-size="6.3" text-anchor="middle">
-      <line x1="270" y1="90" x2="270" y2="382" class="rule"/>
-      <line x1="358.3" y1="90" x2="358.3" y2="382" class="rule"/>
-      <line x1="446.7" y1="90" x2="446.7" y2="382" class="rule"/>
-      <line x1="535" y1="90" x2="535" y2="382" class="rule"/>
-      <line x1="623.3" y1="90" x2="623.3" y2="382" class="rule"/>
-      <line x1="711.7" y1="90" x2="711.7" y2="382" class="rule"/>
-      <line x1="800" y1="90" x2="800" y2="382" class="rule"/>
-      <text x="270" y="396">40</text>
-      <text x="358.3" y="396">50</text>
-      <text x="446.7" y="396">60</text>
-      <text x="535" y="396">70</text>
-      <text x="623.3" y="396">80</text>
-      <text x="711.7" y="396">90</text>
-      <text x="800" y="396">100</text>
-    </g>
-    <g>
-      <text x="24" y="114.5" class="t" font-size="7.6"><tspan font-weight="700">Claude Opus 4.6</tspan><tspan fill="var(--mono-muted)" font-weight="400"> · Chronos</tspan></text>
-      <line x1="655.1" y1="112" x2="739.0" y2="112" stroke="var(--mono-l6)" stroke-width="0.8"/>
-      <circle cx="655.1" cy="112" r="3.3" fill="var(--mono-paper)" stroke="var(--mono-l2)" stroke-width="1"/>
-      <circle cx="739.0" cy="112" r="4.1" fill="var(--mono-ink)"/>
-      <text x="648.1" y="114.2" class="m mono" font-size="6.3" text-anchor="end">83.6</text>
-      <text x="746.0" y="114.2" class="t mono" font-size="6.5" font-weight="700">93.1</text>
-    </g>
-    <g>
-      <text x="24" y="142.5" class="t" font-size="7.6"><tspan font-weight="700">Claude Opus 4.6</tspan><tspan fill="var(--mono-muted)" font-weight="400"> · Claude Code</tspan></text>
-      <line x1="579.2" y1="140" x2="594.2" y2="140" stroke="var(--mono-l6)" stroke-width="0.8"/>
-      <circle cx="579.2" cy="140" r="3.3" fill="var(--mono-paper)" stroke="var(--mono-l2)" stroke-width="1"/>
-      <circle cx="594.2" cy="140" r="4.1" fill="var(--mono-ink)"/>
-      <text x="572.2" y="142.2" class="m mono" font-size="6.3" text-anchor="end">75.0</text>
-      <text x="601.2" y="142.2" class="t mono" font-size="6.5" font-weight="700">76.7</text>
-    </g>
-    <g>
-      <text x="24" y="170.5" class="t" font-size="7.6"><tspan font-weight="700">Claude Haiku 4.5</tspan><tspan fill="var(--mono-muted)" font-weight="400"> · Chronos</tspan></text>
-      <line x1="594.2" y1="168" x2="655.1" y2="168" stroke="var(--mono-l6)" stroke-width="0.8"/>
-      <circle cx="594.2" cy="168" r="3.3" fill="var(--mono-paper)" stroke="var(--mono-l2)" stroke-width="1"/>
-      <circle cx="655.1" cy="168" r="4.1" fill="var(--mono-ink)"/>
-      <text x="587.2" y="170.2" class="m mono" font-size="6.3" text-anchor="end">76.7</text>
-      <text x="662.1" y="170.2" class="t mono" font-size="6.5" font-weight="700">83.6</text>
-    </g>
-    <g>
-      <text x="24" y="198.5" class="t" font-size="7.6"><tspan font-weight="700">Claude Haiku 4.5</tspan><tspan fill="var(--mono-muted)" font-weight="400"> · Claude Code</tspan></text>
-      <line x1="305.3" y1="196" x2="404.3" y2="196" stroke="var(--mono-l6)" stroke-width="0.8"/>
-      <circle cx="305.3" cy="196" r="3.3" fill="var(--mono-paper)" stroke="var(--mono-l2)" stroke-width="1"/>
-      <circle cx="404.3" cy="196" r="4.1" fill="var(--mono-ink)"/>
-      <text x="298.3" y="198.2" class="m mono" font-size="6.3" text-anchor="end">44.0</text>
-      <text x="411.3" y="198.2" class="t mono" font-size="6.5" font-weight="700">55.2</text>
-    </g>
-    <g>
-      <text x="24" y="226.5" class="t" font-size="7.6"><tspan font-weight="700">GPT-5.4</tspan><tspan fill="var(--mono-muted)" font-weight="400"> · Chronos</tspan></text>
-      <line x1="640.1" y1="224" x2="709.0" y2="224" stroke="var(--mono-l6)" stroke-width="0.8"/>
-      <circle cx="640.1" cy="224" r="3.3" fill="var(--mono-paper)" stroke="var(--mono-l2)" stroke-width="1"/>
-      <circle cx="709.0" cy="224" r="4.1" fill="var(--mono-ink)"/>
-      <text x="633.1" y="226.2" class="m mono" font-size="6.3" text-anchor="end">81.9</text>
-      <text x="716.0" y="226.2" class="t mono" font-size="6.5" font-weight="700">89.7</text>
-    </g>
-    <g>
-      <text x="24" y="254.5" class="t" font-size="7.6"><tspan font-weight="700">GPT-5.4</tspan><tspan fill="var(--mono-muted)" font-weight="400"> · Codex CLI</tspan></text>
-      <line x1="587.1" y1="252" x2="739.0" y2="252" stroke="var(--mono-l6)" stroke-width="0.8"/>
-      <circle cx="587.1" cy="252" r="3.3" fill="var(--mono-paper)" stroke="var(--mono-l2)" stroke-width="1"/>
-      <circle cx="739.0" cy="252" r="4.1" fill="var(--mono-ink)"/>
-      <text x="580.1" y="254.2" class="m mono" font-size="6.3" text-anchor="end">75.9</text>
-      <text x="746.0" y="254.2" class="t mono" font-size="6.5" font-weight="700">93.1</text>
-    </g>
-    <g>
-      <text x="24" y="282.5" class="t" font-size="7.6"><tspan font-weight="700">Gemini 3.1 Pro</tspan><tspan fill="var(--mono-muted)" font-weight="400"> · Chronos</tspan></text>
-      <line x1="648.1" y1="280" x2="724.0" y2="280" stroke="var(--mono-l6)" stroke-width="0.8"/>
-      <circle cx="648.1" cy="280" r="3.3" fill="var(--mono-paper)" stroke="var(--mono-l2)" stroke-width="1"/>
-      <circle cx="724.0" cy="280" r="4.1" fill="var(--mono-ink)"/>
-      <text x="641.1" y="282.2" class="m mono" font-size="6.3" text-anchor="end">82.8</text>
-      <text x="731.0" y="282.2" class="t mono" font-size="6.5" font-weight="700">91.4</text>
-    </g>
-    <g>
-      <text x="24" y="310.5" class="t" font-size="7.6"><tspan font-weight="700">Gemini 3.1 Pro</tspan><tspan fill="var(--mono-muted)" font-weight="400"> · Gemini CLI</tspan></text>
-      <line x1="579.2" y1="308" x2="640.1" y2="308" stroke="var(--mono-l6)" stroke-width="0.8"/>
-      <circle cx="579.2" cy="308" r="3.3" fill="var(--mono-paper)" stroke="var(--mono-l2)" stroke-width="1"/>
-      <circle cx="640.1" cy="308" r="4.1" fill="var(--mono-ink)"/>
-      <text x="572.2" y="310.2" class="m mono" font-size="6.3" text-anchor="end">75.0</text>
-      <text x="647.1" y="310.2" class="t mono" font-size="6.5" font-weight="700">81.9</text>
-    </g>
-    <g>
-      <text x="24" y="338.5" class="t" font-size="7.6"><tspan font-weight="700">Gemini 3.1 Flash-Lite</tspan><tspan fill="var(--mono-muted)" font-weight="400"> · Chronos</tspan></text>
-      <line x1="472.3" y1="336" x2="678.1" y2="336" stroke="var(--mono-l6)" stroke-width="0.8"/>
-      <circle cx="472.3" cy="336" r="3.3" fill="var(--mono-paper)" stroke="var(--mono-l2)" stroke-width="1"/>
-      <circle cx="678.1" cy="336" r="4.1" fill="var(--mono-ink)"/>
-      <text x="465.3" y="338.2" class="m mono" font-size="6.3" text-anchor="end">62.9</text>
-      <text x="685.1" y="338.2" class="t mono" font-size="6.5" font-weight="700">86.2</text>
-    </g>
-    <g>
-      <text x="24" y="366.5" class="t" font-size="7.6"><tspan font-weight="700">Gemini 3.1 Flash-Lite</tspan><tspan fill="var(--mono-muted)" font-weight="400"> · Gemini CLI</tspan></text>
-      <line x1="510.3" y1="364" x2="686.0" y2="364" stroke="var(--mono-l6)" stroke-width="0.8"/>
-      <circle cx="510.3" cy="364" r="3.3" fill="var(--mono-paper)" stroke="var(--mono-l2)" stroke-width="1"/>
-      <circle cx="686.0" cy="364" r="4.1" fill="var(--mono-ink)"/>
-      <text x="503.3" y="366.2" class="m mono" font-size="6.3" text-anchor="end">67.2</text>
-      <text x="693.0" y="366.2" class="t mono" font-size="6.5" font-weight="700">87.1</text>
-    </g>
-    <text x="270" y="418" class="f" font-size="6.5" letter-spacing="0.8">ACCURACY (%)</text>
-    <rect x="24" y="428" width="792" height="34" class="codebox"/>
-    <text x="40" y="444" class="t mono" font-size="7.3">MEAN ACROSS TEN PAIRS: GREP 83.8 · VECTOR 72.5 · GAP +11.3</text>
-    <text x="40" y="456" class="m mono" font-size="6.9">FILE-BASED DELIVERY: GREP 72.5 · VECTOR 72.4 · VECTOR WINS 5 OF 10</text>
-  </svg>
-  </div>
-  <div class="mem-fig-src">ARXIV:2605.15184 · TABLE 1 · LONGMEMEVAL-S 116Q · GPT-4O GRADER</div>
-</figure>
+```python
+hits = search(query, filters, k)
+# -> [Handle(id, score, preview), ...]
+```
 
-The interesting number is not the gap. It is the harness row. Claude Opus 4.6 scores 93.1 under Chronos and 76.7 under Claude Code. That is a 16.4-point move from changing the orchestration layer, with the same model, the same corpus, and the same retriever. The retriever changes the score by 1.7 points in that row. A leaderboard that reports only retrieval mode is measuring the smaller effect.
+The query can be a literal, a regex, a bag of terms, a natural-language question, or a structured filter. The implementation can be grep, BM25, an ANN index, or a fusion of several. None of these is universally best. Literal search is precise when the agent knows the string; BM25 is strong when the vocabulary overlaps; dense retrieval handles paraphrase; hybrid covers the case where the agent does not know which one applies.
 
-File-based delivery then produces something that looks like a retriever result but is really a workflow result. The unweighted means converge: 72.5 for grep, 72.4 for vector. Vector wins five of ten pairs. Codex with GPT-5.4 drops from 93.1 inline grep to 55.2 programmatic grep — a 37.9-point fall — while its programmatic vector score is 67.2. The grep tool did not get worse. Each hit became a file to locate, open, and integrate, and that second stage failed often enough to eat the entire retrieval advantage.
+Filters deserve more attention than they usually get. Time, path, tenant, type, status, and source are cheap ways to remove whole regions of the corpus before similarity runs. A date filter can eliminate an entire class of wrong answers without touching the embedding. The filter is part of the query, not an afterthought applied to the result.
 
-| Where file-based delivery flips the winner | grep | vector | Δ (vector − grep) |
-| :--- | ---: | ---: | ---: |
-| Claude Opus 4.6 · Chronos | 80.2 | 81.9 | +1.7 |
-| Claude Opus 4.6 · Claude Code | 68.1 | 79.3 | +11.2 |
-| GPT-5.4 · Codex CLI | 55.2 | 67.2 | +12.0 |
-| Gemini 3.1 Pro · Gemini CLI | 81.0 | 82.8 | +1.8 |
-| Gemini 3.1 Flash-Lite · Gemini CLI | 68.1 | 74.1 | +6.0 |
+Search owns recall first and precision second. If the right record is not in the candidate set, Get cannot recover it. So `k` has to be large enough to cover the plausible answers, and the candidate set has to be diverse enough that one ranking function does not collapse it. Only then does precision at the top matter, because the planner will read a handful at most. `k` is a budget decision, not a quality knob: returning fifty handles is cheap; returning fifty records is not.
 
-Only the five flipped pairs are shown. The other five remain grep-ahead under file-based delivery.
+This is why Search should return handles rather than content.
 
-Experiment 2 adds distractors in fixed session-limit steps (s5, s10, s20, s30, full). The curves are not monotone. Chronos with Opus is vector-ahead at s5 through s20 and again at full, but grep is ahead at s30, 85.3 against 84.5. Claude Code with Opus favors grep at every setting. Gemini CLI with Gemini 3.1 Pro favors vector at every setting, and the gap widens to 89.7 against 78.5 at full. The paper's own summary is that both methods degrade only mildly as noise grows, but the ordering depends on harness and backbone.
+- **Context budget.** A shortlist should cost tens of tokens per item, not thousands. The full record is fetched only for the candidates that survive.
+- **Deferred resolution.** The planner can choose, re-query, widen, or stop. Inline passages force the choice at the moment of retrieval.
+- **Verification.** Get is where freshness and permissions are checked. A passage pasted into the prompt has already skipped that check.
+- **One ranking authority.** If Search returns passages, the ranking model's top choice quietly becomes the answer. The planner never gets to compare.
 
-That is what a two-module model predicts. More distractors raise the value of a precise Search, but only if Get lets the agent confirm the literal span. If Get is expensive, the first result set is effectively the whole memory, and coverage-first retrieval holds up better. The paper does not measure that mechanism directly. It is a reading, not a result.
+When Search returns passages inline, it has already spent the context and made the choice. The model cannot widen the passage, cannot check a newer version, and cannot cite a precise span. The score becomes the answer.
 
-## Why inline grep wins
+There is also a legibility argument. Literal search fails visibly: an empty result or an obvious mismatch tells the agent to change the pattern. Dense search fails plausibly: a nearest-neighbor index returns a neighbor even when no good match exists, unless the system applies a threshold and says so. A memory system that cannot report "I did not find it" will manufacture continuity. Return the query that ran, the filters that applied, and a confidence signal. A miss is information.
 
-Three properties, and only the first is about lexical matching.
+None of this makes one instrument universally better. It makes the instrument a choice the planner can reason about. Search should expose more than one way to look, and it should let the agent switch when the first look fails.
 
-1. **The handle arrives with the content.** A grep hit is `path:line:text`. The agent gets a preview and an address in the same token. It can Get the surrounding range immediately, without another Search. An inline vector result is often a chunk with a score; the address, if it exists, is metadata the model may never see.
+## Get: expand a handle into evidence
 
-2. **Failure is legible.** A bad regex returns nothing, or returns an obvious mismatch. The agent knows to try another pattern. A bad embedding returns a plausible neighbor. The model has no signal that the right passage exists and was missed. Dense retrieval fails quietly, which is the worst way for a memory system to fail.
+The other half is deliberately boring:
 
-3. **The agent controls the query.** The model writes the pattern: it can anchor it, loosen it, add a file glob, or switch to another directory. In a vector tool, the query is re-encoded behind an interface the agent cannot inspect. It can only rephrase and hope.
+```python
+record = get(handle, window=None)
+# -> Record(text, metadata, version, scope) | Miss | Mismatch
+```
 
-None of this makes lexical matching universally better. It makes lexical matching a better *Search* when the evidence is literal and the handle is preserved. The paper's limitations section says the same thing in different words: LongMemEval answers often license on verbatim spans, and the result should not be generalized to paraphrase-heavy or multimodal corpora.
+Get takes the handle verbatim. It does not re-run Search, does not fuzzy-match the nearest ID, and does not pick the best paragraph. It resolves the address and returns the record.
 
-The Codex collapse is the counterexample that shows why the pair matters. Search was fine: the same grep tool, over the same corpus, found the same kind of hits. Get became a three-step workflow. The model had to notice a file path, open it, find the relevant region, and keep the state straight across turns. When that loop is unreliable, a 93.1% retriever produces a 55.2% answer. Retrieval quality is necessary; it is not the product.
+Expansion means more than returning the matched line. Get should return the enclosing section, the document title, the effective date, the status, the source type, and the version. The agent needs the record's own description to decide whether it applies. A policy line without its effective date is a quotation. A ticket that mentions a policy is not the policy.
 
-The harness is not a wrapper around memory. It is the shape of memory.
+Freshness is the first hard problem. The index is a snapshot; records move. Get should read through to the current record, or to a versioned snapshot if the handle pins one, and it should report which version it served. If the handle names a version and the store has moved on, Get returns a mismatch with both versions. It never silently resolves to different bytes.
+
+Permissions are the second. Search may rank over a corpus wider than the caller's read scope. The preview can leak a title, a path, or a snippet even when the body is protected. Filter at Search, enforce at Get, and generate previews only from fields the caller may read. A handle should carry a scope, or be unguessable, but obscurity is not authorization.
+
+Cost is the third. Get's cost is the bytes returned plus the turn spent reading them. Give it a window, a byte cap, and a token estimate. Whole-file reads are how a memory system becomes a context leak. If the record is large, return a structured slice: the heading path, the relevant section, the metadata, and a pointer to the rest. Do not summarize inside Get. Summarization is a write-time or planner-time decision, not a read-time substitution.
+
+Version is the fourth. Every record needs a version: a hash, an ETag, a commit, an `updated_at`. The handle may pin it. Get returns the version it served, so the planner can cache evidence and know when to refresh. A version is not a formality. It is the difference between "the policy" and "a policy that was true when the index was built."
+
+And Get never ranks. If Get starts choosing "the best passage", ranking has leaked into the read path. Then two components rank, neither is accountable, and the handle no longer means "this record" but "something around here".
 
 ## The handle contract
 
 Once Search returns handles, the hard part moves to the handle. A good handle has five properties.
 
-1. **Stable.** The same handle resolves to the same bytes for the life of the task. If the store mutates, the handle carries a version.
+1. **Stable.** The same handle resolves to the same record version for the life of the task. Immutable IDs are better than line numbers; if the store mutates, the handle carries a version. `path:41-58` is more stable than `path`, but a file edit still shifts every line after it.
 
-2. **Resolvable.** Get accepts it verbatim. No second Search, no fuzzy match, no guessing.
+2. **Addressable.** Get accepts it verbatim. No second Search, no fuzzy match, no guessing. A handle is a name plus enough context to resolve it: store, ID, span, version, scope.
 
-3. **Granular.** It addresses a span, not a whole document. `path:41-58`, not `path`.
+3. **Previewable.** It carries, or can cheaply fetch, a short preview for ranking and logs. The preview is not evidence. It is a reason to open the record.
 
-4. **Cheap to mint.** Search must be able to return dozens without spending the context budget.
+4. **Permissioned.** It carries or implies a scope, and Get enforces it. Search should not mint handles the caller can never resolve, and a preview should not disclose what the record would hide.
 
-5. **Legible.** A human can read it in a log and know where it points. This is not required for correctness, but it is required for debugging.
+5. **Versioned.** It pins a version or reports the one it resolved. A mismatch is a first-class response, not an exception to swallow.
+
+A workable shape looks like this:
+
+```json
+{
+  "store": "docs",
+  "id": "policies/2026-returns.md",
+  "span": "L12-L17",
+  "version": "sha256:6f1c...",
+  "scope": "tenant:acme",
+  "preview": "Refunds are accepted within 14 days..."
+}
+```
 
 | Store | Search returns | Get resolves | Staleness mode |
 | :--- | :--- | :--- | :--- |
@@ -418,7 +331,7 @@ A handle that resolves to the wrong bytes is worse than a 404. A 404 is at least
 
 Search and Get have different cost curves. Search costs a scan or an index probe plus one model turn to read the shortlist. Get costs the bytes returned plus one model turn to read them. The first scales with the corpus; the second scales with what you choose to read.
 
-The efficient policy is therefore asymmetric: Search wide and cheap, Get narrow and exact. The common failure is the reverse — one narrow Search, then a whole-file Get. That is how an agent spends 40,000 tokens to answer a question whose evidence was one paragraph.
+The efficient policy is therefore asymmetric: Search wide and cheap, Get narrow and exact. The common failure is the reverse — one narrow Search, then a whole-file Get. That is how an agent spends tens of thousands of tokens to answer a question whose evidence was one paragraph.
 
 ```python
 def browse(cue, memory, budget):
@@ -438,9 +351,11 @@ def browse(cue, memory, budget):
 
 Three details matter. `hits` is a list of handles, not passages; the preview is for ranking, not for evidence. `memory.get` takes a window, so the agent can widen the context around a hit without reading the whole file. `next_cue` closes the loop: the record itself supplies the next search term, which is what makes the process browsing rather than querying.
 
-The stopping rule is not “k results read”. It is “no new handles” or “every claim has a resolved source”. A loop that stops at k has turned memory back into a quotation service.
+The stopping rule is not "k results read". It is "no new handles" or "every claim has a resolved source". A loop that stops at `k` has turned memory back into a quotation service.
 
-What to measure follows from the loop: searches per answer, gets per search, unique handles, dead-handle rate, and re-search rate. Accuracy alone cannot tell you whether the memory is browsable. A system that returns high scores but few resolvable handles is a search engine, not a memory.
+The context budget is the other half. Every Get displaces working state: instructions, the current plan, the previous evidence. Evidence should be spent on the claims the answer actually needs. A system that retrieves a dozen records and uses one has paid for a dozen reads and one answer. Track bytes per resolved claim, not bytes per turn.
+
+What to measure follows from the loop: searches per answer, gets per search, unique handles, dead-handle rate, re-search rate, and bytes per resolved claim. Accuracy alone cannot tell you whether the memory is browsable. A system that returns high scores but few resolvable handles is a search engine, not a memory.
 
 ## The memory desk
 
@@ -448,7 +363,7 @@ The desk below makes the division visible. The cue matches three records. Search
 
 <figure class="mem-lab">
   <figcaption>
-    <span class="card-tag">MEMORY DESK // 03</span>
+    <span class="card-tag">MEMORY DESK // 02</span>
     <h3 class="mem-fig-title">Three handles match. One record is current.</h3>
     <p class="mem-fig-sub">Select a search result, then read what Get actually returns. Search ranks; Get decides.</p>
   </figcaption>
@@ -483,7 +398,7 @@ The desk below makes the division visible. The cue matches three records. Search
       </label>
     </div>
     <div class="mem-read">
-      <div class="mem-col-head">GET // EXACT BYTES</div>
+      <div class="mem-col-head">GET // EXACT RECORD</div>
       <div class="mem-doc mem-doc--a">
         <div class="mem-doc-head"><span>policies/returns-2024.md</span><span>L41–L46</span></div>
         <pre>41  ## Returns
@@ -528,51 +443,64 @@ The desk below makes the division visible. The cue matches three records. Search
 
 The top-ranked hit is the stale one. That is not a bug in Search; it is the boundary of what ranking can know. The current policy is shorter, uses a different phrase, and ranks second. Get settles it because the record carries its own effective date and status.
 
-If the record did not carry that metadata, Get would return bytes and the agent would still be guessing. A handle resolves a location. Provenance resolves a meaning.
+If the record did not carry that metadata, Get would return bytes and the agent would still be guessing. A handle resolves a location. Provenance resolves meaning.
 
 ## What this changes in practice
 
-- Make every Search result carry a handle Get can consume. `path:line`, `doc_id#anchor`, `table:pk`, `commit:path:line`.
+The API is two functions and one handle type. The schema is where the real work lives.
 
-- Make Get a first-class tool, not a hidden step inside Search. It should accept the handle verbatim and return exact bytes or a definite miss.
+```python
+# Search returns handles. It never returns records.
+hits = memory.search("refund window", filters={"after": "2026-01-01"}, k=8)
+# -> [Handle(id=..., score=0.94, preview="..."), ...]
 
-- Let Get take a range. A whole-file read is how a memory system becomes a context leak.
+# Get resolves one handle. It never ranks.
+record = memory.get(hits[0], window=40)
+# -> Record(text=..., metadata={...}, version="sha256:...", scope="tenant:acme")
+```
 
-- Keep handles stable across compaction and re-indexing. Version them when the store mutates, and fail loudly on a mismatch.
+- **One handle type, two verbs.** If Search and Get each invent their own address format, the seam becomes a translation layer and the translation will drift.
 
-- Give Search more than one instrument. Literal search for known items, semantic search for paraphrase, filters for structure. Let the agent choose with a policy hint, not a hard-coded pipeline.
+- **Search returns handles with previews, never full records.** A preview is a reason to open a record, not a substitute for it.
 
-- Treat previews as previews. If the snippet is all the model ever sees, it will answer from the snippet.
+- **Get is first-class.** It accepts a handle verbatim and returns an exact record or a definite miss. It is not a hidden step inside Search.
 
-- Put provenance inside the record. Effective dates, status, source type, and version belong in the bytes Get returns, not in a side channel the agent cannot see.
+- **Get takes a span or a window.** A whole-file read is how a memory system becomes a context leak. Enforce a byte cap and report the token estimate before the planner commits.
 
-- Report the harness with the retriever. A score without the delivery path and stop policy is not reproducible.
+- **Put provenance in the record.** Effective dates, status, source type, version, and permissions belong in the bytes Get returns, not in a side channel the agent cannot see.
 
-## What the paper does not say
+- **Keep the index derivable.** Rebuild it from records when the embedding model changes. Never let the index become the only copy of a fact.
 
-It does not say grep beats vector in general. The authors are explicit: the task rewards literal spans, and scientific synthesis, paraphrase-heavy abstracts, visual documents, and code semantics may favor dense retrieval or a hybrid.
+- **Apply permissions twice.** Filter in Search, enforce in Get, and generate previews only from readable fields. A title leak is still a leak.
 
-The harness is both a variable and a confound. Chronos uses category-conditioned prompts and a controlled tool surface; the CLIs bring their own ergonomics. The 16.4-point harness shift is real, but it is not a clean estimate of “harness quality”.
+- **Version every handle and fail loudly.** A mismatch is cheaper than a wrong answer that looks current.
 
-File-based delivery is a workflow test, not a pure delivery test. It changes the number of turns, the failure surface, and the model's opportunity to lose state. The Codex collapse is evidence about the loop, not about grep.
+- **Expose more than one search instrument.** Literal for known items, BM25 for term overlap, dense for paraphrase, filters for structure. Let the planner choose, or route by query type.
 
-The noise experiment is not monotone, and the paper does not isolate query strings or retrieved sets. The crossings are measured; the mechanism is inferred.
+- **Instrument the loop.** Searches per answer, gets per search, unique handles, dead handles, re-searches, bytes per resolved claim. Accuracy alone hides the seam.
 
-Most importantly, the paper measures answer accuracy, not memory. It does not test whether an agent can return to a source tomorrow, widen it, cite it, or detect that it changed. Those are the properties the two-module frame is about. A benchmark for memory would need to measure them directly.
+## Failure modes
 
-Grep is not all you need. Grep is a pair. The question is not which index you install; it is whether your memory exposes both verbs.
+Most memory failures are not model failures. They are contract failures, and they cluster at the two boundaries: the index and the record store.
 
-Search finds the address. Get reads the shelf. The loop is what makes it memory.
+| Failure | What goes wrong | Design fix |
+| :--- | :--- | :--- |
+| Search miss | The query vocabulary does not match the record, or a dense index returns a plausible neighbor. The right record never enters the candidate set. | Offer more than one instrument, let the planner reformulate from evidence, apply filters early, and return an explicit low-confidence or empty result. |
+| Stale handle | A record is edited, re-indexed, or compacted. The handle still resolves, but to different bytes. | Version the handle, hash the record, and return a mismatch with both versions instead of silently resolving. |
+| Permission leak | Search ranks a document the caller cannot read, or the preview exposes its title or snippet. | Filter by scope at Search, enforce at Get, and build previews only from readable fields. Do not rely on unguessable IDs as authorization. |
+| Get too expensive | The planner reads whole files or repeats the same Get, and evidence crowds out working state. | Require a span or window, cap bytes and tokens, cache resolved records by version, and charge the read against the turn budget. |
+| Infinite loop | Every record suggests a new cue, no handle is repeated in the seen-set, and the loop never reaches a claim. | Keep a seen-set, cap turns and bytes, stop on no new handles or resolved claims, and treat repeated cues as a signal to change instruments. |
+| Handle collision | Two records share an ID after a re-index or a merge, and the handle resolves to the wrong one. | Namespace IDs by store, keep record IDs immutable, include a version, and check for collisions when minting a handle. |
+
+The failures are asymmetric. A Search miss is cheap: the agent sees an empty list and tries another query. A Get failure is expensive: the agent has already spent context and may not notice that the record is stale, unreadable, or the wrong one. That asymmetry is why Get needs the stricter contract, and why "the retriever scored well" is not a memory metric.
+
+The two modules are not a pipeline you install once. They are a division of labor you have to keep: Search reduces, Get expands, the handle carries the promise between them, and the loop spends the budget. When the seam holds, the agent can find something, leave, come back, and still be talking about the same record.
 
 ## References
 
-- [Is Grep All You Need? How Agent Harnesses Reshape Agentic Search](https://arxiv.org/abs/2605.15184) — the paper under discussion: 116 LongMemEval-S questions, four harnesses, two retrievers, two delivery paths.
-- [LongMemEval](https://arxiv.org/abs/2410.10813) — the long-term conversational memory benchmark used in both experiments.
-- [Chronos](https://arxiv.org/abs/2603.16862) — the custom harness and structured temporal-event layer.
 - [Retrieval-Augmented Generation](https://arxiv.org/abs/2005.11401) — the retrieve-then-generate pipeline this article is arguing about.
 - [MemGPT](https://arxiv.org/abs/2310.08560) — memory as an operating system, with paging between context and storage.
 - [Lost in the Middle](https://arxiv.org/abs/2307.03172) — why more retrieved text is not automatically more usable.
-- [grep, POSIX](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/grep.html) — the tool whose output shape this article treats as an interface.
 
 <style>
   .prose-inner .mem-fig,
@@ -1050,19 +978,5 @@ Search finds the address. Get reads the shelf. The loop is what makes it memory.
     font-size: 11.5px;
     line-height: 1.55;
     color: var(--mono-muted);
-  }
-
-  @media (max-width: 700px) {
-    .prose-inner .mem-lead-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .prose-inner .mem-lead-plus {
-      height: 24px;
-    }
-
-    .prose-inner .mem-lead-title {
-      font-size: 18px;
-    }
   }
 </style>
