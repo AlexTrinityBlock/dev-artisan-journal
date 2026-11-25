@@ -1,5 +1,5 @@
 ---
-title: "Publishing Through MCP: API Keys, Pre-Signed Uploads, and RustFS"
+title: "Publishing Through MCP"
 description: "How the site's latest-articles section now lets an AI Agent update articles through MCP — with a scoped key, one short-lived RustFS upload URL, and a database-backed article that goes public with its image."
 pubDate: 2026-11-25
 category: "AI"
@@ -9,7 +9,7 @@ author: "Alex.Hsiao"
 readTime: "8 min read"
 ---
 
-# Publishing Through MCP: API Keys, Pre-Signed Uploads, and RustFS
+# Publishing Through MCP
 
 ## What is running now
 

@@ -1,5 +1,5 @@
 ---
-title: "透過 MCP 發佈文章：API Key、預簽上傳與 RustFS"
+title: "透過 MCP 發佈文章"
 description: "接案宣傳網站的最新文章專區，現在可以讓 AI Agent 透過 MCP 更新文章：一把受限的金鑰、一個短效 RustFS 上傳 URL，以及與圖片一起公開的資料庫文章。"
 pubDate: 2026-11-25
 category: "AI"
@@ -9,7 +9,7 @@ author: "Alex.Hsiao"
 readTime: "8 分鐘"
 ---
 
-# 透過 MCP 發佈文章：API Key、預簽上傳與 RustFS
+# 透過 MCP 發佈文章
 
 ## 現在實際運作的是什麼
 
