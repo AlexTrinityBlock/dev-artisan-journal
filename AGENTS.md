@@ -19,6 +19,10 @@ bun x astro dev --background
 
 Manage the background server with `bun x astro dev stop`, `bun x astro dev status`, and `bun x astro dev logs`.
 
+## Deployment
+
+Deployment is automatic. Pushing to `master` triggers the `Deploy to GitHub Pages` workflow (`.github/workflows/deploy.yml`), which builds the site with Bun and publishes `dist/` to GitHub Pages. Do not run a separate deploy command; wait for the workflow to finish and verify the live URLs.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build
