@@ -1,23 +1,23 @@
 ---
 title: "透過 MCP 發佈文章：API Key、預簽上傳與 RustFS"
-description: "一份可行性草圖，不是規格：AI 透過 MCP 更新接案網站的最新文章，伺服器只簽一個短效上傳 URL，圖片直接進 RustFS。不把儲存桶金鑰交給模型，也不假裝已經有完整的工具與資料表。"
+description: "接案宣傳網站的最新文章專區，現在可以讓 AI Agent 透過 MCP 更新文章：一把受限的金鑰、一個短效 RustFS 上傳 URL，以及與圖片一起公開的資料庫文章。"
 pubDate: 2026-11-25
 category: "AI"
 tags: ["MCP", "Spring Boot", "RustFS", "S3", "架構"]
 featured: false
 author: "Alex.Hsiao"
-readTime: "7 分鐘"
+readTime: "8 分鐘"
 ---
 
 # 透過 MCP 發佈文章：API Key、預簽上傳與 RustFS
 
-## 想法，不是藍圖
+## 現在實際運作的是什麼
 
-接案宣傳網站有一個最新文章專區。目前是人在瀏覽器裡編輯。現在的想法是讓 AI 也能起草、更新這些文章，並且加入圖片。
+接案宣傳網站的最新文章專區，以前只能在瀏覽器裡編輯。現在不只有這樣。AI Agent 可以透過 MCP 起草、更新文章，並且加入圖片。人工編輯器還在；代理是第二個用戶端，只是金鑰範圍更窄。
 
-問題不是「怎麼把資料庫連線交給模型」，而是「模型最少需要什麼能力」。答案可以很小：一個內容用的 MCP 端點、一個短效檔案 URL，以及一個永遠不把儲存桶金鑰交給模型的物件儲存。
+這就是值得寫下來的部分。實作是一個 Spring Boot 服務，帶一個 MCP 端點、一個放文章內容的資料庫，以及放圖片的 RustFS。我不會在這裡公開完整的工具清單或資料表定義。重點不是 schema，而是責任怎麼切。
 
-這是一份可行性草圖，不是規格。它刻意不發明資料表名稱、端點清單或完整的工具 schema。HTTP 範例裡的名稱只是佔位符。重點是形狀，而這個形狀可以用很多方式實作。
+代理從頭到尾不會拿到資料庫 URL，也不會拿到 RustFS 的存取金鑰。它拿到的是一把內容操作用的金鑰；需要圖片時，再拿到一個短效上傳 URL。
 
 <section class="mfig-lead">
   <div class="mfig-lead-head">
@@ -53,12 +53,12 @@ readTime: "7 分鐘"
   </div>
   <div class="mfig-lead-flow mfig-scroll">
   <svg class="mfig-svg" viewBox="0 0 840 128" role="img" aria-labelledby="pub-lead-title pub-lead-desc">
-    <title id="pub-lead-title">發佈想法的一條線</title>
+    <title id="pub-lead-title">發佈流程的一條線</title>
     <desc id="pub-lead-desc">AI 用戶端呼叫 MCP 伺服器，伺服器檢查金鑰、簽一個上傳 URL，用戶端把位元組 PUT 到 RustFS，文章最後保存物件的引用。</desc>
     <defs>
       <marker id="pub-lead-arrow" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-ink)"/></marker>
     </defs>
-    <text x="24" y="16" class="f" font-size="7.5" letter-spacing="1.2">一個想法 // 六個動作</text>
+    <text x="24" y="16" class="f" font-size="7.5" letter-spacing="1.2">一條流程 // 六個動作</text>
     <text x="816" y="16" class="f" font-size="7.5" text-anchor="end" letter-spacing="1">能力，不是憑證</text>
     <line x1="24" y1="24" x2="816" y2="24" class="rule"/>
     <rect x="24" y="38" width="118" height="50" class="term"/>
@@ -91,23 +91,23 @@ readTime: "7 分鐘"
   <p class="mfig-lead-note"><b>圖片和文章是兩件事。</b>這個分離讓模型不必碰儲存憑證。</p>
 </section>
 
-<p class="mfig-bridge">接下來是一張圖、四個步驟，以及一段明確標成示意的請求範例。</p>
+<p class="mfig-bridge">接下來是實際運作的架構、四個步驟，以及讓這個分離成立的請求形狀。</p>
 
-## RustFS 提供什麼
+## 為什麼用 RustFS
 
-RustFS 是一套分散式、S3 相容的物件儲存，以 Rust 撰寫。官方文件描述常見的 S3 資料平面：儲存桶與物件、multipart 上傳、IAM 與 bucket policy，以及預簽 GET/PUT URL。它使用 Signature Version 4，預設是 path-style 定址。
+RustFS 是一套分散式、S3 相容的物件儲存，以 Rust 撰寫。我用它，因為它支援 S3 API，支援預簽 GET/PUT URL。這讓應用程式可以簽一個上傳 URL，而不必把儲存憑證交給代理。
 
-對這個想法來說，三個特性最重要：
+這次實作有三個特性最重要：
 
-- **預簽 URL 是一種能力。** 伺服器可以為單一物件、單一短窗簽一個 URL。AI 不需要 RustFS 的存取金鑰。
-- **位元組可以直接進儲存。** 應用伺服器簽完 URL 就可以退出傳輸路徑。它處理的是中介資料，不是 megabytes。
+- **預簽 URL 是一種能力。** 伺服器可以為單一物件、單一短窗簽一個 URL。代理不需要 RustFS 的存取金鑰。
+- **位元組可以直接進儲存。** 應用伺服器簽完 URL 就退出傳輸路徑。它處理的是中介資料，不是 megabytes。
 - **公開端可以維持唯讀。** 上傳留在私有儲存桶，發佈後的圖片再透過反向代理或 CDN 提供。寫入路徑與讀取路徑不需要同一組權限。
 
 一個提醒：S3 相容是目標，不是同一件事。RustFS 文件列出它支援的操作，也列出與 AWS S3 不同的地方。測試你實際會用到的操作，並且用用戶端真的連得到的端點來簽章；scheme、host、port、region 與物件路徑都是簽章的一部分。
 
-## 簡單架構
+## 實際架構
 
-這張圖刻意很小。AI Agent 連到 MCP 伺服器。MCP 伺服器把文章直接寫進資料庫，並簽一個上傳 URL。AI Agent 直接上傳圖片到 RustFS。公開頁面從資料庫讀文章、從 RustFS 讀圖片。
+實際運作的架構刻意很小。AI Agent 呼叫 MCP 伺服器。MCP 伺服器把文章寫進資料庫，並回傳一個預簽上傳 URL。AI Agent 直接把圖片上傳到 RustFS。公開頁面從資料庫讀文章、從 RustFS 讀圖片。
 
 <figure class="mfig-fig">
   <figcaption>
@@ -117,14 +117,14 @@ RustFS 是一套分散式、S3 相容的物件儲存，以 Rust 撰寫。官方�
   </figcaption>
   <div class="mfig-scroll">
   <svg class="mfig-svg" viewBox="0 0 840 340" role="img" aria-labelledby="pub-f1-title pub-f1-desc">
-    <title id="pub-f1-title">MCP 發佈文章的簡單架構</title>
+    <title id="pub-f1-title">MCP 發佈文章的實際架構</title>
     <desc id="pub-f1-desc">AI Agent 呼叫 Spring Boot MCP 伺服器。伺服器把文章寫進資料庫，並回傳一個 RustFS 的上傳 URL。AI Agent 直接把圖片上傳到 RustFS。公開使用者從資料庫讀文章、從 RustFS 讀圖片，通常透過 CDN 或反向代理。</desc>
     <defs>
       <marker id="pub-f1-arrow" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-ink)"/></marker>
       <marker id="pub-f1-arrow-muted" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-l5)"/></marker>
     </defs>
     <text x="24" y="18" class="f" font-size="7.5" letter-spacing="1.2">一個 MCP 端點 // 一個預簽 URL // 一個公開頁面</text>
-    <text x="816" y="18" class="f" font-size="7.5" text-anchor="end" letter-spacing="1">可行性草圖</text>
+    <text x="816" y="18" class="f" font-size="7.5" text-anchor="end" letter-spacing="1">實際運作中</text>
     <line x1="24" y1="26" x2="816" y2="26" class="rule"/>
     <rect x="24" y="48" width="160" height="64" class="term"/>
     <text x="36" y="66" class="f" font-size="6.4" letter-spacing="0.7">用戶端</text>
@@ -165,20 +165,22 @@ RustFS 是一套分散式、S3 相容的物件儲存，以 Rust 撰寫。官方�
   <p class="mfig-fig-src">AI AGENT · MCP · 資料庫 · RUSTFS · 公開使用者</p>
 </figure>
 
-## 四個步驟（外加一把金鑰）
+## 四個步驟
 
-第一步之前，管理員先給 AI Agent 一把金鑰。金鑰代表代理，不是資料庫密碼。範圍盡量窄，而且要能撤銷。
+流程是四個步驟，外加一開始的那把金鑰。
+
+管理員先給 AI Agent 一把金鑰。金鑰代表代理，不是資料庫密碼。它可以設定範圍，也可以撤銷。
 
 1. **文章直接進資料庫。** AI Agent 把文章交給 MCP 伺服器。伺服器驗證請求，直接把文章寫進資料庫。
 2. **上傳 URL 由 MCP 取得。** 需要圖片時，AI Agent 向 MCP 伺服器要求一個上傳位置。伺服器回傳一個單一物件的短效 URL。
 3. **圖片進 RustFS。** AI Agent 用這個 URL 把圖片位元組 `PUT` 到 RustFS。MCP 伺服器不代理圖片。
 4. **文章與圖片一起公開。** 公開頁面從資料庫讀文章、從 RustFS 讀圖片，通常透過 CDN 或反向代理。兩者一起呈現給使用者。
 
-任何一步都可能失敗。URL 過期就重新申請一個。檔案與宣告類型不符就拒絕。上傳了卻沒被引用，就排程清理。這些是維運細節，不是把儲存桶金鑰交給模型的理由。
+實務上，任何一步都可能失敗。URL 過期就重新申請一個。檔案與宣告類型不符就拒絕。上傳了卻沒被引用，就排程清理。這些是維運細節，不是把儲存桶金鑰交給模型的理由。
 
-## MCP HTTP 請求，示意用
+## MCP 請求的形狀
 
-工具名稱與參數由你定義。以下名稱是佔位符，不代表這個專案已經有這些端點。
+請求的形狀很簡單。以下工具名稱與參數是文章裡的簡寫；真正的名稱留在服務內部。
 
 假設 MCP 端點是 `POST /mcp`，金鑰放在 `Authorization` 標頭：
 
@@ -251,20 +253,22 @@ Content-Type: application/json
 
 用戶端接著用回傳的 `Content-Type` 做一般的 `PUT`。最後再呼叫一次 MCP，把上傳物件接到文章；或由伺服器檢查物件後自行接上。
 
-## 要留意的事
+## 實際做下來，哪些設計選擇重要
 
-- **金鑰要有範圍。** 內容金鑰不應該能管理整個儲存叢集。
-- **只簽一個物件。** 不要讓用戶端選儲存桶、路徑或到期時間。
+- **金鑰要有範圍。** 內容金鑰不能管理整個儲存叢集。
+- **只簽一個物件。** 用戶端不能選儲存桶、路徑或到期時間。
 - **窗口要短。** 預簽 URL 是 bearer 能力，把它當密碼看。
 - **上傳後要驗證。** `PUT` URL 不是完整的上傳政策。檢查類型與大小，不符就刪除。
 - **讀寫路徑分開。** 公開讀取走 CDN 或反向代理；私有寫入走簽章 URL。
-- **發佈保留人工。** AI 可以起草與準備，但要不要上線由人決定。
+- **發佈保留人工。** 代理可以起草與準備，但要不要上線由人決定。
 
-## 為什麼值得試
+這些選擇讓實作小到可以推理。
 
-有趣的地方不是上傳，而是分離。AI 拿到的是內容能力與一個物件 URL，不是儲存憑證。MCP 伺服器可以保持很小，因為它不代理檔案。RustFS 做物件儲存擅長的事，公開網站讀一個穩定的引用。
+## 這次改變了什麼
 
-實作可以是 Spring Boot 服務、小型 Node 程序、serverless function，或託管的 MCP 平台。工具可以不同，模式可以攜帶。這才是值得實驗的部分。
+有趣的地方不是上傳，而是分離。AI Agent 拿到的是內容能力與一個物件 URL，不是儲存憑證。MCP 伺服器可以保持很小，因為它不代理檔案。RustFS 做物件儲存擅長的事，公開頁面讀一個穩定的引用。
+
+實作是一個 Spring Boot 服務、一個資料庫，以及 RustFS。工具可以不同，模式可以攜帶。代理可以在不持有儲存桶金鑰的情況下發佈文章。這是我想要的性質，現在系統也有了。
 
 ## 參考資料
 
