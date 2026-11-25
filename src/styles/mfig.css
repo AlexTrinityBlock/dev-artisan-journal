@@ -1,0 +1,279 @@
+/* ═══════════════════════════════════════════════════════════════
+   MONO EDITORIAL FIGURES — shared by technical posts
+   Lead cards, flow strips, and hand-written SVG diagrams.
+   Prefix: mfig-* (no collision with per-post styles)
+   ═══════════════════════════════════════════════════════════════ */
+
+.prose-inner .mfig-lead {
+  margin: 26px 0;
+  padding: 20px 18px 16px;
+  border: 0.7px solid var(--mono-grid);
+  background: var(--mono-paper);
+}
+
+.prose-inner .mfig-lead-head {
+  margin-bottom: 14px;
+}
+
+.prose-inner .mfig-lead-kicker {
+  margin: 0 0 6px;
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: var(--mono-muted);
+}
+
+.prose-inner .mfig-lead-title {
+  margin: 0 0 4px;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: var(--mono-ink);
+}
+
+.prose-inner .mfig-lead-sub {
+  margin: 0 0 14px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--mono-l2);
+}
+
+.prose-inner .mfig-lead-grid {
+  display: grid;
+  grid-template-columns: 1fr 26px 1fr 26px 1fr;
+  align-items: stretch;
+  margin-bottom: 14px;
+}
+
+.prose-inner .mfig-card {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 14px 12px;
+  border: 0.7px solid var(--mono-grid);
+  background: var(--mono-paper);
+}
+
+.prose-inner .mfig-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  margin-bottom: 12px;
+  border: 0.7px solid var(--mono-grid);
+  background: var(--mono-bg-subtle);
+  color: var(--mono-ink);
+}
+
+.prose-inner .mfig-ico {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+.prose-inner .mfig-tag {
+  margin-bottom: 5px;
+  font-family: var(--mono-font-mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--mono-muted);
+}
+
+.prose-inner .mfig-card h4 {
+  margin: 0 0 5px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  color: var(--mono-ink);
+}
+
+.prose-inner .mfig-card p {
+  margin: 0 0 12px;
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: var(--mono-l2);
+}
+
+.prose-inner .mfig-card code {
+  font-size: 0.9em;
+}
+
+.prose-inner .mfig-meta {
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 0.7px solid var(--mono-grid);
+  font-family: var(--mono-font-mono);
+  font-size: 7.5px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--mono-faint);
+}
+
+.prose-inner .mfig-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono-font-mono);
+  font-size: 12px;
+  color: var(--mono-faint);
+}
+
+.prose-inner .mfig-lead-flow {
+  margin-bottom: 12px;
+}
+
+.prose-inner .mfig-lead-note {
+  margin: 0;
+  padding-top: 10px;
+  border-top: 0.7px solid var(--mono-grid);
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--mono-l2);
+}
+
+.prose-inner .mfig-lead-note b {
+  color: var(--mono-ink);
+}
+
+.prose-inner .mfig-bridge {
+  margin: 0 0 6px;
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: var(--mono-muted);
+}
+
+.prose-inner .mfig-fig {
+  margin: 26px 0;
+  padding: 20px 18px 14px;
+  border: 0.7px solid var(--mono-grid);
+  background: var(--mono-paper);
+}
+
+.prose-inner .mfig-fig figcaption {
+  margin-bottom: 14px;
+}
+
+.prose-inner .mfig-fig-title {
+  margin: 4px 0 3px;
+  font-size: 15.5px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  color: var(--mono-ink);
+}
+
+.prose-inner .mfig-fig-sub {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: var(--mono-muted);
+}
+
+.prose-inner .mfig-fig-sub code {
+  font-size: 0.9em;
+}
+
+.prose-inner .mfig-fig-src {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 0.7px solid var(--mono-grid);
+  font-family: var(--mono-font-mono);
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mono-faint);
+}
+
+.prose-inner .mfig-scroll {
+  overflow-x: auto;
+}
+
+.prose-inner .mfig-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.prose-inner .mfig-svg text {
+  font-family: var(--mono-font);
+}
+
+.prose-inner .mfig-svg .t {
+  fill: var(--mono-ink);
+}
+
+.prose-inner .mfig-svg .m {
+  fill: var(--mono-muted);
+}
+
+.prose-inner .mfig-svg .f {
+  fill: var(--mono-faint);
+  font-family: var(--mono-font-mono);
+}
+
+.prose-inner .mfig-svg .mono {
+  font-family: var(--mono-font-mono);
+}
+
+.prose-inner .mfig-svg .box {
+  fill: var(--mono-paper);
+  stroke: var(--mono-grid);
+  stroke-width: 0.7;
+}
+
+.prose-inner .mfig-svg .term {
+  fill: var(--mono-bg-subtle);
+  stroke: var(--mono-grid);
+  stroke-width: 0.7;
+}
+
+.prose-inner .mfig-svg .codebox {
+  fill: var(--mono-bg-subtle);
+  stroke: var(--mono-grid);
+  stroke-width: 0.7;
+}
+
+.prose-inner .mfig-svg .rule {
+  stroke: var(--mono-grid);
+  stroke-width: 0.7;
+}
+
+.prose-inner .mfig-svg .rule-soft {
+  stroke: var(--mono-grid);
+  stroke-width: 0.5;
+}
+
+.prose-inner .mfig-svg .dash {
+  fill: none;
+  stroke: var(--mono-l5);
+  stroke-width: 0.7;
+  stroke-dasharray: 2 3;
+}
+
+.prose-inner .mfig-svg .arrow {
+  fill: none;
+  stroke: var(--mono-ink);
+  stroke-width: 0.8;
+}
+
+@media (max-width: 700px) {
+  .prose-inner .mfig-lead-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .prose-inner .mfig-arrow {
+    height: 22px;
+    transform: rotate(90deg);
+  }
+
+  .prose-inner .mfig-lead-title {
+    font-size: 18px;
+  }
+
+  .prose-inner .mfig-svg {
+    min-width: 760px;
+  }
+}
