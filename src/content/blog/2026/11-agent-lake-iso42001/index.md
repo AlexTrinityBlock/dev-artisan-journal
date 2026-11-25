@@ -1,6 +1,6 @@
 ---
-title: "From Traces to Evidence: The Agent Lake and ISO/IEC 42001"
-description: "LangChain's agent lake stores traces and outcomes; ISO/IEC 42001 asks for proof. The interesting part is where the two meet — and what traces alone still cannot prove."
+title: "How LangChain Passed ISO/IEC 42001 AI Governance Certification"
+description: "How LangChain used its agent lake and LangSmith to pass ISO/IEC 42001 — and what traces alone still cannot prove."
 pubDate: 2026-11-25
 category: "AI"
 tags: ["Agent Governance", "ISO 42001", "Observability", "LangSmith", "AI Management"]
@@ -9,7 +9,7 @@ author: "Alex.Hsiao"
 readTime: "14 min read"
 ---
 
-# From Traces to Evidence: The Agent Lake and ISO/IEC 42001
+# How LangChain Passed ISO/IEC 42001 AI Governance Certification
 
 An agent can do everything right and still leave no evidence that it did. That is the gap an AI management system is supposed to close, and the gap an agent lake can narrow — but not close on its own.
 

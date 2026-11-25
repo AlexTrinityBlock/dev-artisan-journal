@@ -1,6 +1,6 @@
 ---
-title: "从 Trace 到证据：Agent Lake 与 ISO/IEC 42001"
-description: "LangChain 的 agent lake 存储 trace 与 outcome；ISO/IEC 42001 要的是可证明的治理。真正有趣的是两者交汇之处，以及 trace 单独仍然证明不了什么。"
+title: "LangChain 如何通过 ISO/IEC 42001 人工智能治理认证"
+description: "LangChain 如何用 agent lake 与 LangSmith 通过 ISO/IEC 42001，以及 trace 单独仍然证明不了什么。"
 pubDate: 2026-11-25
 category: "AI"
 tags: ["代理治理", "ISO 42001", "可观测性", "LangSmith", "AI 管理"]
@@ -9,7 +9,7 @@ author: "Alex.Hsiao"
 readTime: "14 分钟"
 ---
 
-# 从 Trace 到证据：Agent Lake 与 ISO/IEC 42001
+# LangChain 如何通过 ISO/IEC 42001 人工智能治理认证
 
 代理可以把每件事都做对，却仍旧没有留下任何证明。这正是 AI 管理体系应该补上的缺口，也是 agent lake 能缩小、却无法独自填平的缺口。
 
