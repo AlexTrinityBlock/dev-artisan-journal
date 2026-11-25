@@ -23,6 +23,12 @@ Manage the background server with `bun x astro dev stop`, `bun x astro dev statu
 
 Deployment is automatic. Pushing to `master` triggers the `Deploy to GitHub Pages` workflow (`.github/workflows/deploy.yml`), which builds the site with Bun and publishes `dist/` to GitHub Pages. Do not run a separate deploy command; wait for the workflow to finish and verify the live URLs.
 
+## Content & Localization
+
+Every article has three editions: `index.md` (English), `index.zh-hant.md` (Traditional Chinese), and `index.zh-hans.md` (Simplified Chinese). Any content change — title, description, body, figures, tags, or read time — must be applied to all three editions in the same commit. Do not ship a change to only one language.
+
+Localized UI and CV strings follow the same rule: when changing `src/data/cv.ts` or `src/i18n`, update every locale in the same change.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build
