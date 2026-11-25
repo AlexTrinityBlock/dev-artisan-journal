@@ -1,6 +1,6 @@
 ---
-title: "Plaintext-Only contentEditable: A CMS Editor That Saves Like a Database"
-description: "Native contentEditable is enough for a CMS when plain text is the contract. Here is the browser support, the React traps, and a per-block write queue that keeps fast edits from colliding with themselves."
+title: "A Page You Can Edit by Typing"
+description: "A live, front-end-only demo of a title and body you can edit by typing — plus the browser support, React traps, and save queue behind a reliable contentEditable editor."
 pubDate: 2026-11-25
 category: "Web"
 tags: ["contentEditable", "React", "TanStack Query", "UX", "Web"]
@@ -9,7 +9,35 @@ author: "Alex.Hsiao"
 readTime: "12 min read"
 ---
 
-# Plaintext-Only contentEditable: A CMS Editor That Saves Like a Database
+# A Page You Can Edit by Typing
+
+Try it before reading the argument. Click the title or the body and type. This is a front-end-only component: no save request, no database, no framework.
+
+<section class="ce-demo" aria-labelledby="ce-demo-label">
+  <div class="ce-demo-head">
+    <span class="card-tag" id="ce-demo-label">LIVE DEMO // 00</span>
+    <span class="ce-demo-hint">CLICK + TYPE · LOCAL ONLY</span>
+  </div>
+  <div class="ce-demo-page">
+    <div class="ce-demo-title" contenteditable="plaintext-only" data-ce-demo="title" spellcheck="false" role="textbox" aria-multiline="false" aria-label="Demo article title">A Page You Can Edit by Typing</div>
+    <div class="ce-demo-body" contenteditable="plaintext-only" data-ce-demo="body" spellcheck="false" role="textbox" aria-multiline="true" aria-label="Demo article body"><p>This is the body. Put the caret here and type. Paste keeps plain text; it does not carry Word or Google Docs styling.</p><p>There is no save button. Reload the page and it resets.</p></div>
+    <div class="ce-demo-status">CONTENTEDITABLE="PLAINTEXT-ONLY" · NO SAVE · NO BACKEND</div>
+  </div>
+</section>
+
+<script>
+  (() => {
+    document.documentElement.dataset.ceDemo = 'ready';
+    const probe = document.createElement('div');
+    probe.setAttribute('contenteditable', 'plaintext-only');
+    if (probe.contentEditable === 'plaintext-only') return;
+    document.querySelectorAll('[data-ce-demo]').forEach((el) => {
+      el.setAttribute('contenteditable', 'true');
+    });
+  })();
+</script>
+
+<p class="mfig-bridge">The demo is the smallest version of the idea. The rest of this article is why it is harder than it looks once the text has to be saved, and what the browser does not guarantee.</p>
 
 ## The editor should be the smallest part
 

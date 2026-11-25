@@ -1,6 +1,6 @@
 ---
-title: "plaintext-only 的 contentEditable：像資料庫一樣儲存的 CMS 編輯器"
-description: "當純文字就是契約，原生 contentEditable 就足以支撐 CMS。這篇說明瀏覽器支援、React 陷阱，以及讓快速編輯不會撞到自己版本的逐區塊寫入佇列。"
+title: "可以直接打字編輯的網址"
+description: "一個純前端的標題與內文示範：點一下就能直接打字。文章也說明 plaintext-only 的瀏覽器支援、React 陷阱，以及讓快速編輯不會撞到自己版本的逐區塊儲存佇列。"
 pubDate: 2026-11-25
 category: "Web"
 tags: ["contentEditable", "React", "TanStack Query", "使用者體驗", "Web"]
@@ -9,7 +9,35 @@ author: "Alex.Hsiao"
 readTime: "12 分鐘"
 ---
 
-# plaintext-only 的 contentEditable：像資料庫一樣儲存的 CMS 編輯器
+# 可以直接打字編輯的網址
+
+先試再讀。點一下標題或內文，直接打字。這是一個純前端組件：沒有儲存請求、沒有資料庫、沒有框架。
+
+<section class="ce-demo" aria-labelledby="ce-demo-label">
+  <div class="ce-demo-head">
+    <span class="card-tag" id="ce-demo-label">LIVE DEMO // 00</span>
+    <span class="ce-demo-hint">點一下就能改 · 只在本地</span>
+  </div>
+  <div class="ce-demo-page">
+    <div class="ce-demo-title" contenteditable="plaintext-only" data-ce-demo="title" spellcheck="false" role="textbox" aria-multiline="false" aria-label="示範文章標題">可以直接打字編輯的網址</div>
+    <div class="ce-demo-body" contenteditable="plaintext-only" data-ce-demo="body" spellcheck="false" role="textbox" aria-multiline="true" aria-label="示範文章內文"><p>這是內文。把游標放進來，直接修改。貼上時只保留純文字，不會帶進 Word 或 Google Docs 的樣式。</p><p>沒有儲存按鈕。重新整理頁面就會還原。</p></div>
+    <div class="ce-demo-status">CONTENTEDITABLE="PLAINTEXT-ONLY" · 不儲存 · 沒有後端</div>
+  </div>
+</section>
+
+<script>
+  (() => {
+    document.documentElement.dataset.ceDemo = 'ready';
+    const probe = document.createElement('div');
+    probe.setAttribute('contenteditable', 'plaintext-only');
+    if (probe.contentEditable === 'plaintext-only') return;
+    document.querySelectorAll('[data-ce-demo]').forEach((el) => {
+      el.setAttribute('contenteditable', 'true');
+    });
+  })();
+</script>
+
+<p class="mfig-bridge">這個示範是想法的最小版本。接下來要說明的是：一旦文字需要被儲存，為什麼它比看起來更難，以及瀏覽器到底保證了什麼。</p>
 
 ## 編輯器應該只佔最小的一部分
 

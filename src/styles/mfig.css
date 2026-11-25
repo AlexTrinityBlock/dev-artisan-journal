@@ -259,6 +259,81 @@
   stroke-width: 0.8;
 }
 
+/* Live contentEditable demo */
+.prose-inner .ce-demo {
+  margin: 26px 0;
+  border: 0.7px solid var(--mono-grid);
+  background: var(--mono-paper);
+}
+
+.prose-inner .ce-demo-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 0.7px solid var(--mono-grid);
+  background: var(--mono-bg-subtle);
+}
+
+.prose-inner .ce-demo-hint {
+  font-family: var(--mono-font-mono);
+  font-size: 7.5px;
+  letter-spacing: 0.06em;
+  color: var(--mono-faint);
+  text-align: right;
+}
+
+.prose-inner .ce-demo-page {
+  padding: 22px 20px 18px;
+}
+
+.prose-inner .ce-demo-title {
+  margin: 0 0 10px;
+  padding: 2px 0;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: var(--mono-ink);
+  outline: none;
+  border-bottom: 0.7px dashed transparent;
+  white-space: pre-wrap;
+}
+
+.prose-inner .ce-demo-title:focus {
+  border-bottom-color: var(--mono-l5);
+}
+
+.prose-inner .ce-demo-body {
+  margin: 0;
+  padding: 2px 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--mono-l2);
+  outline: none;
+  border-bottom: 0.7px dashed transparent;
+  white-space: normal;
+}
+
+.prose-inner .ce-demo-body:focus {
+  border-bottom-color: var(--mono-l5);
+}
+
+.prose-inner .ce-demo-body p {
+  margin: 0 0 10px;
+}
+
+.prose-inner .ce-demo-status {
+  margin-top: 14px;
+  padding-top: 8px;
+  border-top: 0.7px solid var(--mono-grid);
+  font-family: var(--mono-font-mono);
+  font-size: 7.5px;
+  letter-spacing: 0.05em;
+  color: var(--mono-faint);
+}
+
 @media (max-width: 700px) {
   .prose-inner .mfig-lead-grid {
     grid-template-columns: 1fr;
@@ -275,5 +350,23 @@
 
   .prose-inner .mfig-svg {
     min-width: 760px;
+  }
+
+  .prose-inner .ce-demo-title {
+    font-size: 20px;
+  }
+
+  .prose-inner .ce-demo-page {
+    padding: 18px 14px;
+  }
+
+  .prose-inner .ce-demo-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .prose-inner .ce-demo-hint {
+    text-align: left;
   }
 }
