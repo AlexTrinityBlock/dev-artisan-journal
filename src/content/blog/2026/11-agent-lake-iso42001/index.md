@@ -15,6 +15,8 @@ An agent can do everything right and still leave no evidence that it did. That i
 
 In November 2026, LangChain published two essays that are usually read separately. One describes [the agent lake](https://www.langchain.com/blog/the-agent-lake): storage and compute for agent traces and outcomes. The other describes [how LangChain used LangSmith to earn ISO/IEC 42001 certification](https://www.langchain.com/blog/ai-governance-iso-iec-42001-langsmith). Read together, they make a larger claim than either makes alone: the artifacts engineers use to debug agents are the same artifacts an auditor can use to govern them. This essay takes that claim seriously, then asks where it stops.
 
+<p class="mfig-source-note"><span class="mfig-source-label">SOURCE // LANGCHAIN</span> <a href="https://www.langchain.com/blog/ai-governance-iso-iec-42001-langsmith">How We Achieved ISO 42001 with LangSmith</a> <em>and</em> <a href="https://www.langchain.com/blog/the-agent-lake">The Agent Lake</a></p>
+
 <section class="mfig-lead">
   <div class="mfig-lead-head">
     <span class="card-tag">AGENT LAKE // 00</span>
@@ -48,39 +50,39 @@ In November 2026, LangChain published two essays that are usually read separatel
     </div>
   </div>
   <div class="mfig-lead-flow mfig-scroll">
-  <svg class="mfig-svg" viewBox="0 0 840 126" role="img" aria-labelledby="lake-lead-title lake-lead-desc">
+  <svg class="mfig-svg" viewBox="0 0 780 138" role="img" aria-labelledby="lake-lead-title lake-lead-desc">
     <title id="lake-lead-title">From one agent run to one piece of evidence</title>
     <desc id="lake-lead-desc">A trace records what happened, an outcome records whether it mattered, an evaluation records whether it passed, an issue records what recurs, a fix records what changed, and the combined record becomes evidence for an audit.</desc>
     <defs>
       <marker id="lake-lead-arrow" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-ink)"/></marker>
     </defs>
-    <text x="20" y="16" class="f" font-size="7.5" letter-spacing="1.2">ONE RUN // SIX ARTIFACTS</text>
-    <text x="820" y="16" class="f" font-size="7.5" text-anchor="end" letter-spacing="1">THE EVIDENCE CHAIN</text>
-    <line x1="20" y1="24" x2="820" y2="24" class="rule"/>
-    <rect x="20" y="42" width="118" height="38" class="term"/>
-    <text x="79" y="65" class="t mono" font-size="9.6" font-weight="800" text-anchor="middle">TRACE</text>
-    <text x="79" y="96" class="m" font-size="6.6" text-anchor="middle">what happened</text>
-    <line x1="140" y1="61" x2="153" y2="61" class="arrow" marker-end="url(#lake-lead-arrow)"/>
-    <rect x="155" y="42" width="118" height="38" class="box"/>
-    <text x="214" y="65" class="t mono" font-size="9.6" font-weight="800" text-anchor="middle">OUTCOME</text>
-    <text x="214" y="96" class="m" font-size="6.6" text-anchor="middle">whether it mattered</text>
-    <line x1="275" y1="61" x2="288" y2="61" class="arrow" marker-end="url(#lake-lead-arrow)"/>
-    <rect x="290" y="42" width="118" height="38" class="term"/>
-    <text x="349" y="65" class="t mono" font-size="9.6" font-weight="800" text-anchor="middle">EVAL</text>
-    <text x="349" y="96" class="m" font-size="6.6" text-anchor="middle">whether it passed</text>
-    <line x1="410" y1="61" x2="423" y2="61" class="arrow" marker-end="url(#lake-lead-arrow)"/>
-    <rect x="425" y="42" width="118" height="38" class="box"/>
-    <text x="484" y="65" class="t mono" font-size="9.6" font-weight="800" text-anchor="middle">ISSUE</text>
-    <text x="484" y="96" class="m" font-size="6.6" text-anchor="middle">what recurs</text>
-    <line x1="545" y1="61" x2="558" y2="61" class="arrow" marker-end="url(#lake-lead-arrow)"/>
-    <rect x="560" y="42" width="118" height="38" class="term"/>
-    <text x="619" y="65" class="t mono" font-size="9.6" font-weight="800" text-anchor="middle">FIX</text>
-    <text x="619" y="96" class="m" font-size="6.6" text-anchor="middle">what changed</text>
-    <line x1="680" y1="61" x2="693" y2="61" class="arrow" marker-end="url(#lake-lead-arrow)"/>
-    <rect x="695" y="42" width="125" height="38" class="codebox"/>
-    <text x="757" y="65" class="t mono" font-size="9.6" font-weight="800" text-anchor="middle">EVIDENCE</text>
-    <text x="757" y="96" class="m" font-size="6.6" text-anchor="middle">what proves it</text>
-    <text x="420" y="117" class="f" font-size="6.4" text-anchor="middle" letter-spacing="0.6">EACH STEP WRITES A RECORD // THE RECORD IS ONLY USEFUL IF THE SCHEMA HOLDS</text>
+    <text x="24" y="16" class="f" font-size="9" letter-spacing="1.1">ONE RUN // SIX ARTIFACTS</text>
+    <text x="756" y="16" class="f" font-size="9" text-anchor="end" letter-spacing="1">THE EVIDENCE CHAIN</text>
+    <line x1="24" y1="25" x2="756" y2="25" class="rule"/>
+    <rect x="24" y="40" width="114" height="44" class="term"/>
+    <text x="81" y="62" class="t mono" font-size="11.5" font-weight="800" text-anchor="middle">TRACE</text>
+    <text x="81" y="100" class="m" font-size="9" text-anchor="middle">what happened</text>
+    <line x1="140" y1="62" x2="146" y2="62" class="arrow" marker-end="url(#lake-lead-arrow)"/>
+    <rect x="148" y="40" width="114" height="44" class="box"/>
+    <text x="205" y="62" class="t mono" font-size="11.5" font-weight="800" text-anchor="middle">OUTCOME</text>
+    <text x="205" y="100" class="m" font-size="9" text-anchor="middle">whether it mattered</text>
+    <line x1="264" y1="62" x2="270" y2="62" class="arrow" marker-end="url(#lake-lead-arrow)"/>
+    <rect x="272" y="40" width="114" height="44" class="term"/>
+    <text x="329" y="62" class="t mono" font-size="11.5" font-weight="800" text-anchor="middle">EVAL</text>
+    <text x="329" y="100" class="m" font-size="9" text-anchor="middle">whether it passed</text>
+    <line x1="388" y1="62" x2="394" y2="62" class="arrow" marker-end="url(#lake-lead-arrow)"/>
+    <rect x="396" y="40" width="114" height="44" class="box"/>
+    <text x="453" y="62" class="t mono" font-size="11.5" font-weight="800" text-anchor="middle">ISSUE</text>
+    <text x="453" y="100" class="m" font-size="9" text-anchor="middle">what recurs</text>
+    <line x1="512" y1="62" x2="518" y2="62" class="arrow" marker-end="url(#lake-lead-arrow)"/>
+    <rect x="520" y="40" width="114" height="44" class="term"/>
+    <text x="577" y="62" class="t mono" font-size="11.5" font-weight="800" text-anchor="middle">FIX</text>
+    <text x="577" y="100" class="m" font-size="9" text-anchor="middle">what changed</text>
+    <line x1="636" y1="62" x2="642" y2="62" class="arrow" marker-end="url(#lake-lead-arrow)"/>
+    <rect x="644" y="40" width="114" height="44" class="codebox"/>
+    <text x="701" y="62" class="t mono" font-size="11.5" font-weight="800" text-anchor="middle">EVIDENCE</text>
+    <text x="701" y="100" class="m" font-size="9" text-anchor="middle">what proves it</text>
+    <text x="390" y="126" class="f" font-size="9" text-anchor="middle" letter-spacing="0.5">EACH STEP WRITES A RECORD // THE RECORD IS ONLY USEFUL IF THE SCHEMA HOLDS</text>
   </svg>
   </div>
   <p class="mfig-lead-note"><b>Evidence is not the same as compliance.</b> The lake supplies evidence for the four audit questions; the management system decides whether the answers are acceptable.</p>
@@ -122,139 +124,120 @@ LangChain's compute layer is easiest to read as four jobs. Online evaluators and
 
 The important claim is not that every company needs all five tools. It is that storage and compute share one schema. The lake is not a bigger log store. It is a structure for turning operational exhaust into evidence.
 
-<figure class="mfig-fig">
+<figure class="mfig-fig mfig-fig-arch">
   <figcaption>
     <span class="card-tag">THE ARCHITECTURE // 01</span>
     <h3 class="mfig-fig-title">The lake is a pipeline with a governance rail</h3>
     <p class="mfig-fig-sub">Agents, tools, users, and outcomes enter through ingestion; SmithDB holds the execution record and the judgment together; compute turns them into issues, fixes, and tests. The rail is not stored in the lake, but every stage depends on it.</p>
   </figcaption>
   <div class="mfig-scroll">
-  <svg class="mfig-svg" viewBox="0 0 840 420" role="img" aria-labelledby="lake-f1-title lake-f1-desc">
+  <svg class="mfig-svg" viewBox="0 0 780 500" role="img" aria-labelledby="lake-f1-title lake-f1-desc">
     <title id="lake-f1-title">Architecture of an agent lake with a governance rail</title>
-    <desc id="lake-f1-desc">Agents, tools, users, and outcomes feed an ingestion layer with batching, streaming, redaction, sampling, schema checks, and retention. The trace and outcome store, SmithDB, holds traces, threads, spans, feedback, and outcomes. Intelligent compute runs online evaluators, AI Search, Insights, Engine, and SmithTune over the store. Results become a tagged deployment, then production runs return as new evidence through a feedback loop. A side rail lists policy, roles, risk register, data provenance, human oversight, and corrective action as governance elements outside the lake.</desc>
+    <desc id="lake-f1-desc">Agents, tools, users, and outcomes feed an ingestion layer with batching, streaming, redaction, sampling, schema checks, and retention. SmithDB holds traces, threads, spans, feedback, and outcomes. Intelligent compute runs online evaluators, AI Search, Insights, Engine, and SmithTune over the store. Results become a tagged deployment, then production runs return as new evidence. A vertical governance rail on the right lists policy, roles, risk register, provenance, human oversight, and corrective action as elements outside the lake but inside the audit.</desc>
     <defs>
       <marker id="lake-f1-arrow" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-ink)"/></marker>
     </defs>
-    <text x="24" y="18" class="f" font-size="7.5" letter-spacing="1.2">THE AGENT LAKE // TRACES + OUTCOMES + COMPUTE</text>
-    <text x="816" y="18" class="f" font-size="7.5" text-anchor="end" letter-spacing="1">EVIDENCE, NOT COMPLIANCE</text>
-    <line x1="24" y1="26" x2="816" y2="26" class="rule"/>
-    <text x="24" y="44" class="f" font-size="6.6" letter-spacing="0.8">SOURCES</text>
-    <rect x="24" y="52" width="104" height="48" class="box"/>
-    <text x="34" y="68" class="f" font-size="6.2" letter-spacing="0.6">AGENTS</text>
-    <text x="34" y="84" class="t" font-size="8.6" font-weight="800">RUNS</text>
-    <text x="34" y="95" class="m" font-size="6.2">plans · threads</text>
-    <rect x="24" y="108" width="104" height="48" class="term"/>
-    <text x="34" y="124" class="f" font-size="6.2" letter-spacing="0.6">TOOLS</text>
-    <text x="34" y="140" class="t" font-size="8.6" font-weight="800">CALLS</text>
-    <text x="34" y="151" class="m" font-size="6.2">side effects</text>
-    <rect x="24" y="164" width="104" height="48" class="box"/>
-    <text x="34" y="180" class="f" font-size="6.2" letter-spacing="0.6">USERS</text>
-    <text x="34" y="196" class="t" font-size="8.6" font-weight="800">FEEDBACK</text>
-    <text x="34" y="207" class="m" font-size="6.2">approvals</text>
-    <rect x="24" y="220" width="104" height="48" class="term"/>
-    <text x="34" y="236" class="f" font-size="6.2" letter-spacing="0.6">OUTCOMES</text>
-    <text x="34" y="252" class="t" font-size="8.6" font-weight="800">IMPACT</text>
-    <text x="34" y="263" class="m" font-size="6.2">PRs · scores · labels</text>
-    <line x1="128" y1="76" x2="136" y2="76" class="rule-soft"/>
-    <line x1="128" y1="132" x2="136" y2="132" class="rule-soft"/>
-    <line x1="128" y1="188" x2="136" y2="188" class="rule-soft"/>
-    <line x1="128" y1="244" x2="136" y2="244" class="rule-soft"/>
-    <line x1="136" y1="76" x2="136" y2="244" class="rule-soft"/>
-    <line x1="136" y1="160" x2="148" y2="160" class="arrow" marker-end="url(#lake-f1-arrow)"/>
-    <rect x="150" y="52" width="104" height="216" class="codebox"/>
-    <text x="162" y="70" class="f" font-size="6.4" letter-spacing="0.6">INGEST</text>
-    <text x="162" y="84" class="t mono" font-size="7.6" font-weight="800">OTEL / SDK</text>
-    <line x1="162" y1="92" x2="242" y2="92" class="rule-soft"/>
-    <text x="162" y="108" class="m" font-size="7.2">BATCH</text>
-    <text x="162" y="121" class="m" font-size="7.2">STREAM</text>
-    <line x1="162" y1="130" x2="242" y2="130" class="rule-soft"/>
-    <text x="162" y="146" class="m" font-size="7.2">REDACT</text>
-    <text x="162" y="159" class="m" font-size="7.2">SAMPLE</text>
-    <line x1="162" y1="168" x2="242" y2="168" class="rule-soft"/>
-    <text x="162" y="184" class="m" font-size="7.2">SCHEMA</text>
-    <text x="162" y="197" class="m" font-size="7.2">CHECK</text>
-    <line x1="162" y1="206" x2="242" y2="206" class="rule-soft"/>
-    <text x="162" y="222" class="m" font-size="7.2">RETENTION</text>
-    <text x="162" y="235" class="m" font-size="7.2">POLICY</text>
-    <text x="162" y="256" class="f" font-size="6.2">one path in</text>
-    <line x1="254" y1="160" x2="264" y2="160" class="arrow" marker-end="url(#lake-f1-arrow)"/>
-    <rect x="266" y="52" width="148" height="216" class="term"/>
-    <text x="278" y="70" class="f" font-size="6.4" letter-spacing="0.6">TRACE + OUTCOME STORE</text>
-    <text x="278" y="88" class="t mono" font-size="11" font-weight="800">SmithDB</text>
-    <line x1="278" y1="96" x2="402" y2="96" class="rule-soft"/>
-    <text x="278" y="112" class="m" font-size="7.2">traces</text>
-    <text x="278" y="127" class="m" font-size="7.2">threads</text>
-    <text x="278" y="142" class="m" font-size="7.2">spans</text>
-    <text x="278" y="157" class="m" font-size="7.2">feedback</text>
-    <text x="278" y="172" class="m" font-size="7.2">outcomes</text>
-    <line x1="278" y1="182" x2="402" y2="182" class="rule-soft"/>
-    <text x="278" y="198" class="f" font-size="6.2">append-only</text>
-    <text x="278" y="210" class="f" font-size="6.2">high cardinality</text>
-    <text x="278" y="222" class="f" font-size="6.2">trace-shaped schema</text>
-    <text x="278" y="244" class="m" font-size="6.2">billions of runs / mo</text>
-    <text x="278" y="256" class="f" font-size="5.8">LANGCHAIN CLAIM</text>
-    <line x1="414" y1="160" x2="428" y2="160" class="arrow" marker-end="url(#lake-f1-arrow)"/>
-    <rect x="430" y="52" width="174" height="216" class="box"/>
-    <text x="442" y="70" class="f" font-size="6.4" letter-spacing="0.6">INTELLIGENT COMPUTE</text>
-    <text x="442" y="88" class="t" font-size="8.2" font-weight="800">ONLINE EVALS</text>
-    <text x="442" y="99" class="m" font-size="6.2">hallucination · toxicity</text>
-    <line x1="442" y1="106" x2="592" y2="106" class="rule-soft"/>
-    <text x="442" y="122" class="t" font-size="8.2" font-weight="800">AI SEARCH</text>
-    <text x="442" y="133" class="m" font-size="6.2">natural language queries</text>
-    <line x1="442" y1="140" x2="592" y2="140" class="rule-soft"/>
-    <text x="442" y="156" class="t" font-size="8.2" font-weight="800">INSIGHTS</text>
-    <text x="442" y="167" class="m" font-size="6.2">traffic clusters</text>
-    <line x1="442" y1="174" x2="592" y2="174" class="rule-soft"/>
-    <text x="442" y="190" class="t" font-size="8.2" font-weight="800">ENGINE</text>
-    <text x="442" y="201" class="m" font-size="6.2">issues → cause → PR</text>
-    <line x1="442" y1="208" x2="592" y2="208" class="rule-soft"/>
-    <text x="442" y="224" class="t" font-size="8.2" font-weight="800">SMITHTUNE</text>
-    <text x="442" y="235" class="m" font-size="6.2">best trajectories</text>
-    <text x="442" y="254" class="f" font-size="6.2">decision models make</text>
-    <text x="442" y="264" class="f" font-size="6.2">filtering cheap</text>
-    <line x1="604" y1="120" x2="618" y2="120" class="arrow" marker-end="url(#lake-f1-arrow)"/>
-    <rect x="620" y="52" width="76" height="108" class="codebox"/>
-    <text x="630" y="70" class="f" font-size="6.2" letter-spacing="0.6">DEPLOY</text>
-    <text x="630" y="90" class="t" font-size="11" font-weight="800">v+1</text>
-    <text x="630" y="106" class="m" font-size="6.2">tagged</text>
-    <text x="630" y="119" class="m" font-size="6.2">reviewed</text>
-    <text x="630" y="132" class="m" font-size="6.2">rollback</text>
-    <text x="630" y="148" class="f" font-size="5.8">approval gate</text>
-    <line x1="658" y1="160" x2="658" y2="170" class="arrow" marker-end="url(#lake-f1-arrow)"/>
-    <rect x="620" y="172" width="76" height="96" class="box"/>
-    <text x="630" y="190" class="f" font-size="6.2" letter-spacing="0.6">PRODUCTION</text>
-    <text x="630" y="210" class="t" font-size="8.2" font-weight="800">NEW RUNS</text>
-    <text x="630" y="226" class="m" font-size="6.2">new traces</text>
-    <text x="630" y="239" class="m" font-size="6.2">new outcomes</text>
-    <text x="630" y="258" class="f" font-size="6.2">next loop</text>
-    <path d="M658 268 V300 H340 V270" class="arrow" fill="none" marker-end="url(#lake-f1-arrow)"/>
-    <text x="500" y="316" class="f" font-size="6.2" text-anchor="middle" letter-spacing="0.6">NEW RUNS RETURN AS NEW EVIDENCE</text>
-    <rect x="712" y="52" width="104" height="216" class="dash"/>
-    <text x="724" y="70" class="f" font-size="6.4" letter-spacing="0.6">GOVERNANCE</text>
-    <text x="724" y="83" class="t mon" font-size="7.4" font-weight="800">EVIDENCE RAIL</text>
-    <line x1="724" y1="91" x2="804" y2="91" class="rule-soft"/>
-    <text x="724" y="107" class="m" font-size="6.6">POLICY</text>
-    <text x="724" y="125" class="m" font-size="6.6">ROLES</text>
-    <text x="724" y="143" class="m" font-size="6.6">RISK REGISTER</text>
-    <text x="724" y="161" class="m" font-size="6.6">DATA PROVENANCE</text>
-    <text x="724" y="179" class="m" font-size="6.6">HUMAN OVERSIGHT</text>
-    <text x="724" y="197" class="m" font-size="6.6">CORRECTIVE ACTION</text>
-    <line x1="724" y1="207" x2="804" y2="207" class="rule-soft"/>
-    <text x="724" y="223" class="f" font-size="6.2">outside the lake,</text>
-    <text x="724" y="235" class="f" font-size="6.2">inside the audit</text>
-    <text x="724" y="254" class="f" font-size="6.2">applies to</text>
-    <text x="724" y="264" class="f" font-size="6.2">every stage</text>
-    <line x1="24" y1="332" x2="816" y2="332" class="rule"/>
-    <text x="24" y="350" class="f" font-size="6.2" letter-spacing="0.8">WHAT THE LAKE PROVES</text>
-    <text x="24" y="366" class="t" font-size="7.8" font-weight="800">execution + outcome</text>
-    <text x="24" y="379" class="m" font-size="6.2">joined by stable IDs</text>
-    <text x="300" y="350" class="f" font-size="6.2" letter-spacing="0.8">WHAT THE RAIL ADDS</text>
-    <text x="300" y="366" class="t" font-size="7.8" font-weight="800">authority + risk + correction</text>
-    <text x="300" y="379" class="m" font-size="6.2">decisions the lake cannot make</text>
-    <text x="576" y="350" class="f" font-size="6.2" letter-spacing="0.8">WHAT THE AUDIT ASKS</text>
-    <text x="576" y="366" class="t" font-size="7.8" font-weight="800">allowed · works · did · improves</text>
-    <text x="576" y="379" class="m" font-size="6.2">four questions, four evidence classes</text>
-    <text x="420" y="404" class="f" font-size="6.2" text-anchor="middle" letter-spacing="0.5">TRACES PROVE ACTIVITY // OUTCOMES PROVE RELEVANCE // THE MANAGEMENT SYSTEM PROVES AUTHORITY</text>
+    <text x="24" y="18" class="f" font-size="9" letter-spacing="1.1">THE AGENT LAKE // TRACES + OUTCOMES + COMPUTE</text>
+    <text x="600" y="18" class="f" font-size="9" text-anchor="end" letter-spacing="1">EVIDENCE, NOT COMPLIANCE</text>
+    <line x1="24" y1="27" x2="600" y2="27" class="rule"/>
+    <line x1="616" y1="27" x2="756" y2="27" class="rule"/>
+    <text x="24" y="48" class="f" font-size="8.5" letter-spacing="0.8">SOURCES</text>
+    <rect x="24" y="56" width="138" height="58" class="box"/>
+    <text x="34" y="74" class="f" font-size="8.5" letter-spacing="0.5">AGENTS</text>
+    <text x="34" y="93" class="t" font-size="12.5" font-weight="800">RUNS</text>
+    <text x="34" y="107" class="m" font-size="9.5">plans · threads</text>
+    <rect x="170" y="56" width="138" height="58" class="term"/>
+    <text x="180" y="74" class="f" font-size="8.5" letter-spacing="0.5">TOOLS</text>
+    <text x="180" y="93" class="t" font-size="12.5" font-weight="800">CALLS</text>
+    <text x="180" y="107" class="m" font-size="9.5">side effects</text>
+    <rect x="316" y="56" width="138" height="58" class="box"/>
+    <text x="326" y="74" class="f" font-size="8.5" letter-spacing="0.5">USERS</text>
+    <text x="326" y="93" class="t" font-size="12.5" font-weight="800">FEEDBACK</text>
+    <text x="326" y="107" class="m" font-size="9.5">approvals</text>
+    <rect x="462" y="56" width="138" height="58" class="term"/>
+    <text x="472" y="74" class="f" font-size="8.5" letter-spacing="0.5">OUTCOMES</text>
+    <text x="472" y="93" class="t" font-size="12.5" font-weight="800">IMPACT</text>
+    <text x="472" y="107" class="m" font-size="9.5">PRs · scores · labels</text>
+    <line x1="93" y1="114" x2="93" y2="121" class="rule-soft"/>
+    <line x1="239" y1="114" x2="239" y2="121" class="rule-soft"/>
+    <line x1="385" y1="114" x2="385" y2="121" class="rule-soft"/>
+    <line x1="531" y1="114" x2="531" y2="121" class="rule-soft"/>
+    <line x1="93" y1="121" x2="531" y2="121" class="rule-soft"/>
+    <line x1="312" y1="121" x2="312" y2="130" class="arrow" marker-end="url(#lake-f1-arrow)"/>
+    <rect x="24" y="130" width="576" height="64" class="codebox"/>
+    <text x="36" y="148" class="f" font-size="9" letter-spacing="0.6">INGEST // ONE PATH IN</text>
+    <text x="36" y="171" class="t" font-size="11" font-weight="600">BATCH · STREAM · REDACT · SAMPLE · SCHEMA CHECK · RETENTION</text>
+    <line x1="312" y1="194" x2="312" y2="202" class="rule-soft"/>
+    <line x1="139" y1="202" x2="383" y2="202" class="rule-soft"/>
+    <line x1="139" y1="202" x2="139" y2="210" class="arrow" marker-end="url(#lake-f1-arrow)"/>
+    <line x1="383" y1="202" x2="383" y2="210" class="arrow" marker-end="url(#lake-f1-arrow)"/>
+    <rect x="24" y="210" width="230" height="182" class="term"/>
+    <text x="36" y="230" class="f" font-size="9" letter-spacing="0.6">TRACE + OUTCOME STORE</text>
+    <text x="36" y="256" class="t mono" font-size="16" font-weight="800">SmithDB</text>
+    <line x1="36" y1="266" x2="242" y2="266" class="rule-soft"/>
+    <text x="36" y="286" class="m" font-size="11">trace</text>
+    <text x="36" y="306" class="m" font-size="11">thread</text>
+    <text x="36" y="326" class="m" font-size="11">span</text>
+    <text x="142" y="286" class="m" font-size="11">feedback</text>
+    <text x="142" y="306" class="m" font-size="11">outcome</text>
+    <line x1="36" y1="340" x2="242" y2="340" class="rule-soft"/>
+    <text x="36" y="356" class="m" font-size="9.5">append-only · high cardinality</text>
+    <text x="36" y="370" class="m" font-size="9.5">trace-shaped schema</text>
+    <text x="36" y="383" class="f" font-size="8.5">billions of runs/mo · LANGCHAIN CLAIM</text>
+    <rect x="266" y="210" width="226" height="182" class="box"/>
+    <text x="278" y="230" class="f" font-size="9" letter-spacing="0.6">INTELLIGENT COMPUTE</text>
+    <text x="278" y="252" class="t" font-size="11" font-weight="800">ONLINE EVALS</text>
+    <text x="278" y="264" class="m" font-size="9.5">hallucination · toxicity</text>
+    <text x="278" y="282" class="t" font-size="11" font-weight="800">AI SEARCH</text>
+    <text x="278" y="294" class="m" font-size="9.5">natural-language queries</text>
+    <text x="278" y="312" class="t" font-size="11" font-weight="800">INSIGHTS</text>
+    <text x="278" y="324" class="m" font-size="9.5">traffic clusters</text>
+    <text x="278" y="342" class="t" font-size="11" font-weight="800">ENGINE</text>
+    <text x="278" y="354" class="m" font-size="9.5">issue → cause → PR</text>
+    <text x="278" y="372" class="t" font-size="11" font-weight="800">SMITHTUNE</text>
+    <text x="278" y="384" class="m" font-size="9.5">best trajectories</text>
+    <line x1="256" y1="300" x2="264" y2="300" class="arrow" marker-end="url(#lake-f1-arrow)"/>
+    <line x1="494" y1="300" x2="502" y2="300" class="arrow" marker-end="url(#lake-f1-arrow)"/>
+    <rect x="504" y="210" width="96" height="102" class="codebox"/>
+    <text x="524" y="230" class="f" font-size="9" letter-spacing="0.6">DEPLOY</text>
+    <text x="524" y="254" class="t" font-size="15" font-weight="800">v+1</text>
+    <text x="524" y="270" class="m" font-size="9.5">tagged</text>
+    <text x="524" y="282" class="m" font-size="9.5">reviewed</text>
+    <text x="524" y="294" class="m" font-size="9.5">rollback</text>
+    <text x="524" y="306" class="m" font-size="8.5">approval gate</text>
+    <line x1="552" y1="312" x2="552" y2="322" class="arrow" marker-end="url(#lake-f1-arrow)"/>
+    <rect x="504" y="322" width="96" height="70" class="box"/>
+    <text x="524" y="340" class="f" font-size="9" letter-spacing="0.6">PRODUCTION</text>
+    <text x="524" y="362" class="t" font-size="11" font-weight="800">NEW RUNS</text>
+    <text x="524" y="376" class="m" font-size="9.5">new traces</text>
+    <text x="524" y="388" class="m" font-size="9.5">new outcomes</text>
+    <path d="M552 392 V412 H139 V394" class="arrow" fill="none" marker-end="url(#lake-f1-arrow)"/>
+    <text x="340" y="428" class="f" font-size="9.5" text-anchor="middle" letter-spacing="0.6">NEW RUNS RETURN AS NEW EVIDENCE</text>
+    <rect x="616" y="40" width="140" height="372" class="dash"/>
+    <text x="628" y="60" class="f" font-size="8.5" letter-spacing="0.8">GOVERNANCE</text>
+    <text x="628" y="78" class="t mono" font-size="11" font-weight="800">EVIDENCE RAIL</text>
+    <line x1="628" y1="86" x2="744" y2="86" class="rule-soft"/>
+    <text x="628" y="102" class="f" font-size="8.5">OUTSIDE THE LAKE</text>
+    <text x="628" y="114" class="f" font-size="8.5">INSIDE THE AUDIT</text>
+    <text x="628" y="140" class="m" font-size="10.5">POLICY</text>
+    <text x="628" y="176" class="m" font-size="10.5">ROLES</text>
+    <text x="628" y="212" class="m" font-size="10.5">RISK REGISTER</text>
+    <text x="628" y="248" class="m" font-size="10.5">DATA PROVENANCE</text>
+    <text x="628" y="284" class="m" font-size="10.5">HUMAN OVERSIGHT</text>
+    <text x="628" y="320" class="m" font-size="10.5">CORRECTIVE ACTION</text>
+    <line x1="628" y1="338" x2="744" y2="338" class="rule-soft"/>
+    <text x="628" y="358" class="f" font-size="8.5">applies to every stage</text>
+    <text x="628" y="370" class="f" font-size="8.5">not stored in the lake</text>
+    <line x1="24" y1="440" x2="756" y2="440" class="rule"/>
+    <text x="24" y="458" class="f" font-size="8.5" letter-spacing="0.8">WHAT THE LAKE PROVES</text>
+    <text x="24" y="474" class="t" font-size="11" font-weight="800">execution + outcome</text>
+    <text x="24" y="488" class="m" font-size="9.5">joined by stable IDs</text>
+    <text x="280" y="458" class="f" font-size="8.5" letter-spacing="0.8">WHAT THE RAIL ADDS</text>
+    <text x="280" y="474" class="t" font-size="11" font-weight="800">authority + risk + correction</text>
+    <text x="280" y="488" class="m" font-size="9.5">decisions the lake cannot make</text>
+    <text x="536" y="458" class="f" font-size="8.5" letter-spacing="0.8">WHAT THE AUDIT ASKS</text>
+    <text x="536" y="474" class="t" font-size="11" font-weight="800">allowed · works · did · improves</text>
+    <text x="536" y="488" class="m" font-size="9.5">four questions, four evidence classes</text>
   </svg>
   </div>
   <p class="mfig-fig-src">TRACE + OUTCOME · SMITHDB · COMPUTE · DEPLOY · GOVERNANCE RAIL</p>
@@ -299,118 +282,107 @@ The PDCA cycle is where evidence and management meet. Plan covers scope, policy,
 
 The Annex A mapping in LangChain's appendix is a useful example of tracing controls to artifacts: Fleet configuration to A.6.2.2, tool approval to A.6.2.3 and A.9.3, dataset versioning and provenance to A.7.2 and A.7.5, experiments to A.6.2.4, tracing to A.6.2.8, online evaluation and alerts to A.6.2.6 and clause 9.1, and Engine to clause 10.1 and 10.2. The mapping is LangChain's, not the auditor's. An auditor decides whether an artifact actually satisfies a control. A table in a blog post is a claim about fitness, not proof of it. Used carefully, though, the mapping shows the shape of a real evidence program: each control should point to an artifact, an owner, and a test.
 
-<figure class="mfig-fig">
+<figure class="mfig-fig mfig-fig-arch">
   <figcaption>
     <span class="card-tag">THE EVIDENCE MAP // 02</span>
     <h3 class="mfig-fig-title">Four questions, one management loop, and the artifacts in between</h3>
     <p class="mfig-fig-sub">Each audit question maps to an evidence class and to a stage of the Plan-Do-Check-Act cycle. The artifacts come from the lake. Policy, roles, impact assessment, risk acceptance, and management review do not.</p>
   </figcaption>
   <div class="mfig-scroll">
-  <svg class="mfig-svg" viewBox="0 0 840 420" role="img" aria-labelledby="lake-f2-title lake-f2-desc">
+  <svg class="mfig-svg" viewBox="0 0 780 524" role="img" aria-labelledby="lake-f2-title lake-f2-desc">
     <title id="lake-f2-title">ISO/IEC 42001 evidence map</title>
     <desc id="lake-f2-desc">Four audit questions — allowed, works, did, improves — map to permissions and prompt tags, versioned evaluations and provenance, traces and approvals, and issues and regression tests. Each maps to a Plan, Do, Check, or Act stage and to Annex A clauses. Policy, roles, impact assessment, risk acceptance, internal audit, and management review sit outside the lake but inside the management system.</desc>
     <defs>
       <marker id="lake-f2-arrow" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-ink)"/></marker>
     </defs>
-    <text x="24" y="18" class="f" font-size="7.5" letter-spacing="1.2">ISO/IEC 42001 // EVIDENCE MAP</text>
-    <text x="816" y="18" class="f" font-size="7.5" text-anchor="end" letter-spacing="1">FOUR QUESTIONS // ONE LOOP</text>
-    <line x1="24" y1="26" x2="816" y2="26" class="rule"/>
-    <rect x="24" y="46" width="184" height="62" class="term"/>
-    <text x="36" y="62" class="f" font-size="6.2" letter-spacing="0.6">Q1 // ALLOWED</text>
-    <text x="36" y="80" class="t" font-size="9.6" font-weight="800">What may it do?</text>
-    <text x="36" y="94" class="m" font-size="6.2">authority and oversight</text>
-    <rect x="216" y="46" width="236" height="62" class="box"/>
-    <text x="228" y="62" class="f" font-size="6.2" letter-spacing="0.6">EVIDENCE</text>
-    <text x="228" y="78" class="m" font-size="6.4">workspace permissions</text>
-    <text x="228" y="90" class="m" font-size="6.4">credential model · Auto / Ask</text>
-    <text x="228" y="102" class="m" font-size="6.4">prompt tags · approver identity</text>
-    <rect x="460" y="46" width="92" height="62" class="codebox"/>
-    <text x="470" y="62" class="f" font-size="6.2" letter-spacing="0.6">ANNEX A</text>
-    <text x="470" y="78" class="t mono" font-size="6.6">A.6.2.2</text>
-    <text x="470" y="90" class="t mono" font-size="6.6">A.6.2.3</text>
-    <text x="470" y="102" class="f" font-size="6.0">PLAN</text>
-    <rect x="24" y="114" width="184" height="62" class="box"/>
-    <text x="36" y="130" class="f" font-size="6.2" letter-spacing="0.6">Q2 // WORKS</text>
-    <text x="36" y="148" class="t" font-size="9.6" font-weight="800">How do you prove it works?</text>
-    <text x="36" y="162" class="m" font-size="6.2">verification and validation</text>
-    <rect x="216" y="114" width="236" height="62" class="term"/>
-    <text x="228" y="130" class="f" font-size="6.2" letter-spacing="0.6">EVIDENCE</text>
-    <text x="228" y="146" class="m" font-size="6.4">versioned datasets · fixed evaluators</text>
-    <text x="228" y="158" class="m" font-size="6.4">release experiments</text>
-    <text x="228" y="170" class="m" font-size="6.4">data provenance · source lineage</text>
-    <rect x="460" y="114" width="92" height="62" class="codebox"/>
-    <text x="470" y="130" class="f" font-size="6.2" letter-spacing="0.6">ANNEX A</text>
-    <text x="470" y="146" class="t mono" font-size="6.6">A.6.2.4</text>
-    <text x="470" y="158" class="t mono" font-size="6.6">A.7.2 · A.7.5</text>
-    <text x="470" y="170" class="f" font-size="6.0">DO / CHECK</text>
-    <rect x="24" y="182" width="184" height="62" class="term"/>
-    <text x="36" y="198" class="f" font-size="6.2" letter-spacing="0.6">Q3 // DID</text>
-    <text x="36" y="216" class="t" font-size="9.6" font-weight="800">What did it do?</text>
-    <text x="36" y="230" class="m" font-size="6.2">recording and monitoring</text>
-    <rect x="216" y="182" width="236" height="62" class="box"/>
-    <text x="228" y="198" class="f" font-size="6.2" letter-spacing="0.6">EVIDENCE</text>
-    <text x="228" y="214" class="m" font-size="6.4">traces · tool calls · errors</text>
-    <text x="228" y="226" class="m" font-size="6.4">approvals · pause / resume</text>
-    <text x="228" y="238" class="m" font-size="6.4">evaluation feedback · corrections</text>
-    <rect x="460" y="182" width="92" height="62" class="codebox"/>
-    <text x="470" y="198" class="f" font-size="6.2" letter-spacing="0.6">ANNEX A</text>
-    <text x="470" y="214" class="t mono" font-size="6.6">A.6.2.8</text>
-    <text x="470" y="226" class="t mono" font-size="6.6">CLAUSE 9.1</text>
-    <text x="470" y="238" class="f" font-size="6.0">CHECK</text>
-    <rect x="24" y="250" width="184" height="62" class="box"/>
-    <text x="36" y="266" class="f" font-size="6.2" letter-spacing="0.6">Q4 // IMPROVES</text>
-    <text x="36" y="284" class="t" font-size="9.6" font-weight="800">How do you improve it?</text>
-    <text x="36" y="298" class="m" font-size="6.2">corrective action</text>
-    <rect x="216" y="250" width="236" height="62" class="term"/>
-    <text x="228" y="266" class="f" font-size="6.2" letter-spacing="0.6">EVIDENCE</text>
-    <text x="228" y="282" class="m" font-size="6.4">issues · root-cause analysis</text>
-    <text x="228" y="294" class="m" font-size="6.4">pull requests · regression tests</text>
-    <text x="228" y="306" class="m" font-size="6.4">effectiveness check</text>
-    <rect x="460" y="250" width="92" height="62" class="codebox"/>
-    <text x="470" y="266" class="f" font-size="6.2" letter-spacing="0.6">CLAUSE</text>
-    <text x="470" y="282" class="t mono" font-size="6.6">10.1</text>
-    <text x="470" y="294" class="t mono" font-size="6.6">10.2</text>
-    <text x="470" y="306" class="f" font-size="6.0">ACT</text>
-    <text x="24" y="334" class="f" font-size="6.2" letter-spacing="0.6">EACH ROW IS A CONTROL OBJECTIVE, NOT A FEATURE.</text>
-    <text x="24" y="348" class="m" font-size="6.4">The artifact is necessary; the management system decides if it is sufficient.</text>
-    <text x="568" y="44" class="f" font-size="6.4" letter-spacing="0.6">THE MANAGEMENT SYSTEM // PDCA</text>
-    <rect x="580" y="56" width="104" height="88" class="box"/>
-    <text x="592" y="74" class="f" font-size="6.4" letter-spacing="0.6">PLAN</text>
-    <text x="592" y="92" class="m" font-size="6.2">scope · policy</text>
-    <text x="592" y="104" class="m" font-size="6.2">roles</text>
-    <text x="592" y="116" class="m" font-size="6.2">risk + impact</text>
-    <text x="592" y="128" class="m" font-size="6.2">objectives</text>
-    <line x1="684" y1="100" x2="698" y2="100" class="arrow" marker-end="url(#lake-f2-arrow)"/>
-    <rect x="700" y="56" width="104" height="88" class="term"/>
-    <text x="712" y="74" class="f" font-size="6.4" letter-spacing="0.6">DO</text>
-    <text x="712" y="92" class="m" font-size="6.2">lifecycle</text>
-    <text x="712" y="104" class="m" font-size="6.2">data handling</text>
-    <text x="712" y="116" class="m" font-size="6.2">operations</text>
-    <text x="712" y="128" class="m" font-size="6.2">controls</text>
-    <line x1="752" y1="144" x2="752" y2="160" class="arrow" marker-end="url(#lake-f2-arrow)"/>
-    <rect x="700" y="162" width="104" height="88" class="box"/>
-    <text x="712" y="180" class="f" font-size="6.4" letter-spacing="0.6">CHECK</text>
-    <text x="712" y="198" class="m" font-size="6.2">monitoring</text>
-    <text x="712" y="210" class="m" font-size="6.2">measurement</text>
-    <text x="712" y="222" class="m" font-size="6.2">internal audit</text>
-    <text x="712" y="234" class="m" font-size="6.2">management review</text>
-    <line x1="698" y1="206" x2="686" y2="206" class="arrow" marker-end="url(#lake-f2-arrow)"/>
-    <rect x="580" y="162" width="104" height="88" class="term"/>
-    <text x="592" y="180" class="f" font-size="6.4" letter-spacing="0.6">ACT</text>
-    <text x="592" y="198" class="m" font-size="6.2">nonconformity</text>
-    <text x="592" y="210" class="m" font-size="6.2">corrective action</text>
-    <text x="592" y="222" class="m" font-size="6.2">effectiveness</text>
-    <text x="592" y="234" class="m" font-size="6.2">improvement</text>
-    <line x1="632" y1="162" x2="632" y2="146" class="arrow" marker-end="url(#lake-f2-arrow)"/>
-    <rect x="568" y="268" width="248" height="96" class="dash"/>
-    <text x="580" y="286" class="f" font-size="6.2" letter-spacing="0.6">OUTSIDE THE LAKE // INSIDE THE AIMS</text>
-    <text x="580" y="304" class="m" font-size="6.4">policy · roles · accountability</text>
-    <text x="580" y="318" class="m" font-size="6.4">impact assessment · risk acceptance</text>
-    <text x="580" y="332" class="m" font-size="6.4">statement of applicability</text>
-    <text x="580" y="346" class="m" font-size="6.4">internal audit · management review</text>
-    <text x="580" y="358" class="f" font-size="6.0">the AIMS owns these, not the trace store</text>
-    <text x="568" y="386" class="f" font-size="6.2">A TRACE ANSWERS WHAT HAPPENED.</text>
-    <text x="568" y="400" class="f" font-size="6.2">THE AIMS ANSWERS WHO WAS ALLOWED TO DECIDE.</text>
+    <text x="24" y="18" class="f" font-size="9" letter-spacing="1.1">ISO/IEC 42001 // EVIDENCE MAP</text>
+    <text x="756" y="18" class="f" font-size="9" text-anchor="end" letter-spacing="1">FOUR QUESTIONS // ONE LOOP</text>
+    <line x1="24" y1="27" x2="756" y2="27" class="rule"/>
+    <rect x="24" y="40" width="210" height="70" class="term"/>
+    <text x="36" y="56" class="f" font-size="8.5" letter-spacing="0.6">Q1 // ALLOWED</text>
+    <text x="36" y="78" class="t" font-size="12.5" font-weight="800">What may it do?</text>
+    <text x="36" y="94" class="m" font-size="9.5">authority and oversight</text>
+    <rect x="242" y="40" width="308" height="70" class="box"/>
+    <text x="256" y="56" class="f" font-size="8.5" letter-spacing="0.6">EVIDENCE</text>
+    <text x="256" y="74" class="m" font-size="10.5">workspace permissions</text>
+    <text x="256" y="89" class="m" font-size="10.5">credential model · Auto / Ask</text>
+    <text x="256" y="104" class="m" font-size="10.5">prompt tags · approver identity</text>
+    <rect x="558" y="40" width="104" height="70" class="codebox"/>
+    <text x="570" y="56" class="f" font-size="8.5" letter-spacing="0.6">ANNEX A</text>
+    <text x="570" y="78" class="t mono" font-size="10.5">A.6.2.2</text>
+    <text x="570" y="94" class="t mono" font-size="10.5">A.6.2.3</text>
+    <rect x="670" y="40" width="86" height="70" class="box"/>
+    <text x="682" y="56" class="f" font-size="8.5" letter-spacing="0.6">STAGE</text>
+    <text x="682" y="86" class="t mono" font-size="11.5" font-weight="800">PLAN</text>
+    <rect x="24" y="118" width="210" height="70" class="box"/>
+    <text x="36" y="134" class="f" font-size="8.5" letter-spacing="0.6">Q2 // WORKS</text>
+    <text x="36" y="156" class="t" font-size="12.5" font-weight="800">How do you prove it works?</text>
+    <text x="36" y="172" class="m" font-size="9.5">verification and validation</text>
+    <rect x="242" y="118" width="308" height="70" class="term"/>
+    <text x="256" y="134" class="f" font-size="8.5" letter-spacing="0.6">EVIDENCE</text>
+    <text x="256" y="152" class="m" font-size="10.5">versioned datasets · fixed evaluators</text>
+    <text x="256" y="167" class="m" font-size="10.5">release experiments</text>
+    <text x="256" y="182" class="m" font-size="10.5">data provenance · source lineage</text>
+    <rect x="558" y="118" width="104" height="70" class="codebox"/>
+    <text x="570" y="134" class="f" font-size="8.5" letter-spacing="0.6">ANNEX A</text>
+    <text x="570" y="156" class="t mono" font-size="10.5">A.6.2.4</text>
+    <text x="570" y="172" class="t mono" font-size="10.5">A.7.2 · A.7.5</text>
+    <rect x="670" y="118" width="86" height="70" class="term"/>
+    <text x="682" y="134" class="f" font-size="8.5" letter-spacing="0.6">STAGE</text>
+    <text x="682" y="164" class="t mono" font-size="11.5" font-weight="800">DO · CHECK</text>
+    <rect x="24" y="196" width="210" height="70" class="term"/>
+    <text x="36" y="212" class="f" font-size="8.5" letter-spacing="0.6">Q3 // DID</text>
+    <text x="36" y="234" class="t" font-size="12.5" font-weight="800">What did it do?</text>
+    <text x="36" y="250" class="m" font-size="9.5">recording and monitoring</text>
+    <rect x="242" y="196" width="308" height="70" class="box"/>
+    <text x="256" y="212" class="f" font-size="8.5" letter-spacing="0.6">EVIDENCE</text>
+    <text x="256" y="230" class="m" font-size="10.5">traces · tool calls · errors</text>
+    <text x="256" y="245" class="m" font-size="10.5">approvals · pause / resume</text>
+    <text x="256" y="260" class="m" font-size="10.5">evaluation feedback · corrections</text>
+    <rect x="558" y="196" width="104" height="70" class="codebox"/>
+    <text x="570" y="212" class="f" font-size="8.5" letter-spacing="0.6">ANNEX A</text>
+    <text x="570" y="234" class="t mono" font-size="10.5">A.6.2.8</text>
+    <text x="570" y="250" class="t mono" font-size="10.5">CLAUSE 9.1</text>
+    <rect x="670" y="196" width="86" height="70" class="box"/>
+    <text x="682" y="212" class="f" font-size="8.5" letter-spacing="0.6">STAGE</text>
+    <text x="682" y="242" class="t mono" font-size="11.5" font-weight="800">CHECK</text>
+    <rect x="24" y="274" width="210" height="70" class="box"/>
+    <text x="36" y="290" class="f" font-size="8.5" letter-spacing="0.6">Q4 // IMPROVES</text>
+    <text x="36" y="312" class="t" font-size="12.5" font-weight="800">How do you improve it?</text>
+    <text x="36" y="328" class="m" font-size="9.5">corrective action</text>
+    <rect x="242" y="274" width="308" height="70" class="term"/>
+    <text x="256" y="290" class="f" font-size="8.5" letter-spacing="0.6">EVIDENCE</text>
+    <text x="256" y="308" class="m" font-size="10.5">issues · root-cause analysis</text>
+    <text x="256" y="323" class="m" font-size="10.5">pull requests · regression tests</text>
+    <text x="256" y="338" class="m" font-size="10.5">effectiveness check</text>
+    <rect x="558" y="274" width="104" height="70" class="codebox"/>
+    <text x="570" y="290" class="f" font-size="8.5" letter-spacing="0.6">ANNEX A</text>
+    <text x="570" y="312" class="t mono" font-size="10.5">10.1</text>
+    <text x="570" y="328" class="t mono" font-size="10.5">10.2</text>
+    <rect x="670" y="274" width="86" height="70" class="term"/>
+    <text x="682" y="290" class="f" font-size="8.5" letter-spacing="0.6">STAGE</text>
+    <text x="682" y="320" class="t mono" font-size="11.5" font-weight="800">ACT</text>
+    <text x="24" y="364" class="f" font-size="9" letter-spacing="0.6">THE MANAGEMENT SYSTEM // PDCA</text>
+    <rect x="24" y="372" width="177" height="72" class="box"/>
+    <text x="36" y="392" class="f" font-size="9" letter-spacing="0.6">PLAN</text>
+    <text x="36" y="412" class="m" font-size="9.5">scope · policy · roles</text>
+    <text x="36" y="428" class="m" font-size="9.5">risk + impact · objectives</text>
+    <rect x="209" y="372" width="177" height="72" class="term"/>
+    <text x="221" y="392" class="f" font-size="9" letter-spacing="0.6">DO</text>
+    <text x="221" y="412" class="m" font-size="9.5">lifecycle · data handling</text>
+    <text x="221" y="428" class="m" font-size="9.5">operations · controls</text>
+    <rect x="394" y="372" width="177" height="72" class="box"/>
+    <text x="406" y="392" class="f" font-size="9" letter-spacing="0.6">CHECK</text>
+    <text x="406" y="412" class="m" font-size="9.5">monitoring · measurement</text>
+    <text x="406" y="428" class="m" font-size="9.5">internal audit · review</text>
+    <rect x="579" y="372" width="177" height="72" class="term"/>
+    <text x="591" y="392" class="f" font-size="9" letter-spacing="0.6">ACT</text>
+    <text x="591" y="412" class="m" font-size="9.5">nonconformity</text>
+    <text x="591" y="428" class="m" font-size="9.5">corrective action · effectiveness</text>
+    <line x1="24" y1="460" x2="756" y2="460" class="rule"/>
+    <text x="24" y="478" class="f" font-size="9.5">OUTSIDE THE LAKE, INSIDE THE AIMS: policy · roles · accountability · impact assessment</text>
+    <text x="24" y="492" class="f" font-size="9.5">risk acceptance · statement of applicability · internal audit · management review</text>
+    <text x="24" y="510" class="t" font-size="10.5" font-weight="800">A TRACE ANSWERS WHAT HAPPENED. THE AIMS ANSWERS WHO WAS ALLOWED TO DECIDE.</text>
   </svg>
   </div>
   <p class="mfig-fig-src">ALLOWED · WORKS · DID · IMPROVES · PLAN · DO · CHECK · ACT</p>

@@ -370,3 +370,34 @@
     text-align: left;
   }
 }
+
+.prose-inner .mfig-source-note {
+  margin: 18px 0 0;
+  padding: 10px 12px;
+  border-left: 2px solid var(--mono-ink);
+  background: var(--mono-bg-subtle);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--mono-ink);
+}
+
+.prose-inner .mfig-source-note a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose-inner .mfig-source-label {
+  margin-right: 8px;
+  font-family: var(--mono-font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: var(--mono-faint);
+}
+
+@media (max-width: 720px) {
+  .prose-inner .mfig-fig-arch .mfig-svg,
+  .prose-inner .mfig-lead-flow .mfig-svg {
+    min-width: 640px;
+  }
+}

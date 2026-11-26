@@ -13,7 +13,9 @@ readTime: "14 分钟"
 
 代理可以把每件事都做对，却仍旧没有留下任何证明。这正是 AI 管理体系应该补上的缺口，也是 agent lake 能缩小、却无法独自填平的缺口。
 
-2026 年 11 月，LangChain 发表了两篇通常被分开阅读的文章。一篇谈 [agent lake](https://www.langchain.com/blog/the-agent-lake)：为代理 trace 与 outcome 设计的存储与计算。另一篇谈 [LangChain 如何用 LangSmith 通过 ISO/IEC 42001 认证](https://www.langchain.com/blog/ai-governance-iso-iec-42001-langsmith)。合在一起读，它们的主张比各自单独读时更大：工程师调试代理所用的产物，正是审核员可以用来治理代理的产物。本文认真看待这个主张，再追问它到哪里为止。
+2026 年 11 月，LangChain 发表了两篇通常被分开阅读的文章。一篇谈 [agent lake](https://www.langchain.com/blog/the-agent-lake)：为代理 trace 与 outcome 设计的存储与计算。另一篇谈 [How We Achieved ISO 42001 with LangSmith](https://www.langchain.com/blog/ai-governance-iso-iec-42001-langsmith)。合在一起读，它们的主张比各自单独读时更大：工程师调试代理所用的产物，正是审核员可以用来治理代理的产物。本文认真看待这个主张，再追问它到哪里为止。
+
+<p class="mfig-source-note"><span class="mfig-source-label">原文 // LANGCHAIN</span> <a href="https://www.langchain.com/blog/ai-governance-iso-iec-42001-langsmith">How We Achieved ISO 42001 with LangSmith</a> <em>与</em> <a href="https://www.langchain.com/blog/the-agent-lake">The Agent Lake</a></p>
 
 <section class="mfig-lead">
   <div class="mfig-lead-head">
@@ -48,39 +50,39 @@ readTime: "14 分钟"
     </div>
   </div>
   <div class="mfig-lead-flow mfig-scroll">
-  <svg class="mfig-svg" viewBox="0 0 840 126" role="img" aria-labelledby="lake-lead-title lake-lead-desc">
+  <svg class="mfig-svg" viewBox="0 0 780 138" role="img" aria-labelledby="lake-lead-title lake-lead-desc">
     <title id="lake-lead-title">从一次代理执行，到一件证据</title>
     <desc id="lake-lead-desc">Trace 记录发生了什么，outcome 记录它是否重要，评测记录它是否通过，issue 记录什么在重复，修正记录改了什么，合起来的记录则成为审核证据。</desc>
     <defs>
       <marker id="lake-lead-arrow" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-ink)"/></marker>
     </defs>
-    <text x="20" y="16" class="f" font-size="7.5" letter-spacing="1.2">一次执行 // 六件产物</text>
-    <text x="820" y="16" class="f" font-size="7.5" text-anchor="end" letter-spacing="1">证据链</text>
-    <line x1="20" y1="24" x2="820" y2="24" class="rule"/>
-    <rect x="20" y="42" width="118" height="38" class="term"/>
-    <text x="79" y="65" class="t mono" font-size="9.6" font-weight="800" text-anchor="middle">TRACE</text>
-    <text x="79" y="96" class="m" font-size="6.6" text-anchor="middle">发生了什么</text>
-    <line x1="140" y1="61" x2="153" y2="61" class="arrow" marker-end="url(#lake-lead-arrow)"/>
-    <rect x="155" y="42" width="118" height="38" class="box"/>
-    <text x="214" y="65" class="t mono" font-size="9.6" font-weight="800" text-anchor="middle">OUTCOME</text>
-    <text x="214" y="96" class="m" font-size="6.6" text-anchor="middle">是否重要</text>
-    <line x1="275" y1="61" x2="288" y2="61" class="arrow" marker-end="url(#lake-lead-arrow)"/>
-    <rect x="290" y="42" width="118" height="38" class="term"/>
-    <text x="349" y="65" class="t mono" font-size="9.6" font-weight="800" text-anchor="middle">EVAL</text>
-    <text x="349" y="96" class="m" font-size="6.6" text-anchor="middle">是否通过</text>
-    <line x1="410" y1="61" x2="423" y2="61" class="arrow" marker-end="url(#lake-lead-arrow)"/>
-    <rect x="425" y="42" width="118" height="38" class="box"/>
-    <text x="484" y="65" class="t mono" font-size="9.6" font-weight="800" text-anchor="middle">ISSUE</text>
-    <text x="484" y="96" class="m" font-size="6.6" text-anchor="middle">什么在重复</text>
-    <line x1="545" y1="61" x2="558" y2="61" class="arrow" marker-end="url(#lake-lead-arrow)"/>
-    <rect x="560" y="42" width="118" height="38" class="term"/>
-    <text x="619" y="65" class="t mono" font-size="9.6" font-weight="800" text-anchor="middle">FIX</text>
-    <text x="619" y="96" class="m" font-size="6.6" text-anchor="middle">改了什么</text>
-    <line x1="680" y1="61" x2="693" y2="61" class="arrow" marker-end="url(#lake-lead-arrow)"/>
-    <rect x="695" y="42" width="125" height="38" class="codebox"/>
-    <text x="757" y="65" class="t mono" font-size="9.6" font-weight="800" text-anchor="middle">EVIDENCE</text>
-    <text x="757" y="96" class="m" font-size="6.6" text-anchor="middle">证明了什么</text>
-    <text x="420" y="117" class="f" font-size="6.4" text-anchor="middle" letter-spacing="0.6">每一步都写下一条记录 // 记录只有在 SCHEMA 站得住时才有用</text>
+    <text x="24" y="16" class="f" font-size="9" letter-spacing="1.1">一次执行 // 六件产物</text>
+    <text x="756" y="16" class="f" font-size="9" text-anchor="end" letter-spacing="1">证据链</text>
+    <line x1="24" y1="25" x2="756" y2="25" class="rule"/>
+    <rect x="24" y="40" width="114" height="44" class="term"/>
+    <text x="81" y="62" class="t mono" font-size="11.5" font-weight="800" text-anchor="middle">TRACE</text>
+    <text x="81" y="100" class="m" font-size="9" text-anchor="middle">发生了什么</text>
+    <line x1="140" y1="62" x2="146" y2="62" class="arrow" marker-end="url(#lake-lead-arrow)"/>
+    <rect x="148" y="40" width="114" height="44" class="box"/>
+    <text x="205" y="62" class="t mono" font-size="11.5" font-weight="800" text-anchor="middle">OUTCOME</text>
+    <text x="205" y="100" class="m" font-size="9" text-anchor="middle">是否重要</text>
+    <line x1="264" y1="62" x2="270" y2="62" class="arrow" marker-end="url(#lake-lead-arrow)"/>
+    <rect x="272" y="40" width="114" height="44" class="term"/>
+    <text x="329" y="62" class="t mono" font-size="11.5" font-weight="800" text-anchor="middle">EVAL</text>
+    <text x="329" y="100" class="m" font-size="9" text-anchor="middle">是否通过</text>
+    <line x1="388" y1="62" x2="394" y2="62" class="arrow" marker-end="url(#lake-lead-arrow)"/>
+    <rect x="396" y="40" width="114" height="44" class="box"/>
+    <text x="453" y="62" class="t mono" font-size="11.5" font-weight="800" text-anchor="middle">ISSUE</text>
+    <text x="453" y="100" class="m" font-size="9" text-anchor="middle">什么在重复</text>
+    <line x1="512" y1="62" x2="518" y2="62" class="arrow" marker-end="url(#lake-lead-arrow)"/>
+    <rect x="520" y="40" width="114" height="44" class="term"/>
+    <text x="577" y="62" class="t mono" font-size="11.5" font-weight="800" text-anchor="middle">FIX</text>
+    <text x="577" y="100" class="m" font-size="9" text-anchor="middle">改了什么</text>
+    <line x1="636" y1="62" x2="642" y2="62" class="arrow" marker-end="url(#lake-lead-arrow)"/>
+    <rect x="644" y="40" width="114" height="44" class="codebox"/>
+    <text x="701" y="62" class="t mono" font-size="11.5" font-weight="800" text-anchor="middle">EVIDENCE</text>
+    <text x="701" y="100" class="m" font-size="9" text-anchor="middle">证明了什么</text>
+    <text x="390" y="126" class="f" font-size="9" text-anchor="middle" letter-spacing="0.5">每一步都写下一笔记录 // 记录只有在 SCHEMA 站得住时才有用</text>
   </svg>
   </div>
   <p class="mfig-lead-note"><b>证据不等于合规。</b>Lake 为四个审核问题提供证据；管理体系决定这些答案是否可被接受。</p>
@@ -122,139 +124,120 @@ LangChain 的计算层，最容易理解成四种工作。在线评测器与 AI 
 
 真正重要的主张，不是每家公司都需要这五种工具，而是存储与计算共用同一套 schema。Lake 不是更大的日志存储。它是一套结构，把运营的废气变成证据。
 
-<figure class="mfig-fig">
+<figure class="mfig-fig mfig-fig-arch">
   <figcaption>
-    <span class="card-tag">架构 // 01</span>
+    <span class="card-tag">THE ARCHITECTURE // 01</span>
     <h3 class="mfig-fig-title">Lake 是一条管线，旁边有一道治理侧栏</h3>
     <p class="mfig-fig-sub">代理、工具、用户与 outcome 经过写入层；SmithDB 把执行记录与判断放在一起；计算把它们变成 issue、修正与测试。侧栏不在 lake 里，但每一个阶段都依赖它。</p>
   </figcaption>
   <div class="mfig-scroll">
-  <svg class="mfig-svg" viewBox="0 0 840 420" role="img" aria-labelledby="lake-f1-title lake-f1-desc">
+  <svg class="mfig-svg" viewBox="0 0 780 500" role="img" aria-labelledby="lake-f1-title lake-f1-desc">
     <title id="lake-f1-title">Agent lake 与治理侧栏的架构</title>
-    <desc id="lake-f1-desc">代理、工具、用户与 outcome 进入写入层，经过批处理、流式、脱敏、抽样、schema 检查与保留策略。Trace 与 outcome 存储 SmithDB 持有 trace、thread、span、feedback 与 outcome。智能计算在存储之上运行在线评测、AI Search、Insights、Engine 与 SmithTune。结果变成有标签的部署，生产执行再经由反馈回路成为新证据。侧栏列出政策、角色、风险登记册、数据溯源、人工监督与纠正措施，这些治理元素在 lake 之外。</desc>
+    <desc id="lake-f1-desc">代理、工具、用户与 outcome 进入写入层，经过批处理、流式、脱敏、抽样、schema 检查与保留策略。SmithDB 持有 trace、thread、span、feedback 与 outcome。智能计算在存储之上运行在线评测、AI Search、Insights、Engine 与 SmithTune。结果变成有标签的部署，生产执行再经由反馈回路成为新证据。右侧的垂直治理侧栏列出政策、角色、风险登记册、数据溯源、人工监督与纠正措施，这些元素在 lake 之外、审核之内。</desc>
     <defs>
       <marker id="lake-f1-arrow" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-ink)"/></marker>
     </defs>
-    <text x="24" y="18" class="f" font-size="7.5" letter-spacing="1.2">AGENT LAKE // TRACE + OUTCOME + 计算</text>
-    <text x="816" y="18" class="f" font-size="7.5" text-anchor="end" letter-spacing="1">是证据，不是合规</text>
-    <line x1="24" y1="26" x2="816" y2="26" class="rule"/>
-    <text x="24" y="44" class="f" font-size="6.6" letter-spacing="0.8">来源</text>
-    <rect x="24" y="52" width="104" height="48" class="box"/>
-    <text x="34" y="68" class="f" font-size="6.2" letter-spacing="0.6">代理</text>
-    <text x="34" y="84" class="t" font-size="8.6" font-weight="800">执行</text>
-    <text x="34" y="95" class="m" font-size="6.2">计划 · thread</text>
-    <rect x="24" y="108" width="104" height="48" class="term"/>
-    <text x="34" y="124" class="f" font-size="6.2" letter-spacing="0.6">工具</text>
-    <text x="34" y="140" class="t" font-size="8.6" font-weight="800">调用</text>
-    <text x="34" y="151" class="m" font-size="6.2">副作用</text>
-    <rect x="24" y="164" width="104" height="48" class="box"/>
-    <text x="34" y="180" class="f" font-size="6.2" letter-spacing="0.6">用户</text>
-    <text x="34" y="196" class="t" font-size="8.6" font-weight="800">反馈</text>
-    <text x="34" y="207" class="m" font-size="6.2">审批</text>
-    <rect x="24" y="220" width="104" height="48" class="term"/>
-    <text x="34" y="236" class="f" font-size="6.2" letter-spacing="0.6">OUTCOME</text>
-    <text x="34" y="252" class="t" font-size="8.6" font-weight="800">影响</text>
-    <text x="34" y="263" class="m" font-size="6.2">PR · 分数 · 标注</text>
-    <line x1="128" y1="76" x2="136" y2="76" class="rule-soft"/>
-    <line x1="128" y1="132" x2="136" y2="132" class="rule-soft"/>
-    <line x1="128" y1="188" x2="136" y2="188" class="rule-soft"/>
-    <line x1="128" y1="244" x2="136" y2="244" class="rule-soft"/>
-    <line x1="136" y1="76" x2="136" y2="244" class="rule-soft"/>
-    <line x1="136" y1="160" x2="148" y2="160" class="arrow" marker-end="url(#lake-f1-arrow)"/>
-    <rect x="150" y="52" width="104" height="216" class="codebox"/>
-    <text x="162" y="70" class="f" font-size="6.4" letter-spacing="0.6">写入</text>
-    <text x="162" y="84" class="t mono" font-size="7.6" font-weight="800">OTEL / SDK</text>
-    <line x1="162" y1="92" x2="242" y2="92" class="rule-soft"/>
-    <text x="162" y="108" class="m" font-size="7.2">批处理</text>
-    <text x="162" y="121" class="m" font-size="7.2">流式</text>
-    <line x1="162" y1="130" x2="242" y2="130" class="rule-soft"/>
-    <text x="162" y="146" class="m" font-size="7.2">脱敏</text>
-    <text x="162" y="159" class="m" font-size="7.2">抽样</text>
-    <line x1="162" y1="168" x2="242" y2="168" class="rule-soft"/>
-    <text x="162" y="184" class="m" font-size="7.2">SCHEMA</text>
-    <text x="162" y="197" class="m" font-size="7.2">检查</text>
-    <line x1="162" y1="206" x2="242" y2="206" class="rule-soft"/>
-    <text x="162" y="222" class="m" font-size="7.2">保留</text>
-    <text x="162" y="235" class="m" font-size="7.2">政策</text>
-    <text x="162" y="256" class="f" font-size="6.2">单一入口</text>
-    <line x1="254" y1="160" x2="264" y2="160" class="arrow" marker-end="url(#lake-f1-arrow)"/>
-    <rect x="266" y="52" width="148" height="216" class="term"/>
-    <text x="278" y="70" class="f" font-size="6.4" letter-spacing="0.6">TRACE + OUTCOME 存储</text>
-    <text x="278" y="88" class="t mono" font-size="11" font-weight="800">SmithDB</text>
-    <line x1="278" y1="96" x2="402" y2="96" class="rule-soft"/>
-    <text x="278" y="112" class="m" font-size="7.2">trace</text>
-    <text x="278" y="127" class="m" font-size="7.2">thread</text>
-    <text x="278" y="142" class="m" font-size="7.2">span</text>
-    <text x="278" y="157" class="m" font-size="7.2">feedback</text>
-    <text x="278" y="172" class="m" font-size="7.2">outcome</text>
-    <line x1="278" y1="182" x2="402" y2="182" class="rule-soft"/>
-    <text x="278" y="198" class="f" font-size="6.2">仅附加</text>
-    <text x="278" y="210" class="f" font-size="6.2">高基数</text>
-    <text x="278" y="222" class="f" font-size="6.2">trace 形状的 schema</text>
-    <text x="278" y="244" class="m" font-size="6.2">每月数十亿次执行</text>
-    <text x="278" y="256" class="f" font-size="5.8">LANGCHAIN 说法</text>
-    <line x1="414" y1="160" x2="428" y2="160" class="arrow" marker-end="url(#lake-f1-arrow)"/>
-    <rect x="430" y="52" width="174" height="216" class="box"/>
-    <text x="442" y="70" class="f" font-size="6.4" letter-spacing="0.6">智能计算</text>
-    <text x="442" y="88" class="t" font-size="8.2" font-weight="800">在线评测</text>
-    <text x="442" y="99" class="m" font-size="6.2">幻觉 · 毒性</text>
-    <line x1="442" y1="106" x2="592" y2="106" class="rule-soft"/>
-    <text x="442" y="122" class="t" font-size="8.2" font-weight="800">AI SEARCH</text>
-    <text x="442" y="133" class="m" font-size="6.2">自然语言查询</text>
-    <line x1="442" y1="140" x2="592" y2="140" class="rule-soft"/>
-    <text x="442" y="156" class="t" font-size="8.2" font-weight="800">INSIGHTS</text>
-    <text x="442" y="167" class="m" font-size="6.2">流量聚类</text>
-    <line x1="442" y1="174" x2="592" y2="174" class="rule-soft"/>
-    <text x="442" y="190" class="t" font-size="8.2" font-weight="800">ENGINE</text>
-    <text x="442" y="201" class="m" font-size="6.2">issue → 根因 → PR</text>
-    <line x1="442" y1="208" x2="592" y2="208" class="rule-soft"/>
-    <text x="442" y="224" class="t" font-size="8.2" font-weight="800">SMITHTUNE</text>
-    <text x="442" y="235" class="m" font-size="6.2">最佳轨迹</text>
-    <text x="442" y="254" class="f" font-size="6.2">决策模型让筛选</text>
-    <text x="442" y="264" class="f" font-size="6.2">变得便宜</text>
-    <line x1="604" y1="120" x2="618" y2="120" class="arrow" marker-end="url(#lake-f1-arrow)"/>
-    <rect x="620" y="52" width="76" height="108" class="codebox"/>
-    <text x="630" y="70" class="f" font-size="6.2" letter-spacing="0.6">部署</text>
-    <text x="630" y="90" class="t" font-size="11" font-weight="800">v+1</text>
-    <text x="630" y="106" class="m" font-size="6.2">已标记</text>
-    <text x="630" y="119" class="m" font-size="6.2">已审查</text>
-    <text x="630" y="132" class="m" font-size="6.2">可回滚</text>
-    <text x="630" y="148" class="f" font-size="5.8">审批关卡</text>
-    <line x1="658" y1="160" x2="658" y2="170" class="arrow" marker-end="url(#lake-f1-arrow)"/>
-    <rect x="620" y="172" width="76" height="96" class="box"/>
-    <text x="630" y="190" class="f" font-size="6.2" letter-spacing="0.6">生产环境</text>
-    <text x="630" y="210" class="t" font-size="8.2" font-weight="800">新执行</text>
-    <text x="630" y="226" class="m" font-size="6.2">新 trace</text>
-    <text x="630" y="239" class="m" font-size="6.2">新 outcome</text>
-    <text x="630" y="258" class="f" font-size="6.2">下一轮</text>
-    <path d="M658 268 V300 H340 V270" class="arrow" fill="none" marker-end="url(#lake-f1-arrow)"/>
-    <text x="500" y="316" class="f" font-size="6.2" text-anchor="middle" letter-spacing="0.6">新的执行会变成新的证据</text>
-    <rect x="712" y="52" width="104" height="216" class="dash"/>
-    <text x="724" y="70" class="f" font-size="6.4" letter-spacing="0.6">治理</text>
-    <text x="724" y="83" class="t mon" font-size="7.4" font-weight="800">证据侧栏</text>
-    <line x1="724" y1="91" x2="804" y2="91" class="rule-soft"/>
-    <text x="724" y="107" class="m" font-size="6.6">政策</text>
-    <text x="724" y="125" class="m" font-size="6.6">角色</text>
-    <text x="724" y="143" class="m" font-size="6.6">风险登记册</text>
-    <text x="724" y="161" class="m" font-size="6.6">数据溯源</text>
-    <text x="724" y="179" class="m" font-size="6.6">人工监督</text>
-    <text x="724" y="197" class="m" font-size="6.6">纠正措施</text>
-    <line x1="724" y1="207" x2="804" y2="207" class="rule-soft"/>
-    <text x="724" y="223" class="f" font-size="6.2">在 lake 之外，</text>
-    <text x="724" y="235" class="f" font-size="6.2">在审核之内</text>
-    <text x="724" y="254" class="f" font-size="6.2">适用于</text>
-    <text x="724" y="264" class="f" font-size="6.2">每个阶段</text>
-    <line x1="24" y1="332" x2="816" y2="332" class="rule"/>
-    <text x="24" y="350" class="f" font-size="6.2" letter-spacing="0.8">LAKE 证明什么</text>
-    <text x="24" y="366" class="t" font-size="7.8" font-weight="800">执行 + outcome</text>
-    <text x="24" y="379" class="m" font-size="6.2">以稳定 ID 关联</text>
-    <text x="300" y="350" class="f" font-size="6.2" letter-spacing="0.8">侧栏补上什么</text>
-    <text x="300" y="366" class="t" font-size="7.8" font-weight="800">权限 + 风险 + 纠正</text>
-    <text x="300" y="379" class="m" font-size="6.2">lake 无法做的决定</text>
-    <text x="576" y="350" class="f" font-size="6.2" letter-spacing="0.8">审核问什么</text>
-    <text x="576" y="366" class="t" font-size="7.8" font-weight="800">允许 · 有效 · 做了什么 · 改进</text>
-    <text x="576" y="379" class="m" font-size="6.2">四个问题，四种证据</text>
-    <text x="420" y="404" class="f" font-size="6.2" text-anchor="middle" letter-spacing="0.5">TRACE 证明活动 // OUTCOME 证明关联 // 管理体系证明权限</text>
+    <text x="24" y="18" class="f" font-size="9" letter-spacing="1.1">AGENT LAKE // TRACE + OUTCOME + 计算</text>
+    <text x="600" y="18" class="f" font-size="9" text-anchor="end" letter-spacing="1">是证据，不是合规</text>
+    <line x1="24" y1="27" x2="600" y2="27" class="rule"/>
+    <line x1="616" y1="27" x2="756" y2="27" class="rule"/>
+    <text x="24" y="48" class="f" font-size="8.5" letter-spacing="0.8">来源</text>
+    <rect x="24" y="56" width="138" height="58" class="box"/>
+    <text x="34" y="74" class="f" font-size="8.5" letter-spacing="0.5">代理</text>
+    <text x="34" y="93" class="t" font-size="12.5" font-weight="800">执行</text>
+    <text x="34" y="107" class="m" font-size="9.5">计划 · thread</text>
+    <rect x="170" y="56" width="138" height="58" class="term"/>
+    <text x="180" y="74" class="f" font-size="8.5" letter-spacing="0.5">工具</text>
+    <text x="180" y="93" class="t" font-size="12.5" font-weight="800">调用</text>
+    <text x="180" y="107" class="m" font-size="9.5">副作用</text>
+    <rect x="316" y="56" width="138" height="58" class="box"/>
+    <text x="326" y="74" class="f" font-size="8.5" letter-spacing="0.5">用户</text>
+    <text x="326" y="93" class="t" font-size="12.5" font-weight="800">反馈</text>
+    <text x="326" y="107" class="m" font-size="9.5">审批</text>
+    <rect x="462" y="56" width="138" height="58" class="term"/>
+    <text x="472" y="74" class="f" font-size="8.5" letter-spacing="0.5">OUTCOME</text>
+    <text x="472" y="93" class="t" font-size="12.5" font-weight="800">影响</text>
+    <text x="472" y="107" class="m" font-size="9.5">PR · 分数 · 标注</text>
+    <line x1="93" y1="114" x2="93" y2="121" class="rule-soft"/>
+    <line x1="239" y1="114" x2="239" y2="121" class="rule-soft"/>
+    <line x1="385" y1="114" x2="385" y2="121" class="rule-soft"/>
+    <line x1="531" y1="114" x2="531" y2="121" class="rule-soft"/>
+    <line x1="93" y1="121" x2="531" y2="121" class="rule-soft"/>
+    <line x1="312" y1="121" x2="312" y2="130" class="arrow" marker-end="url(#lake-f1-arrow)"/>
+    <rect x="24" y="130" width="576" height="64" class="codebox"/>
+    <text x="36" y="148" class="f" font-size="9" letter-spacing="0.6">写入 // 单一入口</text>
+    <text x="36" y="171" class="t" font-size="11" font-weight="600">批处理 · 流式 · 脱敏 · 抽样 · SCHEMA 检查 · 保留策略</text>
+    <line x1="312" y1="194" x2="312" y2="202" class="rule-soft"/>
+    <line x1="139" y1="202" x2="383" y2="202" class="rule-soft"/>
+    <line x1="139" y1="202" x2="139" y2="210" class="arrow" marker-end="url(#lake-f1-arrow)"/>
+    <line x1="383" y1="202" x2="383" y2="210" class="arrow" marker-end="url(#lake-f1-arrow)"/>
+    <rect x="24" y="210" width="230" height="182" class="term"/>
+    <text x="36" y="230" class="f" font-size="9" letter-spacing="0.6">TRACE + OUTCOME 存储</text>
+    <text x="36" y="256" class="t mono" font-size="16" font-weight="800">SmithDB</text>
+    <line x1="36" y1="266" x2="242" y2="266" class="rule-soft"/>
+    <text x="36" y="286" class="m" font-size="11">trace</text>
+    <text x="36" y="306" class="m" font-size="11">thread</text>
+    <text x="36" y="326" class="m" font-size="11">span</text>
+    <text x="142" y="286" class="m" font-size="11">feedback</text>
+    <text x="142" y="306" class="m" font-size="11">outcome</text>
+    <line x1="36" y1="340" x2="242" y2="340" class="rule-soft"/>
+    <text x="36" y="356" class="m" font-size="9.5">仅附加 · 高基数</text>
+    <text x="36" y="370" class="m" font-size="9.5">trace 形状的 schema</text>
+    <text x="36" y="383" class="f" font-size="8.5">每月数十亿次执行 · LANGCHAIN 说法</text>
+    <rect x="266" y="210" width="226" height="182" class="box"/>
+    <text x="278" y="230" class="f" font-size="9" letter-spacing="0.6">智能计算</text>
+    <text x="278" y="252" class="t" font-size="11" font-weight="800">在线评测</text>
+    <text x="278" y="264" class="m" font-size="9.5">幻觉 · 毒性</text>
+    <text x="278" y="282" class="t" font-size="11" font-weight="800">AI SEARCH</text>
+    <text x="278" y="294" class="m" font-size="9.5">自然语言查询</text>
+    <text x="278" y="312" class="t" font-size="11" font-weight="800">INSIGHTS</text>
+    <text x="278" y="324" class="m" font-size="9.5">流量聚类</text>
+    <text x="278" y="342" class="t" font-size="11" font-weight="800">ENGINE</text>
+    <text x="278" y="354" class="m" font-size="9.5">issue → 根因 → PR</text>
+    <text x="278" y="372" class="t" font-size="11" font-weight="800">SMITHTUNE</text>
+    <text x="278" y="384" class="m" font-size="9.5">最佳轨迹</text>
+    <line x1="256" y1="300" x2="264" y2="300" class="arrow" marker-end="url(#lake-f1-arrow)"/>
+    <line x1="494" y1="300" x2="502" y2="300" class="arrow" marker-end="url(#lake-f1-arrow)"/>
+    <rect x="504" y="210" width="96" height="102" class="codebox"/>
+    <text x="524" y="230" class="f" font-size="9" letter-spacing="0.6">部署</text>
+    <text x="524" y="254" class="t" font-size="15" font-weight="800">v+1</text>
+    <text x="524" y="270" class="m" font-size="9.5">已标记</text>
+    <text x="524" y="282" class="m" font-size="9.5">已审查</text>
+    <text x="524" y="294" class="m" font-size="9.5">可回滚</text>
+    <text x="524" y="306" class="m" font-size="8.5">审批关卡</text>
+    <line x1="552" y1="312" x2="552" y2="322" class="arrow" marker-end="url(#lake-f1-arrow)"/>
+    <rect x="504" y="322" width="96" height="70" class="box"/>
+    <text x="524" y="340" class="f" font-size="9" letter-spacing="0.6">生产环境</text>
+    <text x="524" y="362" class="t" font-size="11" font-weight="800">新执行</text>
+    <text x="524" y="376" class="m" font-size="9.5">新 trace</text>
+    <text x="524" y="388" class="m" font-size="9.5">新 outcome</text>
+    <path d="M552 392 V412 H139 V394" class="arrow" fill="none" marker-end="url(#lake-f1-arrow)"/>
+    <text x="340" y="428" class="f" font-size="9.5" text-anchor="middle" letter-spacing="0.6">新的执行会变成新的证据</text>
+    <rect x="616" y="40" width="140" height="372" class="dash"/>
+    <text x="628" y="60" class="f" font-size="8.5" letter-spacing="0.8">治理</text>
+    <text x="628" y="78" class="t mono" font-size="11" font-weight="800">证据侧栏</text>
+    <line x1="628" y1="86" x2="744" y2="86" class="rule-soft"/>
+    <text x="628" y="102" class="f" font-size="8.5">在 LAKE 之外</text>
+    <text x="628" y="114" class="f" font-size="8.5">在审核之内</text>
+    <text x="628" y="140" class="m" font-size="10.5">政策</text>
+    <text x="628" y="176" class="m" font-size="10.5">角色</text>
+    <text x="628" y="212" class="m" font-size="10.5">风险登记册</text>
+    <text x="628" y="248" class="m" font-size="10.5">数据溯源</text>
+    <text x="628" y="284" class="m" font-size="10.5">人工监督</text>
+    <text x="628" y="320" class="m" font-size="10.5">纠正措施</text>
+    <line x1="628" y1="338" x2="744" y2="338" class="rule-soft"/>
+    <text x="628" y="358" class="f" font-size="8.5">适用于每一个阶段</text>
+    <text x="628" y="370" class="f" font-size="8.5">不存在 trace 存储里</text>
+    <line x1="24" y1="440" x2="756" y2="440" class="rule"/>
+    <text x="24" y="458" class="f" font-size="8.5" letter-spacing="0.8">LAKE 证明什么</text>
+    <text x="24" y="474" class="t" font-size="11" font-weight="800">执行 + outcome</text>
+    <text x="24" y="488" class="m" font-size="9.5">以稳定 ID 关联</text>
+    <text x="280" y="458" class="f" font-size="8.5" letter-spacing="0.8">侧栏补上什么</text>
+    <text x="280" y="474" class="t" font-size="11" font-weight="800">权限 + 风险 + 纠正</text>
+    <text x="280" y="488" class="m" font-size="9.5">lake 无法做的决定</text>
+    <text x="536" y="458" class="f" font-size="8.5" letter-spacing="0.8">审核问什么</text>
+    <text x="536" y="474" class="t" font-size="11" font-weight="800">允许 · 有效 · 做了什么 · 改进</text>
+    <text x="536" y="488" class="m" font-size="9.5">四个问题，四种证据</text>
   </svg>
   </div>
   <p class="mfig-fig-src">TRACE + OUTCOME · SMITHDB · 计算 · 部署 · 治理侧栏</p>
@@ -299,118 +282,107 @@ PDCA 循环是证据与管理交汇的地方。规划涵盖范围、政策、角
 
 LangChain 附录里的控制对照，是把控制连到产物的好例子：Fleet 配置对应 A.6.2.2，工具审批对应 A.6.2.3 与 A.9.3，数据集版本与溯源对应 A.7.2 与 A.7.5，实验对应 A.6.2.4，trace 对应 A.6.2.8，在线评测与告警对应 A.6.2.6 与条文 9.1，Engine 对应条文 10.1 与 10.2。这张对照表是 LangChain 的，不是审核员的。产物是否真的满足一项控制，由审核员判定。博客里的一张表，是关于适用性的主张，不是适用性的证明。但小心使用的话，这张表显示了一个真正的证据计划的形状：每一项控制都应该指向一件产物、一位负责人、一个测试。
 
-<figure class="mfig-fig">
+<figure class="mfig-fig mfig-fig-arch">
   <figcaption>
     <span class="card-tag">证据地图 // 02</span>
     <h3 class="mfig-fig-title">四个问题、一个管理循环，以及夹在中间的产物</h3>
     <p class="mfig-fig-sub">每个审核问题对应一种证据类别，也对应规划－执行－检查－行动循环的一个阶段。产物来自 lake；政策、角色、影响评估、风险接受与管理评审则不是。</p>
   </figcaption>
   <div class="mfig-scroll">
-  <svg class="mfig-svg" viewBox="0 0 840 420" role="img" aria-labelledby="lake-f2-title lake-f2-desc">
+  <svg class="mfig-svg" viewBox="0 0 780 524" role="img" aria-labelledby="lake-f2-title lake-f2-desc">
     <title id="lake-f2-title">ISO/IEC 42001 证据地图</title>
     <desc id="lake-f2-desc">四个审核问题——允许、有效、做了什么、改进——分别对应权限与提示词标签、版本化评测与溯源、trace 与审批，以及 issue 与回归测试。每一列也对应规划、执行、检查或行动阶段，以及附录 A 条文。政策、角色、影响评估、风险接受、内部审核与管理评审，位在 lake 之外、管理体系之内。</desc>
     <defs>
       <marker id="lake-f2-arrow" viewBox="0 0 5 5" refX="4.4" refY="2.5" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L5 2.5 L0 5 z" fill="var(--mono-ink)"/></marker>
     </defs>
-    <text x="24" y="18" class="f" font-size="7.5" letter-spacing="1.2">ISO/IEC 42001 // 证据地图</text>
-    <text x="816" y="18" class="f" font-size="7.5" text-anchor="end" letter-spacing="1">四个问题 // 一个循环</text>
-    <line x1="24" y1="26" x2="816" y2="26" class="rule"/>
-    <rect x="24" y="46" width="184" height="62" class="term"/>
-    <text x="36" y="62" class="f" font-size="6.2" letter-spacing="0.6">Q1 // 允许</text>
-    <text x="36" y="80" class="t" font-size="9.6" font-weight="800">它可以做什么？</text>
-    <text x="36" y="94" class="m" font-size="6.2">权限与监督</text>
-    <rect x="216" y="46" width="236" height="62" class="box"/>
-    <text x="228" y="62" class="f" font-size="6.2" letter-spacing="0.6">证据</text>
-    <text x="228" y="78" class="m" font-size="6.4">工作区权限</text>
-    <text x="228" y="90" class="m" font-size="6.4">凭证模型 · Auto / Ask</text>
-    <text x="228" y="102" class="m" font-size="6.4">提示词标签 · 审批者</text>
-    <rect x="460" y="46" width="92" height="62" class="codebox"/>
-    <text x="470" y="62" class="f" font-size="6.2" letter-spacing="0.6">附录 A</text>
-    <text x="470" y="78" class="t mono" font-size="6.6">A.6.2.2</text>
-    <text x="470" y="90" class="t mono" font-size="6.6">A.6.2.3</text>
-    <text x="470" y="102" class="f" font-size="6.0">规划</text>
-    <rect x="24" y="114" width="184" height="62" class="box"/>
-    <text x="36" y="130" class="f" font-size="6.2" letter-spacing="0.6">Q2 // 有效</text>
-    <text x="36" y="148" class="t" font-size="9.6" font-weight="800">如何证明它有效？</text>
-    <text x="36" y="162" class="m" font-size="6.2">验证与确认</text>
-    <rect x="216" y="114" width="236" height="62" class="term"/>
-    <text x="228" y="130" class="f" font-size="6.2" letter-spacing="0.6">证据</text>
-    <text x="228" y="146" class="m" font-size="6.4">版本化数据集 · 固定评测器</text>
-    <text x="228" y="158" class="m" font-size="6.4">发布实验</text>
-    <text x="228" y="170" class="m" font-size="6.4">数据溯源 · 来源血缘</text>
-    <rect x="460" y="114" width="92" height="62" class="codebox"/>
-    <text x="470" y="130" class="f" font-size="6.2" letter-spacing="0.6">附录 A</text>
-    <text x="470" y="146" class="t mono" font-size="6.6">A.6.2.4</text>
-    <text x="470" y="158" class="t mono" font-size="6.6">A.7.2 · A.7.5</text>
-    <text x="470" y="170" class="f" font-size="6.0">执行 / 检查</text>
-    <rect x="24" y="182" width="184" height="62" class="term"/>
-    <text x="36" y="198" class="f" font-size="6.2" letter-spacing="0.6">Q3 // 做了什么</text>
-    <text x="36" y="216" class="t" font-size="9.6" font-weight="800">它做了什么？</text>
-    <text x="36" y="230" class="m" font-size="6.2">记录与监控</text>
-    <rect x="216" y="182" width="236" height="62" class="box"/>
-    <text x="228" y="198" class="f" font-size="6.2" letter-spacing="0.6">证据</text>
-    <text x="228" y="214" class="m" font-size="6.4">trace · 工具调用 · 错误</text>
-    <text x="228" y="226" class="m" font-size="6.4">审批 · 暂停 / 恢复</text>
-    <text x="228" y="238" class="m" font-size="6.4">评测反馈 · 更正</text>
-    <rect x="460" y="182" width="92" height="62" class="codebox"/>
-    <text x="470" y="198" class="f" font-size="6.2" letter-spacing="0.6">附录 A</text>
-    <text x="470" y="214" class="t mono" font-size="6.6">A.6.2.8</text>
-    <text x="470" y="226" class="t mono" font-size="6.6">条文 9.1</text>
-    <text x="470" y="238" class="f" font-size="6.0">检查</text>
-    <rect x="24" y="250" width="184" height="62" class="box"/>
-    <text x="36" y="266" class="f" font-size="6.2" letter-spacing="0.6">Q4 // 改进</text>
-    <text x="36" y="284" class="t" font-size="9.6" font-weight="800">如何改进它？</text>
-    <text x="36" y="298" class="m" font-size="6.2">纠正措施</text>
-    <rect x="216" y="250" width="236" height="62" class="term"/>
-    <text x="228" y="266" class="f" font-size="6.2" letter-spacing="0.6">证据</text>
-    <text x="228" y="282" class="m" font-size="6.4">issue · 根因分析</text>
-    <text x="228" y="294" class="m" font-size="6.4">PR · 回归测试</text>
-    <text x="228" y="306" class="m" font-size="6.4">有效性检查</text>
-    <rect x="460" y="250" width="92" height="62" class="codebox"/>
-    <text x="470" y="266" class="f" font-size="6.2" letter-spacing="0.6">条文</text>
-    <text x="470" y="282" class="t mono" font-size="6.6">10.1</text>
-    <text x="470" y="294" class="t mono" font-size="6.6">10.2</text>
-    <text x="470" y="306" class="f" font-size="6.0">行动</text>
-    <text x="24" y="334" class="f" font-size="6.2" letter-spacing="0.6">每一列是一项控制目标，不是一个功能。</text>
-    <text x="24" y="348" class="m" font-size="6.4">产物是必要的；是否充分，由管理体系决定。</text>
-    <text x="568" y="44" class="f" font-size="6.4" letter-spacing="0.6">管理体系 // PDCA</text>
-    <rect x="580" y="56" width="104" height="88" class="box"/>
-    <text x="592" y="74" class="f" font-size="6.4" letter-spacing="0.6">规划</text>
-    <text x="592" y="92" class="m" font-size="6.2">范围 · 政策</text>
-    <text x="592" y="104" class="m" font-size="6.2">角色</text>
-    <text x="592" y="116" class="m" font-size="6.2">风险 + 影响</text>
-    <text x="592" y="128" class="m" font-size="6.2">目标</text>
-    <line x1="684" y1="100" x2="698" y2="100" class="arrow" marker-end="url(#lake-f2-arrow)"/>
-    <rect x="700" y="56" width="104" height="88" class="term"/>
-    <text x="712" y="74" class="f" font-size="6.4" letter-spacing="0.6">执行</text>
-    <text x="712" y="92" class="m" font-size="6.2">生命周期</text>
-    <text x="712" y="104" class="m" font-size="6.2">数据处理</text>
-    <text x="712" y="116" class="m" font-size="6.2">运营</text>
-    <text x="712" y="128" class="m" font-size="6.2">控制</text>
-    <line x1="752" y1="144" x2="752" y2="160" class="arrow" marker-end="url(#lake-f2-arrow)"/>
-    <rect x="700" y="162" width="104" height="88" class="box"/>
-    <text x="712" y="180" class="f" font-size="6.4" letter-spacing="0.6">检查</text>
-    <text x="712" y="198" class="m" font-size="6.2">监控</text>
-    <text x="712" y="210" class="m" font-size="6.2">测量</text>
-    <text x="712" y="222" class="m" font-size="6.2">内部审核</text>
-    <text x="712" y="234" class="m" font-size="6.2">管理评审</text>
-    <line x1="698" y1="206" x2="686" y2="206" class="arrow" marker-end="url(#lake-f2-arrow)"/>
-    <rect x="580" y="162" width="104" height="88" class="term"/>
-    <text x="592" y="180" class="f" font-size="6.4" letter-spacing="0.6">行动</text>
-    <text x="592" y="198" class="m" font-size="6.2">不符合项</text>
-    <text x="592" y="210" class="m" font-size="6.2">纠正措施</text>
-    <text x="592" y="222" class="m" font-size="6.2">有效性</text>
-    <text x="592" y="234" class="m" font-size="6.2">改进</text>
-    <line x1="632" y1="162" x2="632" y2="146" class="arrow" marker-end="url(#lake-f2-arrow)"/>
-    <rect x="568" y="268" width="248" height="96" class="dash"/>
-    <text x="580" y="286" class="f" font-size="6.2" letter-spacing="0.6">LAKE 之外 // AIMS 之内</text>
-    <text x="580" y="304" class="m" font-size="6.4">政策 · 角色 · 责任</text>
-    <text x="580" y="318" class="m" font-size="6.4">影响评估 · 风险接受</text>
-    <text x="580" y="332" class="m" font-size="6.4">适用性声明</text>
-    <text x="580" y="346" class="m" font-size="6.4">内部审核 · 管理评审</text>
-    <text x="580" y="358" class="f" font-size="6.0">这些属于 AIMS，不属于 trace 存储</text>
-    <text x="568" y="386" class="f" font-size="6.2">TRACE 回答发生了什么。</text>
-    <text x="568" y="400" class="f" font-size="6.2">AIMS 回答谁有权做决定。</text>
+    <text x="24" y="18" class="f" font-size="9" letter-spacing="1.1">ISO/IEC 42001 // 证据地图</text>
+    <text x="756" y="18" class="f" font-size="9" text-anchor="end" letter-spacing="1">四个问题 // 一个循环</text>
+    <line x1="24" y1="27" x2="756" y2="27" class="rule"/>
+    <rect x="24" y="40" width="210" height="70" class="term"/>
+    <text x="36" y="56" class="f" font-size="8.5" letter-spacing="0.6">Q1 // 允许</text>
+    <text x="36" y="78" class="t" font-size="12.5" font-weight="800">它可以做什么？</text>
+    <text x="36" y="94" class="m" font-size="9.5">权限与监督</text>
+    <rect x="242" y="40" width="308" height="70" class="box"/>
+    <text x="256" y="56" class="f" font-size="8.5" letter-spacing="0.6">证据</text>
+    <text x="256" y="74" class="m" font-size="10.5">工作区权限</text>
+    <text x="256" y="89" class="m" font-size="10.5">凭证模型 · Auto / Ask</text>
+    <text x="256" y="104" class="m" font-size="10.5">提示词标签 · 审批者</text>
+    <rect x="558" y="40" width="104" height="70" class="codebox"/>
+    <text x="570" y="56" class="f" font-size="8.5" letter-spacing="0.6">附录 A</text>
+    <text x="570" y="78" class="t mono" font-size="10.5">A.6.2.2</text>
+    <text x="570" y="94" class="t mono" font-size="10.5">A.6.2.3</text>
+    <rect x="670" y="40" width="86" height="70" class="box"/>
+    <text x="682" y="56" class="f" font-size="8.5" letter-spacing="0.6">阶段</text>
+    <text x="682" y="86" class="t mono" font-size="11.5" font-weight="800">规划</text>
+    <rect x="24" y="118" width="210" height="70" class="box"/>
+    <text x="36" y="134" class="f" font-size="8.5" letter-spacing="0.6">Q2 // 有效</text>
+    <text x="36" y="156" class="t" font-size="12.5" font-weight="800">如何证明它有效？</text>
+    <text x="36" y="172" class="m" font-size="9.5">验证与确认</text>
+    <rect x="242" y="118" width="308" height="70" class="term"/>
+    <text x="256" y="134" class="f" font-size="8.5" letter-spacing="0.6">证据</text>
+    <text x="256" y="152" class="m" font-size="10.5">版本化数据集 · 固定评测器</text>
+    <text x="256" y="167" class="m" font-size="10.5">发布实验</text>
+    <text x="256" y="182" class="m" font-size="10.5">数据溯源 · 来源血缘</text>
+    <rect x="558" y="118" width="104" height="70" class="codebox"/>
+    <text x="570" y="134" class="f" font-size="8.5" letter-spacing="0.6">附录 A</text>
+    <text x="570" y="156" class="t mono" font-size="10.5">A.6.2.4</text>
+    <text x="570" y="172" class="t mono" font-size="10.5">A.7.2 · A.7.5</text>
+    <rect x="670" y="118" width="86" height="70" class="term"/>
+    <text x="682" y="134" class="f" font-size="8.5" letter-spacing="0.6">阶段</text>
+    <text x="682" y="164" class="t mono" font-size="11.5" font-weight="800">执行 · 检查</text>
+    <rect x="24" y="196" width="210" height="70" class="term"/>
+    <text x="36" y="212" class="f" font-size="8.5" letter-spacing="0.6">Q3 // 做了什么</text>
+    <text x="36" y="234" class="t" font-size="12.5" font-weight="800">它做了什么？</text>
+    <text x="36" y="250" class="m" font-size="9.5">记录与监控</text>
+    <rect x="242" y="196" width="308" height="70" class="box"/>
+    <text x="256" y="212" class="f" font-size="8.5" letter-spacing="0.6">证据</text>
+    <text x="256" y="230" class="m" font-size="10.5">trace · 工具调用 · 错误</text>
+    <text x="256" y="245" class="m" font-size="10.5">审批 · 暂停 / 恢复</text>
+    <text x="256" y="260" class="m" font-size="10.5">评测反馈 · 更正</text>
+    <rect x="558" y="196" width="104" height="70" class="codebox"/>
+    <text x="570" y="212" class="f" font-size="8.5" letter-spacing="0.6">附录 A</text>
+    <text x="570" y="234" class="t mono" font-size="10.5">A.6.2.8</text>
+    <text x="570" y="250" class="t mono" font-size="10.5">条文 9.1</text>
+    <rect x="670" y="196" width="86" height="70" class="box"/>
+    <text x="682" y="212" class="f" font-size="8.5" letter-spacing="0.6">阶段</text>
+    <text x="682" y="242" class="t mono" font-size="11.5" font-weight="800">检查</text>
+    <rect x="24" y="274" width="210" height="70" class="box"/>
+    <text x="36" y="290" class="f" font-size="8.5" letter-spacing="0.6">Q4 // 改进</text>
+    <text x="36" y="312" class="t" font-size="12.5" font-weight="800">如何改进它？</text>
+    <text x="36" y="328" class="m" font-size="9.5">纠正措施</text>
+    <rect x="242" y="274" width="308" height="70" class="term"/>
+    <text x="256" y="290" class="f" font-size="8.5" letter-spacing="0.6">证据</text>
+    <text x="256" y="308" class="m" font-size="10.5">issue · 根因分析</text>
+    <text x="256" y="323" class="m" font-size="10.5">PR · 回归测试</text>
+    <text x="256" y="338" class="m" font-size="10.5">有效性检查</text>
+    <rect x="558" y="274" width="104" height="70" class="codebox"/>
+    <text x="570" y="290" class="f" font-size="8.5" letter-spacing="0.6">附录 A</text>
+    <text x="570" y="312" class="t mono" font-size="10.5">10.1</text>
+    <text x="570" y="328" class="t mono" font-size="10.5">10.2</text>
+    <rect x="670" y="274" width="86" height="70" class="term"/>
+    <text x="682" y="290" class="f" font-size="8.5" letter-spacing="0.6">阶段</text>
+    <text x="682" y="320" class="t mono" font-size="11.5" font-weight="800">行动</text>
+    <text x="24" y="364" class="f" font-size="9" letter-spacing="0.6">管理体系 // PDCA</text>
+    <rect x="24" y="372" width="177" height="72" class="box"/>
+    <text x="36" y="392" class="f" font-size="9" letter-spacing="0.6">规划</text>
+    <text x="36" y="412" class="m" font-size="9.5">范围 · 政策 · 角色</text>
+    <text x="36" y="428" class="m" font-size="9.5">风险 + 影响 · 目标</text>
+    <rect x="209" y="372" width="177" height="72" class="term"/>
+    <text x="221" y="392" class="f" font-size="9" letter-spacing="0.6">执行</text>
+    <text x="221" y="412" class="m" font-size="9.5">生命周期 · 数据处理</text>
+    <text x="221" y="428" class="m" font-size="9.5">运营 · 控制</text>
+    <rect x="394" y="372" width="177" height="72" class="box"/>
+    <text x="406" y="392" class="f" font-size="9" letter-spacing="0.6">检查</text>
+    <text x="406" y="412" class="m" font-size="9.5">监控 · 测量</text>
+    <text x="406" y="428" class="m" font-size="9.5">内部审核 · 管理评审</text>
+    <rect x="579" y="372" width="177" height="72" class="term"/>
+    <text x="591" y="392" class="f" font-size="9" letter-spacing="0.6">行动</text>
+    <text x="591" y="412" class="m" font-size="9.5">不符合项</text>
+    <text x="591" y="428" class="m" font-size="9.5">纠正措施 · 有效性</text>
+    <line x1="24" y1="460" x2="756" y2="460" class="rule"/>
+    <text x="24" y="478" class="f" font-size="9.5">LAKE 之外，AIMS 之内：政策 · 角色 · 问责 · 影响评估</text>
+    <text x="24" y="492" class="f" font-size="9.5">风险接受 · 适用性声明 · 内部审核 · 管理评审</text>
+    <text x="24" y="510" class="t" font-size="10.5" font-weight="800">TRACE 回答发生了什么。AIMS 回答谁有权做决定。</text>
   </svg>
   </div>
   <p class="mfig-fig-src">允许 · 有效 · 做了什么 · 改进 · 规划 · 执行 · 检查 · 行动</p>
