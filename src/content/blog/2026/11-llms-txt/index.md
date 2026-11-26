@@ -66,3 +66,14 @@ Give an agent only your `llms.txt` and a real question. If it cannot choose the 
 ## The short version
 
 llms.txt is a table of contents for agents. It does not make a site authoritative, and it does not replace the pages themselves. It makes the first minute of an agent's visit cheaper and more accurate. That is a small, useful thing.
+
+## References
+
+- [The /llms.txt file, v2](https://llmstxt.org/) — the current proposal: format, examples, and adoption notes.
+- [Changes in v2](https://llmstxt.org/changes.html) — what changed since the September 2024 proposal, and why.
+- [/llms.txt—a proposal to provide information to help LLMs use websites](https://www.answer.ai/posts/2024-09-03-llmstxt.html) — Jeremy Howard's original Answer.AI announcement.
+- [OpenAI developer docs llms.txt](https://developers.openai.com/llms.txt) — a production index for a large documentation site.
+- [Anthropic docs llms.txt](https://docs.anthropic.com/llms.txt) — the Claude documentation index.
+- [Gemini API docs llms.txt](https://ai.google.dev/gemini-api/docs/llms.txt) — Google's Gemini API documentation index.
+- [RFC 9309: Robots Exclusion Protocol](https://www.rfc-editor.org/rfc/rfc9309.html) — the crawler-access standard that llms.txt is often compared with.
+- [Sitemaps XML format](https://www.sitemaps.org/protocol.html) — the indexing standard that llms.txt complements.

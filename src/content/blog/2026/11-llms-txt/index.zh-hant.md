@@ -66,3 +66,14 @@ Use the test keys in the sandbox. Production keys are issued after review.
 ## 短版結論
 
 llms.txt 是給代理看的目錄。它不會讓網站變得權威，也不會取代頁面本身。它只是讓代理拜訪網站的第一分鐘更便宜、更準確。這是一件很小、但很有用的事。
+
+## 參考資料
+
+- [The /llms.txt file, v2](https://llmstxt.org/) — 現行提案的格式、範例與採用情況。
+- [Changes in v2](https://llmstxt.org/changes.html) — 2024 年 9 月原始提案之後的變更與原因。
+- [/llms.txt—a proposal to provide information to help LLMs use websites](https://www.answer.ai/posts/2024-09-03-llmstxt.html) — Jeremy Howard 在 Answer.AI 的原始公告。
+- [OpenAI developer docs llms.txt](https://developers.openai.com/llms.txt) — 大型文件網站的實際索引。
+- [Anthropic docs llms.txt](https://docs.anthropic.com/llms.txt) — Claude 文件索引。
+- [Gemini API docs llms.txt](https://ai.google.dev/gemini-api/docs/llms.txt) — Google Gemini API 文件索引。
+- [RFC 9309: Robots Exclusion Protocol](https://www.rfc-editor.org/rfc/rfc9309.html) — 常與 llms.txt 對照的爬蟲存取標準。
+- [Sitemaps XML format](https://www.sitemaps.org/protocol.html) — 與 llms.txt 互補的索引標準。
