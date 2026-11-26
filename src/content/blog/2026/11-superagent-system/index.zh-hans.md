@@ -9,7 +9,7 @@ author: "Alex.Hsiao"
 readTime: "14 分钟"
 ---
 
-> **Agent.md** — [agent-readable file](/blog/2026/11-superagent-system/Agent.md)
+> **article.md** — [agent-readable file](/blog/2026/11-superagent-system/article.md)
 >
 > **English description.** `dsh-superagent` is a proactive coding agent for one GitHub repository, packaged as a bundle for DeepSeek Harness. It listens to GitHub and, optionally, Feishu. When an authorized person asks for work, it opens a work item, works on it in its own agent session and directory, and answers in the original conversation, for example with a pull request. ([source](https://github.com/deepseek-ai/dsh-superagent-prototype))
 >

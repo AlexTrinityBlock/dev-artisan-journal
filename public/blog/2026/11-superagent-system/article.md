@@ -1,4 +1,4 @@
-# Agent.md
+# Super-agent source note
 
 This file is the agent-readable source note for the article at `/blog/2026/11-superagent-system/`.
 
