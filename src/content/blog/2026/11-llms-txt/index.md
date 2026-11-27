@@ -63,10 +63,6 @@ For a small site, the cost is one file. The return is that an agent can find the
 
 Give an agent only your `llms.txt` and a real question. If it cannot choose the right link, the map is not clear enough. The source page suggests exactly this test. Keep the language concrete, describe each link, and avoid unexplained jargon.
 
-## The short version
-
-llms.txt is a table of contents for agents. It does not make a site authoritative, and it does not replace the pages themselves. It makes the first minute of an agent's visit cheaper and more accurate. That is a small, useful thing.
-
 ## References
 
 - [The /llms.txt file, v2](https://llmstxt.org/) — the current proposal: format, examples, and adoption notes.

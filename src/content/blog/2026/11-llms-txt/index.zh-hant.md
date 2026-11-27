@@ -63,10 +63,6 @@ Use the test keys in the sandbox. Production keys are issued after review.
 
 只給代理你的 `llms.txt`，再問它一個真實問題。如果它選不到正確的連結，地圖就不夠清楚。規格首頁建議的正是這個測試。用具體的語言、描述每一個連結、不要用沒有解釋的術語。
 
-## 短版結論
-
-llms.txt 是給代理看的目錄。它不會讓網站變得權威，也不會取代頁面本身。它只是讓代理拜訪網站的第一分鐘更便宜、更準確。這是一件很小、但很有用的事。
-
 ## 參考資料
 
 - [The /llms.txt file, v2](https://llmstxt.org/) — 現行提案的格式、範例與採用情況。
