@@ -50,6 +50,32 @@ The intellectual move is not that any one of these is new. Every item has a coun
 
 That framing explains why the article spends so little time on prompts. Prompts matter, but they are not the architecture. The architecture decides which events reach which context, who is allowed to start work, what happens when a worker dies, and how a human gets pulled back in only when a decision is needed.
 
+## The five objects
+
+The five modules describe the shape of the system. Its domain model names the things that actually move through it. Five objects carry every piece of work, and the Engine is the only writer of all five.
+
+| Object | What it is | What it owns / how it changes |
+| --- | --- | --- |
+| **Trigger** | One immutable event from a Source, with the Source's metadata such as its actor. | Belongs to one or more Threads. It is the unit of audit and of idempotence: accepting the same Trigger twice still creates one Ticket. |
+| **Thread** | Triggers in time order. The Source defines which Triggers form one Thread. | Holds its Subscriptions, the running Eval (at most one at a time), and its Decision history. |
+| **Decision** | The result of an Eval: `accept`, `stop`, `ignore`, or `unavailable`, with the reasons recorded. | `accept` creates the Ticket. `stop`, `ignore`, and `unavailable` end the evaluation and stay on the Thread as history. |
+| **Ticket** | The unit of authorized work. | Only an Eval creates one. It refers to a Mandate, holds its Channels and Inputs, and goes open → ended. A person's message on one of its Threads can resume it, unless a person stopped it. It owns execution and its reports. |
+| **Assignment** | The binding of a Ticket to one Executor instance. | A Ticket has several over time. An Assignment goes pending → running → ended independently of the Ticket, and only its final report may end the Ticket from the Executor's side. |
+
+Two other terms are not objects. A **Source** is the stream that produces Triggers and decides what counts as an event. An **Eval** is the judgement that turns a batch of Triggers into a Decision and keeps no state of its own. The path a human message takes runs through both.
+
+### Where a human message enters
+
+A person writes in GitHub or Feishu. The Source plugin normalizes the message into a Trigger and calls the Engine's `receive`. That call is the only way an event enters the domain.
+
+1. **Source → Trigger.** The Source decides the message is an event, attaches its own metadata such as the actor's identity, and hands it over. The Engine stores the Trigger once; a duplicate is answered without a second effect.
+2. **Fan-out to subscribed Tickets.** The Engine delivers the Trigger to every live Ticket subscribed to one of its Threads. A person's message that reaches a Ticket this way becomes an **Input** and stays with that Ticket; it does not enter Eval.
+3. **Otherwise, Eval on the primary Thread.** The Trigger joins that Thread's queue, and a Thread runs at most one Eval at a time. The gate checks who may originate work and with what strength; the main Session then assesses the candidate against the Policy.
+4. **Decision.** The Eval ends `accept`, `stop`, `ignore`, or `unavailable` and records its reasons. `accept` creates the Ticket; `stop` stops the work it names; `ignore` and `unavailable` start nothing.
+5. **Ticket, Mandate, and first Assignment.** An accept creates the Ticket, the Mandate it refers to, and the Ticket's first Assignment in one transaction. The Assignment binds the Ticket to one Executor instance, which runs it in its own Session and directory.
+
+Not every human action takes that path. **Stop, retry, attach, and unsubscribe are control commands**: they come through the main Session's tools or the panel and call Engine commands directly. That is why a person typing "stop" in a Thread is an ordinary Trigger for Eval to judge, while a stop in the panel acts on the Ticket at once. And once a Ticket has an Executor, a person can write directly in its Executor Session; that turn goes to the Executor and needs no Trigger.
+
 ## The router does not work; the workers do not speak
 
 The first module is the cleanest idea in the piece.

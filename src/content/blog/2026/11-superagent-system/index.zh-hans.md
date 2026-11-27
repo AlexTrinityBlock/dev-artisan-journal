@@ -50,6 +50,32 @@ DeepSeek Harness 团队的文章〈Super-agent 设计探索：迈向更自主的
 
 这也解释了为什么文章花很少篇幅谈 prompt。Prompt 重要，但它不是架构。架构决定哪个事件会进到哪个 context、谁有权开始工作、worker 死掉时怎么办，以及人什么时候才需要被拉回来做决定。
 
+## 五个对象
+
+五个模块描述系统的形状；domain model 则命名真正在系统里流动的东西。所有工作都由五个对象承载，而这五个对象只有一个写入者：Engine。
+
+| 对象 | 它是什么 | 它拥有什么／如何变化 |
+| --- | --- | --- |
+| **Trigger**（触发） | 来自 Source 的单个不可变事件，带着 Source 自己的 metadata，例如 actor。 | 属于一条或多条 Thread。它是审计与 idempotence 的单位：同一个 Trigger 被接受两次，仍然只创建一个 Ticket。 |
+| **Thread**（线程） | 按时间顺序排列的 Triggers。哪些 Triggers 构成同一条 Thread，由 Source 决定。 | 持有它的 Subscriptions、当前运行的 Eval（同一时间最多一个），以及 Decision 历史。 |
+| **Decision**（决策） | Eval 的结果：`accept`、`stop`、`ignore` 或 `unavailable`，并记录理由。 | `accept` 创建 Ticket；其余结果结束这次评估，只留在 Thread 上作为记录。 |
+| **Ticket**（工单） | 授权工作的单位。 | 只有 Eval 能创建。它引用一个 Mandate，持有自己的 Channels 与 Inputs，状态从 open → ended；除非人已将它停止，否则人在它某条 Thread 上的消息可以让它恢复。执行与报告归它所有。 |
+| **Assignment**（派工） | 把一张 Ticket 绑定到一个 Executor 实例。 | 一张 Ticket 先后会有多个 Assignment。Assignment 独立于 Ticket，从 pending → running → ended 变化；只有它的最终报告能从 Executor 这一侧结束 Ticket。 |
+
+另外两个词不是对象。**Source** 是产生 Triggers 的事件流，决定什么算一个事件；**Eval** 是把一批 Triggers 变成一个 Decision 的判断，本身不保留状态。人的消息走哪条路，正好由这两者决定。
+
+### 人的消息从哪里进来
+
+一个人在 GitHub 或 Feishu 写下消息。Source plugin 把它规范化成一个 Trigger，调用 Engine 的 `receive`。这个调用是事件进入 domain 的唯一入口。
+
+1. **Source → Trigger。** Source 判定这条消息是一个事件，附上自己的 metadata（例如 actor 的身份），交给 Engine。Engine 只存储 Trigger 一次；重复送来会直接回答，不会产生第二次效果。
+2. **扇出到订阅的 Tickets。** Engine 把 Trigger 送到每一张订阅了它其中一条 Thread 的 live Ticket。人的消息这样抵达 Ticket 时，会成为一笔 **Input** 并留在该 Ticket；它不进入 Eval。
+3. **否则，在 primary Thread 上进入 Eval。** Trigger 排进该 Thread 的队列；一条 Thread 同一时间最多运行一个 Eval。deterministic gate 先判断谁有权发起工作、强度为何；主 Session 再按 Policy 评估候选。
+4. **Decision。** Eval 以 `accept`、`stop`、`ignore` 或 `unavailable` 结束，并记下理由。`accept` 创建 Ticket；`stop` 停止它所指的工作；`ignore` 与 `unavailable` 不会开始任何工作。
+5. **Ticket、Mandate 与第一个 Assignment。** 一次 accept 在同一个事务里创建 Ticket、它所引用的 Mandate，以及这张 Ticket 的第一个 Assignment。Assignment 把 Ticket 绑定到一个 Executor 实例，后者在自己的 Session 与目录里执行它。
+
+不是每个人类动作都走这条路。**stop、retry、attach、unsubscribe 是控制命令**，不是事件：它们从主 Session 的工具或面板进来，直接调用 Engine 的命令。所以人在 Thread 里打「stop」只是普通 Trigger，要由 Eval 判断；在面板按 stop 则立刻作用于 Ticket。而 Ticket 一旦有了 Executor，人也可以直接在它的 Executor Session 里写消息；这一轮直接交给 Executor，不需要任何 Trigger。
+
 ## Router 不干活；Worker 不对外说话
 
 第一个模块是整篇文章里最干净的想法。
