@@ -208,8 +208,28 @@ A rough map:
 
 <figure class="fig">
   <img src="/images/superagent-system/dsh-superagent-architecture.webp" alt="Official dsh-superagent architecture diagram rendered from the repository's Mermaid source: source plugins, session tools, and management routes feed the Engine, which coordinates Store, Policy, SourceRegistry, MasterAssessor, DshExecutor, Outbox, and Effects" width="1600" height="1165" loading="lazy" />
-  <figcaption><b>Official diagram</b> — The prototype's core classes and glue, rendered from the repository's Mermaid source: source plugins, session tools, and management routes enter the Engine; the Engine coordinates Store, Policy, SourceRegistry, MasterAssessor, DshExecutor, and Outbox; asynchronous work is queued through Effects. Source: <a href="https://github.com/deepseek-ai/dsh-superagent-prototype/blob/main/docs/007-architecture.md">dsh-superagent-prototype, docs/007-architecture.md</a> · MIT</figcaption>
+  <figcaption><b>Official diagram</b> — The prototype's core classes and glue, rendered from the repository's Mermaid source: source plugins, session tools, and management routes enter the Engine; the Engine coordinates Store, Policy, SourceRegistry, MasterAssessor, DshExecutor, and Outbox; asynchronous work is queued through Effects. The table below explains each component's job. Source: <a href="https://github.com/deepseek-ai/dsh-superagent-prototype/blob/main/docs/007-architecture.md">dsh-superagent-prototype, docs/007-architecture.md</a> · MIT</figcaption>
 </figure>
+
+### What each component does
+
+| Component | What it does |
+| --- | --- |
+| **Source plugins** | Translate GitHub and Feishu events into Triggers and Thread facts, read thread context, and send messages back through the Source's channel. They reach the core only through `SourceHost` / `SourceContext`. |
+| **Session tools** | The tool adapters for the main Session and Executor Sessions. They turn model tool calls into Engine commands (candidate, decide, attach, note, status, assignment/report) and return compact cards or reads. |
+| **Management routes** | The same-origin `/orchestrator/api` HTTP routes behind the panel. They validate requests and limits, then call the Engine or read the Store. |
+| **Engine** | The single writer of Triggers, Threads, Decisions, Tickets, and Assignments (with their Mandates). It owns each command's transaction and delegates to Intake, Evals, Tickets, Assignments, and Replies. |
+| **Store** | One SQLite database: domain repositories, read queries, Source metadata, settings and history, outbox receipts, and typed KV. It stores state; it does not make policy decisions. |
+| **Policy** | The team's rules: admission gate, Mandate revalidation, assessment outcome, pause and timeout state, and the effects of a policy-version change on live Tickets. |
+| **SourceRegistry** | Owns registered Source kinds and instances, implements `SourceScope`, and provides channel send and link, thread context, search, health claims, and configuration validation. |
+| **MasterAssessor** | Runs the main Session's assessment of a proactive candidate: supplies bounded Thread and repository context, reads the model's judgment, and returns a Decision to the Engine. |
+| **DshExecutor** | The Executor port: one Session and directory per Ticket; prepares launches, delivers Inputs, manages worker slots, retries and cancellation, and reports assignment lifecycle back to the Engine. |
+| **Outbox** | The only writer of message receipts. It saves a message and its reply effect in one transaction, sends through the Source's channel, waits while the Source is off, and drops a message when its conversation is gone or not listened to. |
+| **Settings** | Revisioned settings blocks, pause state, setup fields, policy-version changes, and Source policy sync. A save declares its origin as panel, tool, or sync. |
+| **Sessions** | Manages DeepSeek Harness Sessions for the main Session and workers: creation, prompts, skills and tools registration, prompt versions, relays, notices, and model-retry state. |
+| **Effects** | The durable side-effect queue: one row per kind/key, handlers for assessment, launch, delivery, relay, notice, and reply, oldest-first execution, concurrency limits, exponential backoff, pause and drain, and health. |
+| **Runtime** *(not drawn)* | The composition root: locks the state directory, opens the Store, builds the parts with their ports, registers routes and the Source host, and owns startup and shutdown. |
+| **Panel** *(not drawn)* | The management UI: overview, stage pages, Threads and Tickets, settings, prompts, and health. It calls the management routes; it holds no domain rules. |
 
 The setup file is a nice detail. It is written for a coding agent, not a human: ask one question at a time, collect the answers, show one plan, then execute. It is the same philosophy as the Super-agent itself — minimize the operator's attention — applied to installation.
 

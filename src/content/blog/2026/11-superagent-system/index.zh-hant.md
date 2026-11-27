@@ -208,8 +208,28 @@ README 難得地坦白：
 
 <figure class="fig">
   <img src="/images/superagent-system/dsh-superagent-architecture.webp" alt="由儲存庫 Mermaid 原始碼渲染的 dsh-superagent 官方架構圖：來源外掛、Session 工具與管理路由進入 Engine，Engine 協調 Store、Policy、SourceRegistry、MasterAssessor、DshExecutor、Outbox 與 Effects" width="1600" height="1165" loading="lazy" />
-  <figcaption><b>官方圖示</b> — 原型的核心類別與膠水層，由儲存庫的 Mermaid 原始碼渲染：來源外掛、Session 工具與管理路由進入 Engine；Engine 協調 Store、Policy、SourceRegistry、MasterAssessor、DshExecutor 與 Outbox；非同步工作經由 Effects 排隊。來源：<a href="https://github.com/deepseek-ai/dsh-superagent-prototype/blob/main/docs/007-architecture.md">dsh-superagent-prototype，docs/007-architecture.md</a> · MIT</figcaption>
+  <figcaption><b>官方圖示</b> — 原型的核心類別與膠水層，由儲存庫的 Mermaid 原始碼渲染：來源外掛、Session 工具與管理路由進入 Engine；Engine 協調 Store、Policy、SourceRegistry、MasterAssessor、DshExecutor 與 Outbox；非同步工作經由 Effects 排隊。下方表格逐一說明每個元件的職責。來源：<a href="https://github.com/deepseek-ai/dsh-superagent-prototype/blob/main/docs/007-architecture.md">dsh-superagent-prototype，docs/007-architecture.md</a> · MIT</figcaption>
 </figure>
+
+### 每個元件做什麼
+
+| 元件 | 功能 |
+| --- | --- |
+| **Source plugins** | 把 GitHub 與 Feishu 事件轉成 Trigger 與 Thread 事實、讀取 thread context，並透過 Source 的 channel 送回訊息。它們只透過 `SourceHost` / `SourceContext` 接觸核心。 |
+| **Session tools** | 主 Session 與 Executor Session 的工具轉接層。把模型的工具呼叫轉成 Engine 命令（candidate、decide、attach、note、status、assignment/report），回傳精簡卡片或讀取結果。 |
+| **Management routes** | 面板背後的 same-origin `/orchestrator/api` HTTP 路由。驗證請求與限制，再呼叫 Engine 或讀取 Store。 |
+| **Engine** | Trigger、Thread、Decision、Ticket 與 Assignment（及其 Mandate）的唯一寫入者。它擁有每個命令的交易，並委派給 Intake、Evals、Tickets、Assignments 與 Replies。 |
+| **Store** | 一個 SQLite 資料庫：domain repositories、read queries、Source metadata、settings 與 history、outbox receipts 與 typed KV。它只存狀態，不做政策判斷。 |
+| **Policy** | 團隊規則：admission gate、Mandate revalidation、assessment outcome、pause 與 timeout 狀態，以及 policy version 變更對 live Tickets 的影響。 |
+| **SourceRegistry** | 管理已註冊的 Source kinds 與 instances，實作 `SourceScope`，提供 channel send/link、thread context、search、health claims 與 configuration validation。 |
+| **MasterAssessor** | 執行主 Session 對主動候選的評估：提供有界的 Thread 與 repository 上下文、讀取模型判斷，並把 Decision 回傳給 Engine。 |
+| **DshExecutor** | Executor port：每個 Ticket 一個 Session 與目錄；準備 launch、遞送 Inputs、管理工作槽、重試與取消，並把 assignment 生命週期回報 Engine。 |
+| **Outbox** | 訊息 receipt 的唯一寫入者。它在同一個交易保存訊息與 reply effect，透過 Source channel 送出；Source 關閉時等待，對話消失或未被監聽時丟棄。 |
+| **Settings** | 版本化設定區塊、pause 狀態、setup 欄位、policy version 變更與 Source policy sync。儲存會宣告來源是 panel、tool 或 sync。 |
+| **Sessions** | 管理主 Session 與 worker 的 DeepSeek Harness Sessions：建立、prompt/skills/tools 註冊、prompt versions、relay、notice 與 model-retry 狀態。 |
+| **Effects** | 持久 side-effect 佇列：每個 kind/key 一列；assessment、launch、delivery、relay、notice、reply 的 handler；由舊到新執行、併發上限、指數退避、pause/drain 與 health。 |
+| **Runtime** *(圖中未畫)* | Composition root：鎖住 state 目錄、開啟 Store、用各自的 ports 建構 parts、註冊 routes 與 Source host，並負責 startup/shutdown。 |
+| **Panel** *(圖中未畫)* | 管理 UI：overview、stage 頁、Threads 與 Tickets、settings、prompts 與 health。它呼叫 management routes，本身不持有 domain rules。 |
 
 Setup 檔是個好細節。它是寫給 coding agent 的，不是給人：一次問一個問題、收集答案、顯示一份計畫、再執行。這跟 Super-agent 自己的哲學一樣——把 operator 的注意力降到最低——只是套在安裝上。
 
