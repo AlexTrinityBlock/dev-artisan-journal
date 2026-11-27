@@ -19,6 +19,11 @@ Inside the box there are at most three payloads: the **domain certificate** (you
 
 Once you see the three payloads, the extensions stop being trivia. You can predict what a file can and cannot contain, and you can pick the right `openssl` command instead of guessing.
 
+<figure class="fig">
+  <img src="/images/certificate-files-decoded/lead.webp" alt="Diagram of the three payloads a certificate file can carry: domain certificate, intermediate chain, and private key" width="720" height="405" loading="lazy" />
+  <figcaption>Editorial diagram — the article's own system view, redrawn for the preview card.</figcaption>
+</figure>
+
 <style>
   .prose-inner .crt-sprite {
     position: absolute;

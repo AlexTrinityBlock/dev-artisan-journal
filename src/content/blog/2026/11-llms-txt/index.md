@@ -17,6 +17,11 @@ llms.txt is a Markdown file at `/llms.txt` — or at any subpath such as `/docs/
 
 The proposal comes from Jeremy Howard and was first published in September 2024. Version 2, updated in August 2026, reflects two years of adoption. [llmstxt.org](https://llmstxt.org/) is its home.
 
+<figure class="fig">
+  <img src="/images/llms-txt/llms-txt-format.webp" alt="Illustration of the llms.txt sample format with one H1 title, a blockquote description, optional details, H2 sections, and annotated link lists" width="1108" height="718" loading="lazy" />
+  <figcaption><b>Official figure</b> — The sample format from llmstxt.org: one H1, a blockquote summary, optional detail, H2 sections, and link lists with short notes. Source: <a href="https://llmstxt.org/">llmstxt.org</a></figcaption>
+</figure>
+
 ## The problem it solves
 
 A web page is built for a person. It carries navigation, ads, scripts, cookie banners, and layout. An agent that fetches it has to strip all of that away, and it still may not know which page matters. Context windows are larger than they were, but a whole documentation site still does not fit. Every irrelevant token costs latency and money.
@@ -45,11 +50,6 @@ Use the test keys in the sandbox. Production keys are issued after review.
 ```
 
 The `Optional` section is a convention: it holds secondary material an agent can skip when context is tight.
-
-<figure class="fig">
-  <img src="/images/llms-txt/llms-txt-format.webp" alt="Illustration of the llms.txt sample format with one H1 title, a blockquote description, optional details, H2 sections, and annotated link lists" width="1108" height="718" loading="lazy" />
-  <figcaption><b>Official figure</b> — The sample format from llmstxt.org: one H1, a blockquote summary, optional detail, H2 sections, and link lists with short notes. Source: <a href="https://llmstxt.org/">llmstxt.org</a></figcaption>
-</figure>
 
 Version 2 adds the other half of the idea. Pages that agents may need should have a clean Markdown version at the same URL, either `page.md` or `page.html.md`. Sites can advertise those versions with `rel="alternate" type="text/markdown"` and point to the covering `llms.txt` with `rel="describedby"`. The links can live in HTML or in an HTTP `Link` header, so a CDN can add them without touching every page.
 

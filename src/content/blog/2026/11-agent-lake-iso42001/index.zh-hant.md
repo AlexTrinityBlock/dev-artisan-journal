@@ -92,6 +92,11 @@ cardImageAlt: "LangChain agent lake 流程圖：生產環境的 trace 進入 lak
 
 <p class="mfig-bridge">這個區別就是本文的論點：lake 存了什麼、稽核員能向它追問什麼，以及還有什麼必須留在 lake 之外。</p>
 
+<figure class="fig">
+  <img src="/images/agent-lake/agent-lake-flow.webp" alt="LangChain 官方 agent lake 流程圖：生產環境的代理把 trace 送進 lake，運算層找出高訊號 trace 並自動化改進，改進再回到生產環境" width="1600" height="743" loading="lazy" />
+  <figcaption><b>官方圖示</b> — LangChain 的 agent lake 流程：生產環境的 trace 進入 SmithDB，運算層找出高訊號 trace、把反覆出現的失敗轉成改進，再回到生產環境。來源：<a href="https://www.langchain.com/blog/the-agent-lake">LangChain,〈The Agent Lake〉</a>（2026）</figcaption>
+</figure>
+
 ## 政策與一次執行之間的落差
 
 多數 AI 治理一開始都是一份文件。它點名系統、指派負責人、禁止某些動作、要求另一些動作必須經過審查，並承諾持續監控。文件是必要的。但從證據的角度看，它只是一份意圖聲明。
@@ -107,11 +112,6 @@ cardImageAlt: "LangChain agent lake 流程圖：生產環境的 trace 進入 lak
 ## Agent lake 實際上存了什麼
 
 LangChain 把 agent lake 定義為「結合為代理 trace 最佳化的儲存，以及智慧運算，用來查詢、分析、從中學習，推動代理持續改善」的平台。
-
-<figure class="fig">
-  <img src="/images/agent-lake/agent-lake-flow.webp" alt="LangChain 官方 agent lake 流程圖：生產環境的代理把 trace 送進 lake，運算層找出高訊號 trace 並自動化改進，改進再回到生產環境" width="1600" height="743" loading="lazy" />
-  <figcaption><b>官方圖示</b> — LangChain 的 agent lake 流程：生產環境的 trace 進入 SmithDB，運算層找出高訊號 trace、把反覆出現的失敗轉成改進，再回到生產環境。來源：<a href="https://www.langchain.com/blog/the-agent-lake">LangChain,〈The Agent Lake〉</a>（2026）</figcaption>
-</figure>
 
 拿掉行銷語言，這個定義有三個部分。儲存是為 trace 最佳化的，不是為資料列最佳化的。運算是設計來從非結構化推理裡找出意義，不只是彙總數字。目的則是一個循環：生產資料變成評測資料，評測資料變成一次變更，變更再回到生產。
 

@@ -106,6 +106,11 @@ cardImageAlt: "Diagram of the stale-tab recovery flow: old tab, lazy import, 404
 
 <p class="stale-lead-bridge">The rest of this article is the machinery behind that sentence: what the build writes, what the tab remembers, where the error surfaces, and why the reload needs a leash.</p>
 
+<figure class="fig">
+  <img src="/images/stale-chunk-recovery/lead.webp" alt="Diagram of the stale-tab recovery flow: old tab, lazy import, 404, reload once, fresh document" width="720" height="405" loading="lazy" />
+  <figcaption>Editorial diagram — the stale-tab recovery flow, redrawn for the preview card.</figcaption>
+</figure>
+
 ## A deploy is a rename
 
 At 10:00, a visitor opens the app. The browser receives `index.html`, reads one `<script type="module">` tag, and downloads `assets/index-A9_mBUvc.js`. That file is the application: the shell, the router, and a map of every lazy route it knows how to load.

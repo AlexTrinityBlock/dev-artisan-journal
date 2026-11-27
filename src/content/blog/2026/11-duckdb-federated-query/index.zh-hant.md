@@ -19,6 +19,11 @@ DuckDB 通常被歸類為「跑在行程內的分析資料庫」。這句話沒�
 
 <p class="mfig-source-note"><span class="mfig-source-label">來源 // DUCKDB + ORACLE</span> <a href="https://duckdb.org/docs/2.0/">DuckDB 2.0 documentation</a> <em>與</em> <a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/odbcu/database-gateway-odbc-introduction.html">Oracle Database Gateway for ODBC</a></p>
 
+<figure class="fig">
+  <img src="/images/duckdb-oracle/fig-oracle-gateway.webp" alt="Oracle Database Gateway for ODBC 官方架構圖：用戶端經 Oracle Net 連到 Oracle 資料庫，資料庫再透過閘道與 ODBC 驅動程式存取非 Oracle 系統。" width="548" height="444" loading="lazy" />
+  <figcaption><b>官方圖示</b> — Oracle Database Gateway for ODBC 文件 Figure 1-1。用戶端經 Oracle Net 進入 Oracle 資料庫；資料庫把查詢經異質服務與 Oracle Net 交給同一台機器上的 <code>dg4odbc</code> 閘道，閘道再經 ODBC 驅動管理員與驅動程式抵達非 Oracle 系統。虛線框是 Oracle 標示的非 Oracle 元件。本文後段的手繪盤面就是把這張圖重新排版，並補上單一來源與交易限制。資料來源：<a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/odbcu/database-gateway-odbc-introduction.html">Oracle Database Gateway for ODBC — Introduction</a></figcaption>
+</figure>
+
 ## 兩個方向，兩套堆疊
 
 聯邦是一種方向，不是一個產品。當 DuckDB 發問，介面是擴充套件：`postgres`、`mysql`、`sqlite`、`iceberg`、`delta`、`httpfs` 與 `odbc_scanner`。當 Oracle 發問，介面是 Oracle 自己的：異質服務、資料庫閘道、Oracle Net 與資料庫連結。
@@ -244,11 +249,6 @@ ORDER BY revenue DESC;
   </svg>
   </div>
   <p class="mfig-fig-src">ORACLE 19c 文件 // DATABASE GATEWAY FOR ODBC · HETEROGENEOUS SERVICES</p>
-</figure>
-
-<figure class="fig">
-  <img src="/images/duckdb-oracle/fig-oracle-gateway.webp" alt="Oracle Database Gateway for ODBC 官方架構圖：用戶端經 Oracle Net 連到 Oracle 資料庫，資料庫再透過閘道與 ODBC 驅動程式存取非 Oracle 系統。" width="548" height="444" loading="lazy" />
-  <figcaption><b>官方圖示</b> — Oracle Database Gateway for ODBC 文件 Figure 1-1。用戶端經 Oracle Net 進入 Oracle 資料庫；資料庫把查詢經異質服務與 Oracle Net 交給同一台機器上的 <code>dg4odbc</code> 閘道，閘道再經 ODBC 驅動管理員與驅動程式抵達非 Oracle 系統。虛線框是 Oracle 標示的非 Oracle 元件。上面的手繪盤面就是把這張圖重新排版，並補上單一來源與交易限制。資料來源：<a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/odbcu/database-gateway-odbc-introduction.html">Oracle Database Gateway for ODBC — Introduction</a></figcaption>
 </figure>
 
 最小設定長這樣。把範例 `initdg4odbc.ora` 複製成 `init<sid>.ora`，指向一個 ODBC 來源：

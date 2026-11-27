@@ -17,6 +17,11 @@ llms.txt 是一个放在 `/llms.txt` 的 Markdown 文件——也可以放在 `/
 
 这个提案由 Jeremy Howard 提出，2024 年 9 月首次发表。2026 年 8 月更新的第二版，反映了两年来采用的情况。规格首页是 [llmstxt.org](https://llmstxt.org/)。
 
+<figure class="fig">
+  <img src="/images/llms-txt/llms-txt-format.webp" alt="llms.txt 示例格式示意图：一个 H1 标题、blockquote 说明、可选细节、H2 章节与带说明的链接列表" width="1108" height="718" loading="lazy" />
+  <figcaption><b>官方图示</b> — llmstxt.org 的示例格式：一个 H1、blockquote 摘要、可选细节、H2 章节，以及带简短说明的链接列表。来源：<a href="https://llmstxt.org/">llmstxt.org</a></figcaption>
+</figure>
+
 ## 它解决什么问题
 
 网页是为人们设计的。它带着导航、广告、脚本、cookie 横幅与版面布局。代理抓取页面后，必须先把这些剥掉，而且还未必知道哪一页重要。上下文虽然比以前大，但一整个文档网站仍然放不进去。每一个无关的 token 都在增加延迟与成本。
@@ -45,11 +50,6 @@ Use the test keys in the sandbox. Production keys are issued after review.
 ```
 
 `Optional` 区段是一个惯例：放代理在上下文紧张时可以跳过的次要资料。
-
-<figure class="fig">
-  <img src="/images/llms-txt/llms-txt-format.webp" alt="llms.txt 示例格式示意图：一个 H1 标题、blockquote 说明、可选细节、H2 章节与带说明的链接列表" width="1108" height="718" loading="lazy" />
-  <figcaption><b>官方图示</b> — llmstxt.org 的示例格式：一个 H1、blockquote 摘要、可选细节、H2 章节，以及带简短说明的链接列表。来源：<a href="https://llmstxt.org/">llmstxt.org</a></figcaption>
-</figure>
 
 第二版补上了另一半：代理可能会需要的页面，应该在相同 URL 提供干净的 Markdown 版本，文件名是 `page.md` 或 `page.html.md`。网站可以用 `rel="alternate" type="text/markdown"` 标出这些版本，并用 `rel="describedby"` 指向覆盖它的 `llms.txt`。链接可以放在 HTML 里，也可以放在 HTTP `Link` 标头，让 CDN 不必逐页修改就能加上。
 

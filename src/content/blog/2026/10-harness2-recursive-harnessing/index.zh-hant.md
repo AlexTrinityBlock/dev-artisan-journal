@@ -59,6 +59,11 @@ Harness2（[arXiv:2610.14224](https://arxiv.org/abs/2610.14224)，Google Cloud A
 
 實驗設定刻意摳門。模型權重凍結；harness 透過現成的 runner（OpenCode 與 Codex）在 Gemini 3.5 Flash 與 GLM-5 上執行，四種組合套用同一個改進步驟。三個 benchmark 代表專業工作：WorkBuddy-Bench（Code、Web、Office）、JobBench（長流程的端到端工作任務），以及 Harvey 的 Legal Agent Benchmark，以 *Partial*（逐項標準通過率）呈現。
 
+<figure class="fig">
+  <img src="/images/harness2/fig02-harness-components.webp" alt="八個 harness 組件依執行期角色分組、圍繞凍結模型的示意圖" width="821" height="294" loading="lazy" />
+  <figcaption><b>圖 2</b> — 八個組件依「它們改動執行期的哪一部分」分組。下方那張 icon 圖是這張原始圖版在本站單色語彙下的重繪；原圖值得看一次，特別是外掛如何夾在模型與工具介面之間。來源：<a href="https://arxiv.org/html/2610.14224v1/components.png">arxiv.org/html/2610.14224v1/components.png</a></figcaption>
+</figure>
+
 ## 工作單位是八個檔案
 
 harness 寫成 $\mathcal{H} = (c^{1}, \ldots, c^{K})$，是 $K$ 個可編輯組成的 tuple，與凍結的模型 $\mathcal{M}$ 組合成 agent $\mathcal{A}(\cdot; \mathcal{M}, \mathcal{H})$。Harness2 沿用前作的檔案層級拆解，並多加一個組件，於是 $K = 8$，而且**每個組件都是一個檔案**。這個決定撐起了整篇論文：組件是檔案，編輯就是 diff；而 diff 是可以被提案、被探測、被審閱、被存放的東西。
@@ -147,11 +152,6 @@ harness 寫成 $\mathcal{H} = (c^{1}, \ldots, c^{K})$，是 $K$ 個可編輯組�
 </div>
 
 這八個裡有三個的行為方式足以解釋後面的多數結果。**C5 是唯一會增加一條推理 context 的組件**——它是唯一「乘上成本」而非「塑形」的編輯。**C6 在被呼叫之前不花任何成本**，所以它是放長篇專家流程最便宜的位置。**C8 是唯一模型無法忽略的組件**，因為外掛跑在工具迴圈裡，而不是寫在提示裡。等到消融實驗出現時，你會看到真正貢獻「能力」的兩個組件（技能、腳本）比貢獻「指示」的那一組更值錢——看過啟動時機那一欄之後，這個結果就不那麼意外了。
-
-<figure class="fig">
-  <img src="/images/harness2/fig02-harness-components.webp" alt="八個 harness 組件依執行期角色分組、圍繞凍結模型的示意圖" width="821" height="294" loading="lazy" />
-  <figcaption><b>圖 2</b> — 八個組件依「它們改動執行期的哪一部分」分組。上方那張 icon 圖是這張原始圖版在本站單色語彙下的重繪；原圖值得看一次，特別是外掛如何夾在模型與工具介面之間。來源：<a href="https://arxiv.org/html/2610.14224v1/components.png">arxiv.org/html/2610.14224v1/components.png</a></figcaption>
-</figure>
 
 ## 兩層迴圈，同一套系統
 

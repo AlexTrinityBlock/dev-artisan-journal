@@ -15,6 +15,11 @@ cardImageAlt: "Tufte《The Visual Display of Quantitative Information》第 109 
 
 **Edward Tufte** 是耶魯大學政治學、統計學與電腦科學榮譽退休教授，被公認為資訊設計與資料視覺化的奠基先驅。在其 1983 年的經典著作《The Visual Display of Quantitative Information》中，Tufte 提出了支配高密度圖形溝通的核心理論指標：**資料墨水比（Data-Ink Ratio）**。
 
+<figure class="fig">
+  <img src="/images/data-ink-ratio/tufte-chartjunk-p109.webp" alt="Tufte 以月份與主動脈瓣逆流嚴重程度繪製的 3D 金字塔圖，在《The Visual Display of Quantitative Information》中被用作圖表垃圾的範例。" width="863" height="485" loading="lazy" />
+  <figcaption><b>官方原始圖版</b> — Tufte 的圖表垃圾示範：把一張小表格擠壓成整排 3D 金字塔，增加墨水卻沒有增加資料。出自《The Visual Display of Quantitative Information》第 109 頁。來源：<a href="https://www.edwardtufte.com/notebook/chartjunk/">Edward Tufte — Chartjunk</a></figcaption>
+</figure>
+
 ---
 
 ## 1. 核心原則：什麼是資料墨水比？
@@ -32,11 +37,6 @@ $$\text{Data-Ink Ratio} = \frac{\text{Data-Ink}}{\text{Total Ink used to print o
 > 3. **抹去非資料墨水**：移除多餘的視覺雜訊，例如粗厚的邊框與高飽和的背景填色。
 > 4. **抹去多餘的資料墨水**：當座標軸已清楚表達量尺時，不必在每個座標點重複標註文字。
 > 5. **反覆修訂與編輯**：持續修剪裝飾性元素，直到只剩必要的資料。
-
-<figure class="fig">
-  <img src="/images/data-ink-ratio/tufte-chartjunk-p109.webp" alt="Tufte 以月份與主動脈瓣逆流嚴重程度繪製的 3D 金字塔圖，在《The Visual Display of Quantitative Information》中被用作圖表垃圾的範例。" width="863" height="485" loading="lazy" />
-  <figcaption><b>官方原始圖版</b> — Tufte 的圖表垃圾示範：把一張小表格擠壓成整排 3D 金字塔，增加墨水卻沒有增加資料。出自《The Visual Display of Quantitative Information》第 109 頁。來源：<a href="https://www.edwardtufte.com/notebook/chartjunk/">Edward Tufte — Chartjunk</a></figcaption>
-</figure>
 
 ---
 

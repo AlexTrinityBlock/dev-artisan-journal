@@ -96,6 +96,11 @@ Anthropic 的說法很直接：在 Claude Code 團隊，大多數程式碼由 Cl
   <p class="mfig-lead-note"><b>分工才是重點。</b>修 PR 的代理，明確不被允許核准或合併 PR。</p>
 </section>
 
+<figure class="fig">
+  <img src="/images/claude-ship/claude-ship-loop.webp" alt="Anthropic 官方 Claude Ship 工作流程圖：Code Review 發布發現、PR Steward 推送修復，Claude Approvals 在拉取請求可以合併前套用團隊政策" width="1600" height="816" loading="lazy" />
+  <figcaption><b>官方圖示</b> — Anthropic 對 Claude Ship 循環的看法：Code Review 找問題、PR Steward 修問題，Claude Approvals 在拉取請求可以合併之前套用團隊政策。圖下方是 Anthropic 自己的提醒：Claude Ship 使用 AI，可能漏掉錯誤或安全問題。來源：<a href="https://claude.com/resources/articles/introducing-claude-ship">Anthropic,〈Introducing Claude Ship〉</a>（2026）</figcaption>
+</figure>
+
 <p class="mfig-bridge">接下來要談的就是這個分工：它為什麼存在、權限邊界在哪裡、政策檔該有什麼內容，以及 Anthropic 自家團隊的數字證明了什麼、又沒證明什麼。</p>
 
 ## Claude Ship 是什麼：一個迴圈，三種角色
@@ -107,11 +112,6 @@ Claude Ship 不是新模型，也不是新編輯器。它是三個代理圍著�
 **PR Steward 修問題。** 它想辦法讓 PR 維持綠燈，而且被設計成不能核准或合併。它處理失敗的 CI 檢查、合併衝突，以及來自 Code Review、其他審查工具或團隊成員的審查回饋。每次推送後，它會留言說明改了什麼、怎麼還原。開發者可以留言 `@claude` 下指令來調整方向，或 `@claude stop` 讓它停手。
 
 **Claude Approvals 做決定。** 它套用一份寫在儲存庫裡的核准政策，Anthropic 形容它像「更聰明的 CODEOWNERS 檔」。若政策允許，它可以自行核准例行變更；若政策要求，它也可以針對特定情境要求更深的人工簽核。訊號可以包含 Code Review 的發現，或團隊用自然語言寫的自訂分類器。Anthropic 建議先開觀察模式，再讓分支保護要求它的綠燈。
-
-<figure class="fig">
-  <img src="/images/claude-ship/claude-ship-loop.webp" alt="Anthropic 官方 Claude Ship 工作流程圖：Code Review 發布發現、PR Steward 推送修復，Claude Approvals 在拉取請求可以合併前套用團隊政策" width="1600" height="816" loading="lazy" />
-  <figcaption><b>官方圖示</b> — Anthropic 對 Claude Ship 循環的看法：Code Review 找問題、PR Steward 修問題，Claude Approvals 在拉取請求可以合併之前套用團隊政策。圖下方是 Anthropic 自己的提醒：Claude Ship 使用 AI，可能漏掉錯誤或安全問題。來源：<a href="https://claude.com/resources/articles/introducing-claude-ship">Anthropic,〈Introducing Claude Ship〉</a>（2026）</figcaption>
-</figure>
 
 把三個角色當成系統來看，它們不是一條管線，而是一個帶閘門的迴圈。Steward 的推送改變 diff，diff 改變發現，發現再改變政策是否放行。迴圈裡唯一穩定的物件是政策，所以它放在儲存庫，而不是某個設定頁面。
 

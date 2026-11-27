@@ -41,6 +41,11 @@ cardImageAlt: "contenteditable plaintext-only 屬性值的官方 Baseline 圖示
 
 <p class="mfig-bridge">這個示範是想法的最小版本。接下來要說明的是：一旦文字需要被儲存，為什麼它比看起來更難，以及瀏覽器到底保證了什麼。</p>
 
+<figure class="fig">
+  <img src="/images/contenteditable-save-pipeline/devtools-plaintext-only.webp" alt="Chrome DevTools 元素面板：一個 contenteditable=plaintext-only 的 div，以及 textarea 內部由使用者代理陰影根節點包住的 div 編輯區" width="625" height="167" loading="lazy" />
+  <figcaption><b>官方圖示</b> — Chrome DevTools 顯示 <code>contenteditable="plaintext-only"</code> 的 div，以及 textarea 的使用者代理陰影根節點。兩者的編輯表面都是 div；屬性改變的是行為，不是元素型別。來源：<a href="https://web.dev/blog/contenteditable-plaintext-only-baseline">web.dev</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
+
 ## 編輯器應該只佔最小的一部分
 
 內容管理畫面天生帶著一個誘惑：安裝一套富文字編輯器，把文件建模成樹狀結構，讓框架接手選取範圍、歷史、貼上與儲存。對一頁標題、圖說與簡短內文欄位來說，這是用大量機械來處理少量文字。
@@ -145,11 +150,6 @@ cardImageAlt: "contenteditable plaintext-only 屬性值的官方 Baseline 圖示
 這就是承諾。細節比表面上看起來薄得多。
 
 HTML 規格並沒有標準化 Enter 或貼上產生的 DOM。Chrome 把 Enter 當成換行並插入 `\n`，還會強制元素使用預格式化的 `white-space`。Firefox 136+ 只在 `white-space` 為預格式化時插入 `\n`；否則插入 `<br>`。Safari 歷來使用 `<br>`。實務上的規則是：永遠不要解析 `innerHTML`；讀 `innerText`，並自己設定 `white-space: pre-wrap`。
-
-<figure class="fig">
-  <img src="/images/contenteditable-save-pipeline/devtools-plaintext-only.webp" alt="Chrome DevTools 元素面板：一個 contenteditable=plaintext-only 的 div，以及 textarea 內部由使用者代理陰影根節點包住的 div 編輯區" width="625" height="167" loading="lazy" />
-  <figcaption><b>官方圖示</b> — Chrome DevTools 顯示 <code>contenteditable="plaintext-only"</code> 的 div，以及 textarea 的使用者代理陰影根節點。兩者的編輯表面都是 div；屬性改變的是行為，不是元素型別。來源：<a href="https://web.dev/blog/contenteditable-plaintext-only-baseline">web.dev</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
-</figure>
 
 `plaintext-only` 也不是消毒器。`paste` 事件仍可能帶著 `text/html`，`execCommand("insertHTML")` 仍能插入標記。這個屬性約束的是編輯介面，不是每一條能碰到 DOM 的程式路徑。儲存純文字、在伺服器驗證純文字，並以文字呈現——永遠不要當成 HTML。
 

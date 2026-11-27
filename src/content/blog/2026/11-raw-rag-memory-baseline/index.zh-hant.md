@@ -31,6 +31,11 @@ cardImageAlt: "Memora、EverMemOS 與 Raw-RAG 三條管線並排，依 build、s
 
 本文所有差距都是**百分點**：從 45% 到 46% 是 +1 個百分點。0.13 個百分點幾乎是平手；5 個百分點就是明顯差距。
 
+<figure class="fig">
+  <img src="/images/raw-rag/fig03-pipelines.webp" alt="Memora、EverMemOS 與 Raw-RAG 三條管線並排，依 build、store、recall 三列由上而下對照" width="1600" height="961" loading="lazy" />
+  <figcaption><b>圖 3（論文原圖）</b> — 三條管線並排——Memora、EverMemOS，以及論文自己的簡單 RAG（naive RAG）——由上而下依 build、store、recall 三個階段對照。最右欄就是整篇論文的論點：對話變成平坦 chunk，chunk 變成 embedding，再靠 top-k 與 reranker 完成 recall；全程沒有抽取、沒有圖譜，也沒有使用者畫像。來源：<a href="https://arxiv.org/abs/2610.30755">Bao et al., arXiv:2610.30755</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
+
 <div class="ragx-paper-cta">
   <a class="mono-btn-chamfer ragx-paper-btn" href="https://arxiv.org/abs/2610.30755" target="_blank" rel="noopener noreferrer">
     <span class="chamfer-inner">
@@ -697,11 +702,6 @@ cardImageAlt: "Memora、EverMemOS 與 Raw-RAG 三條管線並排，依 build、s
     </div>
   </div>
 </div>
-
-<figure class="fig">
-  <img src="/images/raw-rag/fig03-pipelines.webp" alt="Memora、EverMemOS 與 Raw-RAG 三條管線並排，依 build、store、recall 三列由上而下對照" width="1600" height="961" loading="lazy" />
-  <figcaption><b>圖 3（論文原圖）</b> — 三條管線並排——Memora、EverMemOS，以及論文自己的簡單 RAG（naive RAG）——由上而下依 build、store、recall 三個階段對照。最右欄就是整篇論文的論點：對話變成平坦 chunk，chunk 變成 embedding，再靠 top-k 與 reranker 完成 recall；全程沒有抽取、沒有圖譜，也沒有使用者畫像。來源：<a href="https://arxiv.org/abs/2610.30755">Bao et al., arXiv:2610.30755</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
-</figure>
 
 論文預設 256-token 窗格，但消融實驗顯示這個數字不是神聖的：**128 到 1,024 token** 的窗格對 MemoryAgentBench 總分沒有顯著影響。真正有影響的是 **reranking** 與 **適度的檢索深度**。移除 cross-encoder 會掉 **3.92 個百分點**；只回傳一個項目會掉 **11.73 個百分點**；回傳 120 個項目會掉 **14.57 個百分點**，主要發生在 long-range understanding 與 conflict resolution。
 

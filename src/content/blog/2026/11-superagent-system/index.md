@@ -27,6 +27,11 @@ If that is the bottleneck, a better chat window does not solve it. A system does
 
 This is a close reading of both the design article and the `dsh-superagent-prototype` repository. The short version: **the most important code in an autonomous agent may be the code that decides when not to act.**
 
+<figure class="fig">
+  <img src="/images/superagent-system/dsh-superagent-architecture.webp" alt="Official dsh-superagent architecture diagram rendered from the repository's Mermaid source: source plugins, session tools, and management routes feed the Engine, which coordinates Store, Policy, SourceRegistry, MasterAssessor, DshExecutor, Outbox, and Effects" width="1600" height="1165" loading="lazy" />
+  <figcaption><b>Official diagram</b> — The prototype's core classes and glue, rendered from the repository's Mermaid source: source plugins, session tools, and management routes enter the Engine; the Engine coordinates Store, Policy, SourceRegistry, MasterAssessor, DshExecutor, and Outbox; asynchronous work is queued through Effects. The component table later in this article explains each component's job. Source: <a href="https://github.com/deepseek-ai/dsh-superagent-prototype/blob/main/docs/007-architecture.md">dsh-superagent-prototype, docs/007-architecture.md</a> · MIT</figcaption>
+</figure>
+
 ## Four properties, five modules
 
 The article defines a Super-agent with four properties:
@@ -231,11 +236,6 @@ A rough map:
 | Policy | `src/policy.ts` | Authorization, assessment, revalidation, policy effects |
 | Panel | `src/client` | What needs a person, decisions, settings, health |
 | Setup | `SETUP.md` | An agent-readable installation script for a coding agent |
-
-<figure class="fig">
-  <img src="/images/superagent-system/dsh-superagent-architecture.webp" alt="Official dsh-superagent architecture diagram rendered from the repository's Mermaid source: source plugins, session tools, and management routes feed the Engine, which coordinates Store, Policy, SourceRegistry, MasterAssessor, DshExecutor, Outbox, and Effects" width="1600" height="1165" loading="lazy" />
-  <figcaption><b>Official diagram</b> — The prototype's core classes and glue, rendered from the repository's Mermaid source: source plugins, session tools, and management routes enter the Engine; the Engine coordinates Store, Policy, SourceRegistry, MasterAssessor, DshExecutor, and Outbox; asynchronous work is queued through Effects. The table below explains each component's job. Source: <a href="https://github.com/deepseek-ai/dsh-superagent-prototype/blob/main/docs/007-architecture.md">dsh-superagent-prototype, docs/007-architecture.md</a> · MIT</figcaption>
-</figure>
 
 ### What each component does
 

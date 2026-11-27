@@ -19,6 +19,11 @@ The useful word for this is federation. The dangerous word is universal. DuckDB 
 
 <p class="mfig-source-note"><span class="mfig-source-label">SOURCES // DUCKDB + ORACLE</span> <a href="https://duckdb.org/docs/2.0/">DuckDB 2.0 documentation</a> <em>and</em> <a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/odbcu/database-gateway-odbc-introduction.html">Oracle Database Gateway for ODBC</a></p>
 
+<figure class="fig">
+  <img src="/images/duckdb-oracle/fig-oracle-gateway.webp" alt="Oracle Database Gateway for ODBC architecture: a client reaches Oracle through Oracle Net, and Oracle passes the query through a gateway and ODBC driver to a non-Oracle system." width="548" height="444" loading="lazy" />
+  <figcaption><b>Official figure</b> — Oracle Database Gateway for ODBC, Figure 1-1. A client reaches Oracle through Oracle Net; the database passes the query through Heterogeneous Services and Oracle Net to a <code>dg4odbc</code> gateway on the same machine, which reaches the non-Oracle system through an ODBC driver manager and driver. Dashed components are non-Oracle. A redrawn plate later in this article reworks this architecture and adds the single-source and transaction limits. Source: <a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/odbcu/database-gateway-odbc-introduction.html">Oracle Database Gateway for ODBC — Introduction</a></figcaption>
+</figure>
+
 ## Two directions, two stacks
 
 Federation is a direction, not a product. When DuckDB asks, the extensions are the interface: `postgres`, `mysql`, `sqlite`, `iceberg`, `delta`, `httpfs`, and `odbc_scanner`. When Oracle asks, the interface is Oracle's own: Heterogeneous Services, a database gateway, Oracle Net, and a database link.
@@ -244,11 +249,6 @@ The chain has five pieces:
   </svg>
   </div>
   <p class="mfig-fig-src">ORACLE 19c DOCS // DATABASE GATEWAY FOR ODBC · HETEROGENEOUS SERVICES</p>
-</figure>
-
-<figure class="fig">
-  <img src="/images/duckdb-oracle/fig-oracle-gateway.webp" alt="Oracle Database Gateway for ODBC architecture: a client reaches Oracle through Oracle Net, and Oracle passes the query through a gateway and ODBC driver to a non-Oracle system." width="548" height="444" loading="lazy" />
-  <figcaption><b>Official figure</b> — Oracle Database Gateway for ODBC, Figure 1-1. A client reaches Oracle through Oracle Net; the database passes the query through Heterogeneous Services and Oracle Net to a <code>dg4odbc</code> gateway on the same machine, which reaches the non-Oracle system through an ODBC driver manager and driver. Dashed components are non-Oracle. The plate above redraws this architecture and adds the single-source and transaction limits. Source: <a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/odbcu/database-gateway-odbc-introduction.html">Oracle Database Gateway for ODBC — Introduction</a></figcaption>
 </figure>
 
 A minimal configuration looks like this. Copy the sample `initdg4odbc.ora` to `init<sid>.ora` and point it at one ODBC source:

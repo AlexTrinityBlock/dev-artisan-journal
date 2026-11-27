@@ -112,6 +112,11 @@ Model Context Protocol 把這個矩陣收斂成一條線。主機連上伺服器
 
 <p class="mfig-bridge">Spring AI 2.1 是目前 Java 生態的實作。接下來要談的是它提供什麼、兩條註解路徑有何差異，以及邊界應該劃在哪裡。</p>
 
+<figure class="fig">
+  <img src="/images/spring-ai-mcp/java-mcp-server-architecture.webp" alt="Spring AI 的 Java MCP 伺服器架構：SSE 用戶端共用一個伺服器行程與 Web 容器；每個 stdio 用戶端則各自在同一個行程裡啟動 Java MCP 伺服器與後端。" width="1600" height="1179" loading="lazy" />
+  <figcaption><b>官方圖示</b> — Spring AI 的 Java MCP 伺服器架構。左半：HTTP/SSE 用戶端共用一個伺服器行程與 Web 容器。右半：每個 stdio 用戶端各自啟動一個 Java MCP 伺服器與後端應用。傳輸方式決定的是行程與信任邊界，不只是線上格式；Spring AI 2.1 的伺服器預設則是 Streamable HTTP。資料來源：<a href="https://docs.spring.io/spring-ai/reference/api/mcp/mcp-overview.html">Spring AI — MCP overview</a></figcaption>
+</figure>
+
 ## Spring AI 2.1 究竟提供什麼
 
 目前這條版本線很好確認：
@@ -319,11 +324,6 @@ CommandLineRunner demo(ChatClient.Builder builder, ToolCallbackProvider mcpTools
 錯誤也是契約的一部分。使用 `@McpTool` 時，`RuntimeException` 會變成模型看得見的錯誤結果；受檢例外或 `Error` 則會向上拋出，讓整個呼叫失敗。從 2.1.0 起，伺服器傳輸不再把例外訊息放進協定層的錯誤回應；這對防外洩是好事，對除錯卻不友善，除非你刻意留下記錄。
 
 ## 傳輸：stdio 或 Streamable HTTP
-
-<figure class="fig">
-  <img src="/images/spring-ai-mcp/java-mcp-server-architecture.webp" alt="Spring AI 的 Java MCP 伺服器架構：SSE 用戶端共用一個伺服器行程與 Web 容器；每個 stdio 用戶端則各自在同一個行程裡啟動 Java MCP 伺服器與後端。" width="1600" height="1179" loading="lazy" />
-  <figcaption><b>官方圖示</b> — Spring AI 的 Java MCP 伺服器架構。左半：HTTP/SSE 用戶端共用一個伺服器行程與 Web 容器。右半：每個 stdio 用戶端各自啟動一個 Java MCP 伺服器與後端應用。傳輸方式決定的是行程與信任邊界，不只是線上格式；Spring AI 2.1 的伺服器預設則是 Streamable HTTP。資料來源：<a href="https://docs.spring.io/spring-ai/reference/api/mcp/mcp-overview.html">Spring AI — MCP overview</a></figcaption>
-</figure>
 
 MCP 有兩種真正重要的傳輸。
 

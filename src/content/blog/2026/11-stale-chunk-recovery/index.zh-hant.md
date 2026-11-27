@@ -106,6 +106,11 @@ cardImageAlt: "過期分頁復原流程圖：舊分頁、延遲載入、404、�
 
 <p class="stale-lead-bridge">接下來是這句話背後的機制：建置寫了什麼、分頁記住了什麼、錯誤在哪裡浮現，以及為什麼重新整理需要一條牽繩。</p>
 
+<figure class="fig">
+  <img src="/images/stale-chunk-recovery/lead.webp" alt="過期分頁復原流程圖：舊分頁、延遲載入、404、重新載入一次、新文件" width="720" height="405" loading="lazy" />
+  <figcaption>編輯圖解——過期分頁的復原流程，為預覽卡重繪。</figcaption>
+</figure>
+
 ## 部署就是改名
 
 10:00，一位訪客打開應用。瀏覽器收到 `index.html`，讀到一個 `<script type="module">` 標籤，下載 `assets/index-A9_mBUvc.js`。那個檔案就是應用本體：外殼、路由，以及它知道如何載入的每一條延遲路由的地圖。

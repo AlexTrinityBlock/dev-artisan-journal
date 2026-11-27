@@ -94,6 +94,11 @@ cardImageAlt: "MemGPT 记忆层级图：固定上下文窗口，加上由函数�
 
 <p class="mem-lead-bridge">这个分类很小：一个动词是集合值的，另一个是单一的。大部分设计工作，都从“不要让它们混在一起”开始——在索引里、在文章编号里、在循环里。</p>
 
+<figure class="fig">
+  <img src="/images/memory-search-get/memgpt-system-flow.webp" alt="MemGPT 图三：固定的 LLM 上下文窗口，内含系统指令、工作上下文与 FIFO 队列，以及通过函数执行器与队列管理器连接的 archival 与 recall 存储" width="1600" height="610" loading="lazy" />
+  <figcaption><b>论文图 3</b> — MemGPT 的记忆层级：固定上下文窗口（系统指令、工作上下文、FIFO 队列）与外部的 archival、recall 存储，由模型可调用的函数连接。论文的赌注是模型自己管理这套层级：它搜索外部存储，再把记录换页回窗口。来源：<a href="https://arxiv.org/abs/2310.08560">Packer et al.,〈MemGPT: Towards LLMs as Operating Systems〉</a>，Figure 3 · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
+
 ## 两个动词，一个记忆
 
 Search 是集合值的。它接受一个线索——字面字符串、正则表达式、自然语言问题、元数据筛选——然后返回候选。它可以近似、可以排序、可以有界。它的工作是在预算内取得召回，不是保证真理。
@@ -111,11 +116,6 @@ Get 是单一的。它接受一个地址，返回该地址上的记录，或一�
 这个循环才是“翻阅”的意思：线索 → Search → 文章编号 → 选择 → Get → 证据 → 新线索。没有目录的图书馆不能用；只有目录、没有书架的图书馆，则只是一份书目。代理两半都需要。
 
 ## 架构：索引、文章编号、记录
-
-<figure class="fig">
-  <img src="/images/memory-search-get/memgpt-system-flow.webp" alt="MemGPT 图三：固定的 LLM 上下文窗口，内含系统指令、工作上下文与 FIFO 队列，以及通过函数执行器与队列管理器连接的 archival 与 recall 存储" width="1600" height="610" loading="lazy" />
-  <figcaption><b>论文图 3</b> — MemGPT 的记忆层级：固定上下文窗口（系统指令、工作上下文、FIFO 队列）与外部的 archival、recall 存储，由模型可调用的函数连接。论文的赌注是模型自己管理这套层级：它搜索外部存储，再把记录换页回窗口。来源：<a href="https://arxiv.org/abs/2310.08560">Packer et al.,〈MemGPT: Towards LLMs as Operating Systems〉</a>，Figure 3 · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
-</figure>
 
 一个同时提供两个动词的记忆库，有三层，而这三层的工作不一样。
 

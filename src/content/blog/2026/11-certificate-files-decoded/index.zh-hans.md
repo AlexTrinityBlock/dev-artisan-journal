@@ -19,6 +19,11 @@ cardImageAlt: "证书文件可能承载的三种内容示意图：域名证书�
 
 一旦看懂这三种内容，扩展名就不再是冷知识。你能预测一个文件能装什么、不能装什么，也能直接挑对 `openssl` 命令，不用再猜。
 
+<figure class="fig">
+  <img src="/images/certificate-files-decoded/lead.webp" alt="证书文件可能承载的三种内容示意图：域名证书、中间链与私钥" width="720" height="405" loading="lazy" />
+  <figcaption>编辑图解——文章自身的系统视图，为预览卡重绘。</figcaption>
+</figure>
+
 <style>
   .prose-inner .crt-sprite {
     position: absolute;

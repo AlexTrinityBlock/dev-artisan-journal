@@ -40,6 +40,11 @@ cardImageAlt: "图表显示三个模型生成一百万输出 token 的成本随�
 
 本文会走完整篇论文：成本论证、三种上下文管理机制、两组基准测试的每一项、单动作的结果、论文提出的**语义状态空间模型**、压缩的配方，以及故事开始破裂的地方。短版结论是：**长上下文不是一种你该默认付费的能力；它是一个你该按任务逐项证明其正当性的服务决策。**
 
+<figure class="fig">
+  <img src="/images/long-context/fig01-cost-per-mtok.webp" alt="三个面板显示，随着上下文窗口从 16K 成长到 256K，GLM 5.2、Kimi K2.6 与 Qwen 3 Coder Next 生成一百万个输出 token 的美元成本急遽上升" width="1600" height="487" loading="lazy" />
+  <figcaption><b>图 1（论文原图）</b>——长上下文的成本：在既有 KV 缓存上生成 1M 输出 token 的美元成本，以每 H100 小时 $3.85 计。每个面板有自己的 y 轴。三条曲线在不同位置弯折——Qwen 3 Coder Next 最早，GLM 5.2 最晚——256K 端点是 16K 端点的 3.6× 到 7×。该注意的是斜率，不是确切的美元数字。最后一次翻倍最贵，而 Qwen 的惩罚最大。数据来源：<a href="https://arxiv.org/abs/2611.05306">Belcak et al., arXiv:2611.05306</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
+
 <div class="lcx-kicker"><svg class="lcx-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#lcx-i-scan-search"></use></svg>一屏读完论文</div>
 
 ## 五个数字，一个论点
@@ -142,11 +147,6 @@ cardImageAlt: "图表显示三个模型生成一百万输出 token 的成本随�
 - **本机负担。** 在一台可用统一内存约 109GB 的 NVIDIA DGX Spark 上，随上下文成长，量测五个开放权重程序码模型之间的 token 间延迟、batch-one 吞吐量与内存占用。
 
 两项量测指向同一个方向。图 1 是论文自己对云端成本曲线的看法。
-
-<figure class="fig">
-  <img src="/images/long-context/fig01-cost-per-mtok.webp" alt="三个面板显示，随着上下文窗口从 16K 成长到 256K，GLM 5.2、Kimi K2.6 与 Qwen 3 Coder Next 生成一百万个输出 token 的美元成本急遽上升" width="1600" height="487" loading="lazy" />
-  <figcaption><b>图 1（论文原图）</b>——长上下文的成本：在既有 KV 缓存上生成 1M 输出 token 的美元成本，以每 H100 小时 $3.85 计。每个面板有自己的 y 轴。三条曲线在不同位置弯折——Qwen 3 Coder Next 最早，GLM 5.2 最晚——256K 端点是 16K 端点的 3.6× 到 7×。该注意的是斜率，不是确切的美元数字。最后一次翻倍最贵，而 Qwen 的惩罚最大。数据来源：<a href="https://arxiv.org/abs/2611.05306">Belcak et al., arXiv:2611.05306</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
-</figure>
 
 <div class="chamfer-card-wrapper lcx-card">
   <div class="chamfer-card-content">

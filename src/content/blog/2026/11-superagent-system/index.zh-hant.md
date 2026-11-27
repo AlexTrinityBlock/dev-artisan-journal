@@ -27,6 +27,11 @@ DeepSeek Harness 團隊的文章〈Super-agent 设计探索：迈向更自主的
 
 這篇是對設計文章與 `dsh-superagent-prototype`  repo 的細讀。短版結論是：**在自主 agent 裡，最重要的程式碼可能是決定「什麼時候不要行動」的那一段。**
 
+<figure class="fig">
+  <img src="/images/superagent-system/dsh-superagent-architecture.webp" alt="由儲存庫 Mermaid 原始碼渲染的 dsh-superagent 官方架構圖：來源外掛、Session 工具與管理路由進入 Engine，Engine 協調 Store、Policy、SourceRegistry、MasterAssessor、DshExecutor、Outbox 與 Effects" width="1600" height="1165" loading="lazy" />
+  <figcaption><b>官方圖示</b> — 原型的核心類別與膠水層，由儲存庫的 Mermaid 原始碼渲染：來源外掛、Session 工具與管理路由進入 Engine；Engine 協調 Store、Policy、SourceRegistry、MasterAssessor、DshExecutor 與 Outbox；非同步工作經由 Effects 排隊。後文的元件表逐一說明每個元件的職責。來源：<a href="https://github.com/deepseek-ai/dsh-superagent-prototype/blob/main/docs/007-architecture.md">dsh-superagent-prototype，docs/007-architecture.md</a> · MIT</figcaption>
+</figure>
+
 ## 四個性質，五個模組
 
 文章用四個性質定義 Super-agent：
@@ -231,11 +236,6 @@ README 難得地坦白：
 | Policy | `src/policy.ts` | 授權、評估、revalidation、policy effects |
 | Panel | `src/client` | 需要人的事、決策、設定、健康狀態 |
 | Setup | `SETUP.md` | 給 coding agent 讀的安裝腳本 |
-
-<figure class="fig">
-  <img src="/images/superagent-system/dsh-superagent-architecture.webp" alt="由儲存庫 Mermaid 原始碼渲染的 dsh-superagent 官方架構圖：來源外掛、Session 工具與管理路由進入 Engine，Engine 協調 Store、Policy、SourceRegistry、MasterAssessor、DshExecutor、Outbox 與 Effects" width="1600" height="1165" loading="lazy" />
-  <figcaption><b>官方圖示</b> — 原型的核心類別與膠水層，由儲存庫的 Mermaid 原始碼渲染：來源外掛、Session 工具與管理路由進入 Engine；Engine 協調 Store、Policy、SourceRegistry、MasterAssessor、DshExecutor 與 Outbox；非同步工作經由 Effects 排隊。下方表格逐一說明每個元件的職責。來源：<a href="https://github.com/deepseek-ai/dsh-superagent-prototype/blob/main/docs/007-architecture.md">dsh-superagent-prototype，docs/007-architecture.md</a> · MIT</figcaption>
-</figure>
 
 ### 每個元件做什麼
 

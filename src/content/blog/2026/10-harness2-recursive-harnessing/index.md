@@ -59,6 +59,11 @@ Most self-improving agent work answers only the first half: rewrite the harness 
 
 The setup is deliberately stingy. Model weights are frozen. The harness is executed through off-the-shelf runners (OpenCode and Codex) across Gemini 3.5 Flash and GLM-5, and the same improvement step is applied to all four configurations. Three benchmarks stand in for professional work: WorkBuddy-Bench (Code, Web, Office), JobBench (long end-to-end job tasks), and Harvey's Legal Agent Benchmark, reported as *Partial*, the per-criterion pass rate.
 
+<figure class="fig">
+  <img src="/images/harness2/fig02-harness-components.webp" alt="Diagram of the eight harness components grouped by runtime role around a frozen model" width="821" height="294" loading="lazy" />
+  <figcaption><b>Fig. 2</b> — The eight components grouped by the part of the runtime they modify. The icon grid below is this plate redrawn in the journal's mono palette; the original is worth reading once for how the plugin sits between the model and the tool interface. Source: <a href="https://arxiv.org/html/2610.14224v1/components.png">arxiv.org/html/2610.14224v1/components.png</a></figcaption>
+</figure>
+
 ## The unit of work is eight files
 
 A harness is written as $\mathcal{H} = (c^{1}, \ldots, c^{K})$, a tuple of $K$ editable components that compose with a frozen model $\mathcal{M}$ to form an agent $\mathcal{A}(\cdot; \mathcal{M}, \mathcal{H})$. Harness2 adopts the file-level decomposition of prior work and extends it by one component, so $K = 8$ and **every component is a file**. That single decision is what makes the rest of the paper possible: if a component is a file, an edit is a diff, and a diff is something you can propose, probe, review, and store.
@@ -147,11 +152,6 @@ A harness is written as $\mathcal{H} = (c^{1}, \ldots, c^{K})$, a tuple of $K$ e
 </div>
 
 Three of the eight behave differently enough to explain much of what follows. **C5 is the only component that adds an inference context** — it is the one edit that multiplies cost rather than shape it. **C6 costs nothing until it is invoked**, which makes it the cheapest place to put long specialist procedure. **C8 is the only component the model cannot ignore**, because a plugin runs in the tool loop rather than in the prompt. When the ablations arrive later, the two components that add *capability* (skills, scripts) turn out to be worth more than the group that adds *instruction* — a result that is easier to believe once you have seen the activation column.
-
-<figure class="fig">
-  <img src="/images/harness2/fig02-harness-components.webp" alt="Diagram of the eight harness components grouped by runtime role around a frozen model" width="821" height="294" loading="lazy" />
-  <figcaption><b>Fig. 2</b> — The eight components grouped by the part of the runtime they modify. The icon grid above is this plate redrawn in the journal's mono palette; the original is worth reading once for how the plugin sits between the model and the tool interface. Source: <a href="https://arxiv.org/html/2610.14224v1/components.png">arxiv.org/html/2610.14224v1/components.png</a></figcaption>
-</figure>
 
 ## Two loops, one system
 

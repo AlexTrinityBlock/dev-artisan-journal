@@ -59,6 +59,11 @@ dialog::backdrop {
 
 九行，没有 JavaScript。背景遮罩、焦点约束、Escape、移动端返回手势与焦点归还，全都由浏览器提供。
 
+<figure class="fig">
+  <img src="/images/modern-web-guidance/agent-marketplaces.webp" alt="支持 Modern Web Guidance 的编码代理与 IDE 标志：Codex、Cursor、Kimi、Google Antigravity、Grok、JetBrains WebStorm 与 GitHub Copilot。" width="1600" height="753" loading="lazy" />
+  <figcaption><b>官方图示</b> — Chrome 在 Modern Web Guidance v1.0 发布时使用的支持名单，列出当时表态的编码代理与 IDE：Codex、Cursor、Kimi、Google Antigravity、Grok、JetBrains WebStorm 与 GitHub Copilot。支持程度依宿主代理而异，安装路径仍取决于你用的代理。来源：<a href="https://developer.chrome.com/blog/modern-web-guidance-v1">Chrome for Developers — Modern Web Guidance v1</a></figcaption>
+</figure>
+
 下面就是同样的标记，正在这篇文章里运行。打开它，用 Tab 走一遍，按 Escape，再重新打开并选一个按钮。
 
 <style>
@@ -741,11 +746,6 @@ textarea {
 技能告诉代理何时该寻求指导。CLI 返回一份有针对性的 Markdown 文件，里面有代码模式、浏览器支持说明、容易踩的坑与回退方案。这里没有微调，代码仍然由代理编写。
 
 任何支持技能的代理都能使用，包括 Claude Code、Codex 与 Copilot。
-
-<figure class="fig">
-  <img src="/images/modern-web-guidance/agent-marketplaces.webp" alt="支持 Modern Web Guidance 的编码代理与 IDE 标志：Codex、Cursor、Kimi、Google Antigravity、Grok、JetBrains WebStorm 与 GitHub Copilot。" width="1600" height="753" loading="lazy" />
-  <figcaption><b>官方图示</b> — Chrome 在 Modern Web Guidance v1.0 发布时使用的支持名单，列出当时表态的编码代理与 IDE：Codex、Cursor、Kimi、Google Antigravity、Grok、JetBrains WebStorm 与 GitHub Copilot。支持程度依宿主代理而异，安装路径仍取决于你用的代理。来源：<a href="https://developer.chrome.com/blog/modern-web-guidance-v1">Chrome for Developers — Modern Web Guidance v1</a></figcaption>
-</figure>
 
 ## 一行命令安装
 

@@ -40,6 +40,11 @@ The headline number is not an accuracy delta. It is a price: at 256K tokens, gen
 
 This article walks through the whole paper: the cost argument, the three context-management regimes, every benchmark in both groups, the single-action result, the proposed **Semantic State Space Model**, the compaction recipe, and the places where the story breaks. The short version: **long context is not a capability you should pay for by default; it is a serving decision you should justify per task.**
 
+<figure class="fig">
+  <img src="/images/long-context/fig01-cost-per-mtok.webp" alt="Three panels showing the dollar cost of one million output tokens rising sharply as context window grows from 16K to 256K for GLM 5.2, Kimi K2.6, and Qwen 3 Coder Next" width="1600" height="487" loading="lazy" />
+  <figcaption><b>Fig. 1 (paper)</b> — The cost of long context: dollars to generate 1M output tokens on an existing KV cache, at $3.85 per H100-hour. Each panel has its own y-axis. The curves bend at different points — Qwen 3 Coder Next earliest, GLM 5.2 latest — and the 256K endpoint is 3.6× to 7× the 16K endpoint. What to notice: the slope, not the exact dollar value. The last doubling is the expensive one, and the penalty is largest for Qwen. Source: <a href="https://arxiv.org/abs/2611.05306">Belcak et al., arXiv:2611.05306</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
+
 <div class="lcx-kicker"><svg class="lcx-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#lcx-i-scan-search"></use></svg>THE PAPER IN ONE SCREEN</div>
 
 ## Five numbers, one argument
@@ -142,11 +147,6 @@ The paper measures two things separately:
 - **Local burden.** On an NVIDIA DGX Spark with ~109GB of usable unified memory, measure inter-token latency, batch-one throughput, and memory footprint for five open-weight coding models as context grows.
 
 Both measurements point the same way. Figure 1 is the paper’s own view of the cloud cost curve.
-
-<figure class="fig">
-  <img src="/images/long-context/fig01-cost-per-mtok.webp" alt="Three panels showing the dollar cost of one million output tokens rising sharply as context window grows from 16K to 256K for GLM 5.2, Kimi K2.6, and Qwen 3 Coder Next" width="1600" height="487" loading="lazy" />
-  <figcaption><b>Fig. 1 (paper)</b> — The cost of long context: dollars to generate 1M output tokens on an existing KV cache, at $3.85 per H100-hour. Each panel has its own y-axis. The curves bend at different points — Qwen 3 Coder Next earliest, GLM 5.2 latest — and the 256K endpoint is 3.6× to 7× the 16K endpoint. What to notice: the slope, not the exact dollar value. The last doubling is the expensive one, and the penalty is largest for Qwen. Source: <a href="https://arxiv.org/abs/2611.05306">Belcak et al., arXiv:2611.05306</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
-</figure>
 
 <div class="chamfer-card-wrapper lcx-card">
   <div class="chamfer-card-content">

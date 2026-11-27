@@ -19,6 +19,11 @@ cardImageAlt: "憑證檔可能承載的三種內容示意圖：網域憑證、�
 
 一旦看懂這三種內容，副檔名就不再是冷知識。你能預測一個檔案能裝什麼、不能裝什麼，也能直接挑對 `openssl` 指令，不必再猜。
 
+<figure class="fig">
+  <img src="/images/certificate-files-decoded/lead.webp" alt="憑證檔可能承載的三種內容示意圖：網域憑證、中繼鏈與私鑰" width="720" height="405" loading="lazy" />
+  <figcaption>編輯圖解——文章自身的系統視圖，為預覽卡重繪。</figcaption>
+</figure>
+
 <style>
   .prose-inner .crt-sprite {
     position: absolute;

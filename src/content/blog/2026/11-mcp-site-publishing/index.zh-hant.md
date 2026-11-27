@@ -95,6 +95,11 @@ cardImageAlt: "MCP 用戶端與伺服器堆疊，包含 session 與傳輸層"
 
 <p class="mfig-bridge">接下來是實際運作的架構、四個步驟，以及讓這個分離成立的請求形狀。</p>
 
+<figure class="fig">
+  <img src="/images/mcp-publishing/mcp-stack.webp" alt="Spring AI 的 MCP 堆疊圖：MCP 用戶端與伺服器各自在傳輸層之上有 session 層，底部列出 stdio、SSE 等傳輸。" width="1600" height="909" loading="lazy" />
+  <figcaption><b>官方圖示</b> — Spring AI 對 MCP 堆疊的畫法：用戶端與伺服器各自在傳輸層之上維持 session，JSON-RPC 訊息跨越傳輸層。圖下方以 stdio 與 SSE 為例；本站建置的 HTTP 端點就位於同一個傳輸層。資料來源：<a href="https://docs.spring.io/spring-ai/reference/api/mcp/mcp-overview.html">Spring AI — MCP overview</a></figcaption>
+</figure>
+
 ## 為什麼用 RustFS
 
 RustFS 是一套分散式、S3 相容的物件儲存，以 Rust 撰寫。我用它，因為它支援 S3 API，支援預簽 GET/PUT URL。這讓應用程式可以簽一個上傳 URL，而不必把儲存憑證交給代理。
@@ -181,11 +186,6 @@ RustFS 是一套分散式、S3 相容的物件儲存，以 Rust 撰寫。我用�
 實務上，任何一步都可能失敗。URL 過期就重新申請一個。檔案與宣告類型不符就拒絕。上傳了卻沒被引用，就排程清理。這些是維運細節，不是把儲存桶金鑰交給模型的理由。
 
 ## MCP 請求的形狀
-
-<figure class="fig">
-  <img src="/images/mcp-publishing/mcp-stack.webp" alt="Spring AI 的 MCP 堆疊圖：MCP 用戶端與伺服器各自在傳輸層之上有 session 層，底部列出 stdio、SSE 等傳輸。" width="1600" height="909" loading="lazy" />
-  <figcaption><b>官方圖示</b> — Spring AI 對 MCP 堆疊的畫法：用戶端與伺服器各自在傳輸層之上維持 session，JSON-RPC 訊息跨越傳輸層。圖下方以 stdio 與 SSE 為例；本站建置的 HTTP 端點就位於同一個傳輸層。資料來源：<a href="https://docs.spring.io/spring-ai/reference/api/mcp/mcp-overview.html">Spring AI — MCP overview</a></figcaption>
-</figure>
 
 請求的形狀很簡單。以下工具名稱與參數是文章裡的簡寫；真正的名稱留在服務內部。
 

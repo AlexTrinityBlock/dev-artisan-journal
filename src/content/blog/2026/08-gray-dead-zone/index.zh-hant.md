@@ -15,6 +15,11 @@ cardImageAlt: "CSS-Tricks 圖解：左側漸層直接穿過色輪的灰色中心
 
 **Erik D. Kennedy** 注意到色彩漸層的一個怪現象：當兩個顏色之間的直線穿過色輪的*零飽和中心*時，漸層的中點會悄悄死去、變成**灰色**。Chris Coyier 在 [CSS-Tricks 上把這個現象記錄為漸層的「Gray Dead Zone」](https://css-tricks.com/the-gray-dead-zone-of-gradients/)——一個真實、可重現的陷阱，只要你開始在互補色相之間插值（例如紅與青），它就會出現。相對地，紅與藍會繞道經過紫色，因此保持鮮豔。
 
+<figure class="fig">
+  <img src="/images/gray-dead-zone/css-tricks-gray-dead-zone.webp" alt="CSS-Tricks 的並排圖解：左側漸層筆直穿過色輪中心而變成灰色，右側漸層繞過中心並保持飽和。" width="1200" height="600" loading="lazy" />
+  <figcaption><b>官方圖解</b> — 直接穿過零飽和中心的弦（左，✕）會在漸層中點產生灰色；繞過中心（右，✓）則能保持色彩。來源：<a href="https://css-tricks.com/the-gray-dead-zone-of-gradients/">CSS-Tricks — The Gray Dead Zone of Gradients</a></figcaption>
+</figure>
+
 ## 現象：穿過中心的插值
 
 在色輪上，兩個顏色之間的漸層是一條直線——一條穿過色彩空間的**弦**。當這條弦靠近色輪中心，飽和度便趨近於零，漸層中點就落在灰色上。經典的元兇是互補色對：紅 ↔ 青、黃 ↔ 藍、綠 ↔ 洋紅。它們的弦筆直穿過中心。
@@ -22,11 +27,6 @@ cardImageAlt: "CSS-Tricks 圖解：左側漸層直接穿過色輪的灰色中心
 > **「灰色死亡區」**——*Chris Coyier, CSS-Tricks*：*「當兩個顏色之間的漸層，其色彩空間中的連線穿過零飽和的中點，中段就會出現這個『灰色死亡區』。」*
 
 技術根源在於 sRGB 有損的插值；較新的 CSS 色彩空間（如 `oklch`）在程式碼層面修好了*插值*，但要選哪些終點色相仍然由你決定——而色輪依然是那張地圖。
-
-<figure class="fig">
-  <img src="/images/gray-dead-zone/css-tricks-gray-dead-zone.webp" alt="CSS-Tricks 的並排圖解：左側漸層筆直穿過色輪中心而變成灰色，右側漸層繞過中心並保持飽和。" width="1200" height="600" loading="lazy" />
-  <figcaption><b>官方圖解</b> — 直接穿過零飽和中心的弦（左，✕）會在漸層中點產生灰色；繞過中心（右，✓）則能保持色彩。來源：<a href="https://css-tricks.com/the-gray-dead-zone-of-gradients/">CSS-Tricks — The Gray Dead Zone of Gradients</a></figcaption>
-</figure>
 
 ## 色輪的三條規則
 

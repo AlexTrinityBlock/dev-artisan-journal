@@ -95,6 +95,11 @@ The agent never receives a database URL or a RustFS access key. It receives a ke
 
 <p class="mfig-bridge">The rest is the running architecture, the four steps, and the request shape that makes the separation work.</p>
 
+<figure class="fig">
+  <img src="/images/mcp-publishing/mcp-stack.webp" alt="Spring AI's MCP stack diagram: an MCP client and server, each with a session layer above a transport layer, with stdio, SSE, and other transports at the base." width="1600" height="909" loading="lazy" />
+  <figcaption><b>Official diagram</b> — The MCP stack as Spring AI draws it: the client and the server each keep a session above a transport, and JSON-RPC messages cross the transport layer. The footer lists stdio and SSE as examples; the HTTP endpoint in this build sits in that same transport layer. Source: <a href="https://docs.spring.io/spring-ai/reference/api/mcp/mcp-overview.html">Spring AI — MCP overview</a></figcaption>
+</figure>
+
 ## Why RustFS
 
 RustFS is a distributed, S3-compatible object storage system written in Rust. I used it because it speaks the S3 API and supports presigned GET/PUT URLs. That let the application sign an upload without handing the agent a storage credential.
@@ -181,11 +186,6 @@ An admin gives the AI Agent a key. The key identifies the agent; it is not a dat
 In practice, a failure can stop at any step. An expired URL needs a new ticket. A file that does not match its declared type is rejected. An image that is uploaded but never published is cleaned up. Those are operational details, not reasons to give the model the bucket key.
 
 ## The MCP request shape
-
-<figure class="fig">
-  <img src="/images/mcp-publishing/mcp-stack.webp" alt="Spring AI's MCP stack diagram: an MCP client and server, each with a session layer above a transport layer, with stdio, SSE, and other transports at the base." width="1600" height="909" loading="lazy" />
-  <figcaption><b>Official diagram</b> — The MCP stack as Spring AI draws it: the client and the server each keep a session above a transport, and JSON-RPC messages cross the transport layer. The footer lists stdio and SSE as examples; the HTTP endpoint in this build sits in that same transport layer. Source: <a href="https://docs.spring.io/spring-ai/reference/api/mcp/mcp-overview.html">Spring AI — MCP overview</a></figcaption>
-</figure>
 
 The request shape is simple. The tool names and parameters below are abbreviated for the article; the real ones stay inside the service.
 

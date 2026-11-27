@@ -59,6 +59,11 @@ dialog::backdrop {
 
 Nine lines, no JavaScript. The browser supplies the backdrop, focus containment, Escape, the mobile back gesture, and focus return.
 
+<figure class="fig">
+  <img src="/images/modern-web-guidance/agent-marketplaces.webp" alt="Logos of coding agents and IDEs with Modern Web Guidance support: Codex, Cursor, Kimi, Google Antigravity, Grok, JetBrains WebStorm, and GitHub Copilot." width="1600" height="753" loading="lazy" />
+  <figcaption><b>Official figure</b> — Chrome's launch image for Modern Web Guidance v1.0, showing the coding agents and IDEs that announced support: Codex, Cursor, Kimi, Google Antigravity, Grok, JetBrains WebStorm, and GitHub Copilot. Support is per host, so the install path still depends on the agent. Source: <a href="https://developer.chrome.com/blog/modern-web-guidance-v1">Chrome for Developers — Modern Web Guidance v1</a></figcaption>
+</figure>
+
 Here is the same markup, running on this page. Open it, tab through it, press Escape, then reopen it and pick a button.
 
 <style>
@@ -741,11 +746,6 @@ The [source repository](https://github.com/GoogleChrome/modern-web-guidance-src)
 The skill tells the agent when to ask for guidance. The CLI returns one targeted Markdown file with code patterns, browser-support notes, gotchas, and fallbacks. Nothing is fine-tuned, and the agent still writes the code.
 
 It works with any agent that supports skills, including Claude Code, Codex, and Copilot.
-
-<figure class="fig">
-  <img src="/images/modern-web-guidance/agent-marketplaces.webp" alt="Logos of coding agents and IDEs with Modern Web Guidance support: Codex, Cursor, Kimi, Google Antigravity, Grok, JetBrains WebStorm, and GitHub Copilot." width="1600" height="753" loading="lazy" />
-  <figcaption><b>Official figure</b> — Chrome's launch image for Modern Web Guidance v1.0, showing the coding agents and IDEs that announced support: Codex, Cursor, Kimi, Google Antigravity, Grok, JetBrains WebStorm, and GitHub Copilot. Support is per host, so the install path still depends on the agent. Source: <a href="https://developer.chrome.com/blog/modern-web-guidance-v1">Chrome for Developers — Modern Web Guidance v1</a></figcaption>
-</figure>
 
 ## Install it in one command
 

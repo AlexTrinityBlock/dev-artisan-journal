@@ -21,6 +21,11 @@ That receipt is the whole idea. Fernet does not just hide bytes; it makes every 
 
 This is a tour of the format at the byte level — where each guarantee comes from, where the design stops, and why the Python API is only two methods long.
 
+<figure class="fig">
+  <img src="/images/fernet/nist-cbc-fig2.webp" alt="NIST CBC mode diagram: each plaintext block is XORed with the IV or the previous ciphertext block before encryption, and decryption reverses the chain." width="1407" height="1270" loading="lazy" />
+  <figcaption><b>Official figure</b> — NIST SP 800-38A, Figure 2. In CBC encryption each plaintext block is XORed with the previous ciphertext block (the IV for the first block) before the block cipher; decryption reverses the chain. Fernet uses this mode with AES-128-CBC and then authenticates the whole record with HMAC-SHA256, so the NIST figure covers confidentiality only. Source: <a href="https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf">NIST SP 800-38A</a> (U.S. government publication; public domain)</figcaption>
+</figure>
+
 ## A recipe, not a primitive
 
 AES is a block cipher. On its own it does not tell you which mode to use, how to pad the last block, where the IV comes from, what to authenticate, or how to compare a tag without leaking timing. Every one of those choices is a place to get the scheme wrong while still producing something that decrypts.
@@ -161,11 +166,6 @@ Encryption runs in a fixed order:
 Note where the tag is computed: over the raw header and ciphertext, not over the plaintext and not over the base64 text. Version, timestamp, and IV are all covered. Change one bit anywhere earlier in the record and the tag changes.
 
 The IV is public and random. It is not a secret and it is not derived from the key. Its only job is to make two encryptions of the same plaintext produce different ciphertexts. In CBC mode, reusing an IV across messages leaks whether their first blocks are equal. Fernet generates a fresh one per token from the OS CSPRNG.
-
-<figure class="fig">
-  <img src="/images/fernet/nist-cbc-fig2.webp" alt="NIST CBC mode diagram: each plaintext block is XORed with the IV or the previous ciphertext block before encryption, and decryption reverses the chain." width="1407" height="1270" loading="lazy" />
-  <figcaption><b>Official figure</b> — NIST SP 800-38A, Figure 2. In CBC encryption each plaintext block is XORed with the previous ciphertext block (the IV for the first block) before the block cipher; decryption reverses the chain. Fernet uses this mode with AES-128-CBC and then authenticates the whole record with HMAC-SHA256, so the NIST figure covers confidentiality only. Source: <a href="https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf">NIST SP 800-38A</a> (U.S. government publication; public domain)</figcaption>
-</figure>
 
 ```python
 from cryptography.fernet import Fernet

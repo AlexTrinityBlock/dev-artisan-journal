@@ -15,6 +15,11 @@ cardImageAlt: "Scanned page 109 of Tufte's The Visual Display of Quantitative In
 
 **Edward Tufte**, Professor Emeritus of Political Science, Statistics, and Computer Science at Yale University, is widely recognized as a foundational pioneer in information design and data visualization. In his seminal 1983 book, *The Visual Display of Quantitative Information*, Tufte formulated the core theoretical metric that governs high-density graphical communication: the **Data-Ink Ratio**.
 
+<figure class="fig">
+  <img src="/images/data-ink-ratio/tufte-chartjunk-p109.webp" alt="Tufte's 3D pyramid chart of aortic regurgitation severity over months, used in The Visual Display of Quantitative Information as an example of chartjunk." width="863" height="485" loading="lazy" />
+  <figcaption><b>Official source plate</b> — Tufte's chartjunk exhibit: a small table extruded into rows of 3D pyramids, adding ink without adding data. From <i>The Visual Display of Quantitative Information</i>, p. 109. Source: <a href="https://www.edwardtufte.com/notebook/chartjunk/">Edward Tufte — Chartjunk</a></figcaption>
+</figure>
+
 ---
 
 ## 1. Core Principle: What Is the Data-Ink Ratio?
@@ -32,11 +37,6 @@ $$\text{Data-Ink Ratio} = \frac{\text{Data-Ink}}{\text{Total Ink used to print o
 > 3. **Erase non-data-ink**: Remove unnecessary visual noise, such as thick border wrappers and saturated background fills.
 > 4. **Erase redundant data-ink**: When axes clearly convey quantitative scale, avoid cluttering every coordinate with repetitive text labels.
 > 5. **Revise and edit**: Continuously prune decorative artifacts until only essential data remains.
-
-<figure class="fig">
-  <img src="/images/data-ink-ratio/tufte-chartjunk-p109.webp" alt="Tufte's 3D pyramid chart of aortic regurgitation severity over months, used in The Visual Display of Quantitative Information as an example of chartjunk." width="863" height="485" loading="lazy" />
-  <figcaption><b>Official source plate</b> — Tufte's chartjunk exhibit: a small table extruded into rows of 3D pyramids, adding ink without adding data. From <i>The Visual Display of Quantitative Information</i>, p. 109. Source: <a href="https://www.edwardtufte.com/notebook/chartjunk/">Edward Tufte — Chartjunk</a></figcaption>
-</figure>
 
 ---
 

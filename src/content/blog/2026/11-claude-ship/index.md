@@ -96,6 +96,11 @@ Most descriptions of the PR loop collapse three different acts into one person: 
   <p class="mfig-lead-note"><b>The separation is the point.</b> The agent that fixes a PR is explicitly not allowed to approve or merge it.</p>
 </section>
 
+<figure class="fig">
+  <img src="/images/claude-ship/claude-ship-loop.webp" alt="Anthropic's official Claude Ship workflow diagram: Code Review posts findings, PR Steward pushes fixes, and Claude Approvals applies team policy before a pull request is ready to merge" width="1600" height="816" loading="lazy" />
+  <figcaption><b>Official figure</b> — Anthropic's view of the Claude Ship loop: Code Review finds, PR Steward fixes, and Claude Approvals applies team policy before a pull request is ready to merge. The footer is Anthropic's own warning that Claude Ship uses AI and may miss bugs or security issues. Source: <a href="https://claude.com/resources/articles/introducing-claude-ship">Anthropic, "Introducing Claude Ship"</a> (2026)</figcaption>
+</figure>
+
 <p class="mfig-bridge">The rest of this essay is about that separation: why it exists, where the permission boundary sits, what a policy file should contain, and what the numbers from Anthropic's own team do and do not prove.</p>
 
 ## What Claude Ship is: one loop, three roles
@@ -107,11 +112,6 @@ Claude Ship is not a new model or a new editor. It is a composition of three age
 **PR Steward fixes.** It works to keep a PR green, and it is designed not to approve or merge. It handles failing CI checks, merge conflicts, and review feedback from Code Review, other review tools, or team members. After every push it comments with what it changed and how to undo it. A developer can comment `@claude` to steer the work or `@claude stop` to make it step back.
 
 **Claude Approvals decides.** It applies an approval policy written as a file in the repository, which Anthropic describes as working like a smarter CODEOWNERS file. If the policy allows, it can approve routine changes on its own. If the policy requires it, it can demand human sign-off for specific scenarios. Its signals can include Code Review findings or custom classifiers written in natural language. Anthropic recommends starting in observe-only mode before making its green light a requirement in branch protection.
-
-<figure class="fig">
-  <img src="/images/claude-ship/claude-ship-loop.webp" alt="Anthropic's official Claude Ship workflow diagram: Code Review posts findings, PR Steward pushes fixes, and Claude Approvals applies team policy before a pull request is ready to merge" width="1600" height="816" loading="lazy" />
-  <figcaption><b>Official figure</b> — Anthropic's view of the Claude Ship loop: Code Review finds, PR Steward fixes, and Claude Approvals applies team policy before a pull request is ready to merge. The footer is Anthropic's own warning that Claude Ship uses AI and may miss bugs or security issues. Source: <a href="https://claude.com/resources/articles/introducing-claude-ship">Anthropic, "Introducing Claude Ship"</a> (2026)</figcaption>
-</figure>
 
 Read as a system, the three roles are not a pipeline. They are a loop with a gate. The Steward's push changes the diff, which can change the findings, which can change whether the policy allows the merge. The only stable object in that cycle is the policy, which is why it lives in the repository and not in a settings page.
 

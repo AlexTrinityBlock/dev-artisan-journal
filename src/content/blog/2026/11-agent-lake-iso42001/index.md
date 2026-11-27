@@ -92,6 +92,11 @@ In November 2026, LangChain published two essays that are usually read separatel
 
 <p class="mfig-bridge">That distinction is the argument of this essay: what the lake stores, what an auditor can ask of it, and what still has to live outside it.</p>
 
+<figure class="fig">
+  <img src="/images/agent-lake/agent-lake-flow.webp" alt="LangChain official agent lake flow diagram: production agents send traces to the lake, compute finds high-signal traces and automates improvements, and improvements return to production" width="1600" height="743" loading="lazy" />
+  <figcaption><b>Official diagram</b> — LangChain's agent lake flow: production traces land in SmithDB, compute finds high-signal traces and turns recurring failures into improvements, and the loop returns to production. Source: <a href="https://www.langchain.com/blog/the-agent-lake">LangChain, "The Agent Lake"</a> (2026)</figcaption>
+</figure>
+
 ## The gap between a policy and a run
 
 Most AI governance starts as a document. It names the systems, assigns owners, forbids some actions, requires review for others, and promises monitoring. The document is necessary. It is also, from an evidentiary point of view, a statement of intent.
@@ -107,11 +112,6 @@ The commercial framing is LangChain's. The architectural argument is broader, an
 ## What the agent lake actually holds
 
 LangChain defines an agent lake as "a platform that combines storage optimized for agent traces with intelligent compute to query, analyze, and learn from them, powering continuous agent improvement."
-
-<figure class="fig">
-  <img src="/images/agent-lake/agent-lake-flow.webp" alt="LangChain official agent lake flow diagram: production agents send traces to the lake, compute finds high-signal traces and automates improvements, and improvements return to production" width="1600" height="743" loading="lazy" />
-  <figcaption><b>Official diagram</b> — LangChain's agent lake flow: production traces land in SmithDB, compute finds high-signal traces and turns recurring failures into improvements, and the loop returns to production. Source: <a href="https://www.langchain.com/blog/the-agent-lake">LangChain, "The Agent Lake"</a> (2026)</figcaption>
-</figure>
 
 Strip the marketing and the definition has three parts. Storage is optimized for traces, not for rows. Compute is designed to find meaning in unstructured reasoning, not only to aggregate numbers. And the purpose is a loop: production data becomes evaluation data, evaluation data becomes a change, and the change returns to production.
 

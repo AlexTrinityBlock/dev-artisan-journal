@@ -31,6 +31,11 @@ Two things sit outside that count. **Full-context** is not a memory system; it i
 
 All gaps in this article are in **percentage points**: moving from 45% to 46% is +1 point. A 0.13-point gap is essentially a tie; a 5-point gap is substantial.
 
+<figure class="fig">
+  <img src="/images/raw-rag/fig03-pipelines.webp" alt="Three side-by-side pipeline diagrams for Memora, EverMemOS, and raw RAG, arranged in build, store, and recall rows" width="1600" height="961" loading="lazy" />
+  <figcaption><b>Fig. 3 (paper)</b> — Three pipelines side by side — Memora, EverMemOS, and the paper's raw RAG — read top to bottom through build, store, and recall. The right-hand column is the whole argument: dialogue becomes flat chunks, chunks become embeddings, and top-k plus a reranker carry recall, with no extraction, graph, or profile anywhere. Source: <a href="https://arxiv.org/abs/2610.30755">Bao et al., arXiv:2610.30755</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
+
 <div class="ragx-paper-cta">
   <a class="mono-btn-chamfer ragx-paper-btn" href="https://arxiv.org/abs/2610.30755" target="_blank" rel="noopener noreferrer">
     <span class="chamfer-inner">
@@ -697,11 +702,6 @@ The chart above is precise but unfriendly. Here is the same pipeline translated 
     </div>
   </div>
 </div>
-
-<figure class="fig">
-  <img src="/images/raw-rag/fig03-pipelines.webp" alt="Three side-by-side pipeline diagrams for Memora, EverMemOS, and raw RAG, arranged in build, store, and recall rows" width="1600" height="961" loading="lazy" />
-  <figcaption><b>Fig. 3 (paper)</b> — Three pipelines side by side — Memora, EverMemOS, and the paper's raw RAG — read top to bottom through build, store, and recall. The right-hand column is the whole argument: dialogue becomes flat chunks, chunks become embeddings, and top-k plus a reranker carry recall, with no extraction, graph, or profile anywhere. Source: <a href="https://arxiv.org/abs/2610.30755">Bao et al., arXiv:2610.30755</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
-</figure>
 
 The paper reports a 256-token window as the default, but the ablation shows the exact size is not sacred: windows from **128 to 1,024 tokens** do not significantly change the MemoryAgentBench total. What does matter is **reranking** and **moderate depth**. Removing the cross-encoder costs **3.92 percentage points**. Returning only one item costs **11.73 percentage points**. Returning 120 items costs **14.57 percentage points**, mostly on long-range understanding and conflict resolution.
 

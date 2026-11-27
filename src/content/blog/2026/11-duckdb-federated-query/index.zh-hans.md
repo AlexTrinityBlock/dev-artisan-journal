@@ -19,6 +19,11 @@ DuckDB 通常被归类为“跑在进程内的分析数据库”。这句话没�
 
 <p class="mfig-source-note"><span class="mfig-source-label">来源 // DUCKDB + ORACLE</span> <a href="https://duckdb.org/docs/2.0/">DuckDB 2.0 documentation</a> <em>与</em> <a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/odbcu/database-gateway-odbc-introduction.html">Oracle Database Gateway for ODBC</a></p>
 
+<figure class="fig">
+  <img src="/images/duckdb-oracle/fig-oracle-gateway.webp" alt="Oracle Database Gateway for ODBC 官方架构图：客户端经 Oracle Net 连接到 Oracle 数据库，数据库再通过网关与 ODBC 驱动程序访问非 Oracle 系统。" width="548" height="444" loading="lazy" />
+  <figcaption><b>官方图示</b> — Oracle Database Gateway for ODBC 文档 Figure 1-1。客户端经 Oracle Net 进入 Oracle 数据库；数据库把查询经异构服务与 Oracle Net 交给同一台机器上的 <code>dg4odbc</code> 网关，网关再经 ODBC 驱动管理器和驱动程序到达非 Oracle 系统。虚线框是 Oracle 标注的非 Oracle 组件。本文后段的手绘图就是把这幅图重新排版，并补上单一来源与事务限制。来源：<a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/odbcu/database-gateway-odbc-introduction.html">Oracle Database Gateway for ODBC — Introduction</a></figcaption>
+</figure>
+
 ## 两个方向，两套栈
 
 联邦是一种方向，不是一个产品。当 DuckDB 发问，接口是扩展：`postgres`、`mysql`、`sqlite`、`iceberg`、`delta`、`httpfs` 与 `odbc_scanner`。当 Oracle 发问，接口是 Oracle 自己的：异构服务、数据库网关、Oracle Net 与数据库链接。
@@ -244,11 +249,6 @@ ORDER BY revenue DESC;
   </svg>
   </div>
   <p class="mfig-fig-src">ORACLE 19c 文档 // DATABASE GATEWAY FOR ODBC · HETEROGENEOUS SERVICES</p>
-</figure>
-
-<figure class="fig">
-  <img src="/images/duckdb-oracle/fig-oracle-gateway.webp" alt="Oracle Database Gateway for ODBC 官方架构图：客户端经 Oracle Net 连接到 Oracle 数据库，数据库再通过网关与 ODBC 驱动程序访问非 Oracle 系统。" width="548" height="444" loading="lazy" />
-  <figcaption><b>官方图示</b> — Oracle Database Gateway for ODBC 文档 Figure 1-1。客户端经 Oracle Net 进入 Oracle 数据库；数据库把查询经异构服务与 Oracle Net 交给同一台机器上的 <code>dg4odbc</code> 网关，网关再经 ODBC 驱动管理器和驱动程序到达非 Oracle 系统。虚线框是 Oracle 标注的非 Oracle 组件。上面的手绘图就是把这幅图重新排版，并补上单一来源与事务限制。来源：<a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/odbcu/database-gateway-odbc-introduction.html">Oracle Database Gateway for ODBC — Introduction</a></figcaption>
 </figure>
 
 最小配置长这样。把示例 `initdg4odbc.ora` 复制成 `init<sid>.ora`，指向一个 ODBC 来源：

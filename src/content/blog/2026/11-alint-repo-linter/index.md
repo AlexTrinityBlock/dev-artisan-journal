@@ -98,6 +98,11 @@ cardImageAlt: "Official alint containers diagram: CLI, LSP server, and dev tooli
   <p class="alint-lead-note"><b>A repository is more than the code inside it.</b> alint is the linter that says so out loud.</p>
 </section>
 
+<figure class="fig">
+  <img src="/images/alint-repo-linter/alint-execution-pipeline.webp" alt="Official alint execution pipeline diagram: a sequence across Developer, alint, alint-dsl, alint-core, alint-rules, and alint-output, numbered from 1 (alint check) through 10 (report and exit code)." width="1600" height="810" loading="lazy" />
+  <figcaption><b>Official diagram</b> — The <code>alint check</code> execution pipeline, from config load and the <code>extends:</code> trust boundary through the single walk, dispatch, aggregation, and output. Source: <a href="https://alint.org/docs/about/architecture-diagrams/">alint docs — Architecture diagrams</a></figcaption>
+</figure>
+
 <p class="alint-lead-bridge">The rest of this article is what that shape includes, how one pass finds it, and how to adopt the tool without a flag day.</p>
 
 A code linter can report zero problems on a repository that is still wrong.
@@ -122,11 +127,6 @@ alint describes itself as "a fast, general linter." The qualifier matters. It is
 It takes over where Repolinter left off — Repolinter was archived in February 2026 — and runs alongside the code linters rather than replacing them. The project publishes benchmarks on every release: about 1.5 seconds for 100,000 files, under 20 seconds for one million.
 
 The tool is young. v0.23.0 shipped on 22 November 2026; the repository itself dates from April 2026. That is a reason to pin the version, not a reason to ignore it. The core model is small and stable: a config, a walk, a set of rules, a report.
-
-<figure class="fig">
-  <img src="/images/alint-repo-linter/alint-execution-pipeline.webp" alt="Official alint execution pipeline diagram: a sequence across Developer, alint, alint-dsl, alint-core, alint-rules, and alint-output, numbered from 1 (alint check) through 10 (report and exit code)." width="1600" height="810" loading="lazy" />
-  <figcaption><b>Official diagram</b> — The <code>alint check</code> execution pipeline, from config load and the <code>extends:</code> trust boundary through the single walk, dispatch, aggregation, and output. Source: <a href="https://alint.org/docs/about/architecture-diagrams/">alint docs — Architecture diagrams</a></figcaption>
-</figure>
 
 ## A rule is three things
 

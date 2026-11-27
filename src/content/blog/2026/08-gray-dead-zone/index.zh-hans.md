@@ -15,6 +15,11 @@ cardImageAlt: "CSS-Tricks 图解：左侧渐变直接穿过色轮的灰色中心
 
 **Erik D. Kennedy** 注意到颜色渐变的一个古怪现象：当两个颜色之间的直线穿过色轮的*零饱和中心*时，渐变的中点会悄悄死掉、变成**灰色**。Chris Coyier 在 [CSS-Tricks 上把这个现象记录为渐变的「Gray Dead Zone」](https://css-tricks.com/the-gray-dead-zone-of-gradients/)——一个真实、可复现的陷阱，只要你开始在互补色相之间插值（例如红与青），它就会出现。相比之下，红与蓝会绕行经过紫色，因此保持鲜艳。
 
+<figure class="fig">
+  <img src="/images/gray-dead-zone/css-tricks-gray-dead-zone.webp" alt="CSS-Tricks 的并排图解：左侧渐变笔直穿过色轮中心而变成灰色，右侧渐变绕过中心并保持饱和。" width="1200" height="600" loading="lazy" />
+  <figcaption><b>官方图解</b> — 直接穿过零饱和中心的弦（左，✕）会在渐变中点产生灰色；绕过中心（右，✓）则能保持色彩。来源：<a href="https://css-tricks.com/the-gray-dead-zone-of-gradients/">CSS-Tricks — The Gray Dead Zone of Gradients</a></figcaption>
+</figure>
+
 ## 现象：穿过中心的插值
 
 在色轮上，两个颜色之间的渐变是一条直线——一条穿过色彩空间的**弦**。当这条弦靠近色轮中心，饱和度便趋近于零，渐变中点就落在灰色上。经典的元凶是互补色对：红 ↔ 青、黄 ↔ 蓝、绿 ↔ 洋红。它们的弦笔直穿过中心。
@@ -22,11 +27,6 @@ cardImageAlt: "CSS-Tricks 图解：左侧渐变直接穿过色轮的灰色中心
 > **「灰色死亡区」**——*Chris Coyier, CSS-Tricks*：*「当两个颜色之间的渐变，其色彩空间中的连线穿过零饱和的中点，中段就会出现这个『灰色死亡区』。」*
 
 技术根源在于 sRGB 有损的插值；较新的 CSS 色彩空间（如 `oklch`）在代码层面修好了*插值*，但要选哪些终点色相仍然由你决定——而色轮依然是那张地图。
-
-<figure class="fig">
-  <img src="/images/gray-dead-zone/css-tricks-gray-dead-zone.webp" alt="CSS-Tricks 的并排图解：左侧渐变笔直穿过色轮中心而变成灰色，右侧渐变绕过中心并保持饱和。" width="1200" height="600" loading="lazy" />
-  <figcaption><b>官方图解</b> — 直接穿过零饱和中心的弦（左，✕）会在渐变中点产生灰色；绕过中心（右，✓）则能保持色彩。来源：<a href="https://css-tricks.com/the-gray-dead-zone-of-gradients/">CSS-Tricks — The Gray Dead Zone of Gradients</a></figcaption>
-</figure>
 
 ## 色轮的三条规则
 

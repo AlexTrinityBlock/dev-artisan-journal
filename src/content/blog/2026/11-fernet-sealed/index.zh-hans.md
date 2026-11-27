@@ -21,6 +21,11 @@ Fernet 是 Python `cryptography` 包里的高层认证加密配方：一把 32 �
 
 这篇文章从字节层级拆解这个格式：每个保证从哪里来、设计在哪里停下，以及为什么 Python API 就只有两个方法。
 
+<figure class="fig">
+  <img src="/images/fernet/nist-cbc-fig2.webp" alt="NIST CBC 模式图：每个明文分组先与 IV 或前一个密文分组做 XOR 再加密，解密则反向还原。" width="1407" height="1270" loading="lazy" />
+  <figcaption><b>官方图示</b> — NIST SP 800-38A Figure 2。CBC 加密时，每个明文分组会先与前一个密文分组（第一个分组则与 IV）做 XOR，再送进分组加密；解密反向而行。Fernet 把这个模式用在 AES-128-CBC，随后才用 HMAC-SHA256 对整条记录做认证，所以这幅 NIST 图只覆盖机密性。来源：<a href="https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf">NIST SP 800-38A</a>（美国政府出版物，公共领域）</figcaption>
+</figure>
+
 ## 是配方，不是密码学原语
 
 AES 是分组加密算法。它本身不会告诉你该用哪种模式、最后一个分组怎么填充、IV 从哪里来、要认证哪些字节，或用什么方式比较标签才不会泄露时间。上述每一个选择，都是可能把方案写错、却仍能解出东西的地方。
@@ -161,11 +166,6 @@ PKCS7 永远至少加入一个字节，即使消息刚好停在分组边界。�
 注意标签是对原始头部与密文计算，不是对明文，也不是对 base64 文本。版本、时间戳与 IV 都被覆盖。改动记录中任何一个较早的比特，标签就会改变。
 
 IV 是公开且随机的。它不是秘密，也不是从密钥派生。它唯一的工作，是让相同明文的两次加密产生不同密文。在 CBC 模式里，跨消息重复使用 IV 会泄露它们的第一个分组是否相同。Fernet 每个令牌都从操作系统 CSPRNG 生成全新的 IV。
-
-<figure class="fig">
-  <img src="/images/fernet/nist-cbc-fig2.webp" alt="NIST CBC 模式图：每个明文分组先与 IV 或前一个密文分组做 XOR 再加密，解密则反向还原。" width="1407" height="1270" loading="lazy" />
-  <figcaption><b>官方图示</b> — NIST SP 800-38A Figure 2。CBC 加密时，每个明文分组会先与前一个密文分组（第一个分组则与 IV）做 XOR，再送进分组加密；解密反向而行。Fernet 把这个模式用在 AES-128-CBC，随后才用 HMAC-SHA256 对整条记录做认证，所以这幅 NIST 图只覆盖机密性。来源：<a href="https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf">NIST SP 800-38A</a>（美国政府出版物，公共领域）</figcaption>
-</figure>
 
 ```python
 from cryptography.fernet import Fernet

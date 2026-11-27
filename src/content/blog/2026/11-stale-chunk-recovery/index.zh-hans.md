@@ -106,6 +106,11 @@ cardImageAlt: "过期标签页恢复流程图：旧标签页、延迟加载、40
 
 <p class="stale-lead-bridge">接下来是这句话背后的机制：构建写了什么、标签页记住了什么、错误在哪里浮现，以及为什么刷新需要一根牵绳。</p>
 
+<figure class="fig">
+  <img src="/images/stale-chunk-recovery/lead.webp" alt="过期标签页恢复流程图：旧标签页、延迟加载、404、重新加载一次、新文档" width="720" height="405" loading="lazy" />
+  <figcaption>编辑图解——过期标签页的恢复流程，为预览卡重绘。</figcaption>
+</figure>
+
 ## 部署就是改名
 
 10:00，一位访客打开应用。浏览器收到 `index.html`，读到一个 `<script type="module">` 标签，下载 `assets/index-A9_mBUvc.js`。那个文件就是应用本体：外壳、路由，以及它知道如何加载的每一条延迟路由的地图。
