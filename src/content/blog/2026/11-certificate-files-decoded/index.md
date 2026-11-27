@@ -19,9 +19,60 @@ Inside the box there are at most three payloads: the **domain certificate** (you
 
 Once you see the three payloads, the extensions stop being trivia. You can predict what a file can and cannot contain, and you can pick the right `openssl` command instead of guessing.
 
-<figure class="fig">
-  <img src="/images/certificate-files-decoded/lead.webp" alt="Diagram of the three payloads a certificate file can carry: domain certificate, intermediate chain, and private key" width="720" height="405" loading="lazy" />
-  <figcaption>Editorial diagram — the article's own system view, redrawn for the preview card.</figcaption>
+<div class="crt-sprite" aria-hidden="true">
+  <svg width="0" height="0" focusable="false">
+    <defs>
+      <symbol id="crt-i-file" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10 9H8m8 4H8m8 4H8"/></g></symbol>
+      <symbol id="crt-i-layers" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></g></symbol>
+      <symbol id="crt-i-key" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></g></symbol>
+      <symbol id="crt-i-shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12l2 2l4-4"/></g></symbol>
+      <symbol id="crt-i-server" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><path d="M6 6h.01M6 18h.01"/></g></symbol>
+      <symbol id="crt-i-globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20a14.5 14.5 0 0 0 0-20M2 12h20"/></g></symbol>
+      <symbol id="crt-i-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><circle cx="12" cy="16" r="1"/><rect width="18" height="12" x="3" y="10" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></g></symbol>
+      <symbol id="crt-i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><circle cx="11.5" cy="14.5" r="2.5"/><path d="M13.3 16.3L15 18"/></g></symbol>
+      <symbol id="crt-i-terminal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M12 19h8M4 17l6-6l-6-6"/></g></symbol>
+      <symbol id="crt-i-binary" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><rect width="4" height="6" x="14" y="14" rx="2"/><rect width="4" height="6" x="6" y="4" rx="2"/><path d="M6 20h4m4-10h4M6 14h2v6m6-16h2v6"/></g></symbol>
+    </defs>
+  </svg>
+</div>
+
+<figure class="crt-fig">
+  <figcaption>
+    <span class="card-tag">ANATOMY // 01</span>
+    <h3 class="crt-fig-title">The three payloads a TLS file can carry</h3>
+    <p class="crt-fig-sub">The container changes. The payloads do not.</p>
+  </figcaption>
+  <div class="crt-scroll">
+  <svg class="crt-svg" viewBox="0 0 800 260" role="img" aria-labelledby="crt-f1-title crt-f1-desc">
+    <title id="crt-f1-title">Certificate file anatomy</title>
+    <desc id="crt-f1-desc">A file can contain a domain certificate, an intermediate certificate chain, and a private key in any combination.</desc>
+    <text x="24" y="22" class="f" font-size="8" letter-spacing="1.2">ONE FILE // THREE POSSIBLE PAYLOADS</text>
+    <rect x="24" y="42" width="236" height="150" class="box"/>
+    <use href="#crt-i-file" x="40" y="58" width="20" height="20" class="ico"/>
+    <text x="70" y="72" class="t" font-size="10.5" font-weight="700">DOMAIN CERTIFICATE</text>
+    <line x1="40" y1="90" x2="244" y2="90" class="rule"/>
+    <text x="40" y="110" class="m" font-size="9">Your domain name and</text>
+    <text x="40" y="124" class="m" font-size="9">public key, signed by a CA.</text>
+    <text x="40" y="160" class="f" font-size="7.5" letter-spacing="0.9">SENT TO EVERY VISITOR</text>
+    <rect x="282" y="42" width="236" height="150" class="box"/>
+    <use href="#crt-i-layers" x="298" y="58" width="20" height="20" class="ico"/>
+    <text x="328" y="72" class="t" font-size="10.5" font-weight="700">INTERMEDIATE CHAIN</text>
+    <line x1="298" y1="90" x2="502" y2="90" class="rule"/>
+    <text x="298" y="110" class="m" font-size="9">The links between your</text>
+    <text x="298" y="124" class="m" font-size="9">certificate and a trusted root.</text>
+    <text x="298" y="160" class="f" font-size="7.5" letter-spacing="0.9">SENT WITH THE LEAF</text>
+    <rect x="540" y="42" width="236" height="150" class="box"/>
+    <use href="#crt-i-key" x="556" y="58" width="20" height="20" class="ico"/>
+    <text x="586" y="72" class="t" font-size="10.5" font-weight="700">PRIVATE KEY</text>
+    <line x1="556" y1="90" x2="760" y2="90" class="rule"/>
+    <text x="556" y="110" class="m" font-size="9">The other half of the key</text>
+    <text x="556" y="124" class="m" font-size="9">pair. It never leaves the host.</text>
+    <text x="556" y="160" class="f" font-size="7.5" letter-spacing="0.9">NEVER SENT TO ANYONE</text>
+    <line x1="24" y1="216" x2="776" y2="216" class="rule"/>
+    <text x="24" y="238" class="m" font-size="9">A <tspan class="mono" font-weight="700">.pem</tspan> can hold any combination. A <tspan class="mono" font-weight="700">.crt</tspan> holds certificates. A <tspan class="mono" font-weight="700">.key</tspan> holds one key. A <tspan class="mono" font-weight="700">.pfx</tspan> holds all three.</text>
+  </svg>
+  </div>
+  <div class="crt-fig-src">ANATOMY · THREE PAYLOADS · ICONS: LUCIDE VIA ICONIFY</div>
 </figure>
 
 <style>
@@ -446,62 +497,6 @@ Once you see the three payloads, the extensions stop being trivia. You can predi
 ## Three payloads, one box
 
 Start with what can be inside. A single file may carry one payload or all three; the extension alone will not tell you.
-
-<div class="crt-sprite" aria-hidden="true">
-  <svg width="0" height="0" focusable="false">
-    <defs>
-      <symbol id="crt-i-file" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10 9H8m8 4H8m8 4H8"/></g></symbol>
-      <symbol id="crt-i-layers" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></g></symbol>
-      <symbol id="crt-i-key" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></g></symbol>
-      <symbol id="crt-i-shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12l2 2l4-4"/></g></symbol>
-      <symbol id="crt-i-server" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><path d="M6 6h.01M6 18h.01"/></g></symbol>
-      <symbol id="crt-i-globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20a14.5 14.5 0 0 0 0-20M2 12h20"/></g></symbol>
-      <symbol id="crt-i-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><circle cx="12" cy="16" r="1"/><rect width="18" height="12" x="3" y="10" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></g></symbol>
-      <symbol id="crt-i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><circle cx="11.5" cy="14.5" r="2.5"/><path d="M13.3 16.3L15 18"/></g></symbol>
-      <symbol id="crt-i-terminal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M12 19h8M4 17l6-6l-6-6"/></g></symbol>
-      <symbol id="crt-i-binary" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><rect width="4" height="6" x="14" y="14" rx="2"/><rect width="4" height="6" x="6" y="4" rx="2"/><path d="M6 20h4m4-10h4M6 14h2v6m6-16h2v6"/></g></symbol>
-    </defs>
-  </svg>
-</div>
-
-<figure class="crt-fig">
-  <figcaption>
-    <span class="card-tag">ANATOMY // 01</span>
-    <h3 class="crt-fig-title">The three payloads a TLS file can carry</h3>
-    <p class="crt-fig-sub">The container changes. The payloads do not.</p>
-  </figcaption>
-  <div class="crt-scroll">
-  <svg class="crt-svg" viewBox="0 0 800 260" role="img" aria-labelledby="crt-f1-title crt-f1-desc">
-    <title id="crt-f1-title">Certificate file anatomy</title>
-    <desc id="crt-f1-desc">A file can contain a domain certificate, an intermediate certificate chain, and a private key in any combination.</desc>
-    <text x="24" y="22" class="f" font-size="8" letter-spacing="1.2">ONE FILE // THREE POSSIBLE PAYLOADS</text>
-    <rect x="24" y="42" width="236" height="150" class="box"/>
-    <use href="#crt-i-file" x="40" y="58" width="20" height="20" class="ico"/>
-    <text x="70" y="72" class="t" font-size="10.5" font-weight="700">DOMAIN CERTIFICATE</text>
-    <line x1="40" y1="90" x2="244" y2="90" class="rule"/>
-    <text x="40" y="110" class="m" font-size="9">Your domain name and</text>
-    <text x="40" y="124" class="m" font-size="9">public key, signed by a CA.</text>
-    <text x="40" y="160" class="f" font-size="7.5" letter-spacing="0.9">SENT TO EVERY VISITOR</text>
-    <rect x="282" y="42" width="236" height="150" class="box"/>
-    <use href="#crt-i-layers" x="298" y="58" width="20" height="20" class="ico"/>
-    <text x="328" y="72" class="t" font-size="10.5" font-weight="700">INTERMEDIATE CHAIN</text>
-    <line x1="298" y1="90" x2="502" y2="90" class="rule"/>
-    <text x="298" y="110" class="m" font-size="9">The links between your</text>
-    <text x="298" y="124" class="m" font-size="9">certificate and a trusted root.</text>
-    <text x="298" y="160" class="f" font-size="7.5" letter-spacing="0.9">SENT WITH THE LEAF</text>
-    <rect x="540" y="42" width="236" height="150" class="box"/>
-    <use href="#crt-i-key" x="556" y="58" width="20" height="20" class="ico"/>
-    <text x="586" y="72" class="t" font-size="10.5" font-weight="700">PRIVATE KEY</text>
-    <line x1="556" y1="90" x2="760" y2="90" class="rule"/>
-    <text x="556" y="110" class="m" font-size="9">The other half of the key</text>
-    <text x="556" y="124" class="m" font-size="9">pair. It never leaves the host.</text>
-    <text x="556" y="160" class="f" font-size="7.5" letter-spacing="0.9">NEVER SENT TO ANYONE</text>
-    <line x1="24" y1="216" x2="776" y2="216" class="rule"/>
-    <text x="24" y="238" class="m" font-size="9">A <tspan class="mono" font-weight="700">.pem</tspan> can hold any combination. A <tspan class="mono" font-weight="700">.crt</tspan> holds certificates. A <tspan class="mono" font-weight="700">.key</tspan> holds one key. A <tspan class="mono" font-weight="700">.pfx</tspan> holds all three.</text>
-  </svg>
-  </div>
-  <div class="crt-fig-src">ANATOMY · THREE PAYLOADS · ICONS: LUCIDE VIA ICONIFY</div>
-</figure>
 
 The practical consequence is simple. If a file contains a private key, it must be protected like a password. If it contains only certificates, it is public by design and can be copied freely. The extension does not tell you which case you are in; the contents do.
 

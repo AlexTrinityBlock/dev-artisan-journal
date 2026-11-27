@@ -19,9 +19,60 @@ cardImageAlt: "证书文件可能承载的三种内容示意图：域名证书�
 
 一旦看懂这三种内容，扩展名就不再是冷知识。你能预测一个文件能装什么、不能装什么，也能直接挑对 `openssl` 命令，不用再猜。
 
-<figure class="fig">
-  <img src="/images/certificate-files-decoded/lead.webp" alt="证书文件可能承载的三种内容示意图：域名证书、中间链与私钥" width="720" height="405" loading="lazy" />
-  <figcaption>编辑图解——文章自身的系统视图，为预览卡重绘。</figcaption>
+<div class="crt-sprite" aria-hidden="true">
+  <svg width="0" height="0" focusable="false">
+    <defs>
+      <symbol id="crt-i-file" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10 9H8m8 4H8m8 4H8"/></g></symbol>
+      <symbol id="crt-i-layers" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></g></symbol>
+      <symbol id="crt-i-key" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></g></symbol>
+      <symbol id="crt-i-shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12l2 2l4-4"/></g></symbol>
+      <symbol id="crt-i-server" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><path d="M6 6h.01M6 18h.01"/></g></symbol>
+      <symbol id="crt-i-globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20a14.5 14.5 0 0 0 0-20M2 12h20"/></g></symbol>
+      <symbol id="crt-i-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><circle cx="12" cy="16" r="1"/><rect width="18" height="12" x="3" y="10" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></g></symbol>
+      <symbol id="crt-i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><circle cx="11.5" cy="14.5" r="2.5"/><path d="M13.3 16.3L15 18"/></g></symbol>
+      <symbol id="crt-i-terminal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M12 19h8M4 17l6-6l-6-6"/></g></symbol>
+      <symbol id="crt-i-binary" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><rect width="4" height="6" x="14" y="14" rx="2"/><rect width="4" height="6" x="6" y="4" rx="2"/><path d="M6 20h4m4-10h4M6 14h2v6m6-16h2v6"/></g></symbol>
+    </defs>
+  </svg>
+</div>
+
+<figure class="crt-fig">
+  <figcaption>
+    <span class="card-tag">ANATOMY // 01</span>
+    <h3 class="crt-fig-title">TLS 文件可能携带的三种内容</h3>
+    <p class="crt-fig-sub">容器会变，内容不会。</p>
+  </figcaption>
+  <div class="crt-scroll">
+  <svg class="crt-svg" viewBox="0 0 800 260" role="img" aria-labelledby="crt-f1-title crt-f1-desc">
+    <title id="crt-f1-title">证书文件结构</title>
+    <desc id="crt-f1-desc">一个文件可以任意组合域名证书、中间证书链与私钥。</desc>
+    <text x="24" y="22" class="f" font-size="8" letter-spacing="1.2">一个文件 // 三种可能内容</text>
+    <rect x="24" y="42" width="236" height="150" class="box"/>
+    <use href="#crt-i-file" x="40" y="58" width="20" height="20" class="ico"/>
+    <text x="70" y="72" class="t" font-size="10.5" font-weight="700">域名证书</text>
+    <line x1="40" y1="90" x2="244" y2="90" class="rule"/>
+    <text x="40" y="110" class="m" font-size="9">你的域名与</text>
+    <text x="40" y="124" class="m" font-size="9">公钥，由 CA 签发。</text>
+    <text x="40" y="160" class="f" font-size="7.5" letter-spacing="0.9">发送给每位访客</text>
+    <rect x="282" y="42" width="236" height="150" class="box"/>
+    <use href="#crt-i-layers" x="298" y="58" width="20" height="20" class="ico"/>
+    <text x="328" y="72" class="t" font-size="10.5" font-weight="700">中间证书链</text>
+    <line x1="298" y1="90" x2="502" y2="90" class="rule"/>
+    <text x="298" y="110" class="m" font-size="9">你的证书与</text>
+    <text x="298" y="124" class="m" font-size="9">受信任根证书之间的连接。</text>
+    <text x="298" y="160" class="f" font-size="7.5" letter-spacing="0.9">随叶证书发送</text>
+    <rect x="540" y="42" width="236" height="150" class="box"/>
+    <use href="#crt-i-key" x="556" y="58" width="20" height="20" class="ico"/>
+    <text x="586" y="72" class="t" font-size="10.5" font-weight="700">私钥</text>
+    <line x1="556" y1="90" x2="760" y2="90" class="rule"/>
+    <text x="556" y="110" class="m" font-size="9">密钥对的另一半。</text>
+    <text x="556" y="124" class="m" font-size="9">它永远不离开主机。</text>
+    <text x="556" y="160" class="f" font-size="7.5" letter-spacing="0.9">绝不发送给任何人</text>
+    <line x1="24" y1="216" x2="776" y2="216" class="rule"/>
+    <text x="24" y="238" class="m" font-size="9">一个 <tspan class="mono" font-weight="700">.pem</tspan> 可以装任意组合；<tspan class="mono" font-weight="700">.crt</tspan> 装证书；<tspan class="mono" font-weight="700">.key</tspan> 装一把密钥；<tspan class="mono" font-weight="700">.pfx</tspan> 则三种全装。</text>
+  </svg>
+  </div>
+  <div class="crt-fig-src">结构 · 三种内容 · 图标：LUCIDE VIA ICONIFY</div>
 </figure>
 
 <style>
@@ -446,62 +497,6 @@ cardImageAlt: "证书文件可能承载的三种内容示意图：域名证书�
 ## 三种内容，一个盒子
 
 先从「里面可能有什么」说起。一个文件可能只装一种内容，也可能三种全装；光看扩展名不会知道。
-
-<div class="crt-sprite" aria-hidden="true">
-  <svg width="0" height="0" focusable="false">
-    <defs>
-      <symbol id="crt-i-file" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10 9H8m8 4H8m8 4H8"/></g></symbol>
-      <symbol id="crt-i-layers" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></g></symbol>
-      <symbol id="crt-i-key" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></g></symbol>
-      <symbol id="crt-i-shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12l2 2l4-4"/></g></symbol>
-      <symbol id="crt-i-server" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><path d="M6 6h.01M6 18h.01"/></g></symbol>
-      <symbol id="crt-i-globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20a14.5 14.5 0 0 0 0-20M2 12h20"/></g></symbol>
-      <symbol id="crt-i-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><circle cx="12" cy="16" r="1"/><rect width="18" height="12" x="3" y="10" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></g></symbol>
-      <symbol id="crt-i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><circle cx="11.5" cy="14.5" r="2.5"/><path d="M13.3 16.3L15 18"/></g></symbol>
-      <symbol id="crt-i-terminal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M12 19h8M4 17l6-6l-6-6"/></g></symbol>
-      <symbol id="crt-i-binary" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><rect width="4" height="6" x="14" y="14" rx="2"/><rect width="4" height="6" x="6" y="4" rx="2"/><path d="M6 20h4m4-10h4M6 14h2v6m6-16h2v6"/></g></symbol>
-    </defs>
-  </svg>
-</div>
-
-<figure class="crt-fig">
-  <figcaption>
-    <span class="card-tag">ANATOMY // 01</span>
-    <h3 class="crt-fig-title">TLS 文件可能携带的三种内容</h3>
-    <p class="crt-fig-sub">容器会变，内容不会。</p>
-  </figcaption>
-  <div class="crt-scroll">
-  <svg class="crt-svg" viewBox="0 0 800 260" role="img" aria-labelledby="crt-f1-title crt-f1-desc">
-    <title id="crt-f1-title">证书文件结构</title>
-    <desc id="crt-f1-desc">一个文件可以任意组合域名证书、中间证书链与私钥。</desc>
-    <text x="24" y="22" class="f" font-size="8" letter-spacing="1.2">一个文件 // 三种可能内容</text>
-    <rect x="24" y="42" width="236" height="150" class="box"/>
-    <use href="#crt-i-file" x="40" y="58" width="20" height="20" class="ico"/>
-    <text x="70" y="72" class="t" font-size="10.5" font-weight="700">域名证书</text>
-    <line x1="40" y1="90" x2="244" y2="90" class="rule"/>
-    <text x="40" y="110" class="m" font-size="9">你的域名与</text>
-    <text x="40" y="124" class="m" font-size="9">公钥，由 CA 签发。</text>
-    <text x="40" y="160" class="f" font-size="7.5" letter-spacing="0.9">发送给每位访客</text>
-    <rect x="282" y="42" width="236" height="150" class="box"/>
-    <use href="#crt-i-layers" x="298" y="58" width="20" height="20" class="ico"/>
-    <text x="328" y="72" class="t" font-size="10.5" font-weight="700">中间证书链</text>
-    <line x1="298" y1="90" x2="502" y2="90" class="rule"/>
-    <text x="298" y="110" class="m" font-size="9">你的证书与</text>
-    <text x="298" y="124" class="m" font-size="9">受信任根证书之间的连接。</text>
-    <text x="298" y="160" class="f" font-size="7.5" letter-spacing="0.9">随叶证书发送</text>
-    <rect x="540" y="42" width="236" height="150" class="box"/>
-    <use href="#crt-i-key" x="556" y="58" width="20" height="20" class="ico"/>
-    <text x="586" y="72" class="t" font-size="10.5" font-weight="700">私钥</text>
-    <line x1="556" y1="90" x2="760" y2="90" class="rule"/>
-    <text x="556" y="110" class="m" font-size="9">密钥对的另一半。</text>
-    <text x="556" y="124" class="m" font-size="9">它永远不离开主机。</text>
-    <text x="556" y="160" class="f" font-size="7.5" letter-spacing="0.9">绝不发送给任何人</text>
-    <line x1="24" y1="216" x2="776" y2="216" class="rule"/>
-    <text x="24" y="238" class="m" font-size="9">一个 <tspan class="mono" font-weight="700">.pem</tspan> 可以装任意组合；<tspan class="mono" font-weight="700">.crt</tspan> 装证书；<tspan class="mono" font-weight="700">.key</tspan> 装一把密钥；<tspan class="mono" font-weight="700">.pfx</tspan> 则三种全装。</text>
-  </svg>
-  </div>
-  <div class="crt-fig-src">结构 · 三种内容 · 图标：LUCIDE VIA ICONIFY</div>
-</figure>
 
 实际结论很简单。文件里若有私钥，就得当成密码一样保护。若只有证书，它本来就是公开的，可以随意复制。扩展名不会告诉你属于哪一种；内容才会。
 

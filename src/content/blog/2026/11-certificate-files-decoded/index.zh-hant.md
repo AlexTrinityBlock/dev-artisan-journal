@@ -19,9 +19,60 @@ cardImageAlt: "憑證檔可能承載的三種內容示意圖：網域憑證、�
 
 一旦看懂這三種內容，副檔名就不再是冷知識。你能預測一個檔案能裝什麼、不能裝什麼，也能直接挑對 `openssl` 指令，不必再猜。
 
-<figure class="fig">
-  <img src="/images/certificate-files-decoded/lead.webp" alt="憑證檔可能承載的三種內容示意圖：網域憑證、中繼鏈與私鑰" width="720" height="405" loading="lazy" />
-  <figcaption>編輯圖解——文章自身的系統視圖，為預覽卡重繪。</figcaption>
+<div class="crt-sprite" aria-hidden="true">
+  <svg width="0" height="0" focusable="false">
+    <defs>
+      <symbol id="crt-i-file" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10 9H8m8 4H8m8 4H8"/></g></symbol>
+      <symbol id="crt-i-layers" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></g></symbol>
+      <symbol id="crt-i-key" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></g></symbol>
+      <symbol id="crt-i-shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12l2 2l4-4"/></g></symbol>
+      <symbol id="crt-i-server" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><path d="M6 6h.01M6 18h.01"/></g></symbol>
+      <symbol id="crt-i-globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20a14.5 14.5 0 0 0 0-20M2 12h20"/></g></symbol>
+      <symbol id="crt-i-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><circle cx="12" cy="16" r="1"/><rect width="18" height="12" x="3" y="10" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></g></symbol>
+      <symbol id="crt-i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><circle cx="11.5" cy="14.5" r="2.5"/><path d="M13.3 16.3L15 18"/></g></symbol>
+      <symbol id="crt-i-terminal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M12 19h8M4 17l6-6l-6-6"/></g></symbol>
+      <symbol id="crt-i-binary" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><rect width="4" height="6" x="14" y="14" rx="2"/><rect width="4" height="6" x="6" y="4" rx="2"/><path d="M6 20h4m4-10h4M6 14h2v6m6-16h2v6"/></g></symbol>
+    </defs>
+  </svg>
+</div>
+
+<figure class="crt-fig">
+  <figcaption>
+    <span class="card-tag">ANATOMY // 01</span>
+    <h3 class="crt-fig-title">TLS 檔案可能攜帶的三種內容</h3>
+    <p class="crt-fig-sub">容器會變，內容不會。</p>
+  </figcaption>
+  <div class="crt-scroll">
+  <svg class="crt-svg" viewBox="0 0 800 260" role="img" aria-labelledby="crt-f1-title crt-f1-desc">
+    <title id="crt-f1-title">憑證檔案結構</title>
+    <desc id="crt-f1-desc">一個檔案可以任意組合網域憑證、中繼憑證鏈與私鑰。</desc>
+    <text x="24" y="22" class="f" font-size="8" letter-spacing="1.2">一個檔案 // 三種可能內容</text>
+    <rect x="24" y="42" width="236" height="150" class="box"/>
+    <use href="#crt-i-file" x="40" y="58" width="20" height="20" class="ico"/>
+    <text x="70" y="72" class="t" font-size="10.5" font-weight="700">網域憑證</text>
+    <line x1="40" y1="90" x2="244" y2="90" class="rule"/>
+    <text x="40" y="110" class="m" font-size="9">你的網域名稱與</text>
+    <text x="40" y="124" class="m" font-size="9">公鑰，由 CA 簽發。</text>
+    <text x="40" y="160" class="f" font-size="7.5" letter-spacing="0.9">傳送給每位訪客</text>
+    <rect x="282" y="42" width="236" height="150" class="box"/>
+    <use href="#crt-i-layers" x="298" y="58" width="20" height="20" class="ico"/>
+    <text x="328" y="72" class="t" font-size="10.5" font-weight="700">中繼憑證鏈</text>
+    <line x1="298" y1="90" x2="502" y2="90" class="rule"/>
+    <text x="298" y="110" class="m" font-size="9">你的憑證與</text>
+    <text x="298" y="124" class="m" font-size="9">受信任根憑證之間的連結。</text>
+    <text x="298" y="160" class="f" font-size="7.5" letter-spacing="0.9">隨葉憑證傳送</text>
+    <rect x="540" y="42" width="236" height="150" class="box"/>
+    <use href="#crt-i-key" x="556" y="58" width="20" height="20" class="ico"/>
+    <text x="586" y="72" class="t" font-size="10.5" font-weight="700">私鑰</text>
+    <line x1="556" y1="90" x2="760" y2="90" class="rule"/>
+    <text x="556" y="110" class="m" font-size="9">金鑰對的另一半。</text>
+    <text x="556" y="124" class="m" font-size="9">它永遠不離開主機。</text>
+    <text x="556" y="160" class="f" font-size="7.5" letter-spacing="0.9">絕不傳送給任何人</text>
+    <line x1="24" y1="216" x2="776" y2="216" class="rule"/>
+    <text x="24" y="238" class="m" font-size="9">一個 <tspan class="mono" font-weight="700">.pem</tspan> 可以裝任意組合；<tspan class="mono" font-weight="700">.crt</tspan> 裝憑證；<tspan class="mono" font-weight="700">.key</tspan> 裝一把金鑰；<tspan class="mono" font-weight="700">.pfx</tspan> 則三種全裝。</text>
+  </svg>
+  </div>
+  <div class="crt-fig-src">結構 · 三種內容 · 圖示：LUCIDE VIA ICONIFY</div>
 </figure>
 
 <style>
@@ -446,62 +497,6 @@ cardImageAlt: "憑證檔可能承載的三種內容示意圖：網域憑證、�
 ## 三種內容，一個箱子
 
 先從「裡面可能有什麼」開始。一個檔案可能只裝一種內容，也可能三種全裝；光看副檔名不會知道。
-
-<div class="crt-sprite" aria-hidden="true">
-  <svg width="0" height="0" focusable="false">
-    <defs>
-      <symbol id="crt-i-file" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10 9H8m8 4H8m8 4H8"/></g></symbol>
-      <symbol id="crt-i-layers" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></g></symbol>
-      <symbol id="crt-i-key" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></g></symbol>
-      <symbol id="crt-i-shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12l2 2l4-4"/></g></symbol>
-      <symbol id="crt-i-server" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/><path d="M6 6h.01M6 18h.01"/></g></symbol>
-      <symbol id="crt-i-globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20a14.5 14.5 0 0 0 0-20M2 12h20"/></g></symbol>
-      <symbol id="crt-i-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><circle cx="12" cy="16" r="1"/><rect width="18" height="12" x="3" y="10" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></g></symbol>
-      <symbol id="crt-i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><circle cx="11.5" cy="14.5" r="2.5"/><path d="M13.3 16.3L15 18"/></g></symbol>
-      <symbol id="crt-i-terminal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><path d="M12 19h8M4 17l6-6l-6-6"/></g></symbol>
-      <symbol id="crt-i-binary" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"><rect width="4" height="6" x="14" y="14" rx="2"/><rect width="4" height="6" x="6" y="4" rx="2"/><path d="M6 20h4m4-10h4M6 14h2v6m6-16h2v6"/></g></symbol>
-    </defs>
-  </svg>
-</div>
-
-<figure class="crt-fig">
-  <figcaption>
-    <span class="card-tag">ANATOMY // 01</span>
-    <h3 class="crt-fig-title">TLS 檔案可能攜帶的三種內容</h3>
-    <p class="crt-fig-sub">容器會變，內容不會。</p>
-  </figcaption>
-  <div class="crt-scroll">
-  <svg class="crt-svg" viewBox="0 0 800 260" role="img" aria-labelledby="crt-f1-title crt-f1-desc">
-    <title id="crt-f1-title">憑證檔案結構</title>
-    <desc id="crt-f1-desc">一個檔案可以任意組合網域憑證、中繼憑證鏈與私鑰。</desc>
-    <text x="24" y="22" class="f" font-size="8" letter-spacing="1.2">一個檔案 // 三種可能內容</text>
-    <rect x="24" y="42" width="236" height="150" class="box"/>
-    <use href="#crt-i-file" x="40" y="58" width="20" height="20" class="ico"/>
-    <text x="70" y="72" class="t" font-size="10.5" font-weight="700">網域憑證</text>
-    <line x1="40" y1="90" x2="244" y2="90" class="rule"/>
-    <text x="40" y="110" class="m" font-size="9">你的網域名稱與</text>
-    <text x="40" y="124" class="m" font-size="9">公鑰，由 CA 簽發。</text>
-    <text x="40" y="160" class="f" font-size="7.5" letter-spacing="0.9">傳送給每位訪客</text>
-    <rect x="282" y="42" width="236" height="150" class="box"/>
-    <use href="#crt-i-layers" x="298" y="58" width="20" height="20" class="ico"/>
-    <text x="328" y="72" class="t" font-size="10.5" font-weight="700">中繼憑證鏈</text>
-    <line x1="298" y1="90" x2="502" y2="90" class="rule"/>
-    <text x="298" y="110" class="m" font-size="9">你的憑證與</text>
-    <text x="298" y="124" class="m" font-size="9">受信任根憑證之間的連結。</text>
-    <text x="298" y="160" class="f" font-size="7.5" letter-spacing="0.9">隨葉憑證傳送</text>
-    <rect x="540" y="42" width="236" height="150" class="box"/>
-    <use href="#crt-i-key" x="556" y="58" width="20" height="20" class="ico"/>
-    <text x="586" y="72" class="t" font-size="10.5" font-weight="700">私鑰</text>
-    <line x1="556" y1="90" x2="760" y2="90" class="rule"/>
-    <text x="556" y="110" class="m" font-size="9">金鑰對的另一半。</text>
-    <text x="556" y="124" class="m" font-size="9">它永遠不離開主機。</text>
-    <text x="556" y="160" class="f" font-size="7.5" letter-spacing="0.9">絕不傳送給任何人</text>
-    <line x1="24" y1="216" x2="776" y2="216" class="rule"/>
-    <text x="24" y="238" class="m" font-size="9">一個 <tspan class="mono" font-weight="700">.pem</tspan> 可以裝任意組合；<tspan class="mono" font-weight="700">.crt</tspan> 裝憑證；<tspan class="mono" font-weight="700">.key</tspan> 裝一把金鑰；<tspan class="mono" font-weight="700">.pfx</tspan> 則三種全裝。</text>
-  </svg>
-  </div>
-  <div class="crt-fig-src">結構 · 三種內容 · 圖示：LUCIDE VIA ICONIFY</div>
-</figure>
 
 實務上的結論很簡單。檔案裡若有私鑰，就得當成密碼一樣保護。若只有憑證，它本來就是公開的，可以隨意複製。副檔名不會告訴你屬於哪一種；內容才會。
 

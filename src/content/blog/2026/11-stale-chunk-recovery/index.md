@@ -108,7 +108,7 @@ cardImageAlt: "Diagram of the stale-tab recovery flow: old tab, lazy import, 404
 
 <figure class="fig">
   <img src="/images/stale-chunk-recovery/lead.webp" alt="Diagram of the stale-tab recovery flow: old tab, lazy import, 404, reload once, fresh document" width="720" height="405" loading="lazy" />
-  <figcaption>Editorial diagram — the stale-tab recovery flow, redrawn for the preview card.</figcaption>
+  <figcaption>Editorial diagram — the stale-tab recovery flow: old tab, lazy import, 404, reload once, fresh document.</figcaption>
 </figure>
 
 ## A deploy is a rename

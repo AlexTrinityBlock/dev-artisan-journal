@@ -108,7 +108,7 @@ cardImageAlt: "過期分頁復原流程圖：舊分頁、延遲載入、404、�
 
 <figure class="fig">
   <img src="/images/stale-chunk-recovery/lead.webp" alt="過期分頁復原流程圖：舊分頁、延遲載入、404、重新載入一次、新文件" width="720" height="405" loading="lazy" />
-  <figcaption>編輯圖解——過期分頁的復原流程，為預覽卡重繪。</figcaption>
+  <figcaption>編輯圖解——過期分頁的復原流程：舊分頁、延遲載入、404、重新載入一次、新文件。</figcaption>
 </figure>
 
 ## 部署就是改名

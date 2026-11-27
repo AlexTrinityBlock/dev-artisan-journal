@@ -108,7 +108,7 @@ cardImageAlt: "过期标签页恢复流程图：旧标签页、延迟加载、40
 
 <figure class="fig">
   <img src="/images/stale-chunk-recovery/lead.webp" alt="过期标签页恢复流程图：旧标签页、延迟加载、404、重新加载一次、新文档" width="720" height="405" loading="lazy" />
-  <figcaption>编辑图解——过期标签页的恢复流程，为预览卡重绘。</figcaption>
+  <figcaption>编辑图解——过期标签页的恢复流程：旧标签页、延迟加载、404、重新加载一次、新文档。</figcaption>
 </figure>
 
 ## 部署就是改名
