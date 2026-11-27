@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import type { Lang } from '../i18n/config';
 import { entrySlug } from '../i18n/posts';
 import { formatDate, postHref, readMinutes, tagHref } from '../i18n/utils';
@@ -16,6 +18,8 @@ interface Props {
       featured?: boolean;
       readTime?: string;
       author?: string;
+      cardImage?: ImageMetadata;
+      cardImageAlt?: string;
     };
   };
   lang: Lang;
@@ -29,6 +33,9 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 const postUrl = postHref(lang, entrySlug(post.id));
 const formattedDate = formatDate(new Date(post.data.pubDate), lang, 'short');
 const readTime = t.post.readTime(readMinutes(post.data.readTime));
+const cardWidth = post.data.cardImage
+  ? Math.min(720, post.data.cardImage.width)
+  : 720;
 ---
 
 <div 
@@ -40,6 +47,18 @@ const readTime = t.post.readTime(readMinutes(post.data.readTime));
   onkeydown="if (event.key === 'Enter' && !event.target.closest('a')) window.location.href = this.dataset.href;"
 >
   <article class="chamfer-card-content article-card-inner">
+    {post.data.cardImage && (
+      <div class="card-image">
+        <Image
+          src={post.data.cardImage}
+          alt={post.data.cardImageAlt ?? ''}
+          width={cardWidth}
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    )}
+
     <!-- Card Header Meta -->
     <div class="card-meta">
       <span class="card-tag">{post.data.category}</span>
@@ -132,6 +151,21 @@ const readTime = t.post.readTime(readMinutes(post.data.readTime));
     );
   }
 
+  .card-image {
+    margin: -24px -22px 16px;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--mono-bg-subtle);
+    border-bottom: 0.7px solid var(--mono-grid);
+  }
+
+  .card-image :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
   .card-meta {
     display: flex;
     align-items: center;
@@ -140,14 +174,15 @@ const readTime = t.post.readTime(readMinutes(post.data.readTime));
     margin-bottom: 12px;
     font-family: var(--mono-font-mono);
     font-size: 11px;
-    color: var(--mono-muted);
+    font-weight: 500;
+    color: var(--mono-label);
   }
 
   .card-tag {
     font-family: var(--mono-font-mono);
-    font-size: 10px;
+    font-size: 10.5px;
     font-weight: 600;
-    color: var(--mono-muted);
+    color: var(--mono-label);
     letter-spacing: 0.12em;
     text-transform: uppercase;
     background: var(--mono-paper);
@@ -175,7 +210,7 @@ const readTime = t.post.readTime(readMinutes(post.data.readTime));
 
   .date-text, .read-time {
     font-size: 11px;
-    color: var(--mono-muted);
+    color: var(--mono-label);
   }
 
   .article-title {

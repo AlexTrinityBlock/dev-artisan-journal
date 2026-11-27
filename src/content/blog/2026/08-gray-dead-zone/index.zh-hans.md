@@ -7,6 +7,8 @@ tags: ["Color", "Gradients", "ColorTheory", "CSS", "Design"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "4 min read"
+cardImage: "./cover.webp"
+cardImageAlt: "CSS-Tricks 图解：左侧渐变直接穿过色轮的灰色中心，右侧渐变绕过中心，保持色彩饱和。"
 ---
 
 # 灰色死亡区：在色轮上挑选色相的三条规则
@@ -20,6 +22,11 @@ readTime: "4 min read"
 > **「灰色死亡区」**——*Chris Coyier, CSS-Tricks*：*「当两个颜色之间的渐变，其色彩空间中的连线穿过零饱和的中点，中段就会出现这个『灰色死亡区』。」*
 
 技术根源在于 sRGB 有损的插值；较新的 CSS 色彩空间（如 `oklch`）在代码层面修好了*插值*，但要选哪些终点色相仍然由你决定——而色轮依然是那张地图。
+
+<figure class="fig">
+  <img src="/images/gray-dead-zone/css-tricks-gray-dead-zone.webp" alt="CSS-Tricks 的并排图解：左侧渐变笔直穿过色轮中心而变成灰色，右侧渐变绕过中心并保持饱和。" width="1200" height="600" loading="lazy" />
+  <figcaption><b>官方图解</b> — 直接穿过零饱和中心的弦（左，✕）会在渐变中点产生灰色；绕过中心（右，✓）则能保持色彩。来源：<a href="https://css-tricks.com/the-gray-dead-zone-of-gradients/">CSS-Tricks — The Gray Dead Zone of Gradients</a></figcaption>
+</figure>
 
 ## 色轮的三条规则
 

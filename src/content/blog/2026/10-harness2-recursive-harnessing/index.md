@@ -7,6 +7,8 @@ tags: ["Agent", "Harness", "RSI", "LLM", "PaperNotes"]
 featured: true
 author: "Alex.Hsiao"
 readTime: "16 min read"
+cardImage: "./cover.webp"
+cardImageAlt: "Diagram of the eight harness components grouped by runtime role around a frozen model"
 ---
 
 <svg class="hx-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
@@ -147,7 +149,7 @@ A harness is written as $\mathcal{H} = (c^{1}, \ldots, c^{K})$, a tuple of $K$ e
 Three of the eight behave differently enough to explain much of what follows. **C5 is the only component that adds an inference context** — it is the one edit that multiplies cost rather than shape it. **C6 costs nothing until it is invoked**, which makes it the cheapest place to put long specialist procedure. **C8 is the only component the model cannot ignore**, because a plugin runs in the tool loop rather than in the prompt. When the ablations arrive later, the two components that add *capability* (skills, scripts) turn out to be worth more than the group that adds *instruction* — a result that is easier to believe once you have seen the activation column.
 
 <figure class="fig">
-  <img src="/images/harness2/fig02-harness-components.png" alt="Diagram of the eight harness components grouped by runtime role around a frozen model" loading="lazy" />
+  <img src="/images/harness2/fig02-harness-components.webp" alt="Diagram of the eight harness components grouped by runtime role around a frozen model" width="821" height="294" loading="lazy" />
   <figcaption><b>Fig. 2</b> — The eight components grouped by the part of the runtime they modify. The icon grid above is this plate redrawn in the journal's mono palette; the original is worth reading once for how the plugin sits between the model and the tool interface. Source: <a href="https://arxiv.org/html/2610.14224v1/components.png">arxiv.org/html/2610.14224v1/components.png</a></figcaption>
 </figure>
 
@@ -191,7 +193,7 @@ Task-level recursion changes $\mathcal{H}$. Harnessing-level recursion changes $
 Why insist on two loops? Because the obvious one-level design fails in two directions at once. A harness tuned for yesterday's task is often *worse* than the starting harness on today's; and carrying a heavily tailored harness forward produces noisy improvement as the task distribution shifts. What does carry over, reliably, is the record of the refinement itself: how a weakness was diagnosed, which change was tried, and what the execution revealed.
 
 <figure class="fig">
-  <img src="/images/harness2/fig03-pipeline.png" alt="Pipeline diagram showing task-level recursion on the left and harnessing-level recursion on the right" loading="lazy" />
+  <img src="/images/harness2/fig03-pipeline.webp" alt="Pipeline diagram showing task-level recursion on the left and harnessing-level recursion on the right" width="1014" height="327" loading="lazy" />
   <figcaption><b>Fig. 3</b> — The pipeline. The inner box is the execution harness being refined on Task <em>t</em>; the outer arc is the improvement harness, which absorbs the refinement record and hands it to the next task. Source: <a href="https://arxiv.org/html/2610.14224v1/harness2_main_new.png">arxiv.org/html/2610.14224v1/harness2_main_new.png</a></figcaption>
 </figure>
 
@@ -262,7 +264,7 @@ The important discipline is stated in one sentence: each decision is tied to a c
 One contrastive step is a single sample. The paper scales it in two directions controlled by a budget $k$: $k$ candidates per scope and $k$ compositions in parallel, or $k$ chained steps in sequence.
 
 <figure class="fig">
-  <img src="/images/harness2/fig04-scaling.png" alt="Two diagrams contrasting parallel recursion, where candidates are proposed independently, with sequential recursion, where each step feeds the next" loading="lazy" />
+  <img src="/images/harness2/fig04-scaling.webp" alt="Two diagrams contrasting parallel recursion, where candidates are proposed independently, with sequential recursion, where each step feeds the next" width="1007" height="250" loading="lazy" />
   <figcaption><b>Fig. 4</b> — Two forms of task-level recursion. (a) Parallel: k references, k invariant and k domain candidates, and k independent composition sessions that each see the whole pool. (b) Sequential: each refined harness and its accumulated execution history become the input to the next step. Source: <a href="https://arxiv.org/html/2610.14224v1/scaling.png">arxiv.org/html/2610.14224v1/scaling.png</a></figcaption>
 </figure>
 
@@ -316,7 +318,7 @@ The first is that **the weaker executor gains more** on WorkBuddy-Bench and LAB.
 The second is that **recursion extends the gain rather than rescuing it**. Parallel recursion at $k = 5$ adds 2.9–3.9 points on WorkBuddy-Bench, 3.0–4.2 on JobBench, and 2.6–6.7 percentage points in LAB Partial. It also narrows some gaps between initial harnesses — JobBench's OpenCode–Codex gap shrinks from 2.4 to 0.5 for Gemini and from 3.0 to 0.5 for GLM-5 — but not uniformly: on WorkBuddy-Bench, GLM-5's gap widens from 0.2 to 1.3.
 
 <figure class="fig">
-  <img src="/images/harness2/fig01-overall-performance.png" alt="Bar chart of WorkBuddy-Bench scores by domain and a line chart of score against scaling budget" loading="lazy" />
+  <img src="/images/harness2/fig01-overall-performance.webp" alt="Bar chart of WorkBuddy-Bench scores by domain and a line chart of score against scaling budget" width="758" height="256" loading="lazy" />
   <figcaption><b>Fig. 1</b> — Left: WorkBuddy-Bench by domain for Gemini 3.5 Flash under OpenCode, with parallel recursion at k = 5; the number above each bar is the gain over the base harness, which is included as the grey bar. Right: score against the recursion budget k on WB-code — Harness2 climbs monotonically while the two baselines stall or wobble. Source: <a href="https://arxiv.org/html/2610.14224v1/intro_teaser.png">arxiv.org/html/2610.14224v1/intro_teaser.png</a></figcaption>
 </figure>
 

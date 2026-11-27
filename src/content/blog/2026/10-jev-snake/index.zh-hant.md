@@ -7,6 +7,8 @@ tags: ["TypeSafe", "Jev", "OpenAI", "AI", "JavaScript", "Interaction"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "17 min read"
+cardImage: "./cover.webp"
+cardImageAlt: "比較傳統軟體、代理，以及以模型判斷構成的 AI 軟體三種架構的圖示"
 ---
 # Jev 玩貪食蛇：兩個給決策模型的小介面
 
@@ -424,6 +426,11 @@ readTime: "17 min read"
 第二列是多數基於 prompt 的系統出錯的地方。更多上下文不會自動更好。Jev 自己的文件就把「塞滿無關細節的巨大狀態」列為失敗模式：無關素材會變成干擾，準確率隨之下降。解法是在送出請求前，於程式中過濾並結構化。
 
 第四列是讓系統可測試的關鍵。模型回傳機率分布；程式決定閾值、備援方案與人工升級路徑。當政策改變時，你改的是程式裡的一個數字——不是 prompt 裡的一段話。
+
+<figure class="fig">
+  <img src="/images/jev-snake/system-one-architectures.webp" alt="TypeSafe 官方圖示，比較傳統軟體、代理與 AI 軟體：控制流程由程式碼掌握，決策模型提供具型別的判斷" width="1600" height="873" loading="lazy" />
+  <figcaption><b>官方圖示</b> — TypeSafe 對傳統軟體、代理與 AI 軟體的三種架構比較。第三欄正是兩個展示共用的形狀：控制流程留在程式裡，決策模型只在特定節點提供具型別的判斷。來源：<a href="https://docs.typesafe.ai/concepts/how-to-build-with-system-one">TypeSafe,〈How to build with System One〉</a></figcaption>
+</figure>
 
 ## 同一個想法的兩套 schema
 

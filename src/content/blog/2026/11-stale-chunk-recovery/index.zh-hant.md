@@ -7,6 +7,8 @@ tags: ["Vite", "React", "前端", "快取", "可靠性"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "14 分鐘"
+cardImage: "./cover.webp"
+cardImageAlt: "過期分頁復原流程圖：舊分頁、延遲載入、404、重新載入一次、新文件"
 ---
 
 # 沒跟上部署的那個分頁：Vite 過期 chunk 的復原

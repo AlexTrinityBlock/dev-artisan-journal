@@ -7,6 +7,8 @@ tags: ["Vite", "React", "Frontend", "Caching", "Reliability"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "14 min read"
+cardImage: "./cover.webp"
+cardImageAlt: "Diagram of the stale-tab recovery flow: old tab, lazy import, 404, reload once, fresh document"
 ---
 
 # The Tab That Missed the Deploy: Recovering Stale Vite Chunks

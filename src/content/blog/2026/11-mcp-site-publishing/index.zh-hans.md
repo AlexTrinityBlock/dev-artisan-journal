@@ -7,6 +7,8 @@ tags: ["MCP", "Spring Boot", "RustFS", "S3", "架构"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "8 分钟"
+cardImage: "./cover.webp"
+cardImageAlt: "MCP 客户端与服务器堆栈，包含 session 与传输层"
 ---
 
 # 通过 MCP 发布文章
@@ -179,6 +181,11 @@ RustFS 是一套分布式、S3 兼容的对象存储，用 Rust 编写。我用�
 实际上，任何一步都可能失败。URL 过期就重新申请一个。文件与声明类型不符就拒绝。上传了却没被引用，就定时清理。这些是运维细节，不是把存储桶密钥交给模型的理由。
 
 ## MCP 请求的形状
+
+<figure class="fig">
+  <img src="/images/mcp-publishing/mcp-stack.webp" alt="Spring AI 的 MCP 堆栈图：MCP 客户端与服务器各自在传输层之上有 session 层，底部列出 stdio、SSE 等传输。" width="1600" height="909" loading="lazy" />
+  <figcaption><b>官方图示</b> — Spring AI 对 MCP 堆栈的画法：客户端与服务器各自在传输层之上维持 session，JSON-RPC 消息跨越传输层。图下方以 stdio 与 SSE 为例；本站构建的 HTTP 端点就位于同一个传输层。来源：<a href="https://docs.spring.io/spring-ai/reference/api/mcp/mcp-overview.html">Spring AI — MCP overview</a></figcaption>
+</figure>
 
 请求的形状很简单。以下工具名称与参数是文章里的简写；真正的名称留在服务内部。
 

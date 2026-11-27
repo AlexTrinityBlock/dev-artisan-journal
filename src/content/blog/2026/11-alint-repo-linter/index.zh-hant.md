@@ -7,6 +7,8 @@ tags: ["alint", "靜態檢查", "GitHub Actions", "CI", "DevOps"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "14 分鐘"
+cardImage: "./cover.webp"
+cardImageAlt: "alint 官方容器圖：alint 內部的 CLI、LSP 伺服器與開發工具，外圍是 CI、編輯器與被檢查的儲存庫。"
 ---
 
 # alint：為程式碼周圍的儲存庫而生的檢查器
@@ -120,6 +122,11 @@ alint 自稱「一個快速、通用的檢查器」。這個修飾詞很重要�
 它接手 Repolinter 留下的位置——Repolinter 已於 2026 年 2 月封存——並且與程式碼檢查器並肩運作，而不是取代它們。專案每次發佈都會公佈基準測試：10 萬個檔案約 1.5 秒，100 萬個檔案不到 20 秒。
 
 這個工具很年輕。v0.23.0 在 2026 年 11 月 22 日發佈；儲存庫本身則成立於 2026 年 4 月。這是把版本固定下來的理由，不是忽略它的理由。核心模型很小也很穩定：一份設定、一次走訪、一組規則、一份報告。
+
+<figure class="fig">
+  <img src="/images/alint-repo-linter/alint-execution-pipeline.webp" alt="alint 官方執行流程圖：依序橫跨 Developer、alint、alint-dsl、alint-core、alint-rules 與 alint-output，從步驟 1（alint check）到步驟 10（回報並結束）。" width="1600" height="810" loading="lazy" />
+  <figcaption><b>官方圖解</b> — <code>alint check</code> 的執行流程：從載入設定與 <code>extends:</code> 信任邊界，經過單次走訪、分派、彙整，到輸出。來源：<a href="https://alint.org/docs/about/architecture-diagrams/">alint docs — Architecture diagrams</a></figcaption>
+</figure>
 
 ## 一條規則是三件事
 

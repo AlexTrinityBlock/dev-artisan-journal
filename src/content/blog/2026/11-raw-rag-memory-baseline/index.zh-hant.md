@@ -7,6 +7,8 @@ tags: ["RAG", "Memory", "LLM", "論文筆記", "Retrieval"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "22 min read"
+cardImage: "./cover.webp"
+cardImageAlt: "Memora、EverMemOS 與 Raw-RAG 三條管線並排，依 build、store、recall 三列對照"
 ---
 
 # 原始歷史就是記憶系統：簡單 RAG 基線揭露了什麼
@@ -697,7 +699,7 @@ readTime: "22 min read"
 </div>
 
 <figure class="fig">
-  <img src="/images/raw-rag/fig03-pipelines.png" alt="Memora、EverMemOS 與 Raw-RAG 三條管線並排，依 build、store、recall 三列由上而下對照" width="2040" height="1225" loading="lazy" />
+  <img src="/images/raw-rag/fig03-pipelines.webp" alt="Memora、EverMemOS 與 Raw-RAG 三條管線並排，依 build、store、recall 三列由上而下對照" width="1600" height="961" loading="lazy" />
   <figcaption><b>圖 3（論文原圖）</b> — 三條管線並排——Memora、EverMemOS，以及論文自己的簡單 RAG（naive RAG）——由上而下依 build、store、recall 三個階段對照。最右欄就是整篇論文的論點：對話變成平坦 chunk，chunk 變成 embedding，再靠 top-k 與 reranker 完成 recall；全程沒有抽取、沒有圖譜，也沒有使用者畫像。來源：<a href="https://arxiv.org/abs/2610.30755">Bao et al., arXiv:2610.30755</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
 </figure>
 
@@ -908,7 +910,7 @@ Complete-store oracle 把論點推得更遠。*Gold* 指的是答案卷：作者
 把檢索從方程式中拿掉之後，每個系統都變好。但保留原始對話內容的系統——Raw-RAG 與 MemMachine——最接近 raw-evidence 天花板。被轉換過的 store 差距更大。Raw-RAG 的 57.54 離 61.60 還有約 4 個百分點，那就是 ingestion 留下的殘影：被合併的欄位、把更正磨平的摘要、失去來源的事實。再完整的存取權，也重建不了當初沒有存下的東西。
 
 <figure class="fig">
-  <img src="/images/raw-rag/fig05-complete-store.png" alt="七個系統在 MEME 上的分組橫條圖，比較原生檢索與完整 store 的準確率，並以虛線標出 raw evidence 天花板、右側列出與 raw 的差距" width="2800" height="2204" loading="lazy" />
+  <img src="/images/raw-rag/fig05-complete-store.webp" alt="七個系統在 MEME 上的分組橫條圖，比較原生檢索與完整 store 的準確率，並以虛線標出 raw evidence 天花板、右側列出與 raw 的差距" width="1600" height="1259" loading="lazy" />
   <figcaption><b>圖 5（論文原圖）</b> — GPT-4o-mini 在 MEME 上：原生檢索 vs. 完整 store，右側是與 raw evidence 的差距。虛線是 61.60 的 raw-evidence 天花板，完整 store 長條上的誤差線為成對 95% 區間。把完整 store 交給每個系統，七個系統都會進步；但只有保留原始對話的 Raw-RAG 與 MemMachine，能落在距天花板約 4 個百分點以內。來源：<a href="https://arxiv.org/abs/2610.30755">Bao et al., arXiv:2610.30755</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
 </figure>
 
@@ -927,7 +929,7 @@ Complete-store oracle 把論點推得更遠。*Gold* 指的是答案卷：作者
 在 LoCoMo 上，UPDATE 與 DELETE 合計只占 33,902 次決策的 **4.39%**。在 LongMemEval 上，**每一題都帶著自己的約 115k-token 歷史**，它們只占 428,858 次決策的 **2.46%**；決策數遠大於題數，因為每一段歷史都分開處理。真正造成持久文字改變的「有效變更」只有 **1.90%** 與 **1.34%**；許多提出的 update 是重複的或格式錯誤的。
 
 <figure class="fig">
-  <img src="/images/raw-rag/fig02-mem0-mutations.png" alt="Mem0 寫入決策的兩層圖表：上層是 LoCoMo 與 LongMemEval 的決策組成橫條，下層是各對話提出與有效 UPDATE+DELETE 的比率" width="3200" height="1476" loading="lazy" />
+  <img src="/images/raw-rag/fig02-mem0-mutations.webp" alt="Mem0 寫入決策的兩層圖表：上層是 LoCoMo 與 LongMemEval 的決策組成橫條，下層是各對話提出與有效 UPDATE+DELETE 的比率" width="1800" height="830" loading="lazy" />
   <figcaption><b>圖 2（論文原圖）</b> — Mem0 提出的變更很少，真正生效的更少。上：寫入動作分布。下：LoCoMo（左）與 LongMemEval（右）每段對話的提出變更率與有效變更率；虛線是依決策加權的平均，所有比率都是占全部送出決策的比例。實際讀法：大多數決策都是 NONE，而且 LoCoMo 每段對話的有效變更都低於提出變更——這一層真正改寫的幅度，遠小於它的策略所暗示的。來源：<a href="https://arxiv.org/abs/2610.30755">Bao et al., arXiv:2610.30755</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
 </figure>
 
@@ -1017,7 +1019,7 @@ MemoryAgentBench 的四種能力之一是 **test-time learning（測試時學習
 | EverMemOS | 8,217.69 | 1,083.79 | 9,301.48 |
 
 <figure class="fig">
-  <img src="/images/raw-rag/fig01-accuracy-ingestion.png" alt="左為七個 benchmark–model 設定的環形長條圖，右為累積匯入時間對 context 長度的折線圖，Raw-RAG 貼近零而 Memora 達 27 小時" width="1963" height="1247" loading="lazy" />
+  <img src="/images/raw-rag/fig01-accuracy-ingestion.webp" alt="左為七個 benchmark–model 設定的環形長條圖，右為累積匯入時間對 context 長度的折線圖，Raw-RAG 貼近零而 Memora 達 27 小時" width="1600" height="1016" loading="lazy" />
   <figcaption><b>圖 1（論文原圖）</b> — 論文自己的總結：Raw-RAG 在七個設定上都具競爭力，而且隨著 BEAM 對話變長，ingestion 成本幾乎不變。左圖每個扇形使用不同的截斷尺度，因此要在同一扇形內比較，不要跨扇形比長度。來源：<a href="https://arxiv.org/abs/2610.30755">Bao et al., arXiv:2610.30755</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
 </figure>
 
@@ -1050,7 +1052,7 @@ MemoryAgentBench 的四種能力之一是 **test-time learning（測試時學習
 | Index | 扁平、ingestion 後固定 | 一份簡單清單，沒有階層、沒有圖，匯入後不再更新。 |
 
 <figure class="fig">
-  <img src="/images/raw-rag/fig04-topk-sensitivity.png" alt="MemoryAgentBench 總分對 final top-k（1 到 120）的折線圖，5 到 60 之間近乎持平，120 明顯下墜，每點附誤差線" width="2400" height="1552" loading="lazy" />
+  <img src="/images/raw-rag/fig04-topk-sensitivity.webp" alt="MemoryAgentBench 總分對 final top-k（1 到 120）的折線圖，5 到 60 之間近乎持平，120 明顯下墜，每點附誤差線" width="1600" height="1035" loading="lazy" />
   <figcaption><b>圖 4（論文原圖）</b> — Final top-k 敏感度：實線是左軸的 MemoryAgentBench 總分，右軸是相對於預設 k = 15 的變化，誤差線為成對 95% 區間。曲線在 k = 5 到 60 之間幾乎持平，只有 k = 120 才明顯下滑——cutoff 不必抓得很精準，但把整個索引都倒給 reader 一定不行。來源：<a href="https://arxiv.org/abs/2610.30755">Bao et al., arXiv:2610.30755</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
 </figure>
 

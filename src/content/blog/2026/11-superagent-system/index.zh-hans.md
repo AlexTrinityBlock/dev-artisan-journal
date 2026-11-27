@@ -7,6 +7,8 @@ tags: ["AI Agents", "DeepSeek", "Harness", "Architecture", "RepoNotes"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "14 分钟"
+cardImage: "./cover.webp"
+cardImageAlt: "dsh-superagent 原型的架构图：来源与工具进入 Engine，Engine 协调 Store、Policy、Executor 与 Effects"
 ---
 
 > **article.md** — [agent-readable file](/blog/2026/11-superagent-system/article.md)
@@ -203,6 +205,11 @@ README 难得地坦白：
 | Policy | `src/policy.ts` | 授权、评估、revalidation、policy effects |
 | Panel | `src/client` | 需要人的事、决策、设置、健康状态 |
 | Setup | `SETUP.md` | 给 coding agent 读的安装脚本 |
+
+<figure class="fig">
+  <img src="/images/superagent-system/dsh-superagent-architecture.webp" alt="由仓库 Mermaid 源码渲染的 dsh-superagent 官方架构图：来源插件、Session 工具与管理路由进入 Engine，Engine 协调 Store、Policy、SourceRegistry、MasterAssessor、DshExecutor、Outbox 与 Effects" width="1600" height="1165" loading="lazy" />
+  <figcaption><b>官方图示</b> — 原型的核心类与胶水层，由仓库的 Mermaid 源码渲染：来源插件、Session 工具与管理路由进入 Engine；Engine 协调 Store、Policy、SourceRegistry、MasterAssessor、DshExecutor 与 Outbox；异步工作经由 Effects 排队。来源：<a href="https://github.com/deepseek-ai/dsh-superagent-prototype/blob/main/docs/007-architecture.md">dsh-superagent-prototype，docs/007-architecture.md</a> · MIT</figcaption>
+</figure>
 
 Setup 文件是个好细节。它是写给 coding agent 的，不是给人：一次问一个问题、收集答案、显示一份计划、再执行。这和 Super-agent 自己的哲学一样——把 operator 的注意力降到最低——只是套在安装上。
 

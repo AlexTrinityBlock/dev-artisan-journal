@@ -7,6 +7,8 @@ tags: ["Vite", "React", "前端", "缓存", "可靠性"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "14 分钟"
+cardImage: "./cover.webp"
+cardImageAlt: "过期标签页恢复流程图：旧标签页、延迟加载、404、重新加载一次、新文档"
 ---
 
 # 没跟上部署的那个标签页：Vite 过期 chunk 的恢复

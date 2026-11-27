@@ -7,6 +7,8 @@ tags: ["AI Agents", "DeepSeek", "Harness", "Architecture", "RepoNotes"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "14 min read"
+cardImage: "./cover.webp"
+cardImageAlt: "Architecture diagram of the dsh-superagent prototype: sources and tools feed the Engine, which coordinates Store, Policy, Executor, and Effects"
 ---
 
 > **article.md** — [agent-readable file](/blog/2026/11-superagent-system/article.md)
@@ -203,6 +205,11 @@ A rough map:
 | Policy | `src/policy.ts` | Authorization, assessment, revalidation, policy effects |
 | Panel | `src/client` | What needs a person, decisions, settings, health |
 | Setup | `SETUP.md` | An agent-readable installation script for a coding agent |
+
+<figure class="fig">
+  <img src="/images/superagent-system/dsh-superagent-architecture.webp" alt="Official dsh-superagent architecture diagram rendered from the repository's Mermaid source: source plugins, session tools, and management routes feed the Engine, which coordinates Store, Policy, SourceRegistry, MasterAssessor, DshExecutor, Outbox, and Effects" width="1600" height="1165" loading="lazy" />
+  <figcaption><b>Official diagram</b> — The prototype's core classes and glue, rendered from the repository's Mermaid source: source plugins, session tools, and management routes enter the Engine; the Engine coordinates Store, Policy, SourceRegistry, MasterAssessor, DshExecutor, and Outbox; asynchronous work is queued through Effects. Source: <a href="https://github.com/deepseek-ai/dsh-superagent-prototype/blob/main/docs/007-architecture.md">dsh-superagent-prototype, docs/007-architecture.md</a> · MIT</figcaption>
+</figure>
 
 The setup file is a nice detail. It is written for a coding agent, not a human: ask one question at a time, collect the answers, show one plan, then execute. It is the same philosophy as the Super-agent itself — minimize the operator's attention — applied to installation.
 

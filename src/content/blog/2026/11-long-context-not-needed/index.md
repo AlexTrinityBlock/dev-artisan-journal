@@ -7,6 +7,8 @@ tags: ["Long Context", "Agents", "Compaction", "LLM", "PaperNotes"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "34 min read"
+cardImage: "./cover.webp"
+cardImageAlt: "Chart of cost per million output tokens rising sharply as context length grows for three models"
 ---
 
 # You Don't Need Long Context: The Seven-Times Cost of a Habit
@@ -142,7 +144,7 @@ The paper measures two things separately:
 Both measurements point the same way. Figure 1 is the paper’s own view of the cloud cost curve.
 
 <figure class="fig">
-  <img src="/images/long-context/fig01-cost-per-mtok.png" alt="Three panels showing the dollar cost of one million output tokens rising sharply as context window grows from 16K to 256K for GLM 5.2, Kimi K2.6, and Qwen 3 Coder Next" width="2800" height="852" loading="lazy" />
+  <img src="/images/long-context/fig01-cost-per-mtok.webp" alt="Three panels showing the dollar cost of one million output tokens rising sharply as context window grows from 16K to 256K for GLM 5.2, Kimi K2.6, and Qwen 3 Coder Next" width="1600" height="487" loading="lazy" />
   <figcaption><b>Fig. 1 (paper)</b> — The cost of long context: dollars to generate 1M output tokens on an existing KV cache, at $3.85 per H100-hour. Each panel has its own y-axis. The curves bend at different points — Qwen 3 Coder Next earliest, GLM 5.2 latest — and the 256K endpoint is 3.6× to 7× the 16K endpoint. What to notice: the slope, not the exact dollar value. The last doubling is the expensive one, and the penalty is largest for Qwen. Source: <a href="https://arxiv.org/abs/2611.05306">Belcak et al., arXiv:2611.05306</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
 </figure>
 
@@ -161,14 +163,14 @@ The shape is consistent across three different models and two serving configurat
 Figure 4 shows the same data from the serving side: decode throughput collapses as the configured window grows. The right-hand axis converts the curve into a speedup over the 256K operating point.
 
 <figure class="fig">
-  <img src="/images/long-context/fig04-throughput.png" alt="Three panels of decode throughput in tokens per second falling from 16K to 256K context for GLM 5.2, Kimi K2.6, and Qwen 3 Coder Next, with a right axis showing 4x to 7x speedup at short context" width="2800" height="828" loading="lazy" />
+  <img src="/images/long-context/fig04-throughput.webp" alt="Three panels of decode throughput in tokens per second falling from 16K to 256K context for GLM 5.2, Kimi K2.6, and Qwen 3 Coder Next, with a right axis showing 4x to 7x speedup at short context" width="1600" height="473" loading="lazy" />
   <figcaption><b>Fig. 4 (paper)</b> — Decode throughput collapses as the context window grows. GLM 5.2 keeps ~4× throughput at 16K versus 256K; Kimi K2.6 ~6×; Qwen 3 Coder Next ~7×. What to notice: a shorter window is not a minor tuning knob — it changes the achievable serving economics by the same order of magnitude as aggressive quantization. Source: <a href="https://arxiv.org/abs/2611.05306">Belcak et al., arXiv:2611.05306</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
 </figure>
 
 The local picture is just as blunt. On the DGX Spark, inter-token latency roughly doubles for several models across the measured range, and the memory footprint climbs until MiniMax M2.7 runs out of the ~109GB budget.
 
 <figure class="fig">
-  <img src="/images/long-context/fig02-dgx-spark.png" alt="Three panels on an NVIDIA DGX Spark: inter-token latency rises with context length, batch-one throughput falls, and memory consumption approaches the 109GB device limit" width="1903" height="596" loading="lazy" />
+  <img src="/images/long-context/fig02-dgx-spark.webp" alt="Three panels on an NVIDIA DGX Spark: inter-token latency rises with context length, batch-one throughput falls, and memory consumption approaches the 109GB device limit" width="1600" height="501" loading="lazy" />
   <figcaption><b>Fig. 2 (paper)</b> — The burden of long context on a local device. Latency rises, throughput falls, and memory consumption approaches the device limit; MiniMax M2.7 runs out of memory around 64K tokens. What to notice: the memory panel, not the latency panel. On a desktop-class box, long context does not just cost more — one model stops entirely. Source: <a href="https://arxiv.org/abs/2611.05306">Belcak et al., arXiv:2611.05306</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
 </figure>
 
@@ -249,7 +251,7 @@ The paper compares three context-management regimes. They differ only in **what 
 The paper’s Figure 3 draws the three regimes as message stacks. It is worth looking at closely, because the difference between EoCC and SAC is easy to blur.
 
 <figure class="fig">
-  <img src="/images/long-context/fig03-regimes.png" alt="Diagram of three context-management regimes: full-history accumulation with an ever-growing conversation, end-of-conversation compaction with periodic summaries, and single-action compaction with one action per conversation" width="2800" height="1020" loading="lazy" />
+  <img src="/images/long-context/fig03-regimes.webp" alt="Diagram of three context-management regimes: full-history accumulation with an ever-growing conversation, end-of-conversation compaction with periodic summaries, and single-action compaction with one action per conversation" width="1600" height="583" loading="lazy" />
   <figcaption><b>Fig. 3 (paper)</b> — The three regimes. FHA keeps one conversation that grows without bound. EoCC periodically inserts a compaction and starts a new conversation. SAC carries only a semantic state and performs one action per conversation. What to notice: SAC is not “summarize more often” — it removes the conversational history entirely, leaving a written state as the only bridge. Source: <a href="https://arxiv.org/abs/2611.05306">Belcak et al., arXiv:2611.05306</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
 </figure>
 
@@ -283,7 +285,7 @@ This is also the paper’s answer to the obvious objection. “What if the agent
 The first research question is whether an agent that takes many actions can finish the task without carrying the whole history. The answer, across six benchmarks and two frontier models, is yes — with small, uneven, mostly positive deviations.
 
 <figure class="fig">
-  <img src="/images/long-context/fig05-long-horizon.png" alt="Six panels of long-horizon benchmark results showing accuracy changes near zero and cost savings between 2x and 8.8x as the total context limit shrinks" width="3000" height="2344" loading="lazy" />
+  <img src="/images/long-context/fig05-long-horizon.webp" alt="Six panels of long-horizon benchmark results showing accuracy changes near zero and cost savings between 2x and 8.8x as the total context limit shrinks" width="1800" height="1406" loading="lazy" />
   <figcaption><b>Fig. 5 (paper)</b> — Long-horizon results as a function of total context limit. Top row: accuracy change versus the full-history baseline; zero is unchanged. Bottom row: estimated cost savings. Orange is Claude Opus 4.5, blue is GPT 5.6 Sol. What to notice: the accuracy lines hover around zero while the cost bars climb — the trade is not “less accuracy for less cost,” it is mostly “same accuracy for less cost.” Source: <a href="https://arxiv.org/abs/2611.05306">Belcak et al., arXiv:2611.05306</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
 </figure>
 
@@ -358,7 +360,7 @@ The second research question is whether a long input needs to be ingested at all
 The result is not close.
 
 <figure class="fig">
-  <img src="/images/long-context/fig06-long-input.png" alt="Seven panels of long-input benchmark results showing accuracy gains up to 40 points and cost savings from 4.4x to 233x when the agent reads documents selectively" width="3000" height="3186" loading="lazy" />
+  <img src="/images/long-context/fig06-long-input.webp" alt="Seven panels of long-input benchmark results showing accuracy gains up to 40 points and cost savings from 4.4x to 233x when the agent reads documents selectively" width="1800" height="1912" loading="lazy" />
   <figcaption><b>Fig. 6 (paper)</b> — Long-input results. Top row of each panel: accuracy change versus the full-input baseline. Bottom row: estimated cost savings. The gains are largest on needle-style benchmarks, but even LOONG and AA-LCR improve. What to notice: the top row of each panel stays flat or above zero while the bottom row climbs. The agent is not trading accuracy for cost; it is getting both. The x-axis is the total context limit, not document size. Source: <a href="https://arxiv.org/abs/2611.05306">Belcak et al., arXiv:2611.05306</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
 </figure>
 
@@ -408,12 +410,12 @@ Why does selective reading *beat* pasting? The paper’s explanation is not that
 The paper also reports the length relationship directly. Figures 7 and 8 plot total conversation length against document length on a log x-axis. If the agent were ingesting documents proportionally, the points would track the dashed `y = x` line. They do not; conversation length stays in a broad band while document length spans orders of magnitude.
 
 <figure class="fig">
-  <img src="/images/long-context/fig07-longbench-scatter.png" alt="Scatter plot of LongBench v2 conversation length versus document length on a logarithmic x-axis; most points sit in a horizontal band far below the equal-length line" width="2400" height="1548" loading="lazy" />
+  <img src="/images/long-context/fig07-longbench-scatter.webp" alt="Scatter plot of LongBench v2 conversation length versus document length on a logarithmic x-axis; most points sit in a horizontal band far below the equal-length line" width="1600" height="1032" loading="lazy" />
   <figcaption><b>Fig. 7 (paper)</b> — LongBench v2, Opus 4.5 with compaction at 16K/12K. The x-axis is logarithmic; the y-axis is linear; the dashed curve is `y = x`. What to notice: conversations stay roughly bounded as documents grow from 10K to over 1M tokens. The agent is not reading proportionally more; it is searching better. Source: <a href="https://arxiv.org/abs/2611.05306">Belcak et al., arXiv:2611.05306</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
 </figure>
 
 <figure class="fig">
-  <img src="/images/long-context/fig08-loong-scatter.png" alt="Scatter plot of LOONG conversation length versus document length; four document-size groups remain in a band around 20K to 100K conversation tokens, below the equal-length line" width="2400" height="1548" loading="lazy" />
+  <img src="/images/long-context/fig08-loong-scatter.webp" alt="Scatter plot of LOONG conversation length versus document length; four document-size groups remain in a band around 20K to 100K conversation tokens, below the equal-length line" width="1600" height="1032" loading="lazy" />
   <figcaption><b>Fig. 8 (paper)</b> — LOONG, Opus 4.5 with compaction at 48K/40K, 1,600 questions. The same bounded-conversation pattern across four document-size buckets. What to notice: the vertical spread comes from task difficulty, not from document length. A 300K-token document does not force a 300K-token conversation. Source: <a href="https://arxiv.org/abs/2611.05306">Belcak et al., arXiv:2611.05306</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
 </figure>
 

@@ -7,6 +7,8 @@ tags: ["Agent", "Harness", "RSI", "LLM", "论文笔记"]
 featured: true
 author: "Alex.Hsiao"
 readTime: "16 min read"
+cardImage: "./cover.webp"
+cardImageAlt: "八个 harness 组件按运行期角色分组、围绕冻结模型的示意图"
 ---
 
 <svg class="hx-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
@@ -147,7 +149,7 @@ harness 写成 $\mathcal{H} = (c^{1}, \ldots, c^{K})$，是 $K$ 个可编辑组�
 这八个里有三个的行为方式足以解释后面的大多数结果。**C5 是唯一会增加一条推理 context 的组件**——它是唯一「乘上成本」而非「塑形」的编辑。**C6 在被调用之前不花任何成本**，所以它是放长篇专家流程最便宜的位置。**C8 是唯一模型无法忽略的组件**，因为插件跑在工具循环里，而不是写在提示里。等消融实验出现时，你会看到真正贡献「能力」的两个组件（技能、脚本）比贡献「指示」的那一组更值钱——看过启动时机那一栏之后，这个结果就没那么意外了。
 
 <figure class="fig">
-  <img src="/images/harness2/fig02-harness-components.png" alt="八个 harness 组件按运行期角色分组、围绕冻结模型的示意图" loading="lazy" />
+  <img src="/images/harness2/fig02-harness-components.webp" alt="八个 harness 组件按运行期角色分组、围绕冻结模型的示意图" width="821" height="294" loading="lazy" />
   <figcaption><b>图 2</b> — 八个组件按「它们改动运行期的哪一部分」分组。上方那张 icon 图是这张原始图版在本站单色语汇下的重绘；原图值得看一次，特别是插件如何夹在模型与工具接口之间。来源：<a href="https://arxiv.org/html/2610.14224v1/components.png">arxiv.org/html/2610.14224v1/components.png</a></figcaption>
 </figure>
 
@@ -191,7 +193,7 @@ harness 写成 $\mathcal{H} = (c^{1}, \ldots, c^{K})$，是 $K$ 个可编辑组�
 为什么非要两层？因为显而易见的单层设计会同时在两个方向失败。为昨天那个任务调好的 harness，在今天的任务上常常比起始 harness 更差；而把一个高度特化的 harness 一路带下去，随着任务分布漂移，改进会变得充满噪声。真正能可靠带走的，是改进过程本身的记录：缺陷怎么被诊断、试了哪个改动、执行结果又揭露了什么。
 
 <figure class="fig">
-  <img src="/images/harness2/fig03-pipeline.png" alt="pipeline 示意图：左侧为任务级递归，右侧为 harnessing 级递归" loading="lazy" />
+  <img src="/images/harness2/fig03-pipeline.webp" alt="pipeline 示意图：左侧为任务级递归，右侧为 harnessing 级递归" width="1014" height="327" loading="lazy" />
   <figcaption><b>图 3</b> — 整条 pipeline。内框是在任务 t 上被精修的执行用 harness；外圈是改进用 harness，它吸收整份精修记录，再交给下一个任务。来源：<a href="https://arxiv.org/html/2610.14224v1/harness2_main_new.png">arxiv.org/html/2610.14224v1/harness2_main_new.png</a></figcaption>
 </figure>
 
@@ -262,7 +264,7 @@ $$\left(\mathcal{H}^{\prime}, e^{\prime}, \xi\right) = \Phi\left(q_{t}, \mathcal
 一次对比步骤只是一个样本。论文用预算 $k$ 往两个方向放大：每个范围 $k$ 个候选、$k$ 个并行组合，或者 $k$ 个串接的步骤。
 
 <figure class="fig">
-  <img src="/images/harness2/fig04-scaling.png" alt="两张图对比并行递归（候选各自独立提案）与串行递归（每一步喂给下一步）" loading="lazy" />
+  <img src="/images/harness2/fig04-scaling.webp" alt="两张图对比并行递归（候选各自独立提案）与串行递归（每一步喂给下一步）" width="1007" height="250" loading="lazy" />
   <figcaption><b>图 4</b> — 任务级递归的两种形式。(a) 并行：$k$ 个参考、$k$ 个不变型候选与 $k$ 个领域候选，再由 $k$ 个各自独立、但都看到整个候选池的组合 session 产出后继 harness。(b) 串行：每个被精修的 harness 及其累积的执行历史，成为下一步的输入。来源：<a href="https://arxiv.org/html/2610.14224v1/scaling.png">arxiv.org/html/2610.14224v1/scaling.png</a></figcaption>
 </figure>
 
@@ -316,7 +318,7 @@ $$\mathcal{R}_{t+1} = \mathrm{Update}\left(\mathcal{R}_{t}, \mathcal{H}^{\star}_
 第二，**递归是把增益往外延伸，而不是补救**。$k = 5$ 的并行递归在 WorkBuddy-Bench 再多加 2.9–3.9 分、JobBench 3.0–4.2 分、LAB Partial 2.6–6.7 个百分点。它也缩小了一些起始 harness 之间的落差——JobBench 的 OpenCode–Codex 差距，Gemini 从 2.4 缩到 0.5、GLM-5 从 3.0 缩到 0.5——但不一致：在 WorkBuddy-Bench 上，GLM-5 的差距反而从 0.2 扩大到 1.3。
 
 <figure class="fig">
-  <img src="/images/harness2/fig01-overall-performance.png" alt="WorkBuddy-Bench 各领域分数的柱状图，以及分数对递归预算的折线图" loading="lazy" />
+  <img src="/images/harness2/fig01-overall-performance.webp" alt="WorkBuddy-Bench 各领域分数的柱状图，以及分数对递归预算的折线图" width="758" height="256" loading="lazy" />
   <figcaption><b>图 1</b> — 左：Gemini 3.5 Flash 在 OpenCode 下、以 $k = 5$ 并行递归的 WorkBuddy-Bench 各领域成绩；每根柱子上方的数字是相对基准 harness 的增益，基准本身以灰色柱子呈现。右：WB-code 上分数对递归预算 $k$ 的关系——Harness2 单调上升，两条 baseline 则停滞或摇摆。来源：<a href="https://arxiv.org/html/2610.14224v1/intro_teaser.png">arxiv.org/html/2610.14224v1/intro_teaser.png</a></figcaption>
 </figure>
 

@@ -7,6 +7,8 @@ tags: ["TLS", "OpenSSL", "证书", "Linux", "信息安全"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "15 分钟"
+cardImage: "./cover.webp"
+cardImageAlt: "证书文件可能承载的三种内容示意图：域名证书、中间链与私钥"
 ---
 
 # 证书文件全解析：PEM、DER、PFX 与 P7B

@@ -7,6 +7,8 @@ tags: ["Color", "Gradients", "ColorTheory", "CSS", "Design"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "4 min read"
+cardImage: "./cover.webp"
+cardImageAlt: "CSS-Tricks diagram showing a gradient that passes through the color wheel's gray center (left) versus one that curves around it (right)."
 ---
 
 # The Gray Dead Zone: Three Rules for Picking Hues on the Wheel
@@ -20,6 +22,11 @@ On the wheel, the gradient between two colors is a straight line — a **chord**
 > **The "Gray Dead Zone"** — *Chris Coyier, CSS-Tricks*: *"If you have a gradient between two colors where the line between them in the color space goes through the zero-saturation middle, you get this 'gray dead zone' in the middle."*
 
 The technical root is sRGB's lossy interpolation; newer CSS color spaces such as `oklch` fix the *interpolation* in code, but choosing the destination hues is still your decision — and the wheel is still the map.
+
+<figure class="fig">
+  <img src="/images/gray-dead-zone/css-tricks-gray-dead-zone.webp" alt="Side-by-side CSS-Tricks diagram: the left gradient runs straight through the color wheel's center and turns gray; the right gradient curves around the center and stays saturated." width="1200" height="600" loading="lazy" />
+  <figcaption><b>Official figure</b> — The straight chord through zero saturation (left, ✕) produces the gray midpoint; routing around the center (right, ✓) keeps the gradient chromatic. Source: <a href="https://css-tricks.com/the-gray-dead-zone-of-gradients/">CSS-Tricks — The Gray Dead Zone of Gradients</a></figcaption>
+</figure>
 
 ## Three Rules for the Wheel
 

@@ -9,6 +9,7 @@
   --mono-paper: #F0EFEB;      /* Page background & default surface ground */
   --mono-card-bg: var(--mono-paper); /* Semantic card background */
   --mono-muted: #8F8E88;      /* Secondary text, subtitles */
+  --mono-label: #65645E;      /* Metadata labels: 5.16:1 on paper, 4.79:1 on subtle */
   --mono-faint: #C6C5BF;      /* Source lines, auxiliary ticks */
   --mono-grid: #DEDDD6;       /* Grid lines, hairline rules */
   --mono-bg-subtle: #E8E7E1;
@@ -189,7 +190,7 @@ a.chamfer-card:hover {
   font-family: var(--mono-font-mono);
   font-size: 10px;
   font-weight: 600;
-  color: var(--mono-muted);
+  color: var(--mono-label);
   letter-spacing: 0.12em;
   margin-bottom: 6px;
   text-transform: uppercase;
@@ -279,7 +280,7 @@ a.chamfer-card:hover {
 .btn-chamfer .btn-tag {
   font-family: var(--mono-font-mono);
   font-size: 10px;
-  color: var(--mono-muted);
+  color: var(--mono-label);
   letter-spacing: 0.1em;
 }
 

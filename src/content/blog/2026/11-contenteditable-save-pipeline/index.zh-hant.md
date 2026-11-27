@@ -7,6 +7,8 @@ tags: ["contentEditable", "React", "TanStack Query", "使用者體驗", "Web"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "12 分鐘"
+cardImage: "./cover.webp"
+cardImageAlt: "contenteditable plaintext-only 屬性值的官方 Baseline 圖示"
 ---
 
 # 可以直接打字編輯的網頁
@@ -143,6 +145,11 @@ readTime: "12 分鐘"
 這就是承諾。細節比表面上看起來薄得多。
 
 HTML 規格並沒有標準化 Enter 或貼上產生的 DOM。Chrome 把 Enter 當成換行並插入 `\n`，還會強制元素使用預格式化的 `white-space`。Firefox 136+ 只在 `white-space` 為預格式化時插入 `\n`；否則插入 `<br>`。Safari 歷來使用 `<br>`。實務上的規則是：永遠不要解析 `innerHTML`；讀 `innerText`，並自己設定 `white-space: pre-wrap`。
+
+<figure class="fig">
+  <img src="/images/contenteditable-save-pipeline/devtools-plaintext-only.webp" alt="Chrome DevTools 元素面板：一個 contenteditable=plaintext-only 的 div，以及 textarea 內部由使用者代理陰影根節點包住的 div 編輯區" width="625" height="167" loading="lazy" />
+  <figcaption><b>官方圖示</b> — Chrome DevTools 顯示 <code>contenteditable="plaintext-only"</code> 的 div，以及 textarea 的使用者代理陰影根節點。兩者的編輯表面都是 div；屬性改變的是行為，不是元素型別。來源：<a href="https://web.dev/blog/contenteditable-plaintext-only-baseline">web.dev</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
 
 `plaintext-only` 也不是消毒器。`paste` 事件仍可能帶著 `text/html`，`execCommand("insertHTML")` 仍能插入標記。這個屬性約束的是編輯介面，不是每一條能碰到 DOM 的程式路徑。儲存純文字、在伺服器驗證純文字，並以文字呈現——永遠不要當成 HTML。
 

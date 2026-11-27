@@ -7,6 +7,8 @@ tags: ["DuckDB", "Federated Query", "Oracle", "ODBC", "Data Engineering"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "12 min read"
+cardImage: "./cover.webp"
+cardImageAlt: "Oracle Database Gateway for ODBC architecture: a client, Oracle, a dg4odbc gateway, and a non-Oracle system"
 ---
 
 # DuckDB: The Universal Cross-Database Query Tool
@@ -242,6 +244,11 @@ The chain has five pieces:
   </svg>
   </div>
   <p class="mfig-fig-src">ORACLE 19c DOCS // DATABASE GATEWAY FOR ODBC · HETEROGENEOUS SERVICES</p>
+</figure>
+
+<figure class="fig">
+  <img src="/images/duckdb-oracle/fig-oracle-gateway.webp" alt="Oracle Database Gateway for ODBC architecture: a client reaches Oracle through Oracle Net, and Oracle passes the query through a gateway and ODBC driver to a non-Oracle system." width="548" height="444" loading="lazy" />
+  <figcaption><b>Official figure</b> — Oracle Database Gateway for ODBC, Figure 1-1. A client reaches Oracle through Oracle Net; the database passes the query through Heterogeneous Services and Oracle Net to a <code>dg4odbc</code> gateway on the same machine, which reaches the non-Oracle system through an ODBC driver manager and driver. Dashed components are non-Oracle. The plate above redraws this architecture and adds the single-source and transaction limits. Source: <a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/odbcu/database-gateway-odbc-introduction.html">Oracle Database Gateway for ODBC — Introduction</a></figcaption>
 </figure>
 
 A minimal configuration looks like this. Copy the sample `initdg4odbc.ora` to `init<sid>.ora` and point it at one ODBC source:

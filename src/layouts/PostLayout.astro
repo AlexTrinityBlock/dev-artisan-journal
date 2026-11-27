@@ -203,7 +203,7 @@ const shareMessage = t.toast.linkCopied.replace(/'/g, "\\'");
     gap: 8px;
     font-family: var(--mono-font-mono);
     font-size: 11px;
-    color: var(--mono-muted);
+    color: var(--mono-label);
     margin-bottom: 24px;
     overflow-x: auto;
     white-space: nowrap;
@@ -224,7 +224,7 @@ const shareMessage = t.toast.linkCopied.replace(/'/g, "\\'");
   }
 
   .crumb-current {
-    color: var(--mono-muted);
+    color: var(--mono-label);
     text-overflow: ellipsis;
     overflow: hidden;
     max-width: 320px;
@@ -249,7 +249,7 @@ const shareMessage = t.toast.linkCopied.replace(/'/g, "\\'");
     font-family: var(--mono-font-mono);
     font-size: 10.5px;
     font-weight: 600;
-    color: var(--mono-muted);
+    color: var(--mono-label);
     letter-spacing: 0.12em;
     text-transform: uppercase;
   }
@@ -260,7 +260,8 @@ const shareMessage = t.toast.linkCopied.replace(/'/g, "\\'");
     gap: 10px;
     font-family: var(--mono-font-mono);
     font-size: 11.5px;
-    color: var(--mono-muted);
+    font-weight: 500;
+    color: var(--mono-label);
     margin-bottom: 16px;
     flex-wrap: wrap;
   }
@@ -322,7 +323,7 @@ const shareMessage = t.toast.linkCopied.replace(/'/g, "\\'");
   .author-title {
     font-size: 10.5px;
     font-family: var(--mono-font-mono);
-    color: var(--mono-muted);
+    color: var(--mono-label);
   }
 
   /* ── Content + Sidebar Layout ─────────────────────────────── */
@@ -510,7 +511,7 @@ const shareMessage = t.toast.linkCopied.replace(/'/g, "\\'");
 
   .prose-inner :global(.tufte-live-card .chart-sub) {
     font-size: 11px;
-    color: var(--mono-muted);
+    color: var(--mono-label);
     margin: 0;
   }
 
@@ -523,7 +524,7 @@ const shareMessage = t.toast.linkCopied.replace(/'/g, "\\'");
   .prose-inner :global(.tufte-live-card .chart-footer) {
     font-family: var(--mono-font-mono);
     font-size: 9.5px;
-    color: var(--mono-faint);
+    color: var(--mono-label);
     letter-spacing: 0.08em;
     margin-top: 8px;
     text-transform: uppercase;
@@ -554,7 +555,7 @@ const shareMessage = t.toast.linkCopied.replace(/'/g, "\\'");
 
   .prose-inner :global(.cl-sub) {
     font-size: 11px;
-    color: var(--mono-muted);
+    color: var(--mono-label);
     margin: 0;
   }
 
@@ -623,7 +624,7 @@ const shareMessage = t.toast.linkCopied.replace(/'/g, "\\'");
     font-family: var(--mono-font-mono);
     font-size: 6.5px;
     letter-spacing: 0.12em;
-    color: var(--mono-muted);
+    color: var(--mono-label);
     text-transform: uppercase;
   }
 
@@ -678,8 +679,9 @@ const shareMessage = t.toast.linkCopied.replace(/'/g, "\\'");
 
   .prose-inner :global(.cl-hex) {
     font-family: var(--mono-font-mono);
-    font-size: 9px;
-    color: var(--mono-l4);
+    font-size: 9.5px;
+    font-weight: 600;
+    color: var(--mono-label);
     cursor: pointer;
     white-space: nowrap;
     overflow: hidden;
@@ -704,11 +706,11 @@ const shareMessage = t.toast.linkCopied.replace(/'/g, "\\'");
 
   .prose-inner :global(.cl-label) {
     font-family: var(--mono-font-mono);
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--mono-muted);
+    color: var(--mono-label);
   }
 
   .prose-inner :global(.cl-val) {
@@ -792,7 +794,7 @@ const shareMessage = t.toast.linkCopied.replace(/'/g, "\\'");
   .prose-inner :global(.cl-foot) {
     font-family: var(--mono-font-mono);
     font-size: 9.5px;
-    color: var(--mono-faint);
+    color: var(--mono-label);
     letter-spacing: 0.08em;
     margin-top: 14px;
     text-transform: uppercase;
@@ -940,7 +942,7 @@ const shareMessage = t.toast.linkCopied.replace(/'/g, "\\'");
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--mono-muted);
+    color: var(--mono-label);
     margin-top: 9px;
     line-height: 1.5;
   }
@@ -1013,7 +1015,7 @@ const shareMessage = t.toast.linkCopied.replace(/'/g, "\\'");
     font-size: 9px;
     font-weight: 700;
     letter-spacing: 0.1em;
-    color: var(--mono-faint);
+    color: var(--mono-label);
   }
 
   .prose-inner :global(.hx-name) {
@@ -1034,7 +1036,7 @@ const shareMessage = t.toast.linkCopied.replace(/'/g, "\\'");
   .prose-inner :global(.hx-file) {
     font-family: var(--mono-font-mono);
     font-size: 8.5px;
-    color: var(--mono-muted);
+    color: var(--mono-label);
     word-break: break-word;
   }
 
@@ -1047,7 +1049,7 @@ const shareMessage = t.toast.linkCopied.replace(/'/g, "\\'");
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--mono-muted);
+    color: var(--mono-label);
   }
 
   .prose-inner :global(.hx-loop) {
@@ -1083,7 +1085,7 @@ const shareMessage = t.toast.linkCopied.replace(/'/g, "\\'");
     font-family: var(--mono-font-mono);
     font-size: 8.5px;
     letter-spacing: 0.06em;
-    color: var(--mono-muted);
+    color: var(--mono-label);
   }
 
   .prose-inner :global(.hx-row) {
@@ -1150,7 +1152,7 @@ const shareMessage = t.toast.linkCopied.replace(/'/g, "\\'");
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--mono-muted);
+    color: var(--mono-label);
   }
 
   .prose-inner :global(.hx-panel h5) {
@@ -1187,7 +1189,7 @@ const shareMessage = t.toast.linkCopied.replace(/'/g, "\\'");
     display: block;
     font-size: 9.5px;
     line-height: 1.45;
-    color: var(--mono-muted);
+    color: var(--mono-label);
     margin-top: 2px;
   }
 
@@ -1223,7 +1225,7 @@ const shareMessage = t.toast.linkCopied.replace(/'/g, "\\'");
     display: block;
     font-size: 10px;
     line-height: 1.5;
-    color: var(--mono-muted);
+    color: var(--mono-label);
     margin-top: 4px;
   }
 
@@ -1302,7 +1304,7 @@ const shareMessage = t.toast.linkCopied.replace(/'/g, "\\'");
     font-family: var(--mono-font-mono);
     font-size: 10.5px;
     font-weight: 700;
-    color: var(--mono-muted);
+    color: var(--mono-label);
   }
 
   .tags-list {
@@ -1400,7 +1402,7 @@ const shareMessage = t.toast.linkCopied.replace(/'/g, "\\'");
     font-family: var(--mono-font-mono);
     font-size: 10px;
     font-weight: 700;
-    color: var(--mono-muted);
+    color: var(--mono-label);
   }
 
   .adjacent-title {

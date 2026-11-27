@@ -7,6 +7,8 @@ tags: ["密碼學", "Fernet", "Python", "資訊安全"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "14 分鐘"
+cardImage: "./cover.webp"
+cardImageAlt: "NIST SP 800-38A 的 CBC 加密與解密鏈結圖"
 ---
 
 # Fernet 密封：驗證加密權杖的解剖學
@@ -159,6 +161,11 @@ PKCS7 永遠至少加入一個位元組，即使訊息剛好停在區塊邊界�
 注意標籤是對原始標頭與密文計算，不是對明文，也不是對 base64 文字。版本、時間戳與 IV 都被涵蓋。改動記錄中任何一個較早的位元，標籤就會改變。
 
 IV 是公開且隨機的。它不是秘密，也不是從金鑰派生。它唯一的工作，是讓相同明文的兩次加密產生不同密文。在 CBC 模式裡，跨訊息重複使用 IV 會洩漏它們的第一個區塊是否相同。Fernet 每個權杖都從作業系統 CSPRNG 產生全新的 IV。
+
+<figure class="fig">
+  <img src="/images/fernet/nist-cbc-fig2.webp" alt="NIST CBC 模式圖：每個明文區塊先與 IV 或前一個密文區塊做 XOR 再加密，解密則反向還原。" width="1407" height="1270" loading="lazy" />
+  <figcaption><b>官方圖示</b> — NIST SP 800-38A Figure 2。CBC 加密時，每個明文區塊會先與前一個密文區塊（第一個區塊則與 IV）做 XOR，再送進區塊加密；解密反向而行。Fernet 把這個模式用在 AES-128-CBC，隨後才用 HMAC-SHA256 對整筆記錄做認證，所以這張 NIST 圖只涵蓋機密性。資料來源：<a href="https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf">NIST SP 800-38A</a>（美國政府出版品，公共領域）</figcaption>
+</figure>
 
 ```python
 from cryptography.fernet import Fernet

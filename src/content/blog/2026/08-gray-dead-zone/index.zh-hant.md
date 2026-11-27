@@ -7,6 +7,8 @@ tags: ["Color", "Gradients", "ColorTheory", "CSS", "Design"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "4 min read"
+cardImage: "./cover.webp"
+cardImageAlt: "CSS-Tricks 圖解：左側漸層直接穿過色輪的灰色中心，右側漸層繞過中心，保持色彩飽和。"
 ---
 
 # 灰色死亡區：在色輪上挑選色相的三條規則
@@ -20,6 +22,11 @@ readTime: "4 min read"
 > **「灰色死亡區」**——*Chris Coyier, CSS-Tricks*：*「當兩個顏色之間的漸層，其色彩空間中的連線穿過零飽和的中點，中段就會出現這個『灰色死亡區』。」*
 
 技術根源在於 sRGB 有損的插值；較新的 CSS 色彩空間（如 `oklch`）在程式碼層面修好了*插值*，但要選哪些終點色相仍然由你決定——而色輪依然是那張地圖。
+
+<figure class="fig">
+  <img src="/images/gray-dead-zone/css-tricks-gray-dead-zone.webp" alt="CSS-Tricks 的並排圖解：左側漸層筆直穿過色輪中心而變成灰色，右側漸層繞過中心並保持飽和。" width="1200" height="600" loading="lazy" />
+  <figcaption><b>官方圖解</b> — 直接穿過零飽和中心的弦（左，✕）會在漸層中點產生灰色；繞過中心（右，✓）則能保持色彩。來源：<a href="https://css-tricks.com/the-gray-dead-zone-of-gradients/">CSS-Tricks — The Gray Dead Zone of Gradients</a></figcaption>
+</figure>
 
 ## 色輪的三條規則
 

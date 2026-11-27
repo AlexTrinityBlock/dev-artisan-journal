@@ -7,6 +7,8 @@ tags: ["MCP", "Spring Boot", "RustFS", "S3", "Architecture"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "8 min read"
+cardImage: "./cover.webp"
+cardImageAlt: "MCP client and server stack with session and transport layers"
 ---
 
 # Publishing Through MCP
@@ -179,6 +181,11 @@ An admin gives the AI Agent a key. The key identifies the agent; it is not a dat
 In practice, a failure can stop at any step. An expired URL needs a new ticket. A file that does not match its declared type is rejected. An image that is uploaded but never published is cleaned up. Those are operational details, not reasons to give the model the bucket key.
 
 ## The MCP request shape
+
+<figure class="fig">
+  <img src="/images/mcp-publishing/mcp-stack.webp" alt="Spring AI's MCP stack diagram: an MCP client and server, each with a session layer above a transport layer, with stdio, SSE, and other transports at the base." width="1600" height="909" loading="lazy" />
+  <figcaption><b>Official diagram</b> — The MCP stack as Spring AI draws it: the client and the server each keep a session above a transport, and JSON-RPC messages cross the transport layer. The footer lists stdio and SSE as examples; the HTTP endpoint in this build sits in that same transport layer. Source: <a href="https://docs.spring.io/spring-ai/reference/api/mcp/mcp-overview.html">Spring AI — MCP overview</a></figcaption>
+</figure>
 
 The request shape is simple. The tool names and parameters below are abbreviated for the article; the real ones stay inside the service.
 

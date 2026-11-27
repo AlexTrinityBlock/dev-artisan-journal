@@ -7,6 +7,8 @@ tags: ["代理", "記憶", "RAG", "檢索", "架構"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "13 分鐘"
+cardImage: "./cover.webp"
+cardImageAlt: "MemGPT 記憶階層圖：固定上下文視窗，加上由函式管理的 archival 與 recall 儲存"
 ---
 
 # 先 Search，再 Get：代理記憶的兩個模組
@@ -109,6 +111,11 @@ Get 是單一的。它接受一個位址，回傳該位址上的記錄，或一�
 這個迴圈才是「翻閱」的意思：線索 → Search → 文章編號 → 選擇 → Get → 證據 → 新線索。沒有目錄的圖書館不能用；只有目錄、沒有書架的圖書館，則只是一份書目。代理兩半都需要。
 
 ## 架構：索引、文章編號、記錄
+
+<figure class="fig">
+  <img src="/images/memory-search-get/memgpt-system-flow.webp" alt="MemGPT 圖三：固定的 LLM 上下文視窗，內含系統指令、工作上下文與 FIFO 佇列，以及透過函式執行器與佇列管理器連接的 archival 與 recall 儲存" width="1600" height="610" loading="lazy" />
+  <figcaption><b>論文圖 3</b> — MemGPT 的記憶階層：固定上下文視窗（系統指令、工作上下文、FIFO 佇列）與外部的 archival、recall 儲存，由模型可呼叫的函式連接。論文的賭注是模型自己管理這套階層：它搜尋外部儲存，再把記錄換頁回視窗。來源：<a href="https://arxiv.org/abs/2310.08560">Packer et al.,〈MemGPT: Towards LLMs as Operating Systems〉</a>，Figure 3 · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
 
 一個同時提供兩個動詞的記憶庫，有三層，而這三層的工作不一樣。
 

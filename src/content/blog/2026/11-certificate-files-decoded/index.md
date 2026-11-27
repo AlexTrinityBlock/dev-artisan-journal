@@ -7,6 +7,8 @@ tags: ["TLS", "OpenSSL", "Certificates", "Linux", "Security"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "15 min read"
+cardImage: "./cover.webp"
+cardImageAlt: "Diagram of the three payloads a certificate file can carry: domain certificate, intermediate chain, and private key"
 ---
 
 # Certificate Files, Decoded: PEM, DER, PFX, and P7B

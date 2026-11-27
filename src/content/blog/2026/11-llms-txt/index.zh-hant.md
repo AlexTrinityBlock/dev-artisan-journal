@@ -7,6 +7,8 @@ tags: ["llms.txt", "AI 代理", "Markdown", "上下文", "Web 標準"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "4 分鐘"
+cardImage: "./cover.webp"
+cardImageAlt: "llms.txt 官方範例格式：一個 H1、blockquote 摘要、H2 區段與帶說明的連結清單"
 ---
 
 # llms.txt：給 AI 代理的一張小地圖
@@ -43,6 +45,11 @@ Use the test keys in the sandbox. Production keys are issued after review.
 ```
 
 `Optional` 區段是一個慣例：放代理在上下文吃緊時可以跳過的次要資料。
+
+<figure class="fig">
+  <img src="/images/llms-txt/llms-txt-format.webp" alt="llms.txt 範例格式示意圖：一個 H1 標題、blockquote 說明、選填細節、H2 區段與帶說明的連結清單" width="1108" height="718" loading="lazy" />
+  <figcaption><b>官方圖示</b> — llmstxt.org 的範例格式：一個 H1、blockquote 摘要、選填細節、H2 區段，以及帶簡短說明的連結清單。來源：<a href="https://llmstxt.org/">llmstxt.org</a></figcaption>
+</figure>
 
 第二版補上了另一半：代理可能會需要的頁面，應該在相同 URL 提供乾淨的 Markdown 版本，檔名是 `page.md` 或 `page.html.md`。網站可以用 `rel="alternate" type="text/markdown"` 標出這些版本，並用 `rel="describedby"` 指向涵蓋它的 `llms.txt`。連結可以放在 HTML 裡，也可以放在 HTTP `Link` 標頭，讓 CDN 不必逐頁修改就能加上。
 

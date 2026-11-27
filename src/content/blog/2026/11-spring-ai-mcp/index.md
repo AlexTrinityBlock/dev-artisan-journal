@@ -7,6 +7,8 @@ tags: ["Spring AI", "MCP", "Java", "Spring Boot", "AI Agents"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "14 min read"
+cardImage: "./cover.webp"
+cardImageAlt: "Spring AI Java MCP server architecture for SSE and stdio transports"
 ---
 
 # Spring AI MCP: Turning a Java Service into an AI Tool Surface
@@ -317,6 +319,11 @@ Three details matter:
 Errors are part of the contract too. With `@McpTool`, a `RuntimeException` becomes an error result the model can see. A checked exception or an `Error` propagates and fails the call. Since 2.1.0, server transports no longer put exception messages into protocol-level error responses, which is good for leaks and bad for debugging unless you log deliberately.
 
 ## Transport: stdio or Streamable HTTP
+
+<figure class="fig">
+  <img src="/images/spring-ai-mcp/java-mcp-server-architecture.webp" alt="Spring AI Java MCP server architecture: SSE clients share one server process and web container, while each stdio client launches its own Java MCP server and backend in a single process." width="1600" height="1179" loading="lazy" />
+  <figcaption><b>Official diagram</b> — Spring AI's Java MCP server architecture. Left: HTTP/SSE clients share one server process and web container. Right: each stdio client launches its own Java MCP server and backend in a single process. The transport fixes the process and trust boundary, not just the wire format; Spring AI 2.1 defaults the server to Streamable HTTP. Source: <a href="https://docs.spring.io/spring-ai/reference/api/mcp/mcp-overview.html">Spring AI — MCP overview</a></figcaption>
+</figure>
 
 MCP has two transports that matter.
 

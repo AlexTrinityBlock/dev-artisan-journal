@@ -16,6 +16,8 @@ const blog = defineCollection({
       readTime: z.string().default('5 min read'),
       heroImage: image().optional(),
       banner: image().optional(),
+      cardImage: image().optional(),
+      cardImageAlt: z.string().optional(),
     }),
 });
 

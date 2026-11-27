@@ -7,6 +7,8 @@ tags: ["代理治理", "ISO 42001", "可观测性", "LangSmith", "AI 管理"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "14 分钟"
+cardImage: "./cover.webp"
+cardImageAlt: "LangChain agent lake 流程图：生产环境的 trace 进入 lake，计算层找出信号，改进再回到生产环境"
 ---
 
 # LangChain 如何通过 ISO/IEC 42001 人工智能治理认证
@@ -105,6 +107,11 @@ readTime: "14 分钟"
 ## Agent lake 实际上存了什么
 
 LangChain 把 agent lake 定义为「结合为代理 trace 优化的存储，以及智能计算，用来查询、分析、从中学习，推动代理持续改进」的平台。
+
+<figure class="fig">
+  <img src="/images/agent-lake/agent-lake-flow.webp" alt="LangChain 官方 agent lake 流程图：生产环境的代理把 trace 送进 lake，计算层找出高信号 trace 并自动化改进，改进再回到生产环境" width="1600" height="743" loading="lazy" />
+  <figcaption><b>官方图示</b> — LangChain 的 agent lake 流程：生产环境的 trace 进入 SmithDB，计算层找出高信号 trace、把反复出现的失败转成改进，再回到生产环境。来源：<a href="https://www.langchain.com/blog/the-agent-lake">LangChain,〈The Agent Lake〉</a>（2026）</figcaption>
+</figure>
 
 拿掉营销语言，这个定义有三个部分。存储是为 trace 优化的，不是为数据行优化的。计算是设计来从非结构化推理里找出意义，不只是汇总数字。目的则是一个循环：生产数据变成评测数据，评测数据变成一次变更，变更再回到生产。
 

@@ -7,6 +7,8 @@ tags: ["Agents", "Memory", "RAG", "Retrieval", "Architecture"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "13 min read"
+cardImage: "./cover.webp"
+cardImageAlt: "MemGPT memory hierarchy diagram: a fixed context window with archival and recall storage managed by functions"
 ---
 
 # Search, Then Get: The Two Modules of Agent Memory
@@ -109,6 +111,11 @@ The pair is asymmetric. Search is a reduction: many records become a few candida
 The loop is what browsing means: cue → Search → handles → choose → Get → evidence → new cue. A library without a catalog is unusable; a catalog without shelves is a bibliography. An agent needs both halves.
 
 ## The architecture: index, handles, records
+
+<figure class="fig">
+  <img src="/images/memory-search-get/memgpt-system-flow.webp" alt="MemGPT figure three: a fixed LLM context window with system instructions, working context, and a FIFO queue, plus archival and recall storage connected through a function executor and queue manager" width="1600" height="610" loading="lazy" />
+  <figcaption><b>Paper Fig. 3</b> — MemGPT's memory hierarchy: a fixed context window (system instructions, working context, FIFO queue) and external archival and recall storage, joined by functions the model can call. The paper's bet is that the model manages the hierarchy itself: it searches external storage and pages records back into the window. Source: <a href="https://arxiv.org/abs/2310.08560">Packer et al., "MemGPT: Towards LLMs as Operating Systems"</a>, Figure 3 · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
 
 A memory system that exposes both verbs has three layers, and they have different jobs.
 

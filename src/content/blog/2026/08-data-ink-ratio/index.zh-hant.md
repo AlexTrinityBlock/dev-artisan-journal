@@ -7,6 +7,8 @@ tags: ["DataViz", "EdwardTufte", "DesignTokens", "Architecture", "Frontend"]
 featured: true
 author: "Alex.Hsiao"
 readTime: "5 min read"
+cardImage: "./cover.webp"
+cardImageAlt: "Tufte《The Visual Display of Quantitative Information》第 109 頁掃描圖，以整排 3D 金字塔圖作為圖表垃圾的範例。"
 ---
 
 # 資料墨水比：Edward Tufte 的極簡主義哲學
@@ -30,6 +32,11 @@ $$\text{Data-Ink Ratio} = \frac{\text{Data-Ink}}{\text{Total Ink used to print o
 > 3. **抹去非資料墨水**：移除多餘的視覺雜訊，例如粗厚的邊框與高飽和的背景填色。
 > 4. **抹去多餘的資料墨水**：當座標軸已清楚表達量尺時，不必在每個座標點重複標註文字。
 > 5. **反覆修訂與編輯**：持續修剪裝飾性元素，直到只剩必要的資料。
+
+<figure class="fig">
+  <img src="/images/data-ink-ratio/tufte-chartjunk-p109.webp" alt="Tufte 以月份與主動脈瓣逆流嚴重程度繪製的 3D 金字塔圖，在《The Visual Display of Quantitative Information》中被用作圖表垃圾的範例。" width="863" height="485" loading="lazy" />
+  <figcaption><b>官方原始圖版</b> — Tufte 的圖表垃圾示範：把一張小表格擠壓成整排 3D 金字塔，增加墨水卻沒有增加資料。出自《The Visual Display of Quantitative Information》第 109 頁。來源：<a href="https://www.edwardtufte.com/notebook/chartjunk/">Edward Tufte — Chartjunk</a></figcaption>
+</figure>
 
 ---
 

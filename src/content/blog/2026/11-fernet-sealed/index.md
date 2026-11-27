@@ -7,6 +7,8 @@ tags: ["Cryptography", "Fernet", "Python", "Security"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "14 min read"
+cardImage: "./cover.webp"
+cardImageAlt: "NIST SP 800-38A diagram of CBC encryption and decryption chained through AES"
 ---
 
 # Fernet, Sealed: The Anatomy of an Authenticated Token
@@ -159,6 +161,11 @@ Encryption runs in a fixed order:
 Note where the tag is computed: over the raw header and ciphertext, not over the plaintext and not over the base64 text. Version, timestamp, and IV are all covered. Change one bit anywhere earlier in the record and the tag changes.
 
 The IV is public and random. It is not a secret and it is not derived from the key. Its only job is to make two encryptions of the same plaintext produce different ciphertexts. In CBC mode, reusing an IV across messages leaks whether their first blocks are equal. Fernet generates a fresh one per token from the OS CSPRNG.
+
+<figure class="fig">
+  <img src="/images/fernet/nist-cbc-fig2.webp" alt="NIST CBC mode diagram: each plaintext block is XORed with the IV or the previous ciphertext block before encryption, and decryption reverses the chain." width="1407" height="1270" loading="lazy" />
+  <figcaption><b>Official figure</b> — NIST SP 800-38A, Figure 2. In CBC encryption each plaintext block is XORed with the previous ciphertext block (the IV for the first block) before the block cipher; decryption reverses the chain. Fernet uses this mode with AES-128-CBC and then authenticates the whole record with HMAC-SHA256, so the NIST figure covers confidentiality only. Source: <a href="https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf">NIST SP 800-38A</a> (U.S. government publication; public domain)</figcaption>
+</figure>
 
 ```python
 from cryptography.fernet import Fernet

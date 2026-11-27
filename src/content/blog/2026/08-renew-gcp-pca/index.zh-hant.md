@@ -7,14 +7,21 @@ tags: ["GCP", "Certification", "ProfessionalCloudArchitect", "AI", "Cloud"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "2 min read"
-heroImage: "./renew-GCP-PCA-2026-08-30-091840.jpg"
+heroImage: "./renew-GCP-PCA-2026-08-30-091840.webp"
+cardImage: "./cover.webp"
+cardImageAlt: "Google Cloud Professional Cloud Architect 官方認證徽章。"
 ---
 
 # 續證我的 Google Cloud Professional Cloud Architect 認證
 
 我的 Google Cloud Platform 認證剛剛到期，於是開始上續證課程——我驚訝地發現，現在的課表裡有這麼多**AI 與 LLM 相關內容**。老實說，這讓我對雲端架構接下來會發生什麼感到興奮。
 
-![Professional Cloud Architect 認證續證學習路徑](./renew-GCP-PCA-2026-08-30-091840.jpg)
+<figure class="fig">
+  <img src="/images/renew-gcp-pca/professional-cloud-architect-badge.webp" alt="Google Cloud Professional Cloud Architect 官方圓形認證徽章，中央是 Google Cloud 標誌，並印有 Cloud Architect 與 Google Cloud Certified – Professional 字樣。" width="1040" height="1040" style="max-width: 360px;" loading="lazy" />
+  <figcaption><b>官方徽章</b> — 透過 Credly 發行的 Professional Cloud Architect 認證徽章。來源：<a href="https://www.credly.com/org/google-cloud/badge/professional-cloud-architect-certification">Credly — Professional Cloud Architect Certification</a></figcaption>
+</figure>
+
+![Professional Cloud Architect 認證續證學習路徑](./renew-GCP-PCA-2026-08-30-091840.webp)
 
 ## 續證路徑長什麼樣子
 
@@ -22,7 +29,7 @@ heroImage: "./renew-GCP-PCA-2026-08-30-091840.jpg"
 
 透過一系列隨選課程、實作實驗與技能徽章，這條路徑回顧了最新的 Google Cloud 技術，並提供真實情境的實作經驗——從基礎觀念到設計與管理現代化解決方案。
 
-![課程截圖：續證課表中的 AI 與 LLM 課程目錄](./renew-GCP-PCA-course1-2026-08-30-091840.jpg)
+![課程截圖：續證課表中的 AI 與 LLM 課程目錄](./renew-GCP-PCA-course1-2026-08-30-091840.webp)
 
 ## 驚喜：AI 無所不在
 

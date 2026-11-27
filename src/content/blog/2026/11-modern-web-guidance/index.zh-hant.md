@@ -7,6 +7,8 @@ tags: ["網頁平台", "Baseline", "編碼代理", "工具鏈", "Chrome"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "11 分鐘"
+cardImage: "./cover.webp"
+cardImageAlt: "支援 Modern Web Guidance 的編碼代理與 IDE 標誌"
 ---
 
 # Modern Web Guidance：讓編碼代理不再錯過現代網頁平台
@@ -739,6 +741,11 @@ textarea {
 技能告訴代理何時該尋求指引。CLI 回傳一份有針對性的 Markdown 檔，裡面有程式模式、瀏覽器支援註記、容易踩的坑與回退方案。這裡沒有微調，程式碼仍然由代理撰寫。
 
 任何支援技能的代理都能使用，包括 Claude Code、Codex 與 Copilot。
+
+<figure class="fig">
+  <img src="/images/modern-web-guidance/agent-marketplaces.webp" alt="支援 Modern Web Guidance 的編碼代理與 IDE 標誌：Codex、Cursor、Kimi、Google Antigravity、Grok、JetBrains WebStorm 與 GitHub Copilot。" width="1600" height="753" loading="lazy" />
+  <figcaption><b>官方圖示</b> — Chrome 在 Modern Web Guidance v1.0 發布時使用的支援名單，列出當時表態的編碼代理與 IDE：Codex、Cursor、Kimi、Google Antigravity、Grok、JetBrains WebStorm 與 GitHub Copilot。支援程度依宿主代理而異，安裝路徑仍取決於你用的代理。資料來源：<a href="https://developer.chrome.com/blog/modern-web-guidance-v1">Chrome for Developers — Modern Web Guidance v1</a></figcaption>
+</figure>
 
 ## 一行指令安裝
 

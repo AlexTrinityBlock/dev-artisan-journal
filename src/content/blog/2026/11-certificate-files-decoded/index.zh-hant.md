@@ -7,6 +7,8 @@ tags: ["TLS", "OpenSSL", "憑證", "Linux", "資訊安全"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "15 分鐘"
+cardImage: "./cover.webp"
+cardImageAlt: "憑證檔可能承載的三種內容示意圖：網域憑證、中繼鏈與私鑰"
 ---
 
 # 憑證檔案全解析：PEM、DER、PFX 與 P7B

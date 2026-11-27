@@ -7,6 +7,8 @@ tags: ["长上下文", "代理", "压缩", "LLM", "论文笔记"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "30 分钟"
+cardImage: "./cover.webp"
+cardImageAlt: "图表显示三个模型生成一百万输出 token 的成本随上下文长度急剧上升"
 ---
 
 # 你不需要长上下文：一个习惯的七倍代价
@@ -142,7 +144,7 @@ readTime: "30 分钟"
 两项量测指向同一个方向。图 1 是论文自己对云端成本曲线的看法。
 
 <figure class="fig">
-  <img src="/images/long-context/fig01-cost-per-mtok.png" alt="三个面板显示，随着上下文窗口从 16K 成长到 256K，GLM 5.2、Kimi K2.6 与 Qwen 3 Coder Next 生成一百万个输出 token 的美元成本急遽上升" width="2800" height="852" loading="lazy" />
+  <img src="/images/long-context/fig01-cost-per-mtok.webp" alt="三个面板显示，随着上下文窗口从 16K 成长到 256K，GLM 5.2、Kimi K2.6 与 Qwen 3 Coder Next 生成一百万个输出 token 的美元成本急遽上升" width="1600" height="487" loading="lazy" />
   <figcaption><b>图 1（论文原图）</b>——长上下文的成本：在既有 KV 缓存上生成 1M 输出 token 的美元成本，以每 H100 小时 $3.85 计。每个面板有自己的 y 轴。三条曲线在不同位置弯折——Qwen 3 Coder Next 最早，GLM 5.2 最晚——256K 端点是 16K 端点的 3.6× 到 7×。该注意的是斜率，不是确切的美元数字。最后一次翻倍最贵，而 Qwen 的惩罚最大。数据来源：<a href="https://arxiv.org/abs/2611.05306">Belcak et al., arXiv:2611.05306</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
 </figure>
 
@@ -161,14 +163,14 @@ readTime: "30 分钟"
 图 4 从服务端展示同一组数据：解码吞吐量随着设置的窗口变大而崩塌。右轴把曲线换算成相对 256K 工作点的速度倍数。
 
 <figure class="fig">
-  <img src="/images/long-context/fig04-throughput.png" alt="三个面板显示 GLM 5.2、Kimi K2.6 与 Qwen 3 Coder Next 的解码吞吐量（token／秒）从 16K 到 256K 上下文一路下降，右轴显示短上下文下有 4× 到 7× 的加速" width="2800" height="828" loading="lazy" />
+  <img src="/images/long-context/fig04-throughput.webp" alt="三个面板显示 GLM 5.2、Kimi K2.6 与 Qwen 3 Coder Next 的解码吞吐量（token／秒）从 16K 到 256K 上下文一路下降，右轴显示短上下文下有 4× 到 7× 的加速" width="1600" height="473" loading="lazy" />
   <figcaption><b>图 4（论文原图）</b>——解码吞吐量随上下文窗口成长而崩塌。GLM 5.2 在 16K 时仍保有约 4× 于 256K 的吞吐量；Kimi K2.6 约 6×；Qwen 3 Coder Next 约 7×。该注意的是：较短的窗口不是小小的调校旋钮——它改变可达到的服务经济效益，幅度和激进量化同一个数量级。数据来源：<a href="https://arxiv.org/abs/2611.05306">Belcak et al., arXiv:2611.05306</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
 </figure>
 
 本机的情况也一样直白。在 DGX Spark 上，数个模型的 token 间延迟在量测范围内大约翻倍，内存占用一路攀升，直到 MiniMax M2.7 用完约 109GB 的预算。
 
 <figure class="fig">
-  <img src="/images/long-context/fig02-dgx-spark.png" alt="NVIDIA DGX Spark 上的三个面板：token 间延迟随上下文长度上升，batch-one 吞吐量下降，内存消耗逼近 109GB 的设备上限" width="1903" height="596" loading="lazy" />
+  <img src="/images/long-context/fig02-dgx-spark.webp" alt="NVIDIA DGX Spark 上的三个面板：token 间延迟随上下文长度上升，batch-one 吞吐量下降，内存消耗逼近 109GB 的设备上限" width="1600" height="501" loading="lazy" />
   <figcaption><b>图 2（论文原图）</b>——长上下文对本机设备的负担。延迟上升、吞吐量下降，内存消耗逼近设备上限；MiniMax M2.7 在约 64K token 时内存不足。该注意的是：看内存面板，不是延迟面板。在桌面级的机器上，长上下文不只是比较贵——其中一个模型会直接停摆。数据来源：<a href="https://arxiv.org/abs/2611.05306">Belcak et al., arXiv:2611.05306</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
 </figure>
 
@@ -249,7 +251,7 @@ readTime: "30 分钟"
 论文的图 3 把三种机制画成消息堆叠。值得仔细看，因为 EoCC 与 SAC 的差别很容易糊掉。
 
 <figure class="fig">
-  <img src="/images/long-context/fig03-regimes.png" alt="三种上下文管理机制的图解：全历史累积让对话不断成长，对话末端压缩周期性插入摘要，单动作压缩则每段对话只执行一个动作" width="2800" height="1020" loading="lazy" />
+  <img src="/images/long-context/fig03-regimes.webp" alt="三种上下文管理机制的图解：全历史累积让对话不断成长，对话末端压缩周期性插入摘要，单动作压缩则每段对话只执行一个动作" width="1600" height="583" loading="lazy" />
   <figcaption><b>图 3（论文原图）</b>——三种机制。FHA 维持一段无界生长的对话。EoCC 周期性插入压缩并开启新对话。SAC 只带一份语义状态，每段对话执行一个动作。该注意的是：SAC 不是「更常摘要」——它完全移除对话历史，只留下书面状态作为唯一的桥梁。数据来源：<a href="https://arxiv.org/abs/2611.05306">Belcak et al., arXiv:2611.05306</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
 </figure>
 
@@ -283,7 +285,7 @@ readTime: "30 分钟"
 第一个研究问题是：一个会执行许多动作的代理，能不能不带着完整历史就完成任务？在六个基准测试与两个前沿模型上，答案是能——偏差很小、方向不一、多数为正。
 
 <figure class="fig">
-  <img src="/images/long-context/fig05-long-horizon.png" alt="六个面板的长流程基准测试结果，显示总上下文上限缩小时，准确率变化接近零，成本节省介于 2× 到 8.8× 之间" width="3000" height="2344" loading="lazy" />
+  <img src="/images/long-context/fig05-long-horizon.webp" alt="六个面板的长流程基准测试结果，显示总上下文上限缩小时，准确率变化接近零，成本节省介于 2× 到 8.8× 之间" width="1800" height="1406" loading="lazy" />
   <figcaption><b>图 5（论文原图）</b>——长流程结果随总上下文上限的变化。上排：相对全历史基线的准确率变化；零代表不变。下排：估计成本节省。橘色是 Claude Opus 4.5，蓝色是 GPT 5.6 Sol。该注意的是：准确率线在零附近徘徊，成本长条却往上爬——这笔交易不是「少一点准确率换少一点成本」，而大多是「一样的准确率，更少的成本」。数据来源：<a href="https://arxiv.org/abs/2611.05306">Belcak et al., arXiv:2611.05306</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
 </figure>
 
@@ -358,7 +360,7 @@ readTime: "30 分钟"
 结果完全不在同一个量级。
 
 <figure class="fig">
-  <img src="/images/long-context/fig06-long-input.png" alt="七个面板的长输入基准测试结果，显示代理选择性阅读文件时，准确率最高增加 40 个百分点，成本节省 4.4× 到 233×" width="3000" height="3186" loading="lazy" />
+  <img src="/images/long-context/fig06-long-input.webp" alt="七个面板的长输入基准测试结果，显示代理选择性阅读文件时，准确率最高增加 40 个百分点，成本节省 4.4× 到 233×" width="1800" height="1912" loading="lazy" />
   <figcaption><b>图 6（论文原图）</b>——长输入结果。每个面板上排：相对全输入基线的准确率变化。下排：估计成本节省。增益在 needle 型基准测试上最大，但连 LOONG 与 AA-LCR 都进步。该注意的是：x 轴是总上下文上限，不是文件大小——代理的工作上下文有上限，来源文件却和原本一样大。数据来源：<a href="https://arxiv.org/abs/2611.05306">Belcak et al., arXiv:2611.05306</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
 </figure>
 
@@ -408,12 +410,12 @@ readTime: "30 分钟"
 论文也直接回报长度关系。图 7 与图 8 以对数 x 轴画出总对话长度对文件长度。如果代理是按比例吞文件，点会贴着虚线 `y = x`。它们没有；对话长度停留在一个宽频带内，文件长度却横跨好几个数量级。
 
 <figure class="fig">
-  <img src="/images/long-context/fig07-longbench-scatter.png" alt="LongBench v2 的对话长度对文件长度散布图，x 轴为对数；大多数点落在远低于等长线的水平带内" width="2400" height="1548" loading="lazy" />
+  <img src="/images/long-context/fig07-longbench-scatter.webp" alt="LongBench v2 的对话长度对文件长度散布图，x 轴为对数；大多数点落在远低于等长线的水平带内" width="1600" height="1032" loading="lazy" />
   <figcaption><b>图 7（论文原图）</b>——LongBench v2，Opus 4.5 以 16K/12K 压缩。x 轴是对数，y 轴是线性；虚线是 `y = x`。该注意的是：文件从 10K 长到超过 1M token，对话大致维持在有界范围。代理不是按比例读得更多；它是搜得更好。数据来源：<a href="https://arxiv.org/abs/2611.05306">Belcak et al., arXiv:2611.05306</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
 </figure>
 
 <figure class="fig">
-  <img src="/images/long-context/fig08-loong-scatter.png" alt="LOONG 的对话长度对文件长度散布图；四个文件大小分组都维持在约 20K 到 100K 对话 token 的带状区域，低于等长线" width="2400" height="1548" loading="lazy" />
+  <img src="/images/long-context/fig08-loong-scatter.webp" alt="LOONG 的对话长度对文件长度散布图；四个文件大小分组都维持在约 20K 到 100K 对话 token 的带状区域，低于等长线" width="1600" height="1032" loading="lazy" />
   <figcaption><b>图 8（论文原图）</b>——LOONG，Opus 4.5 以 48K/40K 压缩，1,600 个问题。四个文件大小分组都呈现同样的有界对话模式。该注意的是：垂直方向的离散来自任务难度，不是文件长度。一份 300K token 的文件，不会强迫产生 300K token 的对话。数据来源：<a href="https://arxiv.org/abs/2611.05306">Belcak et al., arXiv:2611.05306</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
 </figure>
 

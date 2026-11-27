@@ -7,6 +7,8 @@ tags: ["DuckDB", "聯邦查詢", "Oracle", "ODBC", "資料工程"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "12 分鐘"
+cardImage: "./cover.webp"
+cardImageAlt: "Oracle Database Gateway for ODBC 架構圖：用戶端、Oracle、dg4odbc 閘道與非 Oracle 系統"
 ---
 
 # 跨庫查詢萬能工具 DuckDB
@@ -242,6 +244,11 @@ ORDER BY revenue DESC;
   </svg>
   </div>
   <p class="mfig-fig-src">ORACLE 19c 文件 // DATABASE GATEWAY FOR ODBC · HETEROGENEOUS SERVICES</p>
+</figure>
+
+<figure class="fig">
+  <img src="/images/duckdb-oracle/fig-oracle-gateway.webp" alt="Oracle Database Gateway for ODBC 官方架構圖：用戶端經 Oracle Net 連到 Oracle 資料庫，資料庫再透過閘道與 ODBC 驅動程式存取非 Oracle 系統。" width="548" height="444" loading="lazy" />
+  <figcaption><b>官方圖示</b> — Oracle Database Gateway for ODBC 文件 Figure 1-1。用戶端經 Oracle Net 進入 Oracle 資料庫；資料庫把查詢經異質服務與 Oracle Net 交給同一台機器上的 <code>dg4odbc</code> 閘道，閘道再經 ODBC 驅動管理員與驅動程式抵達非 Oracle 系統。虛線框是 Oracle 標示的非 Oracle 元件。上面的手繪盤面就是把這張圖重新排版，並補上單一來源與交易限制。資料來源：<a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/odbcu/database-gateway-odbc-introduction.html">Oracle Database Gateway for ODBC — Introduction</a></figcaption>
 </figure>
 
 最小設定長這樣。把範例 `initdg4odbc.ora` 複製成 `init<sid>.ora`，指向一個 ODBC 來源：

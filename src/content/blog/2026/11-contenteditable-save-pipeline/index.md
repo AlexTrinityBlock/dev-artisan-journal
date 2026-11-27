@@ -7,6 +7,8 @@ tags: ["contentEditable", "React", "TanStack Query", "UX", "Web"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "12 min read"
+cardImage: "./cover.webp"
+cardImageAlt: "Official Baseline graphic for the contenteditable plaintext-only attribute value combination"
 ---
 
 # A Page You Can Edit by Typing
@@ -143,6 +145,11 @@ The alternative is the browser's own editing primitive. `contentEditable` is old
 That is the promise. The details are thinner than they look.
 
 The HTML specification does not standardize the DOM that Enter or paste produces. Chrome treats Enter as a line break and inserts `\n`, and it forces a preformatted `white-space` on the element. Firefox 136+ inserts `\n` only when `white-space` is preformatted; otherwise it inserts `<br>`. Safari has historically used `<br>`. The practical rule is: never parse `innerHTML`; read `innerText` and set `white-space: pre-wrap` yourself.
+
+<figure class="fig">
+  <img src="/images/contenteditable-save-pipeline/devtools-plaintext-only.webp" alt="Chrome DevTools Elements panel showing a div with contenteditable=plaintext-only and a textarea whose editable surface is a div inside a user-agent shadow root" width="625" height="167" loading="lazy" />
+  <figcaption><b>Official figure</b> — Chrome DevTools shows a <code>contenteditable="plaintext-only"</code> div beside a textarea's user-agent shadow root. The editing surface is a div in both cases; the attribute changes behavior, not the element type. Source: <a href="https://web.dev/blog/contenteditable-plaintext-only-baseline">web.dev</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></figcaption>
+</figure>
 
 `plaintext-only` is also not a sanitizer. The `paste` event can still expose `text/html`, and `execCommand("insertHTML")` can still insert markup. The attribute constrains the editing UI, not every code path that can touch the DOM. Store plain text, validate plain text on the server, and render it as text — never as HTML.
 

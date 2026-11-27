@@ -7,6 +7,8 @@ tags: ["TypeSafe", "Jev", "OpenAI", "AI", "JavaScript", "Interaction"]
 featured: false
 author: "Alex.Hsiao"
 readTime: "17 min read"
+cardImage: "./cover.webp"
+cardImageAlt: "Diagram comparing traditional software, agents, and AI-powered software built from model judgments"
 ---
 
 # Jev Plays Snake: Two Small Interfaces for a Decision Model
@@ -425,6 +427,11 @@ The two exhibits look unrelated, but they share the same four moves:
 The second row is where most prompt-based systems go wrong. More context is not automatically better. Jev's own documentation lists “large state full of irrelevant detail” as a failure mode: unrelated material acts as a distractor, and accuracy falls. The fix is to filter and structure in code before the request.
 
 The fourth row is the part that makes the system testable. The model returns a probability distribution; the code decides the threshold, the fallback, and the human-escalation path. When the policy changes, you change a number in code — not a paragraph in a prompt.
+
+<figure class="fig">
+  <img src="/images/jev-snake/system-one-architectures.webp" alt="Official TypeSafe diagram comparing traditional software, agents, and AI-powered software, where code owns control flow and a decision model supplies typed judgments" width="1600" height="873" loading="lazy" />
+  <figcaption><b>Official diagram</b> — TypeSafe's comparison of traditional software, agents, and AI-powered software. The third column is the shape both exhibits use: control flow stays in code, while a decision model supplies a typed judgment at specific points. Source: <a href="https://docs.typesafe.ai/concepts/how-to-build-with-system-one">TypeSafe, "How to build with System One"</a></figcaption>
+</figure>
 
 ## Two schemas for the same idea
 
